@@ -1,867 +1,563 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>LowKey Developers — Build Small. Ship Daily. Compound Forever.</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LowkeyDevs</title>
+    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='404.5 8 700 700'%3E%3Cpath fill='%23000' d='M805.37656,331.90924l46.56651,-80.65556l59.03204,-102.24649l59.03204,102.24649l46.56652,80.65557l17.26816,29.90933h-34.53631h-40.51922l-47.81118,-82.81139l-47.81118,82.81139h-40.5192h-34.53633z'/%3E%3Cpath fill='%23000' d='M970.00415,487.71901l-59.02917,83.97208l-59.02917,-83.97208l-46.56795,-66.24535l-17.26959,-24.5669h34.53918h40.51348l47.81405,68.01799l47.81405,-68.01799h40.51346h34.5392l-17.2696,24.56691z'/%3E%3Cpath fill='%23000' d='M627.53958,466.12421l48.65722,-69.21745h40.51633h34.5392l-17.2696,24.56691l-31.38762,44.65054l-89.3898,127.16167l-89.3898,-127.16167l-31.38763,-44.65055l-17.26959,-24.5669h34.53918h40.51635l48.65722,69.21745l14.33427,20.39125z'/%3E%3Cpath fill='%23000' d='M627.53948,277.5418l-14.33427,-24.82768l-14.33427,24.82768l-48.65723,84.27679h-40.51633h-34.5392l17.2696,-29.91183l31.38762,-54.36496l89.3898,-154.82768l89.3898,154.82768l31.38763,54.36498l17.26959,29.91181h-34.53918h-40.51635z'/%3E%3C/svg%3E">
 
-<style>
-  /* ============================================================
-     DESIGN TOKENS
-     ============================================================ */
-  :root{
-    --bg-0:#05060a;
-    --bg-1:#0a0c14;
-    --bg-2:#0f1220;
-    --glass:rgba(255,255,255,0.04);
-    --glass-border:rgba(255,255,255,0.08);
-    --text-0:#f4f5f9;
-    --text-1:#9aa0b4;
-    --text-2:#5c6178;
-    --accent-a:#6ee7ff;
-    --accent-b:#a78bfa;
-    --accent-c:#ff8fd6;
-    --grad-main:linear-gradient(135deg,var(--accent-a),var(--accent-b) 55%,var(--accent-c));
-    --radius-lg:24px;
-    --radius-md:16px;
-    --radius-sm:10px;
-    --ease:cubic-bezier(.16,.84,.44,1);
-  }
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Syncopate:wght@700&display=swap" rel="stylesheet">
 
-  *{margin:0;padding:0;box-sizing:border-box;}
-  html{background:var(--bg-0);}
-  body{
-    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-    background:var(--bg-0);
-    color:var(--text-0);
-    overflow-x:hidden;
-    line-height:1.5;
-  }
+    <style>
+        :root {
+            --bg-color: #F8F8F8;
+            --text-primary: #000000;
+            --text-secondary: #555555;
+            --font-heading: 'Syncopate', 'Horizon', sans-serif;
+            --font-body: 'Poppins', sans-serif;
+            --nav-height: 80px;
+            --transition-smooth: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-fast: 0.3s ease;
+        }
 
-  ::selection{background:var(--accent-b);color:#04050a;}
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  a{color:inherit;text-decoration:none;}
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-  h1,h2,h3{
-    font-family:'Inter',sans-serif;
-    font-weight:700;
-    letter-spacing:-0.03em;
-    line-height:1.05;
-  }
+        /* Background Effects */
+        .bg-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
 
-  .eyebrow{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    font-size:12px;
-    letter-spacing:0.18em;
-    text-transform:uppercase;
-    color:var(--accent-a);
-    font-weight:600;
-    margin-bottom:18px;
-  }
-  .eyebrow::before{
-    content:'';
-    width:6px;height:6px;border-radius:50%;
-    background:var(--grad-main);
-    box-shadow:0 0 12px var(--accent-a);
-  }
+        .animated-grid {
+            position: absolute;
+            width: 200vw;
+            height: 200vh;
+            top: -50%;
+            left: -50%;
+            background-image: 
+                linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px);
+            animation: gridMove 20s linear infinite;
+        }
 
-  section{
-    position:relative;
-    padding:160px 8vw;
-    max-width:1400px;
-    margin:0 auto;
-  }
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.5;
+            animation: float 10s ease-in-out infinite;
+        }
 
-  /* ============================================================
-     BACKGROUND LAYERS — grid, particles, glow blobs
-     ============================================================ */
-  #bg-canvas{
-    position:fixed;
-    inset:0;
-    z-index:0;
-    pointer-events:none;
-  }
+        .blob-1 {
+            width: 400px;
+            height: 400px;
+            background: rgba(200, 200, 200, 0.4);
+            top: -100px;
+            left: -100px;
+        }
 
-  .grid-overlay{
-    position:fixed;
-    inset:0;
-    z-index:1;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-    background-size:64px 64px;
-    mask-image:radial-gradient(ellipse 80% 60% at 50% 20%, black, transparent 75%);
-    pointer-events:none;
-  }
+        .blob-2 {
+            width: 500px;
+            height: 500px;
+            background: rgba(180, 180, 180, 0.3);
+            bottom: -200px;
+            right: -100px;
+            animation-delay: -5s;
+        }
 
-  .blob{
-    position:fixed;
-    border-radius:50%;
-    filter:blur(120px);
-    opacity:0.35;
-    z-index:0;
-    pointer-events:none;
-  }
-  .blob-a{width:560px;height:560px;background:var(--accent-a);top:-150px;left:-100px;}
-  .blob-b{width:640px;height:640px;background:var(--accent-b);top:40%;right:-200px;}
-  .blob-c{width:500px;height:500px;background:var(--accent-c);bottom:-200px;left:20%;}
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: var(--nav-height);
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            z-index: 100;
+            background: rgba(248, 248, 248, 0.7);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.03);
+            transition: var(--transition-fast);
+        }
 
-  .mouse-glow{
-    position:fixed;
-    width:420px;height:420px;
-    border-radius:50%;
-    background:radial-gradient(circle, rgba(110,231,255,0.10), transparent 70%);
-    pointer-events:none;
-    z-index:1;
-    transform:translate(-50%,-50%);
-    transition:opacity .3s ease;
-  }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 1.25rem;
+            letter-spacing: -0.5px;
+            color: var(--text-primary);
+        }
 
-  main{position:relative;z-index:2;}
+        .nav-logo svg {
+            width: 32px;
+            height: 32px;
+        }
 
-  /* ============================================================
-     NAV
-     ============================================================ */
-  nav{
-    position:fixed;
-    top:0;left:0;right:0;
-    z-index:50;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:22px 8vw;
-    backdrop-filter:blur(16px);
-    background:rgba(5,6,10,0.55);
-    border-bottom:1px solid transparent;
-    transition:border-color .4s var(--ease), background .4s var(--ease);
-  }
-  nav.scrolled{border-bottom:1px solid var(--glass-border);}
+        /* Main Container */
+        .container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: calc(var(--nav-height) + 2rem) 5% 2rem;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
 
-  .logo{
-    font-weight:800;
-    font-size:16px;
-    letter-spacing:-0.02em;
-    display:flex;align-items:center;gap:10px;
-  }
-  .logo-mark{
-    width:26px;height:26px;
-    border-radius:8px;
-    background:var(--grad-main);
-    box-shadow:0 0 20px rgba(110,231,255,0.4);
-  }
+        /* Sections */
+        .section {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            opacity: 1;
+            transition: opacity var(--transition-smooth), transform var(--transition-smooth);
+        }
 
-  .nav-links{
-    display:flex;gap:36px;
-    font-size:14px;
-    color:var(--text-1);
-  }
-  .nav-links a{transition:color .25s ease;}
-  .nav-links a:hover{color:var(--text-0);}
+        .section.hidden {
+            position: absolute;
+            opacity: 0;
+            transform: translateY(30px);
+            pointer-events: none;
+            visibility: hidden;
+        }
 
-  .nav-cta{
-    font-size:13px;
-    font-weight:600;
-    padding:10px 20px;
-    border-radius:999px;
-    background:var(--glass);
-    border:1px solid var(--glass-border);
-    backdrop-filter:blur(10px);
-  }
+        /* Hero Left */
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
 
-  @media(max-width:900px){ .nav-links{display:none;} }
+        .title {
+            font-family: var(--font-heading);
+            font-size: clamp(3rem, 7vw, 6rem);
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            color: var(--text-primary);
+        }
 
-  /* ============================================================
-     BUTTONS
-     ============================================================ */
-  .btn{
-    position:relative;
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    padding:16px 30px;
-    border-radius:999px;
-    font-weight:600;
-    font-size:14px;
-    cursor:pointer;
-    isolation:isolate;
-    overflow:hidden;
-  }
-  .btn-primary{
-    background:var(--grad-main);
-    color:#04050a;
-    box-shadow:0 0 30px rgba(110,231,255,0.25);
-  }
-  .btn-ghost{
-    background:var(--glass);
-    border:1px solid var(--glass-border);
-    color:var(--text-0);
-    backdrop-filter:blur(10px);
-  }
-  .btn:hover{filter:brightness(1.08);}
+        .tagline {
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
 
-  /* ============================================================
-     HERO
-     ============================================================ */
-  .hero{
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding-top:120px;
-  }
-  .hero h1{
-    font-size:clamp(48px,8vw,110px);
-    background:linear-gradient(180deg,#fff, #b9c0d4 70%);
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-  }
-  .hero h1 .grad-word{
-    background:var(--grad-main);
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-  }
-  .hero p{
-    margin-top:26px;
-    font-size:18px;
-    color:var(--text-1);
-    max-width:560px;
-  }
-  .hero-cta-row{
-    display:flex;
-    gap:18px;
-    margin-top:44px;
-    flex-wrap:wrap;
-    justify-content:center;
-  }
-  .hero-stats{
-    display:flex;
-    gap:60px;
-    margin-top:90px;
-    flex-wrap:wrap;
-    justify-content:center;
-  }
-  .hero-stat{text-align:center;}
-  .hero-stat .num{
-    font-size:32px;font-weight:800;
-    background:var(--grad-main);
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-  }
-  .hero-stat .label{font-size:12px;color:var(--text-2);text-transform:uppercase;letter-spacing:0.1em;margin-top:6px;}
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
 
-  .scroll-cue{
-    position:absolute;
-    bottom:40px;left:50%;
-    transform:translateX(-50%);
-    font-size:11px;
-    color:var(--text-2);
-    letter-spacing:0.15em;
-    text-transform:uppercase;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:10px;
-  }
-  .scroll-line{
-    width:1px;height:40px;
-    background:linear-gradient(var(--accent-a), transparent);
-    animation:scrollPulse 2s ease-in-out infinite;
-  }
-  @keyframes scrollPulse{0%,100%{opacity:.2}50%{opacity:1}}
+        .btn {
+            position: relative;
+            padding: 1rem 2rem;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 50px;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-  /* ============================================================
-     SECTION HEADERS
-     ============================================================ */
-  .sec-head{max-width:640px;margin-bottom:70px;}
-  .sec-head h2{font-size:clamp(30px,4vw,48px);}
-  .sec-head p{color:var(--text-1);margin-top:16px;font-size:16px;}
+        .btn:focus-visible {
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.2);
+        }
 
-  /* ============================================================
-     MISSION — flow diagram
-     ============================================================ */
-  .flow{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:0;
-  }
-  .flow-node{
-    padding:18px 34px;
-    border-radius:999px;
-    background:var(--glass);
-    border:1px solid var(--glass-border);
-    backdrop-filter:blur(14px);
-    font-weight:600;
-    font-size:15px;
-    text-align:center;
-  }
-  .flow-node.highlight{
-    background:var(--grad-main);
-    color:#04050a;
-    box-shadow:0 0 30px rgba(167,139,250,0.35);
-  }
-  .flow-arrow{
-    width:1px;height:44px;
-    background:linear-gradient(var(--glass-border), var(--accent-b));
-    position:relative;
-  }
-  .flow-arrow::after{
-    content:'';
-    position:absolute;bottom:-2px;left:50%;
-    transform:translateX(-50%);
-    width:8px;height:8px;
-    border-right:1px solid var(--accent-b);
-    border-bottom:1px solid var(--accent-b);
-    rotate:45deg;
-  }
+        .btn-primary {
+            background-color: var(--text-primary);
+            color: #fff;
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3);
+        }
 
-  /* ============================================================
-     ECOSYSTEM CARDS
-     ============================================================ */
-  .cards-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:24px;
-  }
-  @media(max-width:900px){.cards-grid{grid-template-columns:repeat(2,1fr);}}
-  @media(max-width:600px){.cards-grid{grid-template-columns:1fr;}}
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px -5px rgba(0,0,0,0.4);
+            background-color: #222;
+        }
 
-  .tilt-card{
-    position:relative;
-    padding:34px 28px;
-    border-radius:var(--radius-lg);
-    background:var(--glass);
-    border:1px solid var(--glass-border);
-    backdrop-filter:blur(16px);
-    overflow:hidden;
-    transform-style:preserve-3d;
-    transition:border-color .3s ease, box-shadow .3s ease;
-    cursor:pointer;
-  }
-  .tilt-card::before{
-    content:'';
-    position:absolute;inset:0;
-    background:radial-gradient(300px circle at var(--mx,50%) var(--my,50%), rgba(110,231,255,0.14), transparent 60%);
-    opacity:0;
-    transition:opacity .3s ease;
-  }
-  .tilt-card:hover::before{opacity:1;}
-  .tilt-card:hover{
-    border-color:rgba(255,255,255,0.18);
-    box-shadow:0 20px 60px -20px rgba(110,231,255,0.25);
-  }
-  .card-icon{
-    width:46px;height:46px;
-    border-radius:12px;
-    background:var(--grad-main);
-    display:flex;align-items:center;justify-content:center;
-    font-size:20px;
-    margin-bottom:20px;
-  }
-  .tilt-card h3{font-size:19px;margin-bottom:8px;}
-  .tilt-card p{font-size:14px;color:var(--text-1);}
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-primary);
+            border: 1px solid rgba(0,0,0,0.1);
+            backdrop-filter: blur(5px);
+        }
 
-  /* ============================================================
-     PHILOSOPHY — checklist
-     ============================================================ */
-  .check-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:20px;
-  }
-  @media(max-width:700px){.check-grid{grid-template-columns:1fr;}}
-  .check-item{
-    display:flex;
-    align-items:center;
-    gap:16px;
-    padding:20px 24px;
-    border-radius:var(--radius-md);
-    background:var(--glass);
-    border:1px solid var(--glass-border);
-    backdrop-filter:blur(12px);
-  }
-  .check-mark{
-    width:30px;height:30px;
-    min-width:30px;
-    border-radius:50%;
-    background:var(--grad-main);
-    display:flex;align-items:center;justify-content:center;
-    position:relative;
-  }
-  .check-mark svg{width:14px;height:14px;}
-  .check-mark path{
-    stroke:#04050a;
-    stroke-width:3;
-    fill:none;
-    stroke-linecap:round;
-    stroke-linejoin:round;
-    stroke-dasharray:20;
-    stroke-dashoffset:20;
-  }
-  .check-item.in-view .check-mark path{
-    animation:drawCheck .5s var(--ease) forwards;
-  }
-  @keyframes drawCheck{to{stroke-dashoffset:0;}}
-  .check-item span{font-size:15px;font-weight:500;}
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            border-color: rgba(0,0,0,0.3);
+            background-color: rgba(0,0,0,0.03);
+        }
 
-  /* ============================================================
-     TIMELINE
-     ============================================================ */
-  .timeline{
-    display:flex;
-    justify-content:space-between;
-    position:relative;
-    flex-wrap:wrap;
-    gap:40px;
-  }
-  .timeline::before{
-    content:'';
-    position:absolute;
-    top:24px;left:0;right:0;
-    height:1px;
-    background:linear-gradient(90deg, transparent, var(--glass-border) 10%, var(--glass-border) 90%, transparent);
-  }
-  .t-step{
-    flex:1;
-    min-width:120px;
-    text-align:center;
-    position:relative;
-  }
-  .t-dot{
-    width:48px;height:48px;
-    margin:0 auto 18px;
-    border-radius:50%;
-    background:var(--bg-1);
-    border:1px solid var(--glass-border);
-    display:flex;align-items:center;justify-content:center;
-    font-size:18px;
-    position:relative;
-    z-index:2;
-  }
-  .t-step.active .t-dot{
-    background:var(--grad-main);
-    box-shadow:0 0 24px rgba(110,231,255,0.4);
-    border-color:transparent;
-  }
-  .t-step .t-label{font-size:14px;font-weight:600;}
-  .repeat-tag{
-    text-align:center;
-    margin-top:50px;
-    font-size:13px;
-    letter-spacing:0.15em;
-    text-transform:uppercase;
-    color:var(--accent-a);
-  }
+        /* Ripple Effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(0);
+            animation: ripple-anim 0.6s linear;
+            pointer-events: none;
+        }
+        
+        .btn-secondary .ripple {
+            background: rgba(0, 0, 0, 0.1);
+        }
 
-  /* ============================================================
-     TEAM
-     ============================================================ */
-  .team-grid{
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:20px;
-  }
-  @media(max-width:1000px){.team-grid{grid-template-columns:repeat(3,1fr);}}
-  @media(max-width:600px){.team-grid{grid-template-columns:repeat(2,1fr);}}
+        /* Hero Right */
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+            animation: fadeIn 1.5s ease forwards;
+            opacity: 0;
+        }
 
-  .team-card{
-    padding:28px 20px;
-    border-radius:var(--radius-lg);
-    background:var(--glass);
-    border:1px solid var(--glass-border);
-    backdrop-filter:blur(14px);
-    text-align:center;
-    transition:transform .35s var(--ease), box-shadow .35s var(--ease);
-  }
-  .team-card:hover{
-    transform:translateY(-10px);
-    box-shadow:0 24px 50px -20px rgba(167,139,250,0.35);
-  }
-  .team-emoji{
-    font-size:38px;
-    margin-bottom:16px;
-    display:inline-block;
-    transition:transform .4s var(--ease);
-  }
-  .team-card:hover .team-emoji{transform:scale(1.15) rotate(-6deg);}
-  .team-card h3{font-size:16px;}
-  .team-role{font-size:12px;color:var(--accent-a);margin:6px 0 10px;text-transform:uppercase;letter-spacing:0.08em;}
-  .team-card p{font-size:13px;color:var(--text-1);}
-  .team-card.founder{
-    grid-column:span 5;
-    background:linear-gradient(135deg, rgba(110,231,255,0.08), rgba(167,139,250,0.08));
-  }
-  @media(max-width:1000px){.team-card.founder{grid-column:span 3;}}
-  @media(max-width:600px){.team-card.founder{grid-column:span 2;}}
+        .logo-wrapper {
+            width: 100%;
+            max-width: 500px;
+            aspect-ratio: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: floatingSvg 6s ease-in-out infinite;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+        }
 
-  /* ============================================================
-     VISION — counters
-     ============================================================ */
-  .vision{text-align:center;}
-  .counters{
-    display:flex;
-    justify-content:center;
-    gap:80px;
-    flex-wrap:wrap;
-    margin-top:50px;
-  }
-  .counter-item .count{
-    font-size:56px;
-    font-weight:800;
-    background:var(--grad-main);
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-  }
-  .counter-item .clabel{
-    margin-top:8px;
-    font-size:13px;
-    color:var(--text-2);
-    text-transform:uppercase;
-    letter-spacing:0.12em;
-  }
+        .logo-wrapper svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.1));
+        }
 
-  /* ============================================================
-     FOOTER
-     ============================================================ */
-  footer{
-    padding:60px 8vw 40px;
-    text-align:center;
-    border-top:1px solid var(--glass-border);
-    color:var(--text-2);
-    font-size:13px;
-    position:relative;
-    z-index:2;
-  }
-  footer .footer-mark{
-    font-weight:700;
-    color:var(--text-0);
-    letter-spacing:-0.01em;
-    margin-bottom:10px;
-    font-size:15px;
-  }
+        /* Ask Section */
+        #ask-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 60vh;
+        }
 
-  .reveal{
-    opacity:0;
-    transform:translateY(40px);
-  }
-</style>
+        .ask-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+        }
+
+        .link-hover {
+            position: relative;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            display: inline-block;
+            cursor: pointer;
+            padding-bottom: 4px;
+        }
+
+        .link-hover::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--text-primary);
+            transform-origin: bottom right;
+            transition: transform 0.3s cubic-bezier(0.86, 0, 0.07, 1);
+        }
+
+        .link-hover:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Keyframes */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes floatingSvg {
+            0%, 100% { transform: translateY(0) rotate(0); }
+            50% { transform: translateY(-15px) rotate(1deg); }
+        }
+
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0) translateZ(-200px); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px) translateZ(-200px); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        @keyframes ripple-anim {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .section {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 2rem;
+            }
+            .hero-content {
+                align-items: center;
+            }
+            .btn-group {
+                justify-content: center;
+            }
+            .logo-wrapper {
+                max-width: 350px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .btn-group {
+                flex-direction: column;
+                width: 100%;
+            }
+            .btn {
+                width: 100%;
+            }
+            .toast {
+                width: 90%;
+                text-align: center;
+                justify-content: center;
+                bottom: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<canvas id="bg-canvas"></canvas>
-<div class="grid-overlay"></div>
-<div class="blob blob-a"></div>
-<div class="blob blob-b"></div>
-<div class="blob blob-c"></div>
-<div class="mouse-glow" id="mouseGlow"></div>
-
-<nav id="nav">
-  <div class="logo"><span class="logo-mark"></span>LowKey Developers</div>
-  <div class="nav-links">
-    <a href="#ecosystem">Ecosystem</a>
-    <a href="#philosophy">Philosophy</a>
-    <a href="#build">How We Build</a>
-    <a href="#team">Team</a>
-  </div>
-  <a href="#ecosystem" class="nav-cta magnetic">Explore Tools</a>
-</nav>
-
-<main>
-
-  <!-- 1. HERO -->
-  <section class="hero">
-    <div class="eyebrow">A Quiet Developer Collective</div>
-    <h1>Build Once.<br><span class="grad-word">Compound</span> Forever.</h1>
-    <p>Hundreds of tiny, beautifully built tools — each solving one problem extremely well. No noise. No hype. Just quiet builders, shipping daily.</p>
-    <div class="hero-cta-row">
-      <a href="#ecosystem" class="btn btn-primary magnetic">Explore Tools →</a>
-      <a href="#philosophy" class="btn btn-ghost magnetic">Read Our Philosophy</a>
+    <div class="bg-elements">
+        <div class="animated-grid"></div>
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
     </div>
-    <div class="hero-stats">
-      <div class="hero-stat"><div class="num" data-count="120">0</div><div class="label">Tools Live</div></div>
-      <div class="hero-stat"><div class="num" data-count="1">0</div><div class="label">Tool Shipped / Day</div></div>
-      <div class="hero-stat"><div class="num" data-count="9">0</div><div class="label">Categories</div></div>
+
+    <nav>
+        <div class="nav-logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="404.5 8 700 700">
+                <path fill="#000" d="M805.37656,331.90924l46.56651,-80.65556l59.03204,-102.24649l59.03204,102.24649l46.56652,80.65557l17.26816,29.90933h-34.53631h-40.51922l-47.81118,-82.81139l-47.81118,82.81139h-40.5192h-34.53633z"/>
+                <path fill="#000" d="M970.00415,487.71901l-59.02917,83.97208l-59.02917,-83.97208l-46.56795,-66.24535l-17.26959,-24.5669h34.53918h40.51348l47.81405,68.01799l47.81405,-68.01799h40.51346h34.5392l-17.2696,24.56691z"/>
+                <path fill="#000" d="M627.53958,466.12421l48.65722,-69.21745h40.51633h34.5392l-17.2696,24.56691l-31.38762,44.65054l-89.3898,127.16167l-89.3898,-127.16167l-31.38763,-44.65055l-17.26959,-24.5669h34.53918h40.51635l48.65722,69.21745l14.33427,20.39125z"/>
+                <path fill="#000" d="M627.53948,277.5418l-14.33427,-24.82768l-14.33427,24.82768l-48.65723,84.27679h-40.51633h-34.5392l17.2696,-29.91183l31.38762,-54.36496l89.3898,-154.82768l89.3898,154.82768l31.38763,54.36498l17.26959,29.91181h-34.53918h-40.51635z"/>
+            </svg>
+            LowkeyDevs
+        </div>
+    </nav>
+
+    <main class="container">
+        
+        <section id="hero-section" class="section">
+            <div class="hero-content">
+                <h1 class="title">LOWKEY<br>DEVS<br>.COM</h1>
+                <p class="tagline">We do rain of softwares ;)</p>
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="btn-search">Search Tools</button>
+                    <button class="btn btn-secondary" id="btn-getnew">Get New</button>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="logo-wrapper" id="parallax-logo">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="404.5 8 700 700">
+                        <path fill="#000" d="M805.37656,331.90924l46.56651,-80.65556l59.03204,-102.24649l59.03204,102.24649l46.56652,80.65557l17.26816,29.90933h-34.53631h-40.51922l-47.81118,-82.81139l-47.81118,82.81139h-40.5192h-34.53633z"/>
+                        <path fill="#000" d="M970.00415,487.71901l-59.02917,83.97208l-59.02917,-83.97208l-46.56795,-66.24535l-17.26959,-24.5669h34.53918h40.51348l47.81405,68.01799l47.81405,-68.01799h40.51346h34.5392l-17.2696,24.56691z"/>
+                        <path fill="#000" d="M627.53958,466.12421l48.65722,-69.21745h40.51633h34.5392l-17.2696,24.56691l-31.38762,44.65054l-89.3898,127.16167l-89.3898,-127.16167l-31.38763,-44.65055l-17.26959,-24.5669h34.53918h40.51635l48.65722,69.21745l14.33427,20.39125z"/>
+                        <path fill="#000" d="M627.53948,277.5418l-14.33427,-24.82768l-14.33427,24.82768l-48.65723,84.27679h-40.51633h-34.5392l17.2696,-29.91183l31.38762,-54.36496l89.3898,-154.82768l89.3898,154.82768l31.38763,54.36498l17.26959,29.91181h-34.53918h-40.51635z"/>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <section id="ask-section" class="section hidden">
+            <div>
+                <h2 class="ask-title">Ask Ashu<br>The Dev</h2>
+                <a class="link-hover" id="btn-back">← Back to home</a>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="toast" class="toast">
+        🚀 Coming Soon. We're building something awesome.
     </div>
-    <div class="scroll-cue"><span>Scroll</span><div class="scroll-line"></div></div>
-  </section>
 
-  <!-- 2. MISSION -->
-  <section id="mission">
-    <div class="sec-head reveal">
-      <div class="eyebrow">Mission</div>
-      <h2>One giant startup? No. Hundreds of tiny ones.</h2>
-      <p>Instead of betting everything on a single product, we build hundreds of small tools that each solve one problem extremely well — and let the compounding do the rest.</p>
-    </div>
-    <div class="flow reveal">
-      <div class="flow-node">1 tiny tool</div>
-      <div class="flow-arrow"></div>
-      <div class="flow-node">Many tiny tools</div>
-      <div class="flow-arrow"></div>
-      <div class="flow-node">Traffic compounds</div>
-      <div class="flow-arrow"></div>
-      <div class="flow-node">Brand grows</div>
-      <div class="flow-arrow"></div>
-      <div class="flow-node highlight">Revenue follows</div>
-    </div>
-  </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Elements
+            const heroSection = document.getElementById('hero-section');
+            const askSection = document.getElementById('ask-section');
+            const btnSearch = document.getElementById('btn-search');
+            const btnGetNew = document.getElementById('btn-getnew');
+            const btnBack = document.getElementById('btn-back');
+            const toast = document.getElementById('toast');
+            const parallaxLogo = document.getElementById('parallax-logo');
+            
+            let toastTimeout;
 
-  <!-- 3. ECOSYSTEM -->
-  <section id="ecosystem">
-    <div class="sec-head reveal">
-      <div class="eyebrow">Ecosystem</div>
-      <h2>Every category, one philosophy.</h2>
-      <p>From finance to health, each tool is small, fast, and free — built with the same obsessive care.</p>
-    </div>
-    <div class="cards-grid">
-      <div class="tilt-card reveal"><div class="card-icon">💰</div><h3>Finance</h3><p>SIP, EMI, GST & investment calculators.</p></div>
-      <div class="tilt-card reveal"><div class="card-icon">👩‍💻</div><h3>Developer</h3><p>JSON formatters, regex testers, encoders.</p></div>
-      <div class="tilt-card reveal"><div class="card-icon">⚡</div><h3>Productivity</h3><p>QR generators, PDF tools, converters.</p></div>
-      <div class="tilt-card reveal"><div class="card-icon">🫀</div><h3>Health</h3><p>BMI, calorie & wellness calculators.</p></div>
-      <div class="tilt-card reveal"><div class="card-icon">📚</div><h3>Education</h3><p>GPA tools, study utilities, quick refs.</p></div>
-      <div class="tilt-card reveal"><div class="card-icon">🛠️</div><h3>Utilities</h3><p>Password generators, compressors & more.</p></div>
-    </div>
-  </section>
+            // Ripple Effect Function
+            function createRipple(event) {
+                const button = event.currentTarget;
+                const circle = document.createElement('span');
+                const diameter = Math.max(button.clientWidth, button.clientHeight);
+                const radius = diameter / 2;
 
-  <!-- 4. PHILOSOPHY -->
-  <section id="philosophy">
-    <div class="sec-head reveal">
-      <div class="eyebrow">The Philosophy</div>
-      <h2>Every tool follows the same six rules.</h2>
-    </div>
-    <div class="check-grid">
-      <div class="check-item reveal"><div class="check-mark"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></div><span>Solve one problem</span></div>
-      <div class="check-item reveal"><div class="check-mark"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></div><span>Load instantly</span></div>
-      <div class="check-item reveal"><div class="check-mark"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></div><span>Look beautiful</span></div>
-      <div class="check-item reveal"><div class="check-mark"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></div><span>Work on mobile</span></div>
-      <div class="check-item reveal"><div class="check-mark"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></div><span>Stay free</span></div>
-      <div class="check-item reveal"><div class="check-mark"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></div><span>Improve over time</span></div>
-    </div>
-  </section>
+                circle.style.width = circle.style.height = `${diameter}px`;
+                circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius}px`;
+                circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius}px`;
+                circle.classList.add('ripple');
 
-  <!-- 5. HOW WE BUILD -->
-  <section id="build">
-    <div class="sec-head reveal">
-      <div class="eyebrow">How We Build</div>
-      <h2>Ship every day. No exceptions.</h2>
-    </div>
-    <div class="timeline">
-      <div class="t-step reveal"><div class="t-dot">💡</div><div class="t-label">Idea</div></div>
-      <div class="t-step reveal"><div class="t-dot">🔨</div><div class="t-label">Build</div></div>
-      <div class="t-step reveal"><div class="t-dot">🚀</div><div class="t-label">Deploy</div></div>
-      <div class="t-step reveal"><div class="t-dot">🔍</div><div class="t-label">Index</div></div>
-      <div class="t-step reveal active"><div class="t-dot">📈</div><div class="t-label">Improve</div></div>
-    </div>
-    <div class="repeat-tag reveal">↻ Repeat — Ship Every Day.</div>
-  </section>
+                const ripple = button.querySelector('.ripple');
+                if (ripple) {
+                    ripple.remove();
+                }
+                button.appendChild(circle);
+            }
 
-  <!-- 6. TEAM -->
-  <section id="team">
-    <div class="sec-head reveal">
-      <div class="eyebrow">Meet The Team</div>
-      <h2>Not employees. Characters in the story.</h2>
-    </div>
-    <div class="team-grid">
-      <div class="team-card founder reveal">
-        <div class="team-emoji">👑</div>
-        <h3>Bade Sahab</h3>
-        <div class="team-role">The Invisible Founder</div>
-        <p>Represents all of us. Makes the final decisions. Protects the vision.</p>
-      </div>
-      <div class="team-card reveal"><div class="team-emoji">💻</div><h3>Gurpreet</h3><div class="team-role">Software Builder</div><p>Turns ideas into products.</p></div>
-      <div class="team-card reveal"><div class="team-emoji">🚀</div><h3>Ashu</h3><div class="team-role">Deployment Engineer</div><p>Gets every tool online.</p></div>
-      <div class="team-card reveal"><div class="team-emoji">📈</div><h3>Priyank</h3><div class="team-role">SEO Manager</div><p>Brings traffic.</p></div>
-      <div class="team-card reveal"><div class="team-emoji">💰</div><h3>Abhi</h3><div class="team-role">Revenue Manager</div><p>Turns attention into income.</p></div>
-    </div>
-  </section>
+            // Apply ripple to buttons
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(btn => btn.addEventListener('click', createRipple));
 
-  <!-- 7. VISION -->
-  <section id="vision" class="vision">
-    <div class="sec-head reveal" style="margin:0 auto 20px;">
-      <div class="eyebrow">Vision</div>
-      <h2>An ecosystem that grows while we sleep.</h2>
-      <p style="margin:16px auto 0;">Imagine 500 tools. Then 1000. One recognizable brand, quietly compounding.</p>
-    </div>
-    <div class="counters reveal">
-      <div class="counter-item"><div class="count" data-count="500">0</div><div class="clabel">Tools by 2027</div></div>
-      <div class="counter-item"><div class="count" data-count="1000">0</div><div class="clabel">Long-term goal</div></div>
-      <div class="counter-item"><div class="count" data-count="1">0</div><div class="clabel">Recognizable brand</div></div>
-    </div>
-  </section>
+            // Toast Logic
+            btnSearch.addEventListener('click', () => {
+                clearTimeout(toastTimeout);
+                toast.classList.add('show');
+                toastTimeout = setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2500);
+            });
 
-</main>
+            // Section Transitions
+            function switchSection(hideElem, showElem) {
+                hideElem.classList.add('hidden');
+                setTimeout(() => {
+                    hideElem.style.display = 'none';
+                    // Determine correct layout dynamically or stick to a designated one
+                    showElem.style.display = showElem.id === 'ask-section' ? 'flex' : 'grid';
+                    
+                    // Force reflow
+                    void showElem.offsetWidth;
+                    
+                    showElem.classList.remove('hidden');
+                }, 600); // Wait for transition
+            }
 
-<footer>
-  <div class="footer-mark">LowKey Developers</div>
-  Built quietly by LowKey Developers.
-</footer>
+            btnGetNew.addEventListener('click', () => {
+                switchSection(heroSection, askSection);
+            });
 
-<!-- ================= LIBRARIES ================= -->
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+            btnBack.addEventListener('click', () => {
+                switchSection(askSection, heroSection);
+            });
 
-<script>
-/* ============================================================
-   SMOOTH SCROLL — Lenis
-   ============================================================ */
-const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
-function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
-requestAnimationFrame(raf);
-lenis.on('scroll', ScrollTrigger.update);
-gsap.ticker.add((time)=>{ lenis.raf(time*1000); });
-gsap.ticker.lagSmoothing(0);
-gsap.registerPlugin(ScrollTrigger);
+            // Mouse Parallax Effect
+            document.addEventListener('mousemove', (e) => {
+                // Only run parallax on desktop sizes
+                if (window.innerWidth > 992 && !heroSection.classList.contains('hidden')) {
+                    const xAxis = (window.innerWidth / 2 - e.pageX) / 40;
+                    const yAxis = (window.innerHeight / 2 - e.pageY) / 40;
+                    parallaxLogo.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+                }
+            });
 
-/* ============================================================
-   NAV SCROLL STATE
-   ============================================================ */
-const nav = document.getElementById('nav');
-ScrollTrigger.create({
-  start: 40, end: 99999,
-  onUpdate: self => nav.classList.toggle('scrolled', self.scroll() > 40)
-});
-
-/* ============================================================
-   MOUSE-FOLLOW GLOW
-   ============================================================ */
-const glow = document.getElementById('mouseGlow');
-window.addEventListener('mousemove', e=>{
-  glow.style.left = e.clientX + 'px';
-  glow.style.top = e.clientY + 'px';
-});
-
-/* ============================================================
-   FLOATING PARTICLES — canvas
-   ============================================================ */
-const canvas = document.getElementById('bg-canvas');
-const ctx = canvas.getContext('2d');
-let W, H, particles = [];
-function resize(){
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener('resize', resize);
-
-const COLORS = ['#6ee7ff','#a78bfa','#ff8fd6'];
-for(let i=0;i<70;i++){
-  particles.push({
-    x: Math.random()*W,
-    y: Math.random()*H,
-    r: Math.random()*1.6+0.4,
-    vx: (Math.random()-0.5)*0.15,
-    vy: (Math.random()-0.5)*0.15,
-    c: COLORS[Math.floor(Math.random()*COLORS.length)],
-    a: Math.random()*0.5+0.15
-  });
-}
-function drawParticles(){
-  ctx.clearRect(0,0,W,H);
-  particles.forEach(p=>{
-    p.x += p.vx; p.y += p.vy;
-    if(p.x<0) p.x=W; if(p.x>W) p.x=0;
-    if(p.y<0) p.y=H; if(p.y>H) p.y=0;
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fillStyle = p.c;
-    ctx.globalAlpha = p.a;
-    ctx.fill();
-  });
-  ctx.globalAlpha = 1;
-  requestAnimationFrame(drawParticles);
-}
-drawParticles();
-
-/* ============================================================
-   REVEAL ON SCROLL
-   ============================================================ */
-document.querySelectorAll('.reveal').forEach(el=>{
-  gsap.to(el, {
-    opacity:1, y:0, duration:1, ease:'power3.out',
-    scrollTrigger:{ trigger:el, start:'top 85%' }
-  });
-});
-
-/* Checkmarks draw-in trigger */
-document.querySelectorAll('.check-item').forEach(el=>{
-  ScrollTrigger.create({
-    trigger:el, start:'top 85%',
-    onEnter:()=>el.classList.add('in-view')
-  });
-});
-
-/* Timeline steps light up sequentially */
-gsap.utils.toArray('.t-step').forEach((step,i)=>{
-  ScrollTrigger.create({
-    trigger:'.timeline', start:'top 75%',
-    onEnter:()=> gsap.delayedCall(i*0.15, ()=>step.classList.add('active'))
-  });
-});
-
-/* ============================================================
-   ANIMATED COUNTERS
-   ============================================================ */
-document.querySelectorAll('[data-count]').forEach(el=>{
-  const target = +el.getAttribute('data-count');
-  ScrollTrigger.create({
-    trigger: el, start:'top 90%', once:true,
-    onEnter:()=>{
-      let obj = { val:0 };
-      gsap.to(obj, {
-        val: target, duration: 1.8, ease:'power2.out',
-        onUpdate: ()=> el.textContent = Math.floor(obj.val)
-      });
-    }
-  });
-});
-
-/* ============================================================
-   TILT CARDS
-   ============================================================ */
-document.querySelectorAll('.tilt-card').forEach(card=>{
-  card.addEventListener('mousemove', e=>{
-    const r = card.getBoundingClientRect();
-    const x = e.clientX - r.left, y = e.clientY - r.top;
-    const rotX = ((y / r.height) - 0.5) * -10;
-    const rotY = ((x / r.width) - 0.5) * 10;
-    card.style.setProperty('--mx', x+'px');
-    card.style.setProperty('--my', y+'px');
-    gsap.to(card, { rotateX: rotX, rotateY: rotY, duration:0.4, ease:'power2.out', transformPerspective:600 });
-  });
-  card.addEventListener('mouseleave', ()=>{
-    gsap.to(card, { rotateX:0, rotateY:0, duration:0.6, ease:'power3.out' });
-  });
-});
-
-/* ============================================================
-   MAGNETIC BUTTONS
-   ============================================================ */
-document.querySelectorAll('.magnetic').forEach(btn=>{
-  btn.addEventListener('mousemove', e=>{
-    const r = btn.getBoundingClientRect();
-    const x = e.clientX - r.left - r.width/2;
-    const y = e.clientY - r.top - r.height/2;
-    gsap.to(btn, { x:x*0.3, y:y*0.4, duration:0.3, ease:'power2.out' });
-  });
-  btn.addEventListener('mouseleave', ()=>{
-    gsap.to(btn, { x:0, y:0, duration:0.5, ease:'elastic.out(1,0.4)' });
-  });
-});
-
-/* ============================================================
-   PARALLAX BLOBS
-   ============================================================ */
-window.addEventListener('scroll', ()=>{
-  const y = window.scrollY;
-  gsap.to('.blob-a', { y: y*0.15, duration:0.6 });
-  gsap.to('.blob-b', { y: y*-0.1, duration:0.6 });
-  gsap.to('.blob-c', { y: y*0.08, duration:0.6 });
-});
-</script>
-
+            // Reset parallax on mouse leave
+            document.addEventListener('mouseleave', () => {
+                parallaxLogo.style.transform = `rotateY(0deg) rotateX(0deg)`;
+            });
+        });
+    </script>
 </body>
 </html>
