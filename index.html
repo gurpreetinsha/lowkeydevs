@@ -416,6 +416,395 @@
                 bottom: 1rem;
             }
         }
+
+        /* Search Tools Overlay */
+        #search-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(248, 248, 248, 0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            z-index: 200;
+            opacity: 0;
+            pointer-events: none;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            padding: 4rem 5% 6rem;
+            transition: opacity var(--transition-smooth);
+        }
+
+        #search-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #search-container {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            transform: scale(0.96) translateY(20px);
+            transition: transform var(--transition-smooth);
+        }
+
+        #search-overlay.active #search-container {
+            transform: scale(1) translateY(0);
+        }
+
+        /* Hero Section Hidden State */
+        #hero-section.hero-hidden {
+            opacity: 0;
+            transform: scale(0.96);
+            pointer-events: none;
+        }
+
+        /* Close Button */
+        .search-close-btn {
+            position: fixed;
+            top: 2rem;
+            right: 5%;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 210;
+        }
+
+        .search-close-btn:hover {
+            background: rgba(0, 0, 0, 0.08);
+            transform: rotate(90deg) scale(1.05);
+        }
+
+        .search-close-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--text-primary);
+            stroke-width: 2.5;
+            fill: none;
+        }
+
+        /* Search Input */
+        .search-input-container {
+            width: 100%;
+            position: relative;
+        }
+
+        .search-field {
+            width: 100%;
+            padding: 1.4rem 5rem 1.4rem 2rem;
+            font-family: var(--font-body);
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            font-weight: 500;
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 20px;
+            outline: none;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.02);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .search-field:focus {
+            background: rgba(255, 255, 255, 0.98);
+            border-color: rgba(0, 0, 0, 0.15);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+        }
+
+        .search-field::placeholder {
+            color: rgba(0, 0, 0, 0.35);
+        }
+
+        /* Keyboard Shortcut Hint */
+        .search-shortcut-hint {
+            position: absolute;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 4px;
+            pointer-events: none;
+            opacity: 0.4;
+            transition: opacity 0.3s ease;
+        }
+
+        .search-field:focus ~ .search-shortcut-hint {
+            opacity: 0;
+        }
+
+        .shortcut-key {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            padding: 2px 8px;
+            font-size: 0.8rem;
+            font-family: var(--font-body);
+            font-weight: 500;
+        }
+
+        /* Category Pills */
+        .search-categories {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            width: 100%;
+        }
+
+        .category-pill {
+            padding: 0.5rem 1.3rem;
+            font-family: var(--font-body);
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            user-select: none;
+        }
+
+        .category-pill:hover {
+            color: var(--text-primary);
+            background: rgba(0, 0, 0, 0.06);
+            transform: translateY(-1px);
+        }
+
+        .category-pill.active {
+            color: #fff;
+            background: var(--text-primary);
+            border-color: var(--text-primary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Results & Curated Layouts */
+        .tools-results-container {
+            width: 100%;
+        }
+
+        .search-sections {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            width: 100%;
+        }
+
+        .search-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            opacity: 0.7;
+            padding-left: 0.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            width: 100%;
+        }
+
+        @media (max-width: 1200px) {
+            .tools-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 820px) {
+            .tools-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            .search-close-btn {
+                top: 1rem;
+                right: 4%;
+                width: 40px;
+                height: 40px;
+            }
+            #search-overlay {
+                padding-top: 5rem;
+            }
+        }
+
+        /* Tool Cards */
+        .tool-card {
+            background: rgba(255, 255, 255, 0.65);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 20px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.015);
+            position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .tool-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .tool-card:hover {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+            transform: translateY(-6px);
+        }
+
+        .tool-card-icon {
+            font-size: 2.25rem;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .tool-card-body {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex: 1;
+        }
+
+        .tool-card-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .tool-card-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .tool-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            gap: 0.5rem;
+        }
+
+        .tool-card-category {
+            font-size: 0.72rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            background: rgba(0, 0, 0, 0.04);
+            padding: 3px 9px;
+            border-radius: 50px;
+            white-space: nowrap;
+        }
+
+        .tool-card-btn {
+            background: var(--text-primary);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            padding: 0.45rem 0.9rem;
+            font-size: 0.8rem;
+            font-family: var(--font-body);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+
+        .tool-card-btn:hover {
+            background: #222;
+            transform: translateX(1px);
+        }
+
+        .tool-card-btn svg {
+            width: 12px;
+            height: 12px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.5;
+            transition: transform 0.3s ease;
+        }
+
+        .tool-card-btn:hover svg {
+            transform: translateX(1px);
+        }
+
+        /* Empty State */
+        .empty-state {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 5rem 2rem;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .empty-state.visible {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .empty-state-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .empty-state-title {
+            font-family: var(--font-body);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .empty-state-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
     </style>
 </head>
 <body>
@@ -471,6 +860,72 @@
 
     </main>
 
+    <!-- Search Tools Overlay Modal -->
+    <div id="search-overlay">
+        <!-- Close Button -->
+        <button class="search-close-btn" id="search-close-btn" aria-label="Close search overlay">
+            <svg viewBox="0 0 24 24">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+
+        <div id="search-container">
+            <!-- Search Input Box -->
+            <div class="search-input-container">
+                <input type="text" class="search-field" id="search-field" placeholder="Search calculators, generators, utilities..." autocomplete="off">
+                <div class="search-shortcut-hint">
+                    <span class="shortcut-key" id="meta-key">Ctrl</span>
+                    <span class="shortcut-key">K</span>
+                </div>
+            </div>
+
+            <!-- Category Pills -->
+            <div class="search-categories" id="search-categories">
+                <!-- Dynamically generated category pills -->
+            </div>
+
+            <!-- Results Panel -->
+            <div class="tools-results-container">
+                <!-- Curated sections (Shown when query is empty and category is 'All') -->
+                <div class="search-sections" id="search-sections">
+                    <div class="search-section">
+                        <h2 class="section-title">Popular Tools</h2>
+                        <div class="tools-grid" id="popular-tools-grid">
+                            <!-- Dynamic cards -->
+                        </div>
+                    </div>
+                    
+                    <div class="search-section">
+                        <h2 class="section-title">Recently Added</h2>
+                        <div class="tools-grid" id="recent-tools-grid">
+                            <!-- Dynamic cards -->
+                        </div>
+                    </div>
+
+                    <div class="search-section">
+                        <h2 class="section-title">Trending</h2>
+                        <div class="tools-grid" id="trending-tools-grid">
+                            <!-- Dynamic cards -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Unified Grid (Shown when searching or category filtered) -->
+                <div class="tools-grid" id="filtered-tools-grid" style="display: none;">
+                    <!-- Dynamic cards -->
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-state" id="empty-state">
+                    <div class="empty-state-icon">🔍</div>
+                    <h3 class="empty-state-title">No tools found</h3>
+                    <p class="empty-state-desc">Try another keyword or category.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="toast" class="toast">
         🚀 Coming Soon. We're building something awesome.
     </div>
@@ -511,13 +966,326 @@
             const buttons = document.querySelectorAll('.btn');
             buttons.forEach(btn => btn.addEventListener('click', createRipple));
 
-            // Toast Logic
-            btnSearch.addEventListener('click', () => {
-                clearTimeout(toastTimeout);
-                toast.classList.add('show');
-                toastTimeout = setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 2500);
+            // Tool Overlay Elements
+            const searchOverlay = document.getElementById('search-overlay');
+            const searchField = document.getElementById('search-field');
+            const searchCloseBtn = document.getElementById('search-close-btn');
+
+            // Tools Database Array
+            const tools = [
+                {
+                    name: "SIP Calculator",
+                    category: ["Finance", "Calculators"],
+                    description: "Calculate mutual fund returns with compound interest breakdown.",
+                    icon: "📈",
+                    url: "/sip-calculator",
+                    popular: true,
+                    recent: false,
+                    trending: true
+                },
+                {
+                    name: "EMI Calculator",
+                    category: ["Finance", "Calculators"],
+                    description: "Calculate monthly installments for home, car, or personal loans.",
+                    icon: "💳",
+                    url: "/emi-calculator",
+                    popular: true,
+                    recent: false,
+                    trending: false
+                },
+                {
+                    name: "Password Generator",
+                    category: ["Security", "Generators"],
+                    description: "Create cryptographically secure and customizable passwords.",
+                    icon: "🔐",
+                    url: "/password-generator",
+                    popular: true,
+                    recent: true,
+                    trending: true
+                },
+                {
+                    name: "JSON Formatter",
+                    category: ["Developer", "Utilities"],
+                    description: "Validate, format, beautify, and minify raw JSON datasets.",
+                    icon: "💻",
+                    url: "/json-formatter",
+                    popular: false,
+                    recent: true,
+                    trending: true
+                },
+                {
+                    name: "QR Code Generator",
+                    category: ["Generators", "Utilities"],
+                    description: "Generate highly customizable QR codes for URLs, text, or credentials.",
+                    icon: "📱",
+                    url: "/qr-generator",
+                    popular: false,
+                    recent: true,
+                    trending: false
+                },
+                {
+                    name: "Base64 Encoder",
+                    category: ["Developer", "Utilities"],
+                    description: "Encode binary data or strings to Base64 format and decode them back.",
+                    icon: "⚙️",
+                    url: "/base64-converter",
+                    popular: false,
+                    recent: false,
+                    trending: false
+                },
+                {
+                    name: "Markdown Editor",
+                    category: ["Developer", "Utilities"],
+                    description: "Write clean Markdown content and preview HTML rendering side-by-side.",
+                    icon: "📝",
+                    url: "/markdown-editor",
+                    popular: false,
+                    recent: true,
+                    trending: false
+                },
+                {
+                    name: "RegEx Tester",
+                    category: ["Developer", "Utilities"],
+                    description: "Validate, test, and debug regular expressions with color-coded highlights.",
+                    icon: "🔍",
+                    url: "/regex-tester",
+                    popular: false,
+                    recent: false,
+                    trending: true
+                },
+                {
+                    name: "Hash Generator",
+                    category: ["Security", "Generators"],
+                    description: "Compute MD5, SHA-1, SHA-256, and SHA-512 cryptographic hashes.",
+                    icon: "🔑",
+                    url: "/hash-generator",
+                    popular: false,
+                    recent: false,
+                    trending: false
+                },
+                {
+                    name: "Color Palette Picker",
+                    category: ["Generators", "Developer"],
+                    description: "Generate, test, and export visually appealing color schemes.",
+                    icon: "🎨",
+                    url: "/color-palette",
+                    popular: true,
+                    recent: false,
+                    trending: false
+                },
+                {
+                    name: "CSS Glassmorphism",
+                    category: ["Developer", "Generators"],
+                    description: "Design high-fidelity glassmorphism effects and copy the CSS styles.",
+                    icon: "✨",
+                    url: "/glassmorphism-generator",
+                    popular: false,
+                    recent: true,
+                    trending: true
+                },
+                {
+                    name: "Unit Converter",
+                    category: ["Utilities", "Calculators"],
+                    description: "Convert units of length, area, temperature, weight, volume, and data.",
+                    icon: "📐",
+                    url: "/unit-converter",
+                    popular: false,
+                    recent: false,
+                    trending: false
+                }
+            ];
+
+            const categories = ["All", "Finance", "Calculators", "Generators", "Developer", "Utilities", "Security"];
+            let activeCategory = "All";
+
+            // Keyboard shortcut modifier label check
+            const metaKeyHint = document.getElementById('meta-key');
+            if (navigator.platform && navigator.platform.toUpperCase().indexOf('MAC') >= 0) {
+                metaKeyHint.textContent = 'Cmd';
+            }
+
+            // Stagger timeouts collection to prevent overlaps
+            let staggerTimeouts = [];
+
+            // Open Overlay
+            function openSearch() {
+                if (!searchOverlay.classList.contains('active')) {
+                    heroSection.classList.add('hero-hidden');
+                    searchOverlay.classList.add('active');
+                    
+                    // Small delay to ensure browser paints overlay before auto-focusing keyboard
+                    setTimeout(() => {
+                        searchField.focus();
+                    }, 50);
+                    
+                    activeCategory = "All";
+                    searchField.value = "";
+                    renderCategories();
+                    filterAndRender();
+                } else {
+                    searchField.focus();
+                }
+            }
+
+            // Close Overlay
+            function closeSearch() {
+                if (searchOverlay.classList.contains('active')) {
+                    searchOverlay.classList.remove('active');
+                    heroSection.classList.remove('hero-hidden');
+                    searchField.blur();
+                }
+            }
+
+            // Render Category Pills
+            function renderCategories() {
+                const container = document.getElementById('search-categories');
+                container.innerHTML = '';
+                
+                categories.forEach(cat => {
+                    const pill = document.createElement('button');
+                    pill.className = `category-pill ${cat === activeCategory ? 'active' : ''}`;
+                    pill.textContent = cat;
+                    pill.addEventListener('click', (e) => {
+                        activeCategory = cat;
+                        document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
+                        pill.classList.add('active');
+                        filterAndRender();
+                    });
+                    container.appendChild(pill);
+                });
+            }
+
+            // Render Card Grid Helper
+            function renderGrid(gridElement, toolsList) {
+                gridElement.innerHTML = '';
+                
+                toolsList.forEach((tool, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'tool-card';
+                    
+                    const firstCategory = Array.isArray(tool.category) ? tool.category[0] : tool.category;
+                    
+                    card.innerHTML = `
+                        <div class="tool-card-icon">${tool.icon || '🛠️'}</div>
+                        <div class="tool-card-body">
+                            <h3 class="tool-card-title">${tool.name}</h3>
+                            <p class="tool-card-desc">${tool.description}</p>
+                        </div>
+                        <div class="tool-card-footer">
+                            <span class="tool-card-category">${firstCategory}</span>
+                            <button class="tool-card-btn">
+                                Open
+                                <svg viewBox="0 0 24 24">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    `;
+
+                    // Redirect listener for open button
+                    card.querySelector('.tool-card-btn').addEventListener('click', () => {
+                        window.location.href = tool.url;
+                    });
+                    
+                    gridElement.appendChild(card);
+                    
+                    // Stagger insertion animation
+                    const timeout = setTimeout(() => {
+                        card.classList.add('visible');
+                    }, index * 40);
+                    staggerTimeouts.push(timeout);
+                });
+            }
+
+            // Filter tools and trigger rendering
+            function filterAndRender() {
+                const query = searchField.value.trim().toLowerCase();
+                
+                // Clear any running stagger timeouts
+                staggerTimeouts.forEach(t => clearTimeout(t));
+                staggerTimeouts = [];
+
+                // Filter logic
+                const filtered = tools.filter(tool => {
+                    const toolCategories = Array.isArray(tool.category) ? tool.category : [tool.category];
+                    const matchesCategory = (activeCategory === "All") || toolCategories.includes(activeCategory);
+                    
+                    const matchesQuery = !query || 
+                        tool.name.toLowerCase().includes(query) || 
+                        tool.description.toLowerCase().includes(query) ||
+                        toolCategories.some(cat => cat.toLowerCase().includes(query));
+                        
+                    return matchesCategory && matchesQuery;
+                });
+
+                const sectionsContainer = document.getElementById('search-sections');
+                const filteredGrid = document.getElementById('filtered-tools-grid');
+                const emptyState = document.getElementById('empty-state');
+
+                if (query === '' && activeCategory === 'All') {
+                    // Show curated sections
+                    sectionsContainer.style.display = 'flex';
+                    filteredGrid.style.display = 'none';
+                    
+                    emptyState.classList.remove('visible');
+                    setTimeout(() => {
+                        if (query === '' && activeCategory === 'All') {
+                            emptyState.style.display = 'none';
+                        }
+                    }, 400);
+
+                    // Curated sections list
+                    const popular = tools.filter(t => t.popular);
+                    const recent = tools.filter(t => t.recent);
+                    const trending = tools.filter(t => t.trending);
+
+                    renderGrid(document.getElementById('popular-tools-grid'), popular);
+                    renderGrid(document.getElementById('recent-tools-grid'), recent);
+                    renderGrid(document.getElementById('trending-tools-grid'), trending);
+                } else {
+                    // Show filtered grid
+                    sectionsContainer.style.display = 'none';
+                    
+                    if (filtered.length === 0) {
+                        filteredGrid.style.display = 'none';
+                        emptyState.style.display = 'flex';
+                        // Force reflow
+                        void emptyState.offsetWidth;
+                        emptyState.classList.add('visible');
+                    } else {
+                        emptyState.classList.remove('visible');
+                        emptyState.style.display = 'none';
+                        filteredGrid.style.display = 'grid';
+                        renderGrid(filteredGrid, filtered);
+                    }
+                }
+            }
+
+            // Event Listeners
+            btnSearch.addEventListener('click', openSearch);
+            searchCloseBtn.addEventListener('click', closeSearch);
+
+            // Close on click outside search container
+            searchOverlay.addEventListener('click', (e) => {
+                if (!e.target.closest('#search-container')) {
+                    closeSearch();
+                }
+            });
+
+            // Filter on text input
+            searchField.addEventListener('input', filterAndRender);
+
+            // Global Hotkeys
+            document.addEventListener('keydown', (e) => {
+                const isK = e.key.toLowerCase() === 'k';
+                const isMetaOrCtrl = e.metaKey || e.ctrlKey;
+                
+                if (isK && isMetaOrCtrl) {
+                    e.preventDefault();
+                    openSearch();
+                } else if (e.key === 'Escape') {
+                    closeSearch();
+                }
             });
 
             // Section Transitions
