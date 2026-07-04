@@ -67,7 +67,7 @@ const tools = getToolsByCategory(category.slug);
 <style>
   /* Breadcrumbs */
   .breadcrumbs-nav {
-    background-color: var(--surface-color);
+    background-color: #FFFFFF;
     border-bottom: 1px solid var(--border-color);
     padding: 0.75rem 0;
     font-size: 0.85rem;
@@ -86,7 +86,7 @@ const tools = getToolsByCategory(category.slug);
   }
 
   .breadcrumb-item:hover {
-    color: var(--primary-accent);
+    color: var(--primary-orange);
   }
 
   .breadcrumb-item.active {
@@ -128,9 +128,9 @@ const tools = getToolsByCategory(category.slug);
     justify-content: center;
     width: 52px;
     height: 52px;
-    background-color: var(--primary-glow);
-    color: var(--primary-accent);
-    border-radius: var(--radius-md);
+    background-color: rgba(255, 100, 45, 0.08);
+    color: var(--primary-orange);
+    border-radius: var(--radius-input);
   }
 
   .category-title {
@@ -165,13 +165,13 @@ const tools = getToolsByCategory(category.slug);
   }
 
   .empty-icon {
-    color: var(--primary-accent);
+    color: var(--primary-orange);
   }
 
   .empty-state h3 {
-    font-family: var(--font-display);
+    font-family: var(--font-sans);
     font-size: 1.25rem;
-    font-weight: 600;
+    font-weight: 700;
   }
 
   .empty-state p {
