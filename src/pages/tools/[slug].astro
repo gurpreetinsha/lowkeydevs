@@ -6,12 +6,22 @@ import { registry } from '../../tools/registry';
 import JSONFormatterUI from '../../tools/list/json-formatter/ui.astro';
 import PasswordGeneratorUI from '../../tools/list/password-generator/ui.astro';
 import Base64ConverterUI from '../../tools/list/base64-converter/ui.astro';
+import UUIDGeneratorUI from '../../tools/list/uuid-generator/ui.astro';
+import CaseConverterUI from '../../tools/list/case-converter/ui.astro';
+import URLEncoderDecoderUI from '../../tools/list/url-encoder-decoder/ui.astro';
+import EpochConverterUI from '../../tools/list/epoch-converter/ui.astro';
+import HashGeneratorUI from '../../tools/list/hash-generator/ui.astro';
 
 // Map slugs to UI components
 const uiComponents: Record<string, any> = {
   'json-formatter': JSONFormatterUI,
   'password-generator': PasswordGeneratorUI,
-  'base64-converter': Base64ConverterUI
+  'base64-converter': Base64ConverterUI,
+  'uuid-generator': UUIDGeneratorUI,
+  'case-converter': CaseConverterUI,
+  'url-encoder-decoder': URLEncoderDecoderUI,
+  'epoch-converter': EpochConverterUI,
+  'hash-generator': HashGeneratorUI
 };
 
 export async function getStaticPaths() {

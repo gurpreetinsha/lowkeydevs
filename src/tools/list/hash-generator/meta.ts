@@ -1,0 +1,28 @@
+import type { ToolMeta } from '../../definitions';
+
+export const meta: ToolMeta = {
+  slug: 'hash-generator',
+  title: 'Hash Generator',
+  description: 'Generate cryptographic MD5, SHA-1, SHA-256, and SHA-512 hashes from input text. Fully secure and processed locally in your browser.',
+  category: 'security',
+  keywords: ['hash generator', 'sha256 generator', 'md5 generator', 'sha1 generator', 'sha512', 'hash string', 'cryptographic hash'],
+  icon: 'Shield',
+  faqs: [
+    {
+      question: 'What is a cryptographic hash?',
+      answer: 'A cryptographic hash function maps input data of arbitrary size to a fixed-size bit string. It is a one-way function, meaning it is computationally infeasible to invert.'
+    },
+    {
+      question: 'Can the hashes be decrypted?',
+      answer: 'No. Cryptographic hashes are designed to be irreversible. However, weak algorithms like MD5 and SHA-1 can be vulnerable to collision attacks and pre-computed rainbow table lookups.'
+    }
+  ],
+  educationalContent: {
+    whatIsIt: 'A Hash Generator computes digests (fingerprints) of text strings using secure algorithms. This is essential for verifying data integrity, checking password strengths, or generating unique cache keys.',
+    howToUse: 'Enter or paste your text in the input area. The tool will calculate the MD5, SHA-1, SHA-256, and SHA-512 hashes simultaneously in real-time. Use the Copy button next to each hash to copy it.',
+    proTips: [
+      'For cryptographic security or storing passwords/sensitive identifiers, always prefer SHA-256 or SHA-512 over MD5 or SHA-1.',
+      'Copying is one-click; each hash output has its own dedicated clipboard copy button.'
+    ]
+  }
+};
