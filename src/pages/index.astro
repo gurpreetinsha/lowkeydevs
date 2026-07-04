@@ -5,10 +5,12 @@ import Footer from '../components/Footer.astro';
 import ToolCard from '../components/ToolCard.astro';
 import SponsorCard from '../components/SponsorCard.astro';
 import Icon from '../components/base/Icon.astro';
-import { registry, activeCategories } from '../tools/registry';
+import { registry, categories } from '../tools/registry';
 
 // Filter active categories
-const categoriesWithTools = activeCategories || [];
+const activeCategories = categories.filter(cat => 
+  registry.some(tool => tool.category === cat.slug)
+);
 ---
 
 <Layout 
@@ -57,7 +59,7 @@ const categoriesWithTools = activeCategories || [];
           >
             All Tools
           </button>
-          {categoriesWithTools.map(cat => (
+          {activeCategories.map(cat => (
             <button 
               class="tab-btn" 
               role="tab" 
