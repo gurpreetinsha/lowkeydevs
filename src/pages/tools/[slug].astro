@@ -1,0 +1,34 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import { registry } from '../../tools/registry';
+
+// Import all tool UI components statically
+import JSONFormatterUI from '../../tools/list/json-formatter/ui.astro';
+import PasswordGeneratorUI from '../../tools/list/password-generator/ui.astro';
+import Base64ConverterUI from '../../tools/list/base64-converter/ui.astro';
+
+// Map slugs to UI components
+const uiComponents: Record<string, any> = {
+  'json-formatter': JSONFormatterUI,
+  'password-generator': PasswordGeneratorUI,
+  'base64-converter': Base64ConverterUI
+};
+
+export async function getStaticPaths() {
+  return registry.map(tool => ({
+    params: { slug: tool.slug },
+    props: { tool }
+  }));
+}
+
+const { tool } = Astro.props;
+const ActiveToolUI = uiComponents[tool.slug];
+---
+
+{ActiveToolUI ? (
+  <ToolLayout tool={tool}>
+    <ActiveToolUI />
+  </ToolLayout>
+) : (
+  <div>Tool workspace not found.</div>
+)}

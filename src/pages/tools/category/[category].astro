@@ -1,0 +1,183 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import ToolCard from '../../../components/ToolCard.astro';
+import Icon from '../../../components/base/Icon.astro';
+import { categories, getToolsByCategory } from '../../../tools/registry';
+
+export async function getStaticPaths() {
+  return categories.map(cat => ({
+    params: { category: cat.slug },
+    props: { category: cat }
+  }));
+}
+
+const { category } = Astro.props;
+const tools = getToolsByCategory(category.slug);
+---
+
+<Layout 
+  title={`Best ${category.title} Online - LowKeyDevs`}
+  description={category.description}
+>
+  <Header />
+
+  <!-- Breadcrumbs -->
+  <nav class="breadcrumbs-nav" aria-label="Breadcrumb">
+    <div class="container breadcrumbs-container">
+      <a href="/" class="breadcrumb-item">Home</a>
+      <span class="separator">/</span>
+      <span class="breadcrumb-item active" aria-current="page">{category.title}</span>
+    </div>
+  </nav>
+
+  <main class="category-main container">
+    <header class="category-header">
+      <div class="category-icon-title">
+        <div class="category-icon-wrapper">
+          <Icon name={category.icon} size={28} />
+        </div>
+        <h1 class="category-title">{category.title}</h1>
+      </div>
+      <p class="category-description">{category.description}</p>
+    </header>
+
+    <section class="category-tools" aria-label={`Tools in ${category.title}`}>
+      {tools.length > 0 ? (
+        <div class="tools-grid">
+          {tools.map(tool => (
+            <ToolCard tool={tool} />
+          ))}
+        </div>
+      ) : (
+        <div class="empty-state glass-panel">
+          <Icon name="Info" size={24} class="empty-icon" />
+          <h3>No tools available yet</h3>
+          <p>We are actively building new utilities. Check back soon for updates!</p>
+          <a href="/" class="btn btn-primary">Go back home</a>
+        </div>
+      )}
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  /* Breadcrumbs */
+  .breadcrumbs-nav {
+    background-color: var(--surface-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.75rem 0;
+    font-size: 0.85rem;
+  }
+
+  .breadcrumbs-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .breadcrumb-item {
+    color: var(--text-secondary);
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumb-item:hover {
+    color: var(--primary-accent);
+  }
+
+  .breadcrumb-item.active {
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+  .separator {
+    color: var(--border-color);
+    user-select: none;
+  }
+
+  /* Main Category Layout */
+  .category-main {
+    padding-top: 2.5rem;
+    padding-bottom: 5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .category-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 800px;
+  }
+
+  .category-icon-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .category-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    background-color: var(--primary-glow);
+    color: var(--primary-accent);
+    border-radius: var(--radius-md);
+  }
+
+  .category-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+
+  .category-description {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+
+  /* Grid Layout */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  /* Empty state */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    gap: 1rem;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .empty-icon {
+    color: var(--primary-accent);
+  }
+
+  .empty-state h3 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .empty-state p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+  }
+</style>

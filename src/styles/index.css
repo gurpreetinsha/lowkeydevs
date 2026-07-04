@@ -1,0 +1,265 @@
+/* Design System & Global Styles - LowKeyDevs */
+
+/* Variables */
+:root {
+  /* Fonts */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', var(--font-sans);
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Sleek Dark Mode (Default) */
+  --bg-color: hsl(224, 25%, 8%);
+  --surface-color: hsl(224, 25%, 12%);
+  --surface-hover: hsl(224, 25%, 15%);
+  --border-color: hsla(224, 20%, 20%, 0.4);
+  --border-hover: hsla(224, 20%, 30%, 0.6);
+  --primary-accent: hsl(263, 90%, 64%);
+  --primary-glow: hsla(263, 90%, 64%, 0.15);
+  --primary-gradient: linear-gradient(135deg, hsl(263, 90%, 64%) 0%, hsl(292, 84%, 60%) 100%);
+  --secondary-accent: hsl(192, 95%, 50%);
+  --secondary-glow: hsla(192, 95%, 50%, 0.15);
+  
+  --text-primary: hsl(210, 40%, 98%);
+  --text-secondary: hsl(215, 20%, 75%);
+  --text-muted: hsl(215, 12%, 55%);
+  
+  --success-color: hsl(142, 70%, 45%);
+  --error-color: hsl(350, 80%, 60%);
+  --error-bg: hsla(350, 80%, 60%, 0.1);
+  --error-border: hsla(350, 80%, 60%, 0.2);
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-glow: 0 0 20px 0 rgba(139, 92, 246, 0.15);
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+}
+
+[data-theme="light"] {
+  /* Clean Light Mode */
+  --bg-color: hsl(220, 30%, 97%);
+  --surface-color: hsl(0, 0%, 100%);
+  --surface-hover: hsl(220, 20%, 94%);
+  --border-color: hsl(220, 20%, 90%);
+  --border-hover: hsl(220, 20%, 80%);
+  --primary-accent: hsl(263, 90%, 54%);
+  --primary-glow: hsla(263, 90%, 54%, 0.1);
+  --primary-gradient: linear-gradient(135deg, hsl(263, 90%, 54%) 0%, hsl(280, 80%, 50%) 100%);
+  --secondary-accent: hsl(192, 95%, 40%);
+  --secondary-glow: hsla(192, 95%, 40%, 0.1);
+  
+  --text-primary: hsl(224, 25%, 12%);
+  --text-secondary: hsl(220, 15%, 45%);
+  --text-muted: hsl(220, 10%, 60%);
+  
+  --success-color: hsl(142, 76%, 36%);
+  --error-color: hsl(350, 75%, 50%);
+  --error-bg: hsla(350, 75%, 50%, 0.05);
+  --error-border: hsla(350, 75%, 50%, 0.15);
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  --shadow-glow: 0 0 20px 0 rgba(139, 92, 246, 0.08);
+}
+
+/* Base resets & styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background-color: var(--bg-color);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Typography elements */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+a {
+  color: var(--primary-accent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--text-primary);
+}
+
+pre, code, textarea, input[type="text"], input[type="password"] {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+
+/* Common Layout Components */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: var(--primary-gradient);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+  box-shadow: var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.btn-secondary {
+  background-color: var(--surface-color);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+  background-color: var(--surface-hover);
+  border-color: var(--border-hover);
+}
+
+.btn-danger {
+  background-color: hsla(350, 80%, 60%, 0.15);
+  border-color: var(--error-border);
+  color: var(--error-color);
+}
+
+.btn-danger:hover {
+  background-color: hsla(350, 80%, 60%, 0.25);
+  border-color: var(--error-color);
+}
+
+.btn:disabled, .btn-primary:disabled, .btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Inputs & Form Controls */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.label {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.input, .textarea, .select {
+  width: 100%;
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input:focus, .textarea:focus, .select:focus {
+  border-color: var(--primary-accent);
+  box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 150px;
+}
+
+/* Glassmorphism Panel / Card */
+.glass-panel {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 1.5rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.glass-panel-hover:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}

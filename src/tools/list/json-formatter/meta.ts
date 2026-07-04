@@ -1,0 +1,32 @@
+import type { ToolMeta } from '../../definitions';
+
+export const meta: ToolMeta = {
+  slug: 'json-formatter',
+  title: 'JSON Formatter & Validator',
+  description: 'Format, validate, beautify, and minify your JSON data instantly. All processing runs 100% client-side in your browser for complete privacy.',
+  category: 'json-yaml',
+  keywords: ['json formatter', 'json beautifier', 'validate json', 'minify json', 'prettify json', 'json validator', 'json parser'],
+  icon: 'Braces',
+  faqs: [
+    {
+      question: 'Is my JSON data secure?',
+      answer: 'Yes. All formatting, minification, and validation are processed entirely inside your browser using JavaScript. No JSON data is ever uploaded or transmitted to our servers.'
+    },
+    {
+      question: 'Does this tool validate JSON schema or syntax?',
+      answer: 'Yes, it checks for syntax errors (such as missing commas, unclosed brackets, or trailing commas) and highlights exactly where the parsing failed.'
+    },
+    {
+      question: 'Can I format nested arrays and objects?',
+      answer: 'Yes, the tool handles any valid nested JSON structure and outputs clean, indented text based on your selection (2 spaces, 4 spaces, or tabs).'
+    }
+  ],
+  educationalContent: {
+    whatIsIt: 'JSON (JavaScript Object Notation) is the standard format used to transmit structured data in web applications. While machines read minified JSON easily, humans require proper indentation, brackets alignment, and line breaks to debug and read it efficiently. A JSON Formatter takes dense, unreadable JSON and beautifies it.',
+    howToUse: '1. Paste your raw, minified, or disorganized JSON text into the input field.\n2. The formatter will instantly validate and beautify the text as you type.\n3. Click "Minify" if you want to compact the JSON for storage or API payloads.\n4. Click "Copy" to save the result to your clipboard, or "Clear" to start fresh.',
+    proTips: [
+      'You can toggle between 2-space indentation, 4-space indentation, and tab-spacing options.',
+      'If the JSON is invalid, a helpful error message with the character location will appear to guide your debugging.'
+    ]
+  }
+};

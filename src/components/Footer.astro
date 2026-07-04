@@ -1,0 +1,176 @@
+---
+import Icon from './base/Icon.astro';
+---
+
+<footer class="site-footer">
+  <div class="container footer-container">
+    <div class="footer-brand">
+      <span class="logo-text">LowKey<span class="logo-accent">Devs</span></span>
+      <p class="brand-tagline">
+        The fastest, cleanest collection of 100% private client-side utilities. Zero trackers, zero server logs.
+      </p>
+    </div>
+
+    <div class="footer-links">
+      <h3 class="footer-heading">Platform</h3>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About Us</a></li>
+        <li><a href="/privacy">Privacy Policy</a></li>
+      </ul>
+    </div>
+
+    <!-- Buy Me a Coffee Option -->
+    <div class="footer-donate">
+      <h3 class="footer-heading">Support LowKeyDevs</h3>
+      <p class="donate-text">Help us keep the servers running and the site ad-free.</p>
+      <a 
+        href="https://buymeacoffee.com" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        class="btn btn-donate"
+      >
+        <span class="coffee-icon">☕</span>
+        Buy Me a Coffee
+      </a>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container footer-bottom-container">
+      <p>&copy; {new Date().getFullYear()} LowKeyDevs. All rights reserved.</p>
+      <p class="footer-heart">Made with <span>&hearts;</span> for developers worldwide</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background-color: var(--surface-color);
+    border-top: 1px solid var(--border-color);
+    padding: 3rem 0 1.5rem 0;
+    margin-top: auto;
+  }
+
+  .footer-container {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  @media (max-width: 768px) {
+    .footer-container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .logo-text {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .logo-accent {
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .brand-tagline {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    max-width: 320px;
+  }
+
+  .footer-heading {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+  }
+
+  .footer-links ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .footer-links a {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+  }
+
+  .footer-links a:hover {
+    color: var(--primary-accent);
+  }
+
+  .footer-donate {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .donate-text {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+
+  .btn-donate {
+    background: linear-gradient(135deg, hsl(35, 95%, 55%) 0%, hsl(20, 90%, 50%) 100%);
+    color: white;
+    font-weight: 600;
+    border: none;
+    box-shadow: var(--shadow-sm);
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .btn-donate:hover {
+    box-shadow: 0 0 15px 0 hsla(20, 90%, 50%, 0.25);
+    opacity: 0.95;
+    transform: translateY(-1px);
+  }
+
+  .coffee-icon {
+    font-size: 1.1rem;
+  }
+
+  .footer-bottom {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1.5rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .footer-bottom-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-heart span {
+    color: var(--error-color);
+  }
+</style>
