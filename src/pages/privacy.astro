@@ -91,7 +91,7 @@ import Icon from '../components/base/Icon.astro';
     display: flex;
     flex-direction: column;
     gap: var(--ds-space-100);
-    border-bottom: var(--ds-border-width-default) solid var(--ds-border);
+    border-bottom: 1px solid var(--ds-border);
     padding-bottom: var(--ds-space-300);
   }
 
@@ -107,50 +107,53 @@ import Icon from '../components/base/Icon.astro';
     justify-content: center;
     width: 40px;
     height: 40px;
-    background-color: var(--ds-background-success);
+    background-color: rgba(52, 199, 89, 0.08);
     color: var(--ds-text-success);
+    border: 1px solid rgba(52, 199, 89, 0.15);
     border-radius: var(--ds-radius-medium);
   }
 
   .privacy-title {
-    font-size: 2rem; /* heading-xxlarge */
-    font-weight: 653;
-    letter-spacing: -0.02em;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
     color: var(--ds-text);
   }
 
   .privacy-date {
     color: var(--ds-text-subtlest);
     font-size: 0.8125rem;
+    font-weight: 500;
   }
 
   .privacy-body {
     display: flex;
     flex-direction: column;
     gap: var(--ds-space-250);
-    line-height: 1.5;
+    line-height: 1.6;
     color: var(--ds-text-subtle);
-    font-size: 0.875rem;
+    font-size: 0.9rem;
   }
 
   .privacy-body h2 {
-    font-family: var(--font-sans);
-    font-size: 1.25rem; /* heading-medium */
-    font-weight: 653;
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
     color: var(--ds-text);
     margin-top: var(--ds-space-150);
   }
 
   .highlight-text {
     background-color: var(--ds-background-success);
-    border: var(--ds-border-width-default) solid var(--ds-border-success-subtle);
-    color: var(--ds-text);
+    border: 1px solid var(--ds-border-success-subtle);
+    color: var(--ds-text-success-bolder);
     padding: var(--ds-space-250);
     border-radius: var(--ds-radius-large);
   }
 
   .privacy-footer {
-    border-top: var(--ds-border-width-default) solid var(--ds-border);
+    border-top: 1px solid var(--ds-border);
     padding-top: var(--ds-space-300);
   }
 

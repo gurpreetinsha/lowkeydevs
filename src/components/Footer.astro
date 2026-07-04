@@ -51,11 +51,17 @@ import Icon from './base/Icon.astro';
 
 <style>
   .site-footer {
-    background-color: var(--ds-surface-sunken);
+    background-color: rgba(255, 255, 255, 0.1);
     color: var(--ds-text);
-    border-top: var(--ds-border-width-default) solid var(--ds-border);
+    border-top: 1px solid var(--ds-border);
     padding: var(--ds-space-600) 0 var(--ds-space-400) 0;
     margin-top: auto;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+  }
+
+  html[data-theme="dark"] .site-footer {
+    background-color: rgba(10, 6, 20, 0.4);
   }
 
   .footer-container {
@@ -79,11 +85,11 @@ import Icon from './base/Icon.astro';
   }
 
   .logo-text {
-    font-family: var(--font-sans);
-    font-size: 1.25rem;
-    font-weight: 700;
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 800;
     color: var(--ds-text);
-    letter-spacing: -0.03em;
+    letter-spacing: -0.04em;
   }
 
   .logo-accent {
@@ -93,17 +99,17 @@ import Icon from './base/Icon.astro';
   .brand-tagline {
     color: var(--ds-text-subtle);
     font-size: 0.875rem;
-    line-height: 1.5;
+    line-height: 1.6;
     max-width: 320px;
   }
 
   .footer-heading {
-    font-family: var(--font-sans);
-    font-size: 0.75rem;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
     font-weight: 700;
-    color: var(--ds-text-subtle);
-    text-transform: none; /* MUST NOT use uppercase stretch */
-    letter-spacing: normal;
+    color: var(--ds-text);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     margin-bottom: var(--ds-space-200);
     display: flex;
     flex-direction: column;
@@ -112,16 +118,16 @@ import Icon from './base/Icon.astro';
   }
 
   .new-tools-badge {
-    background-color: var(--ds-background-success);
+    background-color: rgba(52, 199, 89, 0.1);
     color: var(--ds-text-success-bolder);
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-family: var(--font-sans);
     padding: var(--ds-space-025) var(--ds-space-075);
     border-radius: var(--ds-radius-small);
-    border: 1px solid var(--ds-border-success);
-    font-weight: 600;
-    letter-spacing: normal;
-    text-transform: none; /* sentence case badge */
+    border: 1px solid rgba(52, 199, 89, 0.2);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
   }
 
   .footer-links ul {
@@ -136,6 +142,7 @@ import Icon from './base/Icon.astro';
     font-size: 0.875rem;
     text-decoration: none;
     transition: color 0.15s ease;
+    font-weight: 500;
   }
 
   .footer-links a:hover {
@@ -153,7 +160,7 @@ import Icon from './base/Icon.astro';
   .newsletter-text {
     color: var(--ds-text-subtle);
     font-size: 0.875rem;
-    line-height: 1.45;
+    line-height: 1.5;
   }
 
   .newsletter-form {
@@ -165,19 +172,22 @@ import Icon from './base/Icon.astro';
   .newsletter-input {
     width: 100%;
     background-color: var(--ds-background-input);
-    border: var(--ds-border-width-default) solid var(--ds-border-input);
+    border: 1px solid var(--ds-border-input);
     color: var(--ds-text);
     border-radius: var(--ds-radius-medium);
     padding: var(--ds-space-100) 48px var(--ds-space-100) var(--ds-space-150);
     outline: none;
     font-family: var(--font-sans);
     font-size: 0.875rem;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    font-weight: 500;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
   }
 
   .newsletter-input:focus {
     border-color: var(--ds-border-focused);
-    box-shadow: 0 0 0 2px var(--ds-border-focused);
+    box-shadow: var(--form-focus-ring);
+    background-color: var(--ds-background-input-pressed);
   }
 
   .newsletter-submit {
@@ -201,7 +211,7 @@ import Icon from './base/Icon.astro';
   }
 
   .footer-bottom {
-    border-top: var(--ds-border-width-default) solid var(--ds-border);
+    border-top: 1px solid var(--ds-border);
     padding-top: var(--ds-space-200);
     font-size: 0.75rem;
     color: var(--ds-text-subtlest);

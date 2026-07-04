@@ -108,29 +108,33 @@ const searchIndex = registry.map(tool => ({
 
 <style>
   .site-header {
-    background-color: var(--ds-surface);
-    border-bottom: var(--ds-border-width-default) solid var(--ds-border);
+    background-color: rgba(255, 255, 255, 0.3);
+    border-bottom: 1px solid var(--ds-border);
     position: sticky;
     top: 0;
     z-index: 100;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     height: 70px;
     display: flex;
     align-items: center;
+  }
+
+  html[data-theme="dark"] .site-header {
+    background-color: rgba(10, 6, 20, 0.5);
   }
 
   .nav-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: var(--ds-space-300);
+    gap: var(--ds-space-200);
   }
 
   .right-header-group {
     display: flex;
     align-items: center;
-    gap: var(--ds-space-200);
+    gap: var(--ds-space-150);
     flex: 1;
     max-width: 600px;
     justify-content: flex-end;
@@ -144,22 +148,28 @@ const searchIndex = registry.map(tool => ({
   .theme-btn {
     display: inline-flex;
     align-items: center;
-    gap: var(--ds-space-100);
-    background-color: var(--ds-background-neutral-subtle);
-    border: var(--ds-border-width-default) solid var(--ds-border);
+    gap: var(--ds-space-075);
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     color: var(--ds-text-subtle);
     padding: var(--ds-space-100) var(--ds-space-150);
     border-radius: var(--ds-radius-medium);
     cursor: pointer;
     font-family: var(--font-sans);
-    font-weight: 500;
-    font-size: 0.875rem;
-    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 600;
+    font-size: 0.85rem;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  html[data-theme="dark"] .theme-btn {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--ds-text);
   }
 
   .theme-btn:hover {
-    border-color: var(--ds-border-bold);
-    background-color: var(--ds-background-neutral-subtle-hovered);
+    border-color: var(--glass-border-hover);
+    background-color: var(--glass-bg-hover);
   }
 
   .theme-dropdown {
@@ -168,18 +178,20 @@ const searchIndex = registry.map(tool => ({
     right: 0;
     width: 280px;
     background-color: var(--ds-surface-overlay);
-    border: var(--ds-border-width-default) solid var(--ds-border);
+    border: 1px solid var(--glass-border);
     border-radius: var(--ds-radius-large);
     box-shadow: var(--ds-shadow-overlay);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
     z-index: 1001;
     padding: var(--ds-space-200);
-    animation: slideDown 0.15s ease-out;
+    animation: slideDown 0.2s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
   @keyframes slideDown {
     from {
       opacity: 0;
-      transform: translateY(-8px);
+      transform: translateY(-10px);
     }
     to {
       opacity: 1;
@@ -188,28 +200,29 @@ const searchIndex = registry.map(tool => ({
   }
 
   .theme-dropdown-header {
-    font-family: var(--font-sans);
+    font-family: var(--font-display);
     font-size: 0.75rem;
     font-weight: 700;
     color: var(--ds-text-subtle);
     margin-bottom: var(--ds-space-150);
-    text-transform: none;
-    border-bottom: var(--ds-border-width-default) solid var(--ds-border);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--ds-border);
     padding-bottom: var(--ds-space-075);
   }
 
   .theme-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--ds-space-100);
+    gap: var(--ds-space-075);
   }
 
   .theme-option {
     display: flex;
     align-items: center;
-    gap: var(--ds-space-100);
+    gap: var(--ds-space-075);
     background: transparent;
-    border: var(--ds-border-width-default) solid transparent;
+    border: 1px solid transparent;
     padding: var(--ds-space-075) var(--ds-space-100);
     border-radius: var(--ds-radius-medium);
     cursor: pointer;
@@ -217,8 +230,8 @@ const searchIndex = registry.map(tool => ({
     width: 100%;
     color: var(--ds-text);
     font-family: var(--font-sans);
-    font-size: 0.8125rem;
-    transition: all 0.1s ease;
+    font-size: 0.8rem;
+    font-weight: 500;
   }
 
   .theme-option:hover {
@@ -228,13 +241,13 @@ const searchIndex = registry.map(tool => ({
   .theme-option.active {
     background-color: var(--ds-background-selected);
     border-color: var(--ds-border-selected);
-    font-weight: 600;
+    font-weight: 700;
     color: var(--ds-text-selected);
   }
 
   .swatch {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
     flex-shrink: 0;
   }
@@ -261,11 +274,11 @@ const searchIndex = registry.map(tool => ({
   }
 
   .logo-text {
-    font-family: var(--font-sans);
-    font-size: 1.25rem;
-    font-weight: 700;
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 800;
     color: var(--ds-text);
-    letter-spacing: -0.03em;
+    letter-spacing: -0.04em;
   }
 
   .logo-accent {
@@ -277,6 +290,7 @@ const searchIndex = registry.map(tool => ({
     position: relative;
     flex: 1;
     max-width: 440px;
+    transition: max-width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .search-input-container {
@@ -297,29 +311,31 @@ const searchIndex = registry.map(tool => ({
     padding: var(--ds-space-100) var(--ds-space-150) var(--ds-space-100) var(--ds-space-450);
     border-radius: var(--ds-radius-medium);
     background-color: var(--ds-background-input);
-    border: var(--ds-border-width-default) solid var(--ds-border-input);
+    border: 1px solid var(--ds-border-input);
     color: var(--ds-text);
     outline: none;
     font-family: var(--font-sans);
     font-size: 0.875rem;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    font-weight: 500;
   }
 
   #search-input:focus {
     border-color: var(--ds-border-focused);
-    box-shadow: 0 0 0 2px var(--ds-border-focused);
+    box-shadow: var(--form-focus-ring);
+    background-color: var(--ds-background-input-pressed);
   }
 
   .search-kbd {
     position: absolute;
     right: var(--ds-space-150);
     background-color: var(--ds-background-neutral);
-    border: var(--ds-border-width-default) solid var(--ds-border);
+    border: 1px solid var(--ds-border);
     color: var(--ds-text-subtlest);
     padding: 2px 6px;
     border-radius: 4px;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-family: var(--font-sans);
+    font-weight: 700;
     pointer-events: none;
   }
 
@@ -334,9 +350,11 @@ const searchIndex = registry.map(tool => ({
     left: 0;
     right: 0;
     background-color: var(--ds-surface-overlay);
-    border: var(--ds-border-width-default) solid var(--ds-border);
+    border: 1px solid var(--glass-border);
     border-radius: var(--ds-radius-large);
     box-shadow: var(--ds-shadow-overlay);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
     max-height: 380px;
     overflow-y: auto;
     z-index: 1000;
@@ -354,7 +372,6 @@ const searchIndex = registry.map(tool => ({
     padding: var(--ds-space-100) var(--ds-space-150);
     border-radius: var(--ds-radius-medium);
     color: var(--ds-text);
-    transition: background-color 0.1s ease;
     text-decoration: none;
   }
 
@@ -398,15 +415,37 @@ const searchIndex = registry.map(tool => ({
 
   .search-item:hover .search-item-icon-wrapper,
   .search-item.active .search-item-icon-wrapper {
-    background-color: var(--ds-surface);
-    color: var(--ds-text-selected);
+    background-color: var(--ds-background-brand-bold);
+    color: #ffffff;
   }
 
   .search-empty {
     padding: var(--ds-space-300);
     text-align: center;
     color: var(--ds-text-subtlest);
-    font-size: 0.8125rem;
+    font-size: 0.85rem;
+  }
+
+  /* Responsive Search adjustments */
+  @media (max-width: 640px) {
+    .logo-text {
+      font-size: 1.15rem;
+    }
+    .search-wrapper {
+      max-width: 170px;
+    }
+    .search-wrapper:focus-within {
+      max-width: 220px;
+      z-index: 10;
+    }
+    #search-input {
+      font-size: 0.8rem;
+      padding-left: var(--ds-space-350);
+      padding-right: var(--ds-space-150);
+    }
+    .search-kbd {
+      display: none;
+    }
   }
 </style>
 

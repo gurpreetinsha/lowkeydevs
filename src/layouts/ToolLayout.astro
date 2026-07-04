@@ -196,10 +196,16 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 <style>
   /* Breadcrumbs */
   .breadcrumbs-nav {
-    background-color: var(--ds-surface);
-    border-bottom: var(--ds-border-width-default) solid var(--ds-border);
+    background-color: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--ds-border);
     padding: var(--ds-space-150) 0;
-    font-size: 0.8125rem; /* body-small-ish */
+    font-size: 0.8125rem;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  html[data-theme="dark"] .breadcrumbs-nav {
+    background-color: rgba(0, 0, 0, 0.2);
   }
 
   .breadcrumbs-container {
@@ -267,19 +273,25 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
     display: inline-flex;
     align-items: center;
     gap: var(--ds-space-075);
-    background-color: var(--ds-background-neutral);
-    color: var(--ds-text-subtle);
+    background-color: rgba(0, 113, 227, 0.08);
+    color: var(--ds-text-selected);
+    border: 1px solid rgba(0, 113, 227, 0.15);
     padding: var(--ds-space-050) var(--ds-space-150);
     border-radius: var(--ds-radius-full);
     font-size: 0.75rem;
     font-weight: 600;
-    text-transform: none; /* sentence case / brand name */
     font-family: var(--font-sans);
+  }
+
+  html[data-theme="dark"] .category-badge {
+    background-color: rgba(41, 151, 255, 0.12);
+    color: var(--ds-text-selected);
+    border-color: rgba(41, 151, 255, 0.25);
   }
 
   .tool-title {
     font-size: 2.25rem;
-    font-weight: 653;
+    font-weight: 800;
     color: var(--ds-text);
     letter-spacing: -0.03em;
     line-height: 1.15;
@@ -289,7 +301,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
     color: var(--ds-text-subtle);
     font-size: 0.9375rem;
     max-width: 800px;
-    line-height: 1.45;
+    line-height: 1.5;
   }
 
   /* Tool Workspace Frame */
@@ -309,13 +321,12 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   }
 
   .widget-title {
-    font-family: var(--font-sans);
-    font-size: 0.75rem;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
     font-weight: 700;
     margin-bottom: var(--ds-space-200);
-    color: var(--ds-text-subtle);
-    text-transform: none; /* MUST NOT use uppercase stretch */
-    letter-spacing: normal;
+    color: var(--ds-text);
+    letter-spacing: -0.01em;
   }
 
   .related-list {
@@ -352,7 +363,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   }
 
   .related-item:hover .related-icon {
-    color: var(--ds-text-inverse);
+    color: #ffffff;
     background-color: var(--ds-background-brand-bold);
   }
 
@@ -378,8 +389,8 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   }
 
   .privacy-widget {
-    border-color: var(--ds-border-success-subtle);
-    background-color: var(--ds-background-success);
+    border-color: var(--ds-border-success-subtle) !important;
+    background-color: var(--ds-background-success) !important;
   }
 
   .privacy-header {
@@ -398,8 +409,8 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
   .privacy-text {
     font-size: 0.8125rem;
-    color: var(--ds-text); /* neutral text color per Atlassian guidelines */
-    line-height: 1.45;
+    color: var(--ds-text-subtle);
+    line-height: 1.5;
   }
 
   /* Educational Content & FAQs */
@@ -422,7 +433,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
   .edu-title {
     font-size: 1.25rem;
-    font-weight: 653;
+    font-weight: 700;
     margin-bottom: var(--ds-space-150);
     color: var(--ds-text);
   }
@@ -434,7 +445,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   .edu-para {
     color: var(--ds-text-subtle);
     font-size: 0.875rem;
-    line-height: 1.5;
+    line-height: 1.6;
     margin-bottom: var(--ds-space-150);
   }
 
@@ -447,7 +458,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   .step-item {
     font-size: 0.875rem;
     color: var(--ds-text-subtle);
-    line-height: 1.5;
+    line-height: 1.6;
   }
 
   .pro-tips-title {
@@ -533,7 +544,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   .faq-answer p {
     font-size: 0.875rem;
     color: var(--ds-text-subtle);
-    line-height: 1.5;
+    line-height: 1.6;
     margin-top: var(--ds-space-150);
   }
 </style>
