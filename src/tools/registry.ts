@@ -27,6 +27,16 @@ import { meta as removeTextFormattingMeta } from './list/remove-text-formatting/
 import { meta as repeatTextGeneratorMeta } from './list/repeat-text-generator/meta';
 import { meta as reverseTextGeneratorMeta } from './list/reverse-text-generator/meta';
 import { meta as invisibleTextGeneratorMeta } from './list/invisible-text-generator/meta';
+import { meta as fancyTextGeneratorMeta } from './list/fancy-text-generator/meta';
+import { meta as boldTextGeneratorMeta } from './list/bold-text-generator/meta';
+import { meta as italicTextGeneratorMeta } from './list/italic-text-generator/meta';
+import { meta as underlineTextGeneratorMeta } from './list/underline-text-generator/meta';
+import { meta as strikethroughTextGeneratorMeta } from './list/strikethrough-text-generator/meta';
+import { meta as bubbleTextGeneratorMeta } from './list/bubble-text-generator/meta';
+import { meta as smallTextGeneratorMeta } from './list/small-text-generator/meta';
+import { meta as bigTextGeneratorMeta } from './list/big-text-generator/meta';
+import { meta as gothicTextGeneratorMeta } from './list/gothic-text-generator/meta';
+import { meta as mirrorTextGeneratorMeta } from './list/mirror-text-generator/meta';
 
 // Central Registry of all tools
 export const registry: ToolMeta[] = [
@@ -57,7 +67,17 @@ export const registry: ToolMeta[] = [
   removeTextFormattingMeta,
   repeatTextGeneratorMeta,
   reverseTextGeneratorMeta,
-  invisibleTextGeneratorMeta
+  invisibleTextGeneratorMeta,
+  fancyTextGeneratorMeta,
+  boldTextGeneratorMeta,
+  italicTextGeneratorMeta,
+  underlineTextGeneratorMeta,
+  strikethroughTextGeneratorMeta,
+  bubbleTextGeneratorMeta,
+  smallTextGeneratorMeta,
+  bigTextGeneratorMeta,
+  gothicTextGeneratorMeta,
+  mirrorTextGeneratorMeta
 ];
 
 // Helper to find a tool by its slug
