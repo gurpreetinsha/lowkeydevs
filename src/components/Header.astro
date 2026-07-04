@@ -52,14 +52,14 @@ const searchIndex = registry.map(tool => ({
         </button>
         
         <div class="theme-dropdown" id="theme-dropdown" hidden>
-          <div class="theme-dropdown-header">Choose Theme</div>
+          <div class="theme-dropdown-header">Choose theme</div>
           <div class="theme-grid">
             <button class="theme-option" data-theme-val="light" title="Default Light">
-              <span class="swatch" style="background: #FAFAFA; border: 1px solid #E5E7EB;"></span>
+              <span class="swatch" style="background: #FFFFFF; border: 1px solid var(--ds-border);"></span>
               <span class="theme-name">Light</span>
             </button>
             <button class="theme-option" data-theme-val="dark" title="Default Dark">
-              <span class="swatch" style="background: #0F172A; border: 1px solid #334155;"></span>
+              <span class="swatch" style="background: #1D2125; border: 1px solid var(--ds-border);"></span>
               <span class="theme-name">Dark</span>
             </button>
             <button class="theme-option" data-theme-val="cyberpunk" title="Cyberpunk">
@@ -108,8 +108,8 @@ const searchIndex = registry.map(tool => ({
 
 <style>
   .site-header {
-    background-color: var(--color-canvas);
-    border-bottom: 1px solid var(--color-border-light);
+    background-color: var(--ds-surface);
+    border-bottom: var(--ds-border-width-default) solid var(--ds-border);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -124,13 +124,13 @@ const searchIndex = registry.map(tool => ({
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 1.5rem;
+    gap: var(--ds-space-300);
   }
 
   .right-header-group {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: var(--ds-space-200);
     flex: 1;
     max-width: 600px;
     justify-content: flex-end;
@@ -144,37 +144,36 @@ const searchIndex = registry.map(tool => ({
   .theme-btn {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    background-color: var(--color-canvas);
-    border: 1px solid var(--color-hairline);
-    color: var(--color-ink);
-    padding: 8px 14px;
-    border-radius: var(--radius-xs);
+    gap: var(--ds-space-100);
+    background-color: var(--ds-background-neutral-subtle);
+    border: var(--ds-border-width-default) solid var(--ds-border);
+    color: var(--ds-text-subtle);
+    padding: var(--ds-space-100) var(--ds-space-150);
+    border-radius: var(--ds-radius-medium);
     cursor: pointer;
     font-family: var(--font-sans);
     font-weight: 500;
-    font-size: 14px;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.875rem;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .theme-btn:hover {
-    border-color: var(--color-primary);
-    background-color: var(--color-neutral-surface);
-    transform: translateY(-1px);
+    border-color: var(--ds-border-bold);
+    background-color: var(--ds-background-neutral-subtle-hovered);
   }
 
   .theme-dropdown {
     position: absolute;
-    top: calc(100% + 8px);
+    top: calc(100% + var(--ds-space-100));
     right: 0;
     width: 280px;
-    background-color: var(--color-canvas);
-    border: 1px solid var(--color-hairline);
-    border-radius: var(--radius-sm);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    background-color: var(--ds-surface-overlay);
+    border: var(--ds-border-width-default) solid var(--ds-border);
+    border-radius: var(--ds-radius-large);
+    box-shadow: var(--ds-shadow-overlay);
     z-index: 1001;
-    padding: 16px;
-    animation: slideDown 0.2s ease-out;
+    padding: var(--ds-space-200);
+    animation: slideDown 0.15s ease-out;
   }
 
   @keyframes slideDown {
@@ -189,49 +188,48 @@ const searchIndex = registry.map(tool => ({
   }
 
   .theme-dropdown-header {
-    font-family: var(--font-display);
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--color-slate);
-    margin-bottom: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-bottom: 1px solid var(--color-hairline);
-    padding-bottom: 6px;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--ds-text-subtle);
+    margin-bottom: var(--ds-space-150);
+    text-transform: none;
+    border-bottom: var(--ds-border-width-default) solid var(--ds-border);
+    padding-bottom: var(--ds-space-075);
   }
 
   .theme-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
+    gap: var(--ds-space-100);
   }
 
   .theme-option {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--ds-space-100);
     background: transparent;
-    border: 1px solid transparent;
-    padding: 6px 8px;
-    border-radius: var(--radius-xs);
+    border: var(--ds-border-width-default) solid transparent;
+    padding: var(--ds-space-075) var(--ds-space-100);
+    border-radius: var(--ds-radius-medium);
     cursor: pointer;
     text-align: left;
     width: 100%;
-    color: var(--color-ink);
+    color: var(--ds-text);
     font-family: var(--font-sans);
-    font-size: 13px;
-    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.8125rem;
+    transition: all 0.1s ease;
   }
 
   .theme-option:hover {
-    background-color: var(--color-neutral-surface);
-    border-color: var(--color-hairline);
+    background-color: var(--ds-background-neutral-hovered);
   }
 
   .theme-option.active {
-    background-color: var(--color-neutral-surface);
-    border-color: var(--color-primary);
+    background-color: var(--ds-background-selected);
+    border-color: var(--ds-border-selected);
     font-weight: 600;
+    color: var(--ds-text-selected);
   }
 
   .swatch {
@@ -252,7 +250,7 @@ const searchIndex = registry.map(tool => ({
       display: none;
     }
     .theme-btn {
-      padding: 8px;
+      padding: var(--ds-space-100);
     }
   }
 
@@ -263,15 +261,15 @@ const searchIndex = registry.map(tool => ({
   }
 
   .logo-text {
-    font-family: var(--font-display);
-    font-size: 1.35rem;
-    font-weight: 500;
-    color: var(--color-primary-dark);
+    font-family: var(--font-sans);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--ds-text);
     letter-spacing: -0.03em;
   }
 
   .logo-accent {
-    color: var(--color-highlight-coral);
+    color: var(--ds-text-selected);
   }
 
   /* Search Bar Styles */
@@ -289,38 +287,38 @@ const searchIndex = registry.map(tool => ({
 
   .search-icon {
     position: absolute;
-    left: 12px;
-    color: var(--color-slate);
+    left: var(--ds-space-150);
+    color: var(--ds-icon-subtle);
     pointer-events: none;
   }
 
   #search-input {
     width: 100%;
-    padding: 10px 12px 10px 36px;
-    border-radius: var(--radius-xs);
-    background-color: var(--color-canvas);
-    border: 1px solid var(--color-hairline);
-    color: var(--color-ink);
+    padding: var(--ds-space-100) var(--ds-space-150) var(--ds-space-100) var(--ds-space-450);
+    border-radius: var(--ds-radius-medium);
+    background-color: var(--ds-background-input);
+    border: var(--ds-border-width-default) solid var(--ds-border-input);
+    color: var(--ds-text);
     outline: none;
     font-family: var(--font-sans);
-    font-size: 14px;
-    transition: border-color 200ms ease, box-shadow 200ms ease;
+    font-size: 0.875rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
 
   #search-input:focus {
-    border-color: var(--color-form-focus);
-    box-shadow: var(--form-focus-ring);
+    border-color: var(--ds-border-focused);
+    box-shadow: 0 0 0 2px var(--ds-border-focused);
   }
 
   .search-kbd {
     position: absolute;
-    right: 12px;
-    background-color: var(--color-neutral-surface);
-    border: 1px solid var(--color-hairline);
-    color: var(--color-muted);
+    right: var(--ds-space-150);
+    background-color: var(--ds-background-neutral);
+    border: var(--ds-border-width-default) solid var(--ds-border);
+    color: var(--ds-text-subtlest);
     padding: 2px 6px;
     border-radius: 4px;
-    font-size: 11px;
+    font-size: 0.7rem;
     font-family: var(--font-sans);
     pointer-events: none;
   }
@@ -332,17 +330,17 @@ const searchIndex = registry.map(tool => ({
   /* Search Results Dropdown */
   .search-results {
     position: absolute;
-    top: calc(100% + 6px);
+    top: calc(100% + var(--ds-space-075));
     left: 0;
     right: 0;
-    background-color: var(--color-canvas);
-    border: 1px solid var(--color-hairline);
-    border-radius: var(--radius-xs);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+    background-color: var(--ds-surface-overlay);
+    border: var(--ds-border-width-default) solid var(--ds-border);
+    border-radius: var(--ds-radius-large);
+    box-shadow: var(--ds-shadow-overlay);
     max-height: 380px;
     overflow-y: auto;
     z-index: 1000;
-    padding: 6px;
+    padding: var(--ds-space-100);
   }
 
   .search-results ul {
@@ -352,17 +350,18 @@ const searchIndex = registry.map(tool => ({
   .search-item a {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 8px 12px;
-    border-radius: var(--radius-xs);
-    color: var(--color-ink);
-    transition: background-color 150ms ease;
+    gap: var(--ds-space-150);
+    padding: var(--ds-space-100) var(--ds-space-150);
+    border-radius: var(--ds-radius-medium);
+    color: var(--ds-text);
+    transition: background-color 0.1s ease;
+    text-decoration: none;
   }
 
   .search-item:hover a,
   .search-item.active a {
-    background-color: var(--color-neutral-surface);
-    color: var(--color-primary-dark);
+    background-color: var(--ds-background-neutral-hovered);
+    color: var(--ds-text);
   }
 
   .search-item-info {
@@ -373,13 +372,13 @@ const searchIndex = registry.map(tool => ({
 
   .search-item-title {
     font-family: var(--font-sans);
-    font-weight: 500;
-    font-size: 14px;
+    font-weight: 600;
+    font-size: 0.875rem;
   }
 
   .search-item-desc {
-    font-size: 12px;
-    color: var(--color-muted);
+    font-size: 0.75rem;
+    color: var(--ds-text-subtlest);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -389,25 +388,25 @@ const searchIndex = registry.map(tool => ({
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 4px;
-    background-color: var(--color-neutral-surface);
-    color: var(--color-slate);
+    width: 32px;
+    height: 32px;
+    border-radius: var(--ds-radius-small);
+    background-color: var(--ds-background-neutral);
+    color: var(--ds-icon-subtle);
     flex-shrink: 0;
   }
 
   .search-item:hover .search-item-icon-wrapper,
   .search-item.active .search-item-icon-wrapper {
-    background-color: var(--color-canvas);
-    color: var(--color-primary-dark);
+    background-color: var(--ds-surface);
+    color: var(--ds-text-selected);
   }
 
   .search-empty {
-    padding: 24px;
+    padding: var(--ds-space-300);
     text-align: center;
-    color: var(--color-muted);
-    font-size: 13px;
+    color: var(--ds-text-subtlest);
+    font-size: 0.8125rem;
   }
 </style>
 

@@ -29,7 +29,7 @@ const categoryDetail = getCategoryDetail(tool.category);
   </div>
   
   <div class="card-bottom">
-    <span class="card-action-text">Open Tool</span>
+    <span class="card-action-text">Open tool</span>
     <Icon name="ArrowRight" size={14} class="card-arrow" />
   </div>
 </a>
@@ -41,17 +41,16 @@ const categoryDetail = getCategoryDetail(tool.category);
     height: 100%;
     text-decoration: none;
     cursor: pointer;
-    padding: 24px;
-    gap: 16px;
-    background-color: var(--color-canvas);
-    border: 1px solid var(--color-border-light);
-    border-radius: var(--radius-sm);
-    transition: border-color 200ms ease, background-color 200ms ease;
+    padding: var(--ds-space-300);
+    gap: var(--ds-space-200);
+    background-color: var(--ds-surface);
+    border: var(--ds-border-width-default) solid var(--ds-border);
+    border-radius: var(--ds-radius-large);
+    transition: border-color 0.15s ease, background-color 0.15s ease;
   }
 
   .tool-card:hover {
-    border-color: var(--color-hairline);
-    background-color: var(--color-neutral-surface);
+    border-color: var(--ds-border-bold);
   }
 
   .card-top {
@@ -66,51 +65,51 @@ const categoryDetail = getCategoryDetail(tool.category);
     justify-content: center;
     width: 40px;
     height: 40px;
-    background-color: var(--color-neutral-surface);
-    color: var(--color-primary);
-    border-radius: var(--radius-xs);
-    transition: background-color 200ms ease, color 200ms ease;
+    background-color: var(--ds-background-neutral);
+    color: var(--ds-icon-selected);
+    border-radius: var(--ds-radius-medium);
+    transition: background-color 0.15s ease, color 0.15s ease;
   }
 
   .tool-card:hover .card-icon-wrapper {
-    background-color: var(--color-primary);
-    color: var(--color-on-primary);
+    background-color: var(--ds-background-brand-bold);
+    color: var(--ds-text-inverse);
   }
 
   .card-category {
-    font-size: 11px;
-    font-family: var(--font-mono);
-    font-weight: 500;
-    color: var(--color-slate);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    font-size: 0.7rem;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    color: var(--ds-text-subtlest);
+    text-transform: none; /* MUST NOT use uppercase stretch */
+    letter-spacing: normal;
   }
 
   .card-content {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--ds-space-100);
     flex: 1;
   }
 
   .card-title {
-    font-family: var(--font-display);
-    font-size: 18px;
-    font-weight: 500;
-    color: var(--color-primary-dark);
-    line-height: 1.2;
-    transition: color 200ms ease;
+    font-family: var(--font-sans);
+    font-size: 1.125rem; /* heading-small */
+    font-weight: 653;
+    color: var(--ds-text);
+    line-height: 1.35;
+    transition: color 0.15s ease;
   }
 
   .tool-card:hover .card-title {
-    color: var(--color-action-blue);
+    color: var(--ds-text-selected);
   }
 
   .card-description {
     font-family: var(--font-sans);
-    font-size: 14px;
-    color: var(--color-body-muted);
-    line-height: 1.4;
+    font-size: 0.875rem;
+    color: var(--ds-text-subtle);
+    line-height: 1.45;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -120,23 +119,23 @@ const categoryDetail = getCategoryDetail(tool.category);
   .card-bottom {
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 13px;
+    gap: var(--ds-space-075);
+    font-size: 0.875rem;
     font-weight: 500;
     font-family: var(--font-sans);
-    color: var(--color-primary);
+    color: var(--ds-link);
     margin-top: auto;
-    border-top: 1px solid var(--color-border-light);
-    padding-top: 12px;
-    transition: color 200ms ease;
+    border-top: var(--ds-border-width-default) solid var(--ds-border);
+    padding-top: var(--ds-space-150);
+    transition: color 0.15s ease;
   }
 
   .tool-card:hover .card-bottom {
-    color: var(--color-action-blue);
+    color: var(--ds-link-pressed);
   }
 
   .card-arrow {
-    transition: transform 200ms ease;
+    transition: transform 0.15s ease;
   }
 
   .tool-card:hover .card-arrow {

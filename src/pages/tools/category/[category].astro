@@ -18,7 +18,7 @@ const tools = getToolsByCategory(category.slug);
 ---
 
 <Layout 
-  title={`Best ${category.title} Online - LowKeyDevs`}
+  title={`Best ${category.title.toLowerCase()} tools online - LowKeyDevs`}
   description={category.description}
 >
   <Header />
@@ -67,59 +67,62 @@ const tools = getToolsByCategory(category.slug);
 <style>
   /* Breadcrumbs */
   .breadcrumbs-nav {
-    background-color: #FFFFFF;
-    border-bottom: 1px solid var(--border-color);
-    padding: 0.75rem 0;
-    font-size: 0.85rem;
+    background-color: var(--ds-surface);
+    border-bottom: var(--ds-border-width-default) solid var(--ds-border);
+    padding: var(--ds-space-150) 0;
+    font-size: 0.8125rem;
   }
 
   .breadcrumbs-container {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--ds-space-100);
     flex-wrap: wrap;
   }
 
   .breadcrumb-item {
-    color: var(--text-secondary);
-    transition: color 0.2s ease;
+    color: var(--ds-text-subtle);
+    text-decoration: none;
+    transition: color 0.15s ease;
   }
 
   .breadcrumb-item:hover {
-    color: var(--primary-orange);
+    color: var(--ds-link);
+    text-decoration: underline;
   }
 
   .breadcrumb-item.active {
-    color: var(--text-muted);
+    color: var(--ds-text-subtlest);
     pointer-events: none;
+    text-decoration: none;
   }
 
   .separator {
-    color: var(--border-color);
+    color: var(--ds-text-subtlest);
     user-select: none;
   }
 
   /* Main Category Layout */
   .category-main {
-    padding-top: 2.5rem;
-    padding-bottom: 5rem;
+    padding-top: var(--ds-space-600);
+    padding-bottom: var(--ds-space-1000);
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 3rem;
+    gap: var(--ds-space-600);
   }
 
   .category-header {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--ds-space-100);
     max-width: 800px;
   }
 
   .category-icon-title {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: var(--ds-space-150);
   }
 
   .category-icon-wrapper {
@@ -128,28 +131,29 @@ const tools = getToolsByCategory(category.slug);
     justify-content: center;
     width: 52px;
     height: 52px;
-    background-color: rgba(255, 100, 45, 0.08);
-    color: var(--primary-orange);
-    border-radius: var(--radius-input);
+    background-color: var(--ds-background-neutral);
+    color: var(--ds-icon-selected);
+    border-radius: var(--ds-radius-medium);
   }
 
   .category-title {
     font-size: 2.25rem;
-    font-weight: 700;
+    font-weight: 653;
     letter-spacing: -0.025em;
+    color: var(--ds-text);
   }
 
   .category-description {
-    color: var(--text-secondary);
-    font-size: 1.05rem;
-    line-height: 1.5;
+    color: var(--ds-text-subtle);
+    font-size: 0.9375rem;
+    line-height: 1.45;
   }
 
   /* Grid Layout */
   .tools-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
+    gap: var(--ds-space-300);
   }
 
   /* Empty state */
@@ -158,26 +162,27 @@ const tools = getToolsByCategory(category.slug);
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 4rem 2rem;
-    gap: 1rem;
+    padding: var(--ds-space-800) var(--ds-space-400);
+    gap: var(--ds-space-200);
     max-width: 500px;
     margin: 0 auto;
   }
 
   .empty-icon {
-    color: var(--primary-orange);
+    color: var(--ds-icon-subtle);
   }
 
   .empty-state h3 {
     font-family: var(--font-sans);
     font-size: 1.25rem;
-    font-weight: 700;
+    font-weight: 653;
+    color: var(--ds-text);
   }
 
   .empty-state p {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
+    color: var(--ds-text-subtle);
+    font-size: 0.875rem;
     line-height: 1.5;
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--ds-space-100);
   }
 </style>

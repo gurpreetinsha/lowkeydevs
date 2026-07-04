@@ -5,21 +5,21 @@ import Footer from '../components/Footer.astro';
 ---
 
 <Layout 
-  title="About Us - LowKeyDevs"
+  title="About us - LowKeyDevs"
   description="Learn about the philosophy behind LowKeyDevs: why we build fast, privacy-first, 100% client-side developer utility tools."
 >
   <Header />
 
   <main class="about-main container">
     <header class="about-header text-center">
-      <h1 class="about-title">Why We Built <span class="coral-text">LowKeyDevs</span></h1>
+      <h1 class="about-title">Why we built <span class="coral-text">LowKeyDevs</span></h1>
       <p class="about-subtitle">The story and core principles behind the fastest toolbox on the web.</p>
     </header>
 
     <section class="about-content">
       <div class="about-grid">
         <article class="about-card glass-panel">
-          <h2>Our Mission</h2>
+          <h2>Our mission</h2>
           <p>
             Developer utility tools are everywhere. But almost all of them suffer from the same issues: intrusive ads, cookie popups, slow loading speeds, and forced account registrations. 
           </p>
@@ -29,13 +29,13 @@ import Footer from '../components/Footer.astro';
         </article>
 
         <article class="about-card glass-panel">
-          <h2>The Core Principles</h2>
+          <h2>The core principles</h2>
           <ul class="principles-list">
             <li>
               <strong>Instant:</strong> No unnecessary loading. Paste your content, and results render immediately.
             </li>
             <li>
-              <strong>100% Client-Side:</strong> Your privacy is absolute. All computations run in your own browser; no sensitive data touches a server.
+              <strong>100% client-side:</strong> Your privacy is absolute. All computations run in your own browser; no sensitive data touches a server.
             </li>
             <li>
               <strong>Clean UX:</strong> No dark patterns, fake countdowns, popups, or aggressive tracking pixels. Trust is our biggest feature.
@@ -45,11 +45,11 @@ import Footer from '../components/Footer.astro';
       </div>
 
       <div class="about-cta glass-panel text-center">
-        <h2>Open Source & Community Driven</h2>
+        <h2>Open source & community driven</h2>
         <p>
           LowKeyDevs is designed to scale to hundreds of utilities. We are continuously adding new tools. Have an idea or need a specific converter? Let us know!
         </p>
-        <a href="/" class="btn btn-primary">Browse All Tools</a>
+        <a href="/" class="btn btn-primary">Browse all tools</a>
       </div>
     </section>
   </main>
@@ -59,44 +59,44 @@ import Footer from '../components/Footer.astro';
 
 <style>
   .about-main {
-    padding-top: 60px;
-    padding-bottom: 80px;
+    padding-top: var(--ds-space-600);
+    padding-bottom: var(--ds-space-1000);
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 48px;
+    gap: var(--ds-space-600);
   }
 
   .about-header {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--ds-space-150);
   }
 
   .about-title {
     font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 400;
+    font-weight: 653;
     letter-spacing: -0.03em;
-    color: var(--color-primary-dark);
+    color: var(--ds-text);
   }
 
   .coral-text {
-    color: var(--color-highlight-coral);
+    color: var(--ds-text-selected);
   }
 
   .about-subtitle {
-    color: var(--color-body-muted);
-    font-size: 16px;
+    color: var(--ds-text-subtle);
+    font-size: 1rem;
     max-width: 600px;
     margin: 0 auto;
-    line-height: 1.4;
+    line-height: 1.45;
   }
 
   .about-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    margin-bottom: 40px;
+    gap: var(--ds-space-300);
+    margin-bottom: var(--ds-space-500);
   }
 
   @media (max-width: 768px) {
@@ -106,71 +106,71 @@ import Footer from '../components/Footer.astro';
   }
 
   .about-card {
-    padding: 32px;
+    padding: var(--ds-space-400);
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--ds-space-200);
   }
 
   .about-card h2 {
-    font-family: var(--font-display);
-    font-size: 24px;
-    font-weight: 500;
-    color: var(--color-primary-dark);
+    font-family: var(--font-sans);
+    font-size: 1.5rem; /* heading-large */
+    font-weight: 653;
+    color: var(--ds-text);
   }
 
   .about-card p {
-    color: var(--color-body-muted);
-    font-size: 14px;
-    line-height: 1.6;
+    color: var(--ds-text-subtle);
+    font-size: 0.875rem;
+    line-height: 1.5;
   }
 
   .principles-list {
     list-style-type: none;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--ds-space-200);
   }
 
   .principles-list li {
-    font-size: 14px;
-    color: var(--color-body-muted);
+    font-size: 0.875rem;
+    color: var(--ds-text-subtle);
     line-height: 1.5;
     position: relative;
-    padding-left: 24px;
+    padding-left: var(--ds-space-300);
   }
 
   .principles-list li::before {
     content: "✓";
     position: absolute;
     left: 0;
-    color: var(--color-success);
+    color: var(--ds-text-success);
     font-weight: bold;
   }
 
   .about-cta {
-    padding: 48px 32px;
+    padding: var(--ds-space-600) var(--ds-space-400);
     max-width: 720px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
+    gap: var(--ds-space-200);
   }
 
   .about-cta h2 {
-    font-family: var(--font-display);
-    font-size: 24px;
-    font-weight: 500;
-    color: var(--color-primary-dark);
+    font-family: var(--font-sans);
+    font-size: 1.5rem; /* heading-large */
+    font-weight: 653;
+    color: var(--ds-text);
   }
 
   .about-cta p {
-    color: var(--color-body-muted);
-    font-size: 14px;
+    color: var(--ds-text-subtle);
+    font-size: 0.875rem;
     max-width: 500px;
     line-height: 1.5;
-    margin-bottom: 8px;
+    margin-bottom: var(--ds-space-100);
   }
 
   .text-center {

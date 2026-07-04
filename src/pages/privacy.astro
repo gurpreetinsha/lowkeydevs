@@ -6,7 +6,7 @@ import Icon from '../components/base/Icon.astro';
 ---
 
 <Layout 
-  title="Privacy Policy - LowKeyDevs"
+  title="Privacy policy - LowKeyDevs"
   description="Read our plain-English Privacy Policy: why you can trust LowKeyDevs to process your developer data client-side with absolute security."
 >
   <Header />
@@ -18,45 +18,45 @@ import Icon from '../components/base/Icon.astro';
           <div class="lock-wrapper">
             <Icon name="Lock" size={20} />
           </div>
-          <h1 class="privacy-title">Privacy Policy</h1>
+          <h1 class="privacy-title">Privacy policy</h1>
         </div>
         <p class="privacy-date">Last updated: July 4, 2026</p>
       </header>
 
       <section class="privacy-body">
-        <h2>Plain English Summary</h2>
+        <h2>Plain English summary</h2>
         <p class="highlight-text">
           <strong>Your data is yours alone.</strong> We do not collect, send, save, or store any of the input values, files, text, keys, or passwords you process on our website. All processing happens entirely inside your browser via JavaScript.
         </p>
 
-        <h2>1. Personal Data Collection</h2>
+        <h2>1. Personal data collection</h2>
         <p>
           We do not require you to create an account, register, or log in to use LowKeyDevs. We do not collect personal identifiers such as your name, email address, IP address, or physical location.
         </p>
 
-        <h2>2. Data Processing (Client-Side Only)</h2>
+        <h2>2. Data processing (client-side only)</h2>
         <p>
           All operations (such as formatting JSON, generating passwords, or encoding/decoding Base64) are performed locally inside your browser's sandboxed environment. Your input strings and resulting output values are never transmitted to our servers or any third parties.
         </p>
 
-        <h2>3. Cookies and LocalStorage</h2>
+        <h2>3. Cookies and localStorage</h2>
         <p>
           We do not use tracking cookies or advertising pixels. We use standard browser `localStorage` solely to save your design preference (light mode vs. dark mode) so that it persists when you return to the site. This preference data is saved locally on your device and is never sent to us.
         </p>
 
-        <h2>4. Third-Party Analytics</h2>
+        <h2>4. Third-party analytics</h2>
         <p>
           To understand basic usage (such as total pageviews and common browser agents), we may use privacy-friendly, lightweight web analytics. These analytics do not use cookies, do not track you across sites, and comply fully with GDPR, CCPA, and PECR standards.
         </p>
 
-        <h2>5. Changes to This Policy</h2>
+        <h2>5. Changes to this policy</h2>
         <p>
           If we add tools that require server-side computing, we will explicitly mark those tools and update this policy to reflect what data is processed. For now, every tool on LowKeyDevs is 100% client-side.
         </p>
       </section>
 
       <div class="privacy-footer text-center">
-        <a href="/" class="btn btn-primary">Return to Homepage</a>
+        <a href="/" class="btn btn-primary">Return to homepage</a>
       </div>
     </article>
   </main>
@@ -66,8 +66,8 @@ import Icon from '../components/base/Icon.astro';
 
 <style>
   .privacy-main {
-    padding-top: 60px;
-    padding-bottom: 80px;
+    padding-top: var(--ds-space-600);
+    padding-bottom: var(--ds-space-1000);
     flex: 1;
     display: flex;
     justify-content: center;
@@ -75,30 +75,30 @@ import Icon from '../components/base/Icon.astro';
 
   .privacy-content {
     max-width: 800px;
-    padding: 48px 32px;
+    padding: var(--ds-space-600) var(--ds-space-400);
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: var(--ds-space-400);
   }
 
   @media (max-width: 640px) {
     .privacy-content {
-      padding: 32px 16px;
+      padding: var(--ds-space-400) var(--ds-space-200);
     }
   }
 
   .privacy-header {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    border-bottom: 1px solid var(--color-border-light);
-    padding-bottom: 24px;
+    gap: var(--ds-space-100);
+    border-bottom: var(--ds-border-width-default) solid var(--ds-border);
+    padding-bottom: var(--ds-space-300);
   }
 
   .lock-icon-title {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: var(--ds-space-150);
   }
 
   .lock-wrapper {
@@ -107,52 +107,51 @@ import Icon from '../components/base/Icon.astro';
     justify-content: center;
     width: 40px;
     height: 40px;
-    background-color: var(--color-success-bg);
-    color: var(--color-success);
-    border-radius: var(--radius-xs);
+    background-color: var(--ds-background-success);
+    color: var(--ds-text-success);
+    border-radius: var(--ds-radius-medium);
   }
 
   .privacy-title {
-    font-size: 32px;
-    font-weight: 400;
+    font-size: 2rem; /* heading-xxlarge */
+    font-weight: 653;
     letter-spacing: -0.02em;
-    color: var(--color-primary-dark);
-    font-family: var(--font-display);
+    color: var(--ds-text);
   }
 
   .privacy-date {
-    color: var(--color-muted);
-    font-size: 13px;
+    color: var(--ds-text-subtlest);
+    font-size: 0.8125rem;
   }
 
   .privacy-body {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    line-height: 1.6;
-    color: var(--color-body-muted);
-    font-size: 14px;
+    gap: var(--ds-space-250);
+    line-height: 1.5;
+    color: var(--ds-text-subtle);
+    font-size: 0.875rem;
   }
 
   .privacy-body h2 {
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 500;
-    color: var(--color-primary-dark);
-    margin-top: 12px;
+    font-family: var(--font-sans);
+    font-size: 1.25rem; /* heading-medium */
+    font-weight: 653;
+    color: var(--ds-text);
+    margin-top: var(--ds-space-150);
   }
 
   .highlight-text {
-    background-color: var(--color-success-bg);
-    border: 1px solid rgba(0, 138, 118, 0.15);
-    color: var(--color-ink);
-    padding: 20px;
-    border-radius: var(--radius-xs);
+    background-color: var(--ds-background-success);
+    border: var(--ds-border-width-default) solid var(--ds-border-success-subtle);
+    color: var(--ds-text);
+    padding: var(--ds-space-250);
+    border-radius: var(--ds-radius-large);
   }
 
   .privacy-footer {
-    border-top: 1px solid var(--color-border-light);
-    padding-top: 24px;
+    border-top: var(--ds-border-width-default) solid var(--ds-border);
+    padding-top: var(--ds-space-300);
   }
 
   .text-center {

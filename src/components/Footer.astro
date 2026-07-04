@@ -15,15 +15,15 @@ import Icon from './base/Icon.astro';
       <h3 class="footer-heading">Platform</h3>
       <ul>
         <li><a href="/">Home</a></li>
-        <li><a href="/about">About Us</a></li>
-        <li><a href="/privacy">Privacy Policy</a></li>
+        <li><a href="/about">About us</a></li>
+        <li><a href="/privacy">Privacy policy</a></li>
       </ul>
     </div>
 
     <div class="footer-newsletter">
       <h3 class="footer-heading">
-        <span class="new-tools-badge">New Tools</span>
-        Stay Updated
+        <span class="new-tools-badge">New tools</span>
+        Stay updated
       </h3>
       <p class="newsletter-text">Receive updates when new offline tools are added.</p>
       <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed!');">
@@ -51,106 +51,109 @@ import Icon from './base/Icon.astro';
 
 <style>
   .site-footer {
-    background-color: var(--color-primary);
-    color: var(--color-on-dark);
-    border-top: 1px solid var(--color-primary-dark);
-    padding: 60px 0 30px 0;
+    background-color: var(--ds-surface-sunken);
+    color: var(--ds-text);
+    border-top: var(--ds-border-width-default) solid var(--ds-border);
+    padding: var(--ds-space-600) 0 var(--ds-space-400) 0;
     margin-top: auto;
   }
 
   .footer-container {
     display: grid;
     grid-template-columns: 1.5fr 1fr 1.5fr;
-    gap: 3rem;
-    margin-bottom: 40px;
+    gap: var(--ds-space-600);
+    margin-bottom: var(--ds-space-400);
   }
 
   @media (max-width: 768px) {
     .footer-container {
       grid-template-columns: 1fr;
-      gap: 2rem;
+      gap: var(--ds-space-300);
     }
   }
 
   .footer-brand {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--ds-space-150);
   }
 
   .logo-text {
-    font-family: var(--font-display);
+    font-family: var(--font-sans);
     font-size: 1.25rem;
-    font-weight: 500;
-    color: var(--color-on-dark);
+    font-weight: 700;
+    color: var(--ds-text);
     letter-spacing: -0.03em;
   }
 
   .logo-accent {
-    color: var(--color-highlight-coral);
+    color: var(--ds-text-selected);
   }
 
   .brand-tagline {
-    color: var(--color-muted);
-    font-size: 14px;
+    color: var(--ds-text-subtle);
+    font-size: 0.875rem;
     line-height: 1.5;
     max-width: 320px;
   }
 
   .footer-heading {
     font-family: var(--font-sans);
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--color-on-dark);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 16px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--ds-text-subtle);
+    text-transform: none; /* MUST NOT use uppercase stretch */
+    letter-spacing: normal;
+    margin-bottom: var(--ds-space-200);
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--ds-space-100);
     align-items: flex-start;
   }
 
   .new-tools-badge {
-    background-color: var(--color-highlight-coral);
-    color: var(--color-primary-dark);
-    font-size: 10px;
-    font-family: var(--font-mono);
-    padding: 2px 6px;
-    border-radius: var(--radius-xs);
+    background-color: var(--ds-background-success);
+    color: var(--ds-text-success-bolder);
+    font-size: 0.7rem;
+    font-family: var(--font-sans);
+    padding: var(--ds-space-025) var(--ds-space-075);
+    border-radius: var(--ds-radius-small);
+    border: 1px solid var(--ds-border-success);
     font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+    letter-spacing: normal;
+    text-transform: none; /* sentence case badge */
   }
 
   .footer-links ul {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--ds-space-100);
   }
 
   .footer-links a {
-    color: var(--color-muted);
-    font-size: 14px;
-    transition: color 200ms ease;
+    color: var(--ds-text-subtle);
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: color 0.15s ease;
   }
 
   .footer-links a:hover {
-    color: var(--color-on-dark);
+    color: var(--ds-link);
+    text-decoration: underline;
   }
 
   .footer-newsletter {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--ds-space-150);
     max-width: 360px;
   }
 
   .newsletter-text {
-    color: var(--color-muted);
-    font-size: 14px;
-    line-height: 1.4;
+    color: var(--ds-text-subtle);
+    font-size: 0.875rem;
+    line-height: 1.45;
   }
 
   .newsletter-form {
@@ -161,19 +164,20 @@ import Icon from './base/Icon.astro';
 
   .newsletter-input {
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--color-slate);
-    color: var(--color-on-dark);
-    border-radius: var(--radius-xs);
-    padding: 10px 48px 10px 14px;
+    background-color: var(--ds-background-input);
+    border: var(--ds-border-width-default) solid var(--ds-border-input);
+    color: var(--ds-text);
+    border-radius: var(--ds-radius-medium);
+    padding: var(--ds-space-100) 48px var(--ds-space-100) var(--ds-space-150);
     outline: none;
     font-family: var(--font-sans);
-    font-size: 14px;
-    transition: border-color 200ms ease;
+    font-size: 0.875rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
 
   .newsletter-input:focus {
-    border-color: var(--color-highlight-coral);
+    border-color: var(--ds-border-focused);
+    box-shadow: 0 0 0 2px var(--ds-border-focused);
   }
 
   .newsletter-submit {
@@ -184,23 +188,23 @@ import Icon from './base/Icon.astro';
     width: 40px;
     background: transparent;
     border: none;
-    color: var(--color-muted);
+    color: var(--ds-icon-subtle);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color 200ms ease;
+    transition: color 0.15s ease;
   }
 
   .newsletter-submit:hover {
-    color: var(--color-on-dark);
+    color: var(--ds-text-selected);
   }
 
   .footer-bottom {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 20px;
-    font-size: 12px;
-    color: var(--color-muted);
+    border-top: var(--ds-border-width-default) solid var(--ds-border);
+    padding-top: var(--ds-space-200);
+    font-size: 0.75rem;
+    color: var(--ds-text-subtlest);
   }
 
   .footer-bottom-container {
@@ -208,6 +212,6 @@ import Icon from './base/Icon.astro';
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: var(--ds-space-150);
   }
 </style>
