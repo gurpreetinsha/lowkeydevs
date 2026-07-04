@@ -2,7 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import Icon from '../components/base/Icon.astro';
 ---
 
 <Layout 
@@ -13,7 +12,7 @@ import Icon from '../components/base/Icon.astro';
 
   <main class="about-main container">
     <header class="about-header text-center">
-      <h1 class="about-title">Why We Built <span class="gradient-text">LowKeyDevs</span></h1>
+      <h1 class="about-title">Why We Built <span class="coral-text">LowKeyDevs</span></h1>
       <p class="about-subtitle">The story and core principles behind the fastest toolbox on the web.</p>
     </header>
 
@@ -60,42 +59,44 @@ import Icon from '../components/base/Icon.astro';
 
 <style>
   .about-main {
-    padding-top: 3.5rem;
-    padding-bottom: 5rem;
+    padding-top: 60px;
+    padding-bottom: 80px;
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 3.5rem;
+    gap: 48px;
   }
 
   .about-header {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 12px;
   }
 
   .about-title {
-    font-size: 2.75rem;
-    font-weight: 700;
-    letter-spacing: -0.025em;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    color: var(--color-primary-dark);
   }
 
-  .gradient-text {
-    color: var(--primary-orange);
+  .coral-text {
+    color: var(--color-highlight-coral);
   }
 
   .about-subtitle {
-    color: var(--text-secondary);
-    font-size: 1.1rem;
+    color: var(--color-body-muted);
+    font-size: 16px;
     max-width: 600px;
     margin: 0 auto;
+    line-height: 1.4;
   }
 
   .about-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    margin-bottom: 3rem;
+    gap: 24px;
+    margin-bottom: 40px;
   }
 
   @media (max-width: 768px) {
@@ -105,21 +106,22 @@ import Icon from '../components/base/Icon.astro';
   }
 
   .about-card {
-    padding: 2rem;
+    padding: 32px;
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 16px;
   }
 
   .about-card h2 {
-    font-family: var(--font-sans);
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--color-primary-dark);
   }
 
   .about-card p {
-    color: var(--text-secondary);
-    font-size: 0.95rem;
+    color: var(--color-body-muted);
+    font-size: 14px;
     line-height: 1.6;
   }
 
@@ -127,47 +129,48 @@ import Icon from '../components/base/Icon.astro';
     list-style-type: none;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 16px;
   }
 
   .principles-list li {
-    font-size: 0.95rem;
-    color: var(--text-secondary);
+    font-size: 14px;
+    color: var(--color-body-muted);
     line-height: 1.5;
     position: relative;
-    padding-left: 1.5rem;
+    padding-left: 24px;
   }
 
   .principles-list li::before {
     content: "✓";
     position: absolute;
     left: 0;
-    color: var(--success-color);
+    color: var(--color-success);
     font-weight: bold;
   }
 
   .about-cta {
-    padding: 3rem 2rem;
-    max-width: 700px;
+    padding: 48px 32px;
+    max-width: 720px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.25rem;
+    gap: 16px;
   }
 
   .about-cta h2 {
-    font-family: var(--font-sans);
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--color-primary-dark);
   }
 
   .about-cta p {
-    color: var(--text-secondary);
-    font-size: 0.95rem;
+    color: var(--color-body-muted);
+    font-size: 14px;
     max-width: 500px;
     line-height: 1.5;
-    margin-bottom: 0.5rem;
+    margin-bottom: 8px;
   }
 
   .text-center {

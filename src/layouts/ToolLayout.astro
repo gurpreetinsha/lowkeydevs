@@ -85,7 +85,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
       <section class="tool-section" aria-labelledby="tool-title-heading">
         <header class="tool-header-block">
           <span class="category-badge">
-            <Icon name={categoryDetail?.icon || 'Info'} size={14} />
+            <Icon name={categoryDetail?.icon || 'Info'} size={12} />
             {categoryDetail?.title}
           </span>
           <h1 id="tool-title-heading" class="tool-title">{tool.title}</h1>
@@ -99,6 +99,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
       <!-- Sidebar / Related Tools -->
       <aside class="tool-sidebar">
+        <!-- Sidebar Ad/Sponsorship Placement -->
         <SponsorCard />
 
         <div class="sidebar-widget glass-panel">
@@ -107,7 +108,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
             {relatedTools.map(t => (
               <a href={`/tools/${t.slug}`} class="related-item">
                 <div class="related-icon">
-                  <Icon name={t.icon} size={16} />
+                  <Icon name={t.icon} size={14} />
                 </div>
                 <div class="related-info">
                   <span class="related-title">{t.title}</span>
@@ -120,7 +121,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
         <div class="sidebar-widget privacy-widget glass-panel">
           <div class="privacy-header">
-            <Icon name="Lock" size={18} class="privacy-icon" />
+            <Icon name="Lock" size={16} class="privacy-icon" />
             <h2 class="widget-title">100% Client-Side</h2>
           </div>
           <p class="privacy-text">
@@ -148,7 +149,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
           {tool.educationalContent.proTips && (
             <>
               <h2 class="edu-title pro-tips-title">
-                <Icon name="Info" size={16} />
+                <Icon name="Info" size={14} />
                 Pro Tips
               </h2>
               <ul class="pro-tips-list">
@@ -169,7 +170,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
                 <details class="faq-item" open={idx === 0}>
                   <summary class="faq-question">
                     <span>{faq.question}</span>
-                    <Icon name="ChevronDown" size={18} class="chevron" />
+                    <Icon name="ChevronDown" size={16} class="chevron" />
                   </summary>
                   <div class="faq-answer">
                     <p>{faq.answer}</p>
@@ -195,52 +196,52 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 <style>
   /* Breadcrumbs */
   .breadcrumbs-nav {
-    background-color: #FFFFFF;
-    border-bottom: 1px solid var(--border-color);
-    padding: 0.75rem 0;
-    font-size: 0.85rem;
+    background-color: var(--color-canvas);
+    border-bottom: 1px solid var(--color-border-light);
+    padding: 12px 0;
+    font-size: 13px;
   }
 
   .breadcrumbs-container {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 8px;
     flex-wrap: wrap;
   }
 
   .breadcrumb-item {
-    color: var(--text-secondary);
-    transition: color 0.2s ease;
+    color: var(--color-slate);
+    transition: color 200ms ease;
   }
 
   .breadcrumb-item:hover {
-    color: var(--primary-orange);
+    color: var(--color-primary-dark);
   }
 
   .breadcrumb-item.active {
-    color: var(--text-muted);
+    color: var(--color-muted);
     pointer-events: none;
   }
 
   .separator {
-    color: var(--border-color);
+    color: var(--color-hairline);
     user-select: none;
   }
 
   /* Layout Structure */
   .tool-main-layout {
-    padding-top: 2rem;
-    padding-bottom: 4rem;
+    padding-top: 40px;
+    padding-bottom: 80px;
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 3rem;
+    gap: 60px;
   }
 
   .tool-grid-container {
     display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: 2rem;
+    grid-template-columns: 1fr 320px;
+    gap: 32px;
     align-items: start;
   }
 
@@ -252,81 +253,86 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
   /* Header details */
   .tool-header-block {
-    margin-bottom: 1.5rem;
+    margin-bottom: 24px;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 8px;
   }
 
   .category-badge {
     align-self: flex-start;
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
-    background-color: rgba(255, 100, 45, 0.08);
-    color: var(--primary-orange);
-    padding: 0.25rem 0.625rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 600;
+    gap: 6px;
+    background-color: var(--color-neutral-surface);
+    color: var(--color-primary);
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    font-size: 11px;
+    font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    font-family: var(--font-sans);
+    font-family: var(--font-mono);
   }
 
   .tool-title {
-    font-size: 2.25rem;
-    font-weight: 700;
-    letter-spacing: -0.025em;
+    font-size: 36px;
+    font-weight: 400;
+    color: var(--color-primary-dark);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
   }
 
   .tool-description {
-    color: var(--text-secondary);
-    font-size: 1.05rem;
+    color: var(--color-body-muted);
+    font-size: 16px;
     max-width: 800px;
+    line-height: 1.4;
   }
 
   /* Tool Workspace Frame */
   .tool-workspace-wrapper {
-    margin-top: 1rem;
+    margin-top: 16px;
   }
 
   /* Sidebar */
   .tool-sidebar {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 24px;
   }
 
   .sidebar-widget {
-    padding: 1.25rem;
+    padding: 20px;
   }
 
   .widget-title {
     font-family: var(--font-display);
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    color: var(--color-primary-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
   }
 
   .related-list {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 12px;
   }
 
   .related-item {
     display: flex;
     align-items: flex-start;
-    gap: 0.75rem;
-    padding: 0.5rem;
-    border-radius: var(--radius-sm);
-    transition: background-color 0.2s ease;
+    gap: 12px;
+    padding: 8px;
+    border-radius: var(--radius-xs);
+    transition: background-color 200ms ease;
   }
 
   .related-item:hover {
-    background-color: var(--bg-color);
+    background-color: var(--color-neutral-surface);
   }
 
   .related-icon {
@@ -335,58 +341,60 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
     justify-content: center;
     width: 28px;
     height: 28px;
-    background-color: var(--bg-color);
-    color: var(--text-secondary);
-    border-radius: 6px;
+    background-color: var(--color-neutral-surface);
+    color: var(--color-slate);
+    border-radius: 4px;
     flex-shrink: 0;
+    transition: color 200ms ease, background-color 200ms ease;
   }
 
   .related-item:hover .related-icon {
-    color: var(--primary-orange);
+    color: var(--color-on-primary);
+    background-color: var(--color-primary);
   }
 
   .related-info {
     display: flex;
     flex-direction: column;
+    overflow: hidden;
   }
 
   .related-title {
     font-family: var(--font-sans);
-    font-weight: 600;
-    font-size: 0.875rem;
-    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--color-primary-dark);
   }
 
   .related-desc {
-    font-size: 0.75rem;
-    color: var(--text-muted);
+    font-size: 12px;
+    color: var(--color-muted);
     overflow: hidden;
     text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+    white-space: nowrap;
   }
 
   .privacy-widget {
-    border-color: hsla(142, 70%, 45%, 0.2);
+    border-color: rgba(0, 138, 118, 0.15);
+    background-color: var(--color-success-bg);
   }
 
   .privacy-header {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    color: var(--success-color);
-    margin-bottom: 0.5rem;
+    gap: 8px;
+    color: var(--color-success);
+    margin-bottom: 8px;
   }
 
   .privacy-header .widget-title {
     margin-bottom: 0;
-    color: var(--success-color);
+    color: var(--color-success);
   }
 
   .privacy-text {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
+    font-size: 13px;
+    color: var(--color-body-muted);
     line-height: 1.4;
   }
 
@@ -394,7 +402,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   .edu-grid {
     display: grid;
     grid-template-columns: 1.2fr 0.8fr;
-    gap: 2rem;
+    gap: 32px;
     align-items: start;
   }
 
@@ -405,96 +413,96 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   }
 
   .edu-guide, .faq-accordion {
-    padding: 1.75rem;
+    padding: 24px;
   }
 
   .edu-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-bottom: 0.75rem;
-    color: var(--text-primary);
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    color: var(--color-primary-dark);
   }
 
   .edu-title:not(:first-child) {
-    margin-top: 1.5rem;
+    margin-top: 24px;
   }
 
   .edu-para {
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: 1rem;
+    color: var(--color-body-muted);
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 12px;
   }
 
   .steps-list {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 8px;
   }
 
   .step-item {
-    font-size: 0.95rem;
-    color: var(--text-secondary);
+    font-size: 14px;
+    color: var(--color-body-muted);
     line-height: 1.5;
   }
 
   .pro-tips-title {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    color: var(--primary-orange);
+    gap: 8px;
+    color: var(--color-highlight-coral);
   }
 
   .pro-tips-list {
     list-style-type: none;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 8px;
   }
 
   .pro-tips-list li {
-    font-size: 0.95rem;
-    color: var(--text-secondary);
+    font-size: 14px;
+    color: var(--color-body-muted);
     position: relative;
-    padding-left: 1.25rem;
+    padding-left: 20px;
   }
 
   .pro-tips-list li::before {
     content: "✦";
     position: absolute;
     left: 0;
-    color: var(--primary-orange);
+    color: var(--color-highlight-coral);
   }
 
   /* Accordion styling */
   .accordion-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    margin-top: 1rem;
+    gap: 12px;
+    margin-top: 16px;
   }
 
   .faq-item {
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-input);
-    background-color: var(--secondary-bg);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-xs);
+    background-color: var(--color-neutral-surface);
     overflow: hidden;
-    transition: border-color 0.2s ease;
+    transition: border-color 200ms ease;
   }
 
   .faq-item:hover {
-    border-color: var(--primary-orange);
+    border-color: var(--color-primary);
   }
 
   .faq-question {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
+    padding: 14px;
     cursor: pointer;
     font-family: var(--font-sans);
-    font-weight: 600;
-    font-size: 0.95rem;
+    font-weight: 500;
+    font-size: 14px;
     user-select: none;
     list-style: none; /* Hide default triangle */
   }
@@ -504,8 +512,8 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   }
 
   .faq-question .chevron {
-    color: var(--text-muted);
-    transition: transform 0.2s ease;
+    color: var(--color-slate);
+    transition: transform 200ms ease;
   }
 
   .faq-item[open] .faq-question .chevron {
@@ -513,15 +521,15 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   }
 
   .faq-answer {
-    padding: 0 1rem 1rem 1rem;
-    border-top: 1px solid var(--border-color);
-    background-color: #FFFFFF;
+    padding: 0 14px 14px 14px;
+    border-top: 1px solid var(--color-hairline);
+    background-color: var(--color-canvas);
   }
 
   .faq-answer p {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
+    font-size: 13px;
+    color: var(--color-body-muted);
     line-height: 1.5;
-    margin-top: 0.75rem;
+    margin-top: 12px;
   }
 </style>
