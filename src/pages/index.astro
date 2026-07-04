@@ -7,10 +7,10 @@ import SponsorCard from '../components/SponsorCard.astro';
 import Icon from '../components/base/Icon.astro';
 import { registry, categories } from '../tools/registry';
 
-// Slice registry to show a maximum of 20 tools on the landing page
-const featuredTools = registry.slice(0, 20);
+// Show all tools in the registry on the landing page
+const featuredTools = registry;
 
-// Filter active categories based on the 20 featured tools
+// Filter active categories based on the featured tools
 const activeCategories = categories.filter(cat => 
   featuredTools.some(tool => tool.category === cat.slug)
 );
