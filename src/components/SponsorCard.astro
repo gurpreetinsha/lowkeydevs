@@ -1,0 +1,63 @@
+---
+import Icon from './base/Icon.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ctaText?: string;
+  ctaLink?: string;
+}
+
+const {
+  title = 'Dub.co - Open-Source Link Infrastructure',
+  description = 'The modern link management platform for marketing teams. Create, share, and track short links with custom domains, analytics, and rich social embeds.',
+  ctaText = 'Try Dub.co Free',
+  ctaLink = 'https://dub.co'
+} = Astro.props;
+---
+
+<div class="partner-card">
+  <span class="partner-badge">Partner Showcase</span>
+  <div class="partner-content">
+    <h3 class="partner-title">{title}</h3>
+    <p class="partner-description">{description}</p>
+  </div>
+  <a href={ctaLink} target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm partner-cta">
+    <span>{ctaText}</span>
+    <Icon name="ArrowRight" size={12} />
+  </a>
+</div>
+
+<style>
+  .partner-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .partner-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .partner-description {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .partner-cta {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 600;
+    border-radius: var(--radius-pill);
+    transition: transform 250ms ease-out, background-color 250ms ease-out;
+  }
+
+  .partner-cta:hover {
+    transform: scale(1.02);
+  }
+</style>

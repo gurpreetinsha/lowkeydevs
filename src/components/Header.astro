@@ -42,13 +42,6 @@ const searchIndex = registry.map(tool => ({
       </div>
     </div>
 
-    <!-- Actions (Theme Toggle, etc.) -->
-    <div class="header-actions">
-      <button id="theme-toggle" class="theme-btn" aria-label="Toggle light/dark theme">
-        <span class="dark-icon"><Icon name="Moon" size={20} /></span>
-        <span class="light-icon"><Icon name="Sun" size={20} /></span>
-      </button>
-    </div>
   </div>
 </header>
 
@@ -80,7 +73,7 @@ const searchIndex = registry.map(tool => ({
   }
 
   .logo-text {
-    font-family: var(--font-display);
+    font-family: var(--font-sans);
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--text-primary);
@@ -88,9 +81,7 @@ const searchIndex = registry.map(tool => ({
   }
 
   .logo-accent {
-    background: var(--primary-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--primary-orange);
   }
 
   /* Search Bar Styles */
@@ -116,30 +107,29 @@ const searchIndex = registry.map(tool => ({
   #search-input {
     width: 100%;
     padding: 0.625rem 1rem 0.625rem 2.75rem;
-    border-radius: var(--radius-md);
-    background-color: var(--bg-color);
+    border-radius: var(--radius-input);
+    background-color: #FFFFFF;
     border: 1px solid var(--border-color);
     color: var(--text-primary);
     outline: none;
     font-family: var(--font-sans);
     font-size: 0.95rem;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.25s ease-out;
   }
 
   #search-input:focus {
-    border-color: var(--primary-accent);
-    box-shadow: 0 0 0 3px var(--primary-glow);
-    background-color: var(--surface-color);
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 0 3px rgba(255, 100, 45, 0.15);
   }
 
   .search-kbd {
     position: absolute;
     right: 0.75rem;
-    background-color: var(--surface-color);
+    background-color: var(--secondary-bg);
     border: 1px solid var(--border-color);
     color: var(--text-muted);
     padding: 0.125rem 0.375rem;
-    border-radius: 4px;
+    border-radius: 6px;
     font-size: 0.75rem;
     font-family: var(--font-sans);
     pointer-events: none;
@@ -156,10 +146,10 @@ const searchIndex = registry.map(tool => ({
     top: calc(100% + 0.5rem);
     left: 0;
     right: 0;
-    background-color: var(--surface-color);
+    background-color: #FFFFFF;
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
+    border-radius: var(--radius-input);
+    box-shadow: var(--shadow-card);
     max-height: 380px;
     overflow-y: auto;
     z-index: 1000;
@@ -182,8 +172,8 @@ const searchIndex = registry.map(tool => ({
 
   .search-item:hover a,
   .search-item.active a {
-    background-color: var(--bg-color);
-    color: var(--primary-accent);
+    background-color: var(--secondary-bg);
+    color: var(--primary-orange);
   }
 
   .search-item-info {
@@ -192,7 +182,7 @@ const searchIndex = registry.map(tool => ({
   }
 
   .search-item-title {
-    font-family: var(--font-display);
+    font-family: var(--font-sans);
     font-weight: 600;
     font-size: 0.95rem;
   }
@@ -213,15 +203,15 @@ const searchIndex = registry.map(tool => ({
     justify-content: center;
     width: 32px;
     height: 32px;
-    border-radius: 6px;
-    background-color: var(--bg-color);
+    border-radius: 8px;
+    background-color: var(--secondary-bg);
     color: var(--text-secondary);
   }
 
   .search-item:hover .search-item-icon-wrapper,
   .search-item.active .search-item-icon-wrapper {
-    background-color: var(--surface-hover);
-    color: var(--primary-accent);
+    background-color: #FFFFFF;
+    color: var(--primary-orange);
   }
 
   .search-empty {
@@ -231,49 +221,6 @@ const searchIndex = registry.map(tool => ({
     font-size: 0.9rem;
   }
 
-  /* Actions */
-  .theme-btn {
-    background: none;
-    border: 1px solid var(--border-color);
-    padding: 0.5rem;
-    border-radius: var(--radius-md);
-    color: var(--text-secondary);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-  }
-
-  .theme-btn:hover {
-    color: var(--primary-accent);
-    border-color: var(--border-hover);
-    background-color: var(--bg-color);
-  }
-
-  /* Theme Icons Toggle Visibility */
-  :root[data-theme="dark"] .light-icon {
-    display: block;
-  }
-  :root[data-theme="dark"] .dark-icon {
-    display: none;
-  }
-  :root[data-theme="light"] .light-icon {
-    display: none;
-  }
-  :root[data-theme="light"] .dark-icon {
-    display: block;
-  }
-
-  @media (max-width: 640px) {
-    .logo-text {
-      font-size: 1.25rem;
-    }
-    
-    .search-kbd {
-      display: none;
-    }
-  }
 </style>
 
 <script define:vars={{ searchIndex }}>
@@ -400,15 +347,5 @@ const searchIndex = registry.map(tool => ({
     if (!e.target.closest('#site-search')) {
       hideResults();
     }
-  });
-
-  // Theme switcher
-  const themeToggle = document.getElementById('theme-toggle');
-  themeToggle.addEventListener('click', () => {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('lowkeydevs-theme', newTheme);
   });
 </script>

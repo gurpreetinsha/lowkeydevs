@@ -58,20 +58,20 @@ const categoryDetail = getCategoryDetail(tool.category);
     justify-content: center;
     width: 44px;
     height: 44px;
-    background-color: var(--bg-color);
+    background-color: var(--secondary-bg);
     color: var(--text-secondary);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-input);
     transition: background-color 0.2s ease, color 0.2s ease;
   }
 
   .tool-card:hover .card-icon-wrapper {
-    background-color: var(--primary-glow);
-    color: var(--primary-accent);
+    background-color: rgba(255, 100, 45, 0.08);
+    color: var(--primary-orange);
   }
 
   .card-category {
     font-size: 0.75rem;
-    font-family: var(--font-display);
+    font-family: var(--font-sans);
     font-weight: 500;
     color: var(--text-muted);
     text-transform: uppercase;
@@ -94,7 +94,7 @@ const categoryDetail = getCategoryDetail(tool.category);
   }
 
   .tool-card:hover .card-title {
-    color: var(--primary-accent);
+    color: var(--primary-orange);
   }
 
   .card-description {
@@ -114,8 +114,8 @@ const categoryDetail = getCategoryDetail(tool.category);
     gap: 0.35rem;
     font-size: 0.85rem;
     font-weight: 600;
-    font-family: var(--font-display);
-    color: var(--primary-accent);
+    font-family: var(--font-sans);
+    color: var(--primary-orange);
     margin-top: auto;
     border-top: 1px solid var(--border-color);
     padding-top: 0.75rem;
