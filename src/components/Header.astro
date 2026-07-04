@@ -19,25 +19,86 @@ const searchIndex = registry.map(tool => ({
       <span class="logo-text">LowKey<span class="logo-accent">Devs</span></span>
     </a>
 
-    <!-- Instant Search Bar -->
-    <div class="search-wrapper" id="site-search">
-      <div class="search-input-container">
-        <Icon name="Search" class="search-icon" size={16} />
-        <input 
-          type="text" 
-          id="search-input" 
-          placeholder="Search tools (e.g. json, password)..." 
-          autocomplete="off"
-          aria-label="Search tools"
-        />
-        <kbd class="search-kbd">/</kbd>
+    <!-- Right Actions: Search + Theme Switcher -->
+    <div class="right-header-group">
+      <!-- Instant Search Bar -->
+      <div class="search-wrapper" id="site-search">
+        <div class="search-input-container">
+          <Icon name="Search" class="search-icon" size={16} />
+          <input 
+            type="text" 
+            id="search-input" 
+            placeholder="Search tools (e.g. json, password)..." 
+            autocomplete="off"
+            aria-label="Search tools"
+          />
+          <kbd class="search-kbd">/</kbd>
+        </div>
+        
+        <!-- Results Dropdown -->
+        <div class="search-results" id="search-results" hidden>
+          <ul id="results-list" role="listbox" aria-label="Search results"></ul>
+          <div class="search-empty" id="search-empty" hidden>
+            No tools found. Try searching for something else!
+          </div>
+        </div>
       </div>
-      
-      <!-- Results Dropdown -->
-      <div class="search-results" id="search-results" hidden>
-        <ul id="results-list" role="listbox" aria-label="Search results"></ul>
-        <div class="search-empty" id="search-empty" hidden>
-          No tools found. Try searching for something else!
+
+      <!-- Theme Switcher -->
+      <div class="theme-switcher-wrapper" id="theme-switcher">
+        <button class="theme-btn" id="theme-menu-btn" aria-label="Change theme" aria-expanded="false">
+          <Icon name="Palette" size={18} />
+          <span class="theme-btn-text">Theme</span>
+        </button>
+        
+        <div class="theme-dropdown" id="theme-dropdown" hidden>
+          <div class="theme-dropdown-header">Choose Theme</div>
+          <div class="theme-grid">
+            <button class="theme-option" data-theme-val="light" title="Default Light">
+              <span class="swatch" style="background: #FAFAFA; border: 1px solid #E5E7EB;"></span>
+              <span class="theme-name">Light</span>
+            </button>
+            <button class="theme-option" data-theme-val="dark" title="Default Dark">
+              <span class="swatch" style="background: #0F172A; border: 1px solid #334155;"></span>
+              <span class="theme-name">Dark</span>
+            </button>
+            <button class="theme-option" data-theme-val="cyberpunk" title="Cyberpunk">
+              <span class="swatch" style="background: #080710; border: 1px solid #FF007F;"></span>
+              <span class="theme-name">Cyberpunk</span>
+            </button>
+            <button class="theme-option" data-theme-val="dracula" title="Dracula">
+              <span class="swatch" style="background: #282A36; border: 1px solid #BD93F9;"></span>
+              <span class="theme-name">Dracula</span>
+            </button>
+            <button class="theme-option" data-theme-val="solarized-light" title="Solarized Light">
+              <span class="swatch" style="background: #FDF6E3; border: 1px solid #268BD2;"></span>
+              <span class="theme-name">Solarized L</span>
+            </button>
+            <button class="theme-option" data-theme-val="solarized-dark" title="Solarized Dark">
+              <span class="swatch" style="background: #002B36; border: 1px solid #2AA198;"></span>
+              <span class="theme-name">Solarized D</span>
+            </button>
+            <button class="theme-option" data-theme-val="nord" title="Nord">
+              <span class="swatch" style="background: #2E3440; border: 1px solid #88C0D0;"></span>
+              <span class="theme-name">Nord</span>
+            </button>
+            <button class="theme-option" data-theme-val="monokai" title="Monokai">
+              <span class="swatch" style="background: #272822; border: 1px solid #A6E22E;"></span>
+              <span class="theme-name">Monokai</span>
+            </button>
+            <button class="theme-option" data-theme-val="forest" title="Forest Green">
+              <span class="swatch" style="background: #121B14; border: 1px solid #34D399;"></span>
+              <span class="theme-name">Forest</span>
+            </button>
+            <button class="theme-option" data-theme-val="sakura" title="Sakura">
+              <span class="swatch" style="background: #FFF5F5; border: 1px solid #EC4899;"></span>
+              <span class="theme-name">Sakura</span>
+            </button>
+            <button class="theme-option" data-theme-val="oceanic" title="Oceanic">
+              <span class="swatch" style="background: #0B132B; border: 1px solid #00B4D8;"></span>
+              <span class="theme-name">Oceanic</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -64,6 +125,135 @@ const searchIndex = registry.map(tool => ({
     justify-content: space-between;
     align-items: center;
     gap: 1.5rem;
+  }
+
+  .right-header-group {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+    max-width: 600px;
+    justify-content: flex-end;
+  }
+
+  .theme-switcher-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .theme-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    color: var(--color-ink);
+    padding: 8px 14px;
+    border-radius: var(--radius-xs);
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .theme-btn:hover {
+    border-color: var(--color-primary);
+    background-color: var(--color-neutral-surface);
+    transform: translateY(-1px);
+  }
+
+  .theme-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 280px;
+    background-color: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+    padding: 16px;
+    animation: slideDown 0.2s ease-out;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .theme-dropdown-header {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-slate);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--color-hairline);
+    padding-bottom: 6px;
+  }
+
+  .theme-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .theme-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: 1px solid transparent;
+    padding: 6px 8px;
+    border-radius: var(--radius-xs);
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .theme-option:hover {
+    background-color: var(--color-neutral-surface);
+    border-color: var(--color-hairline);
+  }
+
+  .theme-option.active {
+    background-color: var(--color-neutral-surface);
+    border-color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .swatch {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .theme-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    .theme-btn-text {
+      display: none;
+    }
+    .theme-btn {
+      padding: 8px;
+    }
   }
 
   .logo {
@@ -344,5 +534,56 @@ const searchIndex = registry.map(tool => ({
     if (!e.target.closest('#site-search')) {
       hideResults();
     }
+  });
+
+  // Theme selection logic
+  const themeMenuBtn = document.getElementById('theme-menu-btn');
+  const themeDropdown = document.getElementById('theme-dropdown');
+  const themeOptions = document.querySelectorAll('.theme-option');
+
+  if (themeMenuBtn && themeDropdown) {
+    themeMenuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isHidden = themeDropdown.hasAttribute('hidden');
+      if (isHidden) {
+        themeDropdown.removeAttribute('hidden');
+        themeMenuBtn.setAttribute('aria-expanded', 'true');
+        highlightActiveTheme();
+      } else {
+        themeDropdown.setAttribute('hidden', 'true');
+        themeMenuBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!themeDropdown.contains(e.target) && e.target !== themeMenuBtn) {
+        themeDropdown.setAttribute('hidden', 'true');
+        themeMenuBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  function highlightActiveTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    themeOptions.forEach(opt => {
+      if (opt.getAttribute('data-theme-val') === currentTheme) {
+        opt.classList.add('active');
+      } else {
+        opt.classList.remove('active');
+      }
+    });
+  }
+
+  themeOptions.forEach(opt => {
+    opt.addEventListener('click', () => {
+      const themeVal = opt.getAttribute('data-theme-val');
+      if (themeVal) {
+        document.documentElement.setAttribute('data-theme', themeVal);
+        localStorage.setItem('lowkeydevs-theme', themeVal);
+        highlightActiveTheme();
+        themeDropdown.setAttribute('hidden', 'true');
+        themeMenuBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
   });
 </script>
