@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useTheme } from "@/components/ThemeProvider";
 import { calculate } from "./calculate";
-import { Delete, History, CornerDownLeft, Sparkles } from "lucide-react";
+import { History } from "lucide-react";
 import confetti from "canvas-confetti";
 
 export default function ScientificCalculator() {
@@ -26,7 +26,7 @@ export default function ScientificCalculator() {
     setDisplay((prev) => prev.slice(0, -1));
   };
 
-  const handleEvaluate = () => {
+  const handleEvaluate = useCallback(() => {
     if (!display.trim()) return;
 
     const calcResult = calculate({ equation: display, mode: isRad ? "rad" : "deg" });
@@ -45,7 +45,7 @@ export default function ScientificCalculator() {
         origin: { y: 0.8 }
       });
     }
-  };
+  }, [display, isRad, addHistory]);
 
   // Connect physical keyboard inputs
   useEffect(() => {
@@ -71,7 +71,7 @@ export default function ScientificCalculator() {
     };
     window.addEventListener("keydown", handlePhysicalKeys);
     return () => window.removeEventListener("keydown", handlePhysicalKeys);
-  }, [display, isRad]);
+  }, [display, isRad, handleEvaluate]);
 
   const btnGrid = [
     { label: "DEG", action: () => setIsRad(false), active: !isRad, category: "mode" },
@@ -154,7 +154,7 @@ export default function ScientificCalculator() {
             <button
               key={idx}
               onClick={btn.action}
-              className={`h-11 rounded-xl border flex items-center justify-center text-xs select-none active:scale-95 transition-all duration-150 cursor-pointer ${styleClass}`}
+              className={`h-12 rounded-xl border flex items-center justify-center text-xs select-none active:scale-95 transition-all duration-150 cursor-pointer ${styleClass}`}
             >
               {btn.label}
             </button>

@@ -194,9 +194,6 @@ export default function CalculatorLayout({
           </div>
         </div>
 
-        {/* Top Ad placement */}
-        <AdPlaceholder slot="page-top-banner" type="banner" />
-
         {/* Main Workspace Split */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
           
@@ -207,6 +204,9 @@ export default function CalculatorLayout({
             <div className="rounded-2xl border border-border bg-card/25 p-5 md:p-6 shadow-sm relative">
               {children}
             </div>
+
+            {/* Ad placement moved below the interactive calculator block */}
+            <AdPlaceholder slot="page-top-banner" type="banner" />
 
             {/* Explanation section */}
             {explanationContent}

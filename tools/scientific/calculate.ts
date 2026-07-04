@@ -11,7 +11,7 @@ export function calculate(inputs: Record<string, any>): Record<string, any> {
 
   try {
     // Sanitize equation: allow only math characters, numbers, and functions
-    let sanitized = equation
+    const sanitized = equation
       .replace(/\s+/g, "")
       .replace(/π/g, "Math.PI")
       .replace(/e/g, "Math.E")
@@ -43,7 +43,7 @@ export function calculate(inputs: Record<string, any>): Record<string, any> {
     });
 
     return { result: formattedResult };
-  } catch (e) {
+  } catch {
     return { result: "Error" };
   }
 }

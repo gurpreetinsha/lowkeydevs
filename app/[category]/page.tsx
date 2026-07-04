@@ -75,9 +75,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           </div>
         </div>
 
-        {/* Top Ad placement */}
-        <AdPlaceholder slot="category-top-banner" type="banner" />
-
         {/* Grid and list of tools */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {categoryTools.length > 0 ? (
@@ -130,6 +127,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             </div>
           )}
         </div>
+
+        {/* Ad placement moved below grid */}
+        <AdPlaceholder slot="category-top-banner" type="banner" />
 
         {/* Section: Category Context & Guides */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">

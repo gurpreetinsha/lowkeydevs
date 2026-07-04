@@ -124,7 +124,7 @@ export default function Header() {
             {/* Search Trigger */}
             <button
               onClick={() => setSearchOpen(true)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-border bg-input/50 text-muted-foreground hover:text-foreground text-xs font-semibold cursor-pointer max-w-[140px] md:max-w-none transition-all-300"
+              className="flex items-center gap-2 px-3.5 py-2.5 h-10 rounded-xl border border-border bg-input/50 text-muted-foreground hover:text-foreground text-xs font-semibold cursor-pointer max-w-[140px] md:max-w-none transition-all-300"
               aria-label="Open search Modal"
             >
               <Search className="w-3.5 h-3.5 shrink-0" />
@@ -211,7 +211,7 @@ export default function Header() {
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-xl hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer shrink-0"
+              className="md:hidden p-3 h-12 w-12 flex items-center justify-center rounded-xl hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer shrink-0"
               aria-label="Toggle mobile menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -230,7 +230,7 @@ export default function Header() {
                   <Link
                     key={cat.slug}
                     href={`/${cat.slug}`}
-                    className="flex items-center gap-2 p-2 rounded-xl border border-transparent hover:border-border hover:bg-muted/30"
+                    className="flex items-center gap-2.5 p-3 rounded-xl border border-transparent hover:border-border hover:bg-muted/30"
                   >
                     <Icon className="w-4 h-4 text-primary shrink-0" />
                     <span className="text-xs font-bold text-foreground capitalize truncate">{cat.name}</span>
@@ -242,7 +242,7 @@ export default function Header() {
             <div className="pt-4 border-t border-border flex flex-col gap-2">
               <Link
                 href="/search"
-                className="w-full flex items-center justify-center p-2.5 rounded-xl border border-border text-xs font-bold"
+                className="w-full h-12 flex items-center justify-center p-3 rounded-xl border border-border text-xs font-bold"
               >
                 Explore All Tools
               </Link>
@@ -251,7 +251,7 @@ export default function Header() {
                   setPremium(!isPremium);
                   setMobileMenuOpen(false);
                 }}
-                className={`w-full flex items-center justify-center p-2.5 rounded-xl text-xs font-black shadow-md ${
+                className={`w-full h-12 flex items-center justify-center p-3 rounded-xl text-xs font-black shadow-md ${
                   isPremium
                     ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/30"
                     : "bg-gradient-to-r from-primary to-indigo-600 text-white"

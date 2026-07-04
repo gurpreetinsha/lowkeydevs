@@ -36,7 +36,6 @@ export default function DynamicToolForm({ toolSlug, config, calculate: propCalcu
   const router = useRouter();
   const pathname = usePathname();
 
-  const [outputs, setOutputs] = useState<Record<string, any>>({});
   const [copiedLink, setCopiedLink] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
@@ -117,40 +116,34 @@ export default function DynamicToolForm({ toolSlug, config, calculate: propCalcu
 
   // Watch form inputs to run calculations in real-time
   const watchedValues = watch();
-
-  useEffect(() => {
-    if (isValid) {
-      const results = calculate(watchedValues);
-      setOutputs(results);
-    }
-  }, [watchedValues, isValid, calculate]);
+  const outputs = (isValid ? calculate(watchedValues) : {}) as Record<string, any>;
 
   // Debounced auto-saving to local history context
-  const prevValuesRef = useRef<string>("");
+  const stringifiedInputs = JSON.stringify(watchedValues);
   useEffect(() => {
-    if (!isValid || Object.keys(outputs).length === 0) return;
-    
-    const stringifiedInputs = JSON.stringify(watchedValues);
-    if (stringifiedInputs === prevValuesRef.current) return;
-    prevValuesRef.current = stringifiedInputs;
+    if (!isValid || !stringifiedInputs) return;
 
     const timer = setTimeout(() => {
+      const parsedInputs = JSON.parse(stringifiedInputs);
+      const currentOutputs = calculate(parsedInputs) as Record<string, any>;
+      if (Object.keys(currentOutputs).length === 0) return;
+
       let summaryText = "";
-      if (outputs.summaryText) {
-        summaryText = String(outputs.summaryText);
-      } else if (outputs.bmi) {
-        summaryText = `BMI: ${Number(outputs.bmi).toFixed(1)} (${outputs.category})`;
-      } else if (outputs.monthlyPayment) {
-        summaryText = `EMI: $${Number(outputs.monthlyPayment).toFixed(2)}`;
-      } else if (outputs.result) {
-        summaryText = `Result: ${Number(outputs.result).toFixed(4)}`;
+      if (currentOutputs.summaryText) {
+        summaryText = String(currentOutputs.summaryText);
+      } else if (currentOutputs.bmi) {
+        summaryText = `BMI: ${Number(currentOutputs.bmi).toFixed(1)} (${currentOutputs.category})`;
+      } else if (currentOutputs.monthlyPayment) {
+        summaryText = `EMI: $${Number(currentOutputs.monthlyPayment).toFixed(2)}`;
+      } else if (currentOutputs.result) {
+        summaryText = `Result: ${Number(currentOutputs.result).toFixed(4)}`;
       }
 
-      addHistory(toolSlug, watchedValues, outputs, summaryText);
+      addHistory(toolSlug, parsedInputs, currentOutputs, summaryText);
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, [outputs, isValid, watchedValues, addHistory, toolSlug]);
+  }, [stringifiedInputs, isValid, addHistory, toolSlug, calculate]);
 
   // Copy shareable link (encodes inputs as search parameters)
   const handleCopyShareLink = async () => {
@@ -219,7 +212,7 @@ export default function DynamicToolForm({ toolSlug, config, calculate: propCalcu
                     <select
                       id={input.id}
                       {...register(input.id, { valueAsNumber: typeof input.defaultValue === "number" })}
-                      className="w-full rounded-xl border border-border bg-input px-3 py-2 text-sm text-foreground focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all cursor-pointer"
+                      className="w-full h-12 rounded-xl border border-border bg-input px-3 py-3 text-sm text-foreground focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all cursor-pointer"
                     >
                       {input.options?.map((opt: any) => (
                         <option key={opt.value} value={opt.value}>
@@ -239,7 +232,7 @@ export default function DynamicToolForm({ toolSlug, config, calculate: propCalcu
                             key={opt.value}
                             type="button"
                             onClick={() => setValue(input.id, opt.value, { shouldValidate: true })}
-                            className={`p-2.5 rounded-xl border text-xs font-bold text-center cursor-pointer transition-all duration-200 ${
+                            className={`p-3 h-12 rounded-xl border text-xs font-bold text-center cursor-pointer transition-all duration-200 ${
                               isChecked
                                 ? "bg-primary/10 border-primary text-primary"
                                 : "bg-card border-border hover:bg-muted text-muted-foreground hover:text-foreground"
@@ -259,7 +252,7 @@ export default function DynamicToolForm({ toolSlug, config, calculate: propCalcu
                       rows={4}
                       placeholder={input.placeholder}
                       {...register(input.id)}
-                      className="w-full rounded-xl border border-border bg-input px-3 py-2 text-sm text-foreground focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all resize-none"
+                      className="w-full rounded-xl border border-border bg-input px-3 py-3 text-sm text-foreground focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all resize-none"
                     />
                   )}
 
@@ -269,7 +262,7 @@ export default function DynamicToolForm({ toolSlug, config, calculate: propCalcu
                       id={input.id}
                       type="date"
                       {...register(input.id)}
-                      className="w-full rounded-xl border border-border bg-input px-3 py-2 text-sm text-foreground focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all cursor-pointer"
+                      className="w-full h-12 rounded-xl border border-border bg-input px-3 py-3 text-sm text-foreground focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all cursor-pointer"
                     />
                   )}
 
@@ -282,7 +275,7 @@ export default function DynamicToolForm({ toolSlug, config, calculate: propCalcu
                         step={input.step || "any"}
                         {...register(input.id, { valueAsNumber: true })}
                         placeholder={input.placeholder}
-                        className={`w-full rounded-xl border bg-input px-3 py-2 text-sm text-foreground focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all ${
+                        className={`w-full h-12 rounded-xl border bg-input px-3 py-3 text-sm text-foreground focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all ${
                           error ? "border-destructive focus:ring-destructive" : "border-border"
                         }`}
                       />
@@ -297,7 +290,7 @@ export default function DynamicToolForm({ toolSlug, config, calculate: propCalcu
                             step={input.step || 1}
                             value={Number(watchedValues[input.id]) || input.defaultValue}
                             onChange={(e) => setValue(input.id, Number(e.target.value), { shouldValidate: true })}
-                            className="flex-1 h-1 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
+                            className="flex-1 h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
                           />
                           <span className="text-[10px] font-mono font-bold text-muted-foreground select-none shrink-0">
                             {input.validation.min} - {input.validation.max}
@@ -358,7 +351,7 @@ export default function DynamicToolForm({ toolSlug, config, calculate: propCalcu
               // Custom Widget Render: BMI / Metric Gauge
               if (out.type === "gauge" && out.id === "gaugeVal") {
                 const bmiVal = Number(val) || 0;
-                let pct = Math.min(100, Math.max(0, ((bmiVal - 15) / 25) * 100)); // Map BMI 15-40 to 0-100%
+                const pct = Math.min(100, Math.max(0, ((bmiVal - 15) / 25) * 100)); // Map BMI 15-40 to 0-100%
                 
                 let markerColor = "bg-primary";
                 if (bmiVal < 18.5) markerColor = "bg-sky-500";
@@ -447,7 +440,7 @@ export default function DynamicToolForm({ toolSlug, config, calculate: propCalcu
                           } catch (e) { console.error(e); }
                         }}
                         id={"copy-btn-" + out.id}
-                        className="inline-flex items-center self-end mt-2 px-3 py-1 rounded-lg border border-border hover:bg-muted text-[10px] font-bold text-muted-foreground hover:text-foreground transition-all cursor-pointer shadow-sm gap-1"
+                        className="inline-flex items-center self-end mt-2 px-4 py-2 rounded-lg border border-border hover:bg-muted text-xs font-bold text-muted-foreground hover:text-foreground transition-all cursor-pointer shadow-sm gap-1"
                       >
                         Copy
                       </button>
@@ -485,7 +478,7 @@ export default function DynamicToolForm({ toolSlug, config, calculate: propCalcu
             <div className="flex gap-2">
               <button
                 onClick={() => exportToCSV(config.title, watchedValues, outputs)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card hover:bg-muted text-[10px] font-bold text-muted-foreground hover:text-foreground shadow-sm transition-all cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg border border-border bg-card hover:bg-muted text-xs font-bold text-muted-foreground hover:text-foreground shadow-sm transition-all cursor-pointer"
                 title="Download CSV amortization log"
               >
                 <Download className="w-3.5 h-3.5" />
@@ -493,7 +486,7 @@ export default function DynamicToolForm({ toolSlug, config, calculate: propCalcu
               </button>
               <button
                 onClick={() => exportToText(config.title, watchedValues, outputs)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card hover:bg-muted text-[10px] font-bold text-muted-foreground hover:text-foreground shadow-sm transition-all cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg border border-border bg-card hover:bg-muted text-xs font-bold text-muted-foreground hover:text-foreground shadow-sm transition-all cursor-pointer"
                 title="Download Plain Text calculation file"
               >
                 <Download className="w-3.5 h-3.5" />

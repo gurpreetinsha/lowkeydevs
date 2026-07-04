@@ -65,9 +65,6 @@ export default function Home() {
       {/* Main Container */}
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
         
-        {/* Banner Ad placement */}
-        <AdPlaceholder slot="homepage-hero-bottom" type="banner" />
-
         {/* Featured Tools Segment */}
         {featuredTools.length > 0 && (
           <section className="space-y-4">
@@ -118,6 +115,9 @@ export default function Home() {
             </div>
           </section>
         )}
+
+        {/* Banner Ad placement moved below featured tools */}
+        <AdPlaceholder slot="homepage-hero-bottom" type="banner" />
 
         {/* Categories Section */}
         <section className="space-y-4">

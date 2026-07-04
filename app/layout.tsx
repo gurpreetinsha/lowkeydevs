@@ -2,12 +2,16 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   title: "LowkeyDevs - Premium Online Calculators & Tools Platform",
   description: "Free, instant, and high-performance developer, mathematical, health, and financial calculators designed for speed and accessibility.",
   keywords: ["calculators", "online tools", "developer tools", "finance calculators", "health calculators"],
   authors: [{ name: "LowkeyDevs Team" }],
-  viewport: "width=device-width, initial-scale=1",
 };
 
 export default function RootLayout({

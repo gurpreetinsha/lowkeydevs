@@ -32,9 +32,9 @@ export function calculate(inputs: Record<string, any>): Record<string, any> {
   const birthMonth = birthDate.getMonth();
   const birthDay = birthDate.getDate();
 
-  let targetYear = targetDate.getFullYear();
-  let targetMonth = targetDate.getMonth();
-  let targetDay = targetDate.getDate();
+  const targetYear = targetDate.getFullYear();
+  const targetMonth = targetDate.getMonth();
+  const targetDay = targetDate.getDate();
 
   // Primary Age Calculation
   let years = targetYear - birthYear;

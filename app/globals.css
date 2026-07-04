@@ -170,10 +170,10 @@ body {
 
 /* Glassmorphism utility */
 .glass {
-  background: rgba(var(--card), 0.7);
+  background: color-mix(in srgb, var(--card) 70%, transparent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(var(--border), 0.5);
+  border: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
 }
 
 /* Custom premium transitions */
@@ -197,8 +197,10 @@ body {
   background: var(--muted-foreground);
 }
 
-/* Input styles reset for accessibility */
+/* Input styles reset for accessibility and premium feel */
 input:focus-visible, select:focus-visible, textarea:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
+  outline: none;
+  border-color: var(--ring);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ring) 20%, transparent), 0 0 12px color-mix(in srgb, var(--ring) 15%, transparent);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
