@@ -1,0 +1,474 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<find-replace-tool class="tool-workspace">
+  <div class="tool-controls glass-panel">
+    <div class="search-inputs-grid">
+      <div class="form-group">
+        <label for="find-input" class="label">Find Text / Pattern</label>
+        <input type="text" id="find-input" placeholder="Text to search for..." class="input" />
+      </div>
+
+      <div class="form-group">
+        <label for="replace-input" class="label">Replace With</label>
+        <input type="text" id="replace-input" placeholder="Text to replace with..." class="input" />
+      </div>
+    </div>
+
+    <div class="options-row">
+      <div class="checkbox-options">
+        <label class="checkbox-container">
+          <input type="checkbox" id="opt-case" />
+          <span class="checkmark"></span>
+          Case Sensitive
+        </label>
+
+        <label class="checkbox-container">
+          <input type="checkbox" id="opt-whole" />
+          <span class="checkmark"></span>
+          Whole Word
+        </label>
+
+        <label class="checkbox-container">
+          <input type="checkbox" id="opt-regex" />
+          <span class="checkmark"></span>
+          Regular Expression
+        </label>
+      </div>
+
+      <div class="stats-badge" id="match-status" style="display: none;">
+        <span class="badge-text" id="match-count-val">0 matches replaced</span>
+      </div>
+    </div>
+
+    <div class="error-banner" id="regex-error" style="display: none;"></div>
+
+    <div class="control-actions">
+      <button data-action="replace" class="btn btn-primary">
+        <Icon name="Replace" size={16} />
+        Replace Text
+      </button>
+      <button data-action="clear" class="btn btn-danger">
+        <Icon name="Trash2" size={16} />
+        Clear
+      </button>
+    </div>
+  </div>
+
+  <div class="editor-grid">
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Input Text</span>
+        <button data-action="load-sample" class="btn-text">Load Sample</button>
+      </div>
+      <textarea 
+        id="find-replace-input" 
+        placeholder="Paste your source text here..." 
+        aria-label="Input Text for Search and Replace"
+      ></textarea>
+    </div>
+
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Replaced Result</span>
+        <button data-action="copy" class="btn btn-secondary btn-sm" id="btn-copy">
+          <Icon name="Clipboard" size={14} class="copy-icon" />
+          <Icon name="Check" size={14} class="check-icon" />
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <div class="output-container">
+        <textarea 
+          id="find-replace-output" 
+          placeholder="Output with replacements will appear here..." 
+          readonly
+          aria-label="Replaced Output Text"
+        ></textarea>
+      </div>
+    </div>
+  </div>
+</find-replace-tool>
+
+<style>
+  .tool-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .tool-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.5rem;
+  }
+
+  .search-inputs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 600px) {
+    .search-inputs-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .options-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+  }
+
+  .checkbox-options {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .stats-badge {
+    background-color: var(--primary-glow);
+    border: 1px solid var(--primary-accent);
+    color: var(--text-primary);
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .error-banner {
+    background-color: var(--error-bg);
+    border: 1px solid var(--error-border);
+    color: var(--error-color);
+    padding: 0.75rem;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-family: var(--font-mono);
+  }
+
+  /* Custom Checkbox Styles */
+  .checkbox-container {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    padding-left: 2rem;
+    cursor: pointer;
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    user-select: none;
+    transition: color 0.2s ease;
+  }
+
+  .checkbox-container:hover {
+    color: var(--text-primary);
+  }
+
+  .checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  .checkmark {
+    position: absolute;
+    left: 0;
+    height: 1.25rem;
+    width: 1.25rem;
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
+  }
+
+  .checkbox-container:hover input ~ .checkmark {
+    border-color: var(--border-hover);
+  }
+
+  .checkbox-container input:checked ~ .checkmark {
+    background-color: var(--primary-accent);
+    border-color: var(--primary-accent);
+  }
+
+  .checkmark::after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 2px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  .checkbox-container input:checked ~ .checkmark::after {
+    display: block;
+  }
+
+  .control-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    border-top: 1px solid var(--border-color);
+    padding-top: 1.25rem;
+  }
+
+  .editor-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .editor-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .editor-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 400px;
+    padding: 1.25rem;
+  }
+
+  .pane-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+  }
+
+  .pane-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .btn-text {
+    background: none;
+    border: none;
+    color: var(--primary-accent);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: var(--font-display);
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn-text:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
+
+  #find-replace-input,
+  #find-replace-output {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    resize: none;
+    outline: none;
+  }
+
+  #find-replace-output {
+    color: var(--text-secondary);
+  }
+
+  .output-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  /* Copy Button states */
+  #btn-copy .check-icon {
+    display: none;
+  }
+
+  #btn-copy.copied .copy-icon {
+    display: none;
+  }
+
+  #btn-copy.copied .check-icon {
+    display: inline-block;
+    color: var(--success-color);
+  }
+
+  #btn-copy.copied {
+    border-color: var(--success-color);
+  }
+
+  .btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.85rem;
+    border-radius: var(--radius-sm);
+  }
+</style>
+
+<script>
+  import { findAndReplace } from './logic';
+
+  class FindReplaceTool extends HTMLElement {
+    private inputEl!: HTMLTextAreaElement;
+    private outputEl!: HTMLTextAreaElement;
+    private findEl!: HTMLInputElement;
+    private replaceEl!: HTMLInputElement;
+    private caseEl!: HTMLInputElement;
+    private wholeEl!: HTMLInputElement;
+    private regexEl!: HTMLInputElement;
+    private matchStatusEl!: HTMLDivElement;
+    private matchCountValEl!: HTMLSpanElement;
+    private regexErrorEl!: HTMLDivElement;
+
+    connectedCallback() {
+      this.inputEl = this.querySelector('#find-replace-input') as HTMLTextAreaElement;
+      this.outputEl = this.querySelector('#find-replace-output') as HTMLTextAreaElement;
+      this.findEl = this.querySelector('#find-input') as HTMLInputElement;
+      this.replaceEl = this.querySelector('#replace-input') as HTMLInputElement;
+      this.caseEl = this.querySelector('#opt-case') as HTMLInputElement;
+      this.wholeEl = this.querySelector('#opt-whole') as HTMLInputElement;
+      this.regexEl = this.querySelector('#opt-regex') as HTMLInputElement;
+      this.matchStatusEl = this.querySelector('#match-status') as HTMLDivElement;
+      this.matchCountValEl = this.querySelector('#match-count-val') as HTMLSpanElement;
+      this.regexErrorEl = this.querySelector('#regex-error') as HTMLDivElement;
+
+      // Realtime replace on typing
+      const textInputs = [
+        this.inputEl,
+        this.findEl,
+        this.replaceEl
+      ];
+      textInputs.forEach(el => el.addEventListener('input', () => this.handleReplace()));
+
+      const checkboxes = [
+        this.caseEl,
+        this.wholeEl,
+        this.regexEl
+      ];
+      checkboxes.forEach(el => el.addEventListener('change', () => this.handleReplace()));
+
+      // Button clicks
+      this.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const button = target.closest('button');
+        if (!button) return;
+
+        const action = button.getAttribute('data-action');
+        if (action === 'replace') this.handleReplace();
+        if (action === 'clear') this.handleClear();
+        if (action === 'copy') this.handleCopy();
+        if (action === 'load-sample') this.handleLoadSample();
+      });
+    }
+
+    private handleReplace() {
+      const text = this.inputEl.value;
+      const findVal = this.findEl.value;
+      if (!text) {
+        this.outputEl.value = '';
+        this.matchStatusEl.style.display = 'none';
+        this.regexErrorEl.style.display = 'none';
+        return;
+      }
+
+      if (!findVal) {
+        this.outputEl.value = text;
+        this.matchStatusEl.style.display = 'none';
+        this.regexErrorEl.style.display = 'none';
+        return;
+      }
+
+      const options = {
+        find: findVal,
+        replace: this.replaceEl.value,
+        caseSensitive: this.caseEl.checked,
+        wholeWord: this.wholeEl.checked,
+        regex: this.regexEl.checked
+      };
+
+      const result = findAndReplace(text, options);
+
+      if (result.error) {
+        this.regexErrorEl.textContent = result.error;
+        this.regexErrorEl.style.display = 'block';
+        this.matchStatusEl.style.display = 'none';
+        this.outputEl.value = text; // Fallback to original text on regex compile error
+      } else {
+        this.regexErrorEl.style.display = 'none';
+        this.outputEl.value = result.text;
+        this.matchCountValEl.textContent = `${result.matchCount} ${result.matchCount === 1 ? 'match' : 'matches'} replaced`;
+        this.matchStatusEl.style.display = 'block';
+      }
+    }
+
+    private handleClear() {
+      this.inputEl.value = '';
+      this.outputEl.value = '';
+      this.findEl.value = '';
+      this.replaceEl.value = '';
+      this.caseEl.checked = false;
+      this.wholeEl.checked = false;
+      this.regexEl.checked = false;
+      this.matchStatusEl.style.display = 'none';
+      this.regexErrorEl.style.display = 'none';
+      this.inputEl.focus();
+    }
+
+    private handleLoadSample() {
+      this.inputEl.value = "The Quick Brown Fox jumps over the lazy dog.\n\nFoxes are related to dogs, but they are different species of animals. This fox is quick!";
+      this.findEl.value = "fox";
+      this.replaceEl.value = "cat";
+      this.caseEl.checked = false;
+      this.wholeEl.checked = true;
+      this.regexEl.checked = false;
+      this.handleReplace();
+    }
+
+    private async handleCopy() {
+      const text = this.outputEl.value;
+      if (!text) return;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        const copyBtn = this.querySelector('#btn-copy') as HTMLButtonElement;
+        const copyText = copyBtn.querySelector('.copy-text') as HTMLSpanElement;
+
+        copyBtn.classList.add('copied');
+        copyText.textContent = 'Copied!';
+
+        setTimeout(() => {
+          copyBtn.classList.remove('copied');
+          copyText.textContent = 'Copy';
+        }, 2000);
+      } catch (e) {
+        console.error('Failed to copy text', e);
+      }
+    }
+  }
+
+  if (!customElements.get('find-replace-tool')) {
+    customElements.define('find-replace-tool', FindReplaceTool);
+  }
+</script>

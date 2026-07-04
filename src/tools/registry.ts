@@ -19,6 +19,14 @@ import { meta as caseConverterMeta } from './list/case-converter/meta';
 import { meta as urlEncoderDecoderMeta } from './list/url-encoder-decoder/meta';
 import { meta as epochConverterMeta } from './list/epoch-converter/meta';
 import { meta as hashGeneratorMeta } from './list/hash-generator/meta';
+import { meta as sentenceCounterMeta } from './list/sentence-counter/meta';
+import { meta as sortWordsMeta } from './list/sort-words-alphabetically/meta';
+import { meta as findAndReplaceMeta } from './list/find-and-replace-text/meta';
+import { meta as removeDuplicateLinesMeta } from './list/remove-duplicate-lines/meta';
+import { meta as removeTextFormattingMeta } from './list/remove-text-formatting/meta';
+import { meta as repeatTextGeneratorMeta } from './list/repeat-text-generator/meta';
+import { meta as reverseTextGeneratorMeta } from './list/reverse-text-generator/meta';
+import { meta as invisibleTextGeneratorMeta } from './list/invisible-text-generator/meta';
 
 // Central Registry of all tools
 export const registry: ToolMeta[] = [
@@ -41,7 +49,15 @@ export const registry: ToolMeta[] = [
   caseConverterMeta,
   urlEncoderDecoderMeta,
   epochConverterMeta,
-  hashGeneratorMeta
+  hashGeneratorMeta,
+  sentenceCounterMeta,
+  sortWordsMeta,
+  findAndReplaceMeta,
+  removeDuplicateLinesMeta,
+  removeTextFormattingMeta,
+  repeatTextGeneratorMeta,
+  reverseTextGeneratorMeta,
+  invisibleTextGeneratorMeta
 ];
 
 // Helper to find a tool by its slug

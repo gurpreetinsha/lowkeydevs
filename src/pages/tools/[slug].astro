@@ -23,6 +23,14 @@ import CaseConverterUI from '../../tools/list/case-converter/ui.astro';
 import URLEncoderDecoderUI from '../../tools/list/url-encoder-decoder/ui.astro';
 import EpochConverterUI from '../../tools/list/epoch-converter/ui.astro';
 import HashGeneratorUI from '../../tools/list/hash-generator/ui.astro';
+import SentenceCounterUI from '../../tools/list/sentence-counter/ui.astro';
+import SortWordsAlphabeticallyUI from '../../tools/list/sort-words-alphabetically/ui.astro';
+import FindAndReplaceUI from '../../tools/list/find-and-replace-text/ui.astro';
+import RemoveDuplicateLinesUI from '../../tools/list/remove-duplicate-lines/ui.astro';
+import RemoveTextFormattingUI from '../../tools/list/remove-text-formatting/ui.astro';
+import RepeatTextGeneratorUI from '../../tools/list/repeat-text-generator/ui.astro';
+import ReverseTextGeneratorUI from '../../tools/list/reverse-text-generator/ui.astro';
+import InvisibleTextGeneratorUI from '../../tools/list/invisible-text-generator/ui.astro';
 
 // Map slugs to UI components
 const uiComponents: Record<string, any> = {
@@ -45,7 +53,15 @@ const uiComponents: Record<string, any> = {
   'case-converter': CaseConverterUI,
   'url-encoder-decoder': URLEncoderDecoderUI,
   'epoch-converter': EpochConverterUI,
-  'hash-generator': HashGeneratorUI
+  'hash-generator': HashGeneratorUI,
+  'sentence-counter': SentenceCounterUI,
+  'sort-words-alphabetically': SortWordsAlphabeticallyUI,
+  'find-and-replace-text': FindAndReplaceUI,
+  'remove-duplicate-lines': RemoveDuplicateLinesUI,
+  'remove-text-formatting': RemoveTextFormattingUI,
+  'repeat-text-generator': RepeatTextGeneratorUI,
+  'reverse-text-generator': ReverseTextGeneratorUI,
+  'invisible-text-generator': InvisibleTextGeneratorUI
 };
 
 export async function getStaticPaths() {
