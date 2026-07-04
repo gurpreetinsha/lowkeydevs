@@ -19,155 +19,53 @@ const searchIndex = registry.map(tool => ({
       <span class="logo-text">LowKey<span class="logo-accent">Devs</span></span>
     </a>
 
-    <!-- Right Actions: Search + Theme Switcher -->
+    <!-- Right Actions: Search Toggle + Theme Switcher -->
     <div class="right-header-group">
-      <!-- Instant Search Bar -->
-      <div class="search-wrapper" id="site-search">
-        <div class="search-input-container">
-          <Icon name="Search" class="search-icon" size={16} />
-          <input 
-            type="text" 
-            id="search-input" 
-            placeholder="Search tools (e.g. json, password)..." 
-            autocomplete="off"
-            aria-label="Search tools"
-          />
-          <kbd class="search-kbd">/</kbd>
-        </div>
-        
-        <!-- Results Dropdown -->
-        <div class="search-results" id="search-results" hidden>
-          <ul id="results-list" role="listbox" aria-label="Search results"></ul>
-          <div class="search-empty" id="search-empty" hidden>
-            No tools found. Try searching for something else!
-          </div>
-        </div>
-      </div>
+      <!-- Search Button (Pill Search Bar replaced by round glass button) -->
+      <button class="nav-icon-btn" id="search-toggle-btn" aria-label="Search tools" title="Search tools (/)">
+        <Icon name="Search" size={18} />
+      </button>
 
-      <!-- Theme Switcher -->
-      <div class="theme-switcher-wrapper" id="theme-switcher">
-        <button class="theme-btn" id="theme-menu-btn" aria-label="Change theme" aria-expanded="false">
-          <Icon name="Palette" size={18} />
-          <span class="theme-btn-text">Theme</span>
-        </button>
-        
-        <div class="theme-dropdown" id="theme-dropdown" hidden>
-          <div class="theme-dropdown-header">Choose theme</div>
-          <div class="theme-grid">
-            <button class="theme-option" data-theme-val="light" title="Default Light">
-              <span class="swatch" style="background: #FFFFFF; border: 1px solid var(--ds-border);"></span>
-              <span class="theme-name">Light</span>
-            </button>
-            <button class="theme-option" data-theme-val="dark" title="Default Dark">
-              <span class="swatch" style="background: #1D2125; border: 1px solid var(--ds-border);"></span>
-              <span class="theme-name">Dark</span>
-            </button>
-            <button class="theme-option" data-theme-val="cyberpunk" title="Cyberpunk">
-              <span class="swatch" style="background: #080710; border: 1px solid #FF007F;"></span>
-              <span class="theme-name">Cyberpunk</span>
-            </button>
-            <button class="theme-option" data-theme-val="dracula" title="Dracula">
-              <span class="swatch" style="background: #282A36; border: 1px solid #BD93F9;"></span>
-              <span class="theme-name">Dracula</span>
-            </button>
-            <button class="theme-option" data-theme-val="solarized-light" title="Solarized Light">
-              <span class="swatch" style="background: #FDF6E3; border: 1px solid #268BD2;"></span>
-              <span class="theme-name">Solarized L</span>
-            </button>
-            <button class="theme-option" data-theme-val="solarized-dark" title="Solarized Dark">
-              <span class="swatch" style="background: #002B36; border: 1px solid #2AA198;"></span>
-              <span class="theme-name">Solarized D</span>
-            </button>
-            <button class="theme-option" data-theme-val="nord" title="Nord">
-              <span class="swatch" style="background: #2E3440; border: 1px solid #88C0D0;"></span>
-              <span class="theme-name">Nord</span>
-            </button>
-            <button class="theme-option" data-theme-val="monokai" title="Monokai">
-              <span class="swatch" style="background: #272822; border: 1px solid #A6E22E;"></span>
-              <span class="theme-name">Monokai</span>
-            </button>
-            <button class="theme-option" data-theme-val="forest" title="Forest Green">
-              <span class="swatch" style="background: #121B14; border: 1px solid #34D399;"></span>
-              <span class="theme-name">Forest</span>
-            </button>
-            <button class="theme-option" data-theme-val="sakura" title="Sakura">
-              <span class="swatch" style="background: #FFF5F5; border: 1px solid #EC4899;"></span>
-              <span class="theme-name">Sakura</span>
-            </button>
-            <button class="theme-option" data-theme-val="oceanic" title="Oceanic">
-              <span class="swatch" style="background: #0B132B; border: 1px solid #00B4D8;"></span>
-              <span class="theme-name">Oceanic</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Liquid Glass Simulator settings -->
-      <div class="theme-switcher-wrapper" id="glass-switcher">
-        <button class="theme-btn" id="glass-menu-btn" aria-label="Liquid Glass Settings" aria-expanded="false">
-          <Icon name="Sliders" size={18} />
-          <span class="theme-btn-text">Liquid Glass</span>
-        </button>
-        
-        <div class="theme-dropdown" id="glass-dropdown" hidden style="width: 320px;">
-          <div class="theme-dropdown-header">Liquid Glass Settings</div>
-          
-          <div class="customizer-sections" style="display: flex; flex-direction: column; gap: var(--ds-space-200); padding-top: var(--ds-space-100);">
-            <!-- Rendering Mode -->
-            <div class="customizer-row" style="display: flex; justify-content: space-between; align-items: center; gap: var(--ds-space-100);">
-              <span class="label" style="font-size: 0.8rem; font-weight: 600;">Rendering Mode</span>
-              <div class="glass-effect-container" style="padding: 2px; border-radius: 8px; gap: 2px;">
-                <button class="tab-btn customizer-toggle" data-prop="rendering-mode" data-val="fullColor" style="padding: 4px 8px; font-size: 0.75rem; border-radius: 6px; border: none; cursor: pointer;">Full Color</button>
-                <button class="tab-btn customizer-toggle" data-prop="rendering-mode" data-val="accented" style="padding: 4px 8px; font-size: 0.75rem; border-radius: 6px; border: none; cursor: pointer;">Accented</button>
-              </div>
-            </div>
-            
-            <!-- visionOS Texture -->
-            <div class="customizer-row" style="display: flex; justify-content: space-between; align-items: center; gap: var(--ds-space-100);">
-              <span class="label" style="font-size: 0.8rem; font-weight: 600;">visionOS Texture</span>
-              <div class="glass-effect-container" style="padding: 2px; border-radius: 8px; gap: 2px;">
-                <button class="tab-btn customizer-toggle" data-prop="texture" data-val="glass" style="padding: 4px 8px; font-size: 0.75rem; border-radius: 6px; border: none; cursor: pointer;">Glass</button>
-                <button class="tab-btn customizer-toggle" data-prop="texture" data-val="paper" style="padding: 4px 8px; font-size: 0.75rem; border-radius: 6px; border: none; cursor: pointer;">Paper</button>
-              </div>
-            </div>
-
-            <!-- Mounting Style -->
-            <div class="customizer-row" style="display: flex; justify-content: space-between; align-items: center; gap: var(--ds-space-100);">
-              <span class="label" style="font-size: 0.8rem; font-weight: 600;">Mounting Style</span>
-              <div class="glass-effect-container" style="padding: 2px; border-radius: 8px; gap: 2px;">
-                <button class="tab-btn customizer-toggle" data-prop="mounting" data-val="elevated" style="padding: 4px 8px; font-size: 0.75rem; border-radius: 6px; border: none; cursor: pointer;">Elevated</button>
-                <button class="tab-btn customizer-toggle" data-prop="mounting" data-val="recessed" style="padding: 4px 8px; font-size: 0.75rem; border-radius: 6px; border: none; cursor: pointer;">Recessed</button>
-              </div>
-            </div>
-
-            <!-- Level of Detail -->
-            <div class="customizer-row" style="display: flex; justify-content: space-between; align-items: center; gap: var(--ds-space-100);">
-              <span class="label" style="font-size: 0.8rem; font-weight: 600;">Level of Detail</span>
-              <div class="glass-effect-container" style="padding: 2px; border-radius: 8px; gap: 2px;">
-                <button class="tab-btn customizer-toggle" data-prop="detail-level" data-val="standard" style="padding: 4px 8px; font-size: 0.75rem; border-radius: 6px; border: none; cursor: pointer;">Standard</button>
-                <button class="tab-btn customizer-toggle" data-prop="detail-level" data-val="simplified" style="padding: 4px 8px; font-size: 0.75rem; border-radius: 6px; border: none; cursor: pointer;">Simplified</button>
-              </div>
-            </div>
-
-            <!-- Tint Color Picker (shows in Accented Mode) -->
-            <div class="customizer-row tint-color-row" style="display: flex; flex-direction: column; gap: var(--ds-space-100); border-top: 1px solid var(--ds-border); padding-top: var(--ds-space-150);">
-              <span class="label" style="font-size: 0.8rem; font-weight: 600;">Monochrome Accent Tint</span>
-              <div style="display: flex; gap: var(--ds-space-100); justify-content: space-between;">
-                <button class="tint-color-option" data-tint="#0071e3" style="width: 24px; height: 24px; border-radius: 50%; background: #0071e3; border: 2px solid transparent; cursor: pointer;"></button>
-                <button class="tint-color-option" data-tint="#34c759" style="width: 24px; height: 24px; border-radius: 50%; background: #34c759; border: 2px solid transparent; cursor: pointer;"></button>
-                <button class="tint-color-option" data-tint="#ff9500" style="width: 24px; height: 24px; border-radius: 50%; background: #ff9500; border: 2px solid transparent; cursor: pointer;"></button>
-                <button class="tint-color-option" data-tint="#ff3b30" style="width: 24px; height: 24px; border-radius: 50%; background: #ff3b30; border: 2px solid transparent; cursor: pointer;"></button>
-                <button class="tint-color-option" data-tint="#af52de" style="width: 24px; height: 24px; border-radius: 50%; background: #af52de; border: 2px solid transparent; cursor: pointer;"></button>
-                <button class="tint-color-option" data-tint="#ff2d55" style="width: 24px; height: 24px; border-radius: 50%; background: #ff2d55; border: 2px solid transparent; cursor: pointer;"></button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- Theme Switcher (Simple Tap Toggle) -->
+      <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle theme" title="Toggle theme">
+        <span class="theme-icon-light"><Icon name="Moon" size={18} /></span>
+        <span class="theme-icon-dark"><Icon name="Sun" size={18} /></span>
+      </button>
     </div>
-
   </div>
 </header>
+
+<!-- Search Overlay Modal -->
+<div class="search-overlay" id="search-overlay">
+  <div class="search-modal">
+    <div class="search-modal-header">
+      <div class="search-modal-input-wrapper">
+        <Icon name="Search" class="search-modal-icon" size={18} />
+        <input 
+          type="text" 
+          id="search-input" 
+          placeholder="Search tools (e.g. json, password)..." 
+          autocomplete="off"
+          aria-label="Search tools"
+        />
+      </div>
+      <button class="search-close-btn" id="search-close-btn" aria-label="Close search">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    
+    <!-- Results Container -->
+    <div class="search-results" id="search-results" hidden>
+      <ul id="results-list" role="listbox" aria-label="Search results"></ul>
+      <div class="search-empty" id="search-empty" hidden>
+        No tools found. Try searching for something else!
+      </div>
+    </div>
+  </div>
+</div>
 
 <style>
   .site-header {
@@ -198,136 +96,6 @@ const searchIndex = registry.map(tool => ({
     display: flex;
     align-items: center;
     gap: var(--ds-space-150);
-    flex: 1;
-    max-width: 600px;
-    justify-content: flex-end;
-  }
-
-  .theme-switcher-wrapper {
-    position: relative;
-    display: inline-block;
-  }
-
-  .theme-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--ds-space-075);
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid var(--glass-border);
-    color: var(--ds-text-subtle);
-    padding: var(--ds-space-100) var(--ds-space-150);
-    border-radius: var(--ds-radius-medium);
-    cursor: pointer;
-    font-family: var(--font-sans);
-    font-weight: 600;
-    font-size: 0.85rem;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
-
-  html[data-theme="dark"] .theme-btn {
-    background-color: rgba(255, 255, 255, 0.05);
-    color: var(--ds-text);
-  }
-
-  .theme-btn:hover {
-    border-color: var(--glass-border-hover);
-    background-color: var(--glass-bg-hover);
-  }
-
-  .theme-dropdown {
-    position: absolute;
-    top: calc(100% + var(--ds-space-100));
-    right: 0;
-    width: 280px;
-    background-color: var(--ds-surface-overlay);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--ds-radius-large);
-    box-shadow: var(--ds-shadow-overlay);
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-    z-index: 1001;
-    padding: var(--ds-space-200);
-    animation: slideDown 0.2s cubic-bezier(0.25, 1, 0.5, 1);
-  }
-
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .theme-dropdown-header {
-    font-family: var(--font-display);
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--ds-text-subtle);
-    margin-bottom: var(--ds-space-150);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-bottom: 1px solid var(--ds-border);
-    padding-bottom: var(--ds-space-075);
-  }
-
-  .theme-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--ds-space-075);
-  }
-
-  .theme-option {
-    display: flex;
-    align-items: center;
-    gap: var(--ds-space-075);
-    background: transparent;
-    border: 1px solid transparent;
-    padding: var(--ds-space-075) var(--ds-space-100);
-    border-radius: var(--ds-radius-medium);
-    cursor: pointer;
-    text-align: left;
-    width: 100%;
-    color: var(--ds-text);
-    font-family: var(--font-sans);
-    font-size: 0.8rem;
-    font-weight: 500;
-  }
-
-  .theme-option:hover {
-    background-color: var(--ds-background-neutral-hovered);
-  }
-
-  .theme-option.active {
-    background-color: var(--ds-background-selected);
-    border-color: var(--ds-border-selected);
-    font-weight: 700;
-    color: var(--ds-text-selected);
-  }
-
-  .swatch {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .theme-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  @media (max-width: 640px) {
-    .theme-btn-text {
-      display: none;
-    }
-    .theme-btn {
-      padding: var(--ds-space-100);
-    }
   }
 
   .logo {
@@ -348,172 +116,21 @@ const searchIndex = registry.map(tool => ({
     color: var(--ds-text-selected);
   }
 
-  /* Search Bar Styles */
-  .search-wrapper {
-    position: relative;
-    flex: 1;
-    max-width: 440px;
-    transition: max-width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .search-input-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-
-  .search-icon {
-    position: absolute;
-    left: var(--ds-space-150);
-    color: var(--ds-icon-subtle);
-    pointer-events: none;
-  }
-
-  #search-input {
-    width: 100%;
-    padding: var(--ds-space-100) var(--ds-space-150) var(--ds-space-100) var(--ds-space-450);
-    border-radius: var(--ds-radius-medium);
-    background-color: var(--ds-background-input);
-    border: 1px solid var(--ds-border-input);
-    color: var(--ds-text);
-    outline: none;
-    font-family: var(--font-sans);
-    font-size: 0.875rem;
-    font-weight: 500;
-  }
-
-  #search-input:focus {
-    border-color: var(--ds-border-focused);
-    box-shadow: var(--form-focus-ring);
-    background-color: var(--ds-background-input-pressed);
-  }
-
-  .search-kbd {
-    position: absolute;
-    right: var(--ds-space-150);
-    background-color: var(--ds-background-neutral);
-    border: 1px solid var(--ds-border);
-    color: var(--ds-text-subtlest);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 0.65rem;
-    font-family: var(--font-sans);
-    font-weight: 700;
-    pointer-events: none;
-  }
-
-  #search-input:focus ~ .search-kbd {
-    display: none;
-  }
-
-  /* Search Results Dropdown */
-  .search-results {
-    position: absolute;
-    top: calc(100% + var(--ds-space-075));
-    left: 0;
-    right: 0;
-    background-color: var(--ds-surface-overlay);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--ds-radius-large);
-    box-shadow: var(--ds-shadow-overlay);
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-    max-height: 380px;
-    overflow-y: auto;
-    z-index: 1000;
-    padding: var(--ds-space-100);
-  }
-
-  .search-results ul {
-    list-style: none;
-  }
-
-  .search-item a {
-    display: flex;
-    align-items: center;
-    gap: var(--ds-space-150);
-    padding: var(--ds-space-100) var(--ds-space-150);
-    border-radius: var(--ds-radius-medium);
-    color: var(--ds-text);
-    text-decoration: none;
-  }
-
-  .search-item:hover a,
-  .search-item.active a {
-    background-color: var(--ds-background-neutral-hovered);
-    color: var(--ds-text);
-  }
-
-  .search-item-info {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  .search-item-title {
-    font-family: var(--font-sans);
-    font-weight: 600;
-    font-size: 0.875rem;
-  }
-
-  .search-item-desc {
-    font-size: 0.75rem;
-    color: var(--ds-text-subtlest);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .search-item-icon-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: var(--ds-radius-small);
-    background-color: var(--ds-background-neutral);
-    color: var(--ds-icon-subtle);
-    flex-shrink: 0;
-  }
-
-  .search-item:hover .search-item-icon-wrapper,
-  .search-item.active .search-item-icon-wrapper {
-    background-color: var(--ds-background-brand-bold);
-    color: #ffffff;
-  }
-
-  .search-empty {
-    padding: var(--ds-space-300);
-    text-align: center;
-    color: var(--ds-text-subtlest);
-    font-size: 0.85rem;
-  }
-
-  /* Responsive Search adjustments */
   @media (max-width: 640px) {
     .logo-text {
       font-size: 1.15rem;
     }
-    .search-wrapper {
-      max-width: 170px;
-    }
-    .search-wrapper:focus-within {
-      max-width: 220px;
-      z-index: 10;
-    }
-    #search-input {
-      font-size: 0.8rem;
-      padding-left: var(--ds-space-350);
-      padding-right: var(--ds-space-150);
-    }
-    .search-kbd {
-      display: none;
+    .site-header {
+      height: 64px;
     }
   }
 </style>
 
 <script define:vars={{ searchIndex }}>
-  // Instant search functionality
+  // Instant search functionality & overlay triggers
+  const searchToggleBtn = document.getElementById('search-toggle-btn');
+  const searchCloseBtn = document.getElementById('search-close-btn');
+  const searchOverlay = document.getElementById('search-overlay');
   const searchInput = document.getElementById('search-input');
   const resultsContainer = document.getElementById('search-results');
   const resultsList = document.getElementById('results-list');
@@ -521,6 +138,48 @@ const searchIndex = registry.map(tool => ({
   
   let activeIndex = -1;
   let items = [];
+
+  // Toggle Search Overlay
+  function openSearch() {
+    searchOverlay.classList.add('active');
+    setTimeout(() => {
+      searchInput.focus();
+    }, 50);
+  }
+
+  function closeSearch() {
+    searchOverlay.classList.remove('active');
+    searchInput.value = '';
+    hideResults();
+    searchInput.blur();
+  }
+
+  if (searchToggleBtn) {
+    searchToggleBtn.addEventListener('click', openSearch);
+  }
+
+  if (searchCloseBtn) {
+    searchCloseBtn.addEventListener('click', closeSearch);
+  }
+
+  // Close on overlay background click
+  if (searchOverlay) {
+    searchOverlay.addEventListener('click', (e) => {
+      if (e.target === searchOverlay) {
+        closeSearch();
+      }
+    });
+  }
+
+  // Keyboard triggers: '/' to open, Escape to close
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '/' && document.activeElement !== searchInput) {
+      e.preventDefault();
+      openSearch();
+    } else if (e.key === 'Escape' && searchOverlay.classList.contains('active')) {
+      closeSearch();
+    }
+  });
 
   function performSearch(query) {
     const term = query.trim().toLowerCase();
@@ -564,7 +223,7 @@ const searchIndex = registry.map(tool => ({
       li.setAttribute('role', 'option');
       li.id = `search-item-${idx}`;
 
-      // Simple icon map (using basic inline SVGs dynamically generated for search dropdown)
+      // Search results now only render the title (name of tool) and not the description
       li.innerHTML = `
         <a href="/tools/${tool.slug}">
           <div class="search-item-icon-wrapper">
@@ -576,7 +235,6 @@ const searchIndex = registry.map(tool => ({
           </div>
           <div class="search-item-info">
             <span class="search-item-title">${tool.title}</span>
-            <span class="search-item-desc">${tool.description}</span>
           </div>
         </a>
       `;
@@ -613,8 +271,7 @@ const searchIndex = registry.map(tool => ({
         items[activeIndex].querySelector('a').click();
       }
     } else if (e.key === 'Escape') {
-      hideResults();
-      searchInput.blur();
+      closeSearch();
     }
   });
 
@@ -622,162 +279,15 @@ const searchIndex = registry.map(tool => ({
     performSearch(e.target.value);
   });
 
-  // Focus input when "/" key is pressed
-  document.addEventListener('keydown', (e) => {
-    if (e.key === '/' && document.activeElement !== searchInput) {
-      e.preventDefault();
-      searchInput.focus();
-    }
-  });
+  // Theme selection logic (direct two-theme toggle)
+  const themeToggleBtn = document.getElementById('theme-toggle-btn');
 
-  // Hide on click outside
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('#site-search')) {
-      hideResults();
-    }
-  });
-
-  // Theme selection logic
-  const themeMenuBtn = document.getElementById('theme-menu-btn');
-  const themeDropdown = document.getElementById('theme-dropdown');
-  const themeOptions = document.querySelectorAll('.theme-option');
-
-  if (themeMenuBtn && themeDropdown) {
-    themeMenuBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isHidden = themeDropdown.hasAttribute('hidden');
-      if (isHidden) {
-        themeDropdown.removeAttribute('hidden');
-        themeMenuBtn.setAttribute('aria-expanded', 'true');
-        highlightActiveTheme();
-      } else {
-        themeDropdown.setAttribute('hidden', 'true');
-        themeMenuBtn.setAttribute('aria-expanded', 'false');
-      }
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!themeDropdown.contains(e.target) && e.target !== themeMenuBtn) {
-        themeDropdown.setAttribute('hidden', 'true');
-        themeMenuBtn.setAttribute('aria-expanded', 'false');
-      }
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('lowkeydevs-theme', newTheme);
     });
   }
-
-  function highlightActiveTheme() {
-    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-    themeOptions.forEach(opt => {
-      if (opt.getAttribute('data-theme-val') === currentTheme) {
-        opt.classList.add('active');
-      } else {
-        opt.classList.remove('active');
-      }
-    });
-  }
-
-  themeOptions.forEach(opt => {
-    opt.addEventListener('click', () => {
-      const themeVal = opt.getAttribute('data-theme-val');
-      if (themeVal) {
-        document.documentElement.setAttribute('data-theme', themeVal);
-        localStorage.setItem('lowkeydevs-theme', themeVal);
-        highlightActiveTheme();
-        themeDropdown.setAttribute('hidden', 'true');
-        themeMenuBtn.setAttribute('aria-expanded', 'false');
-      }
-    });
-  });
-
-  // Liquid Glass Customizer dropdown logic
-  const glassMenuBtn = document.getElementById('glass-menu-btn');
-  const glassDropdown = document.getElementById('glass-dropdown');
-  const customizerToggles = document.querySelectorAll('.customizer-toggle');
-  const tintColorOptions = document.querySelectorAll('.tint-color-option');
-
-  if (glassMenuBtn && glassDropdown) {
-    glassMenuBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isHidden = glassDropdown.hasAttribute('hidden');
-      if (isHidden) {
-        glassDropdown.removeAttribute('hidden');
-        glassMenuBtn.setAttribute('aria-expanded', 'true');
-        highlightActiveCustomizer();
-      } else {
-        glassDropdown.setAttribute('hidden', 'true');
-        glassMenuBtn.setAttribute('aria-expanded', 'false');
-      }
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!glassDropdown.contains(e.target) && e.target !== glassMenuBtn) {
-        glassDropdown.setAttribute('hidden', 'true');
-        glassMenuBtn.setAttribute('aria-expanded', 'false');
-      }
-    });
-  }
-
-  function highlightActiveCustomizer() {
-    // Read state from document attributes
-    const renderingMode = document.documentElement.getAttribute('data-rendering-mode') || 'fullColor';
-    const texture = document.documentElement.getAttribute('data-texture') || 'glass';
-    const mounting = document.documentElement.getAttribute('data-mounting') || 'elevated';
-    const detailLevel = document.documentElement.getAttribute('data-detail-level') || 'standard';
-    const currentTint = localStorage.getItem('lowkeydevs-tint-color') || '#0071e3';
-
-    // Show/hide tint selection row depending on Accented mode
-    const tintRow = document.querySelector('.tint-color-row');
-    if (tintRow) {
-      tintRow.style.display = (renderingMode === 'accented') ? 'flex' : 'none';
-    }
-
-    customizerToggles.forEach(btn => {
-      const prop = btn.getAttribute('data-prop');
-      const val = btn.getAttribute('data-val');
-      
-      let isActive = false;
-      if (prop === 'rendering-mode' && renderingMode === val) isActive = true;
-      if (prop === 'texture' && texture === val) isActive = true;
-      if (prop === 'mounting' && mounting === val) isActive = true;
-      if (prop === 'detail-level' && detailLevel === val) isActive = true;
-
-      if (isActive) {
-        btn.style.backgroundColor = 'var(--ds-background-selected)';
-        btn.style.color = 'var(--ds-text-selected)';
-        btn.style.fontWeight = '700';
-      } else {
-        btn.style.backgroundColor = 'transparent';
-        btn.style.color = 'var(--ds-text-subtle)';
-        btn.style.fontWeight = '500';
-      }
-    });
-
-    tintColorOptions.forEach(opt => {
-      const tintVal = opt.getAttribute('data-tint');
-      if (tintVal === currentTint) {
-        opt.style.boxShadow = '0 0 0 2px var(--ds-text)';
-      } else {
-        opt.style.boxShadow = 'none';
-      }
-    });
-  }
-
-  customizerToggles.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const prop = btn.getAttribute('data-prop');
-      const val = btn.getAttribute('data-val');
-      
-      document.documentElement.setAttribute(`data-${prop}`, val);
-      localStorage.setItem(`lowkeydevs-${prop}`, val);
-      highlightActiveCustomizer();
-    });
-  });
-
-  tintColorOptions.forEach(opt => {
-    opt.addEventListener('click', () => {
-      const tintVal = opt.getAttribute('data-tint');
-      document.documentElement.style.setProperty('--widget-tint', tintVal);
-      localStorage.setItem('lowkeydevs-tint-color', tintVal);
-      highlightActiveCustomizer();
-    });
-  });
 </script>

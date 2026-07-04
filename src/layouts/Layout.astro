@@ -25,7 +25,10 @@ const {
     <!-- Theme Initializer: Prevent theme flash (FOUC) -->
     <script is:inline>
       (function() {
-        const savedTheme = localStorage.getItem('lowkeydevs-theme') || 'light';
+        let savedTheme = localStorage.getItem('lowkeydevs-theme') || 'light';
+        if (savedTheme !== 'light' && savedTheme !== 'dark') {
+          savedTheme = 'light';
+        }
         document.documentElement.setAttribute('data-theme', savedTheme);
 
         // Liquid Glass Simulator Settings Initializer

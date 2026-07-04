@@ -396,13 +396,13 @@ const activeCategories = categories.filter(cat =>
 </style>
 
 <script>
-  // Hero search trigger focuses the header search input
+  // Hero search trigger opens the search overlay modal via clicking the header search toggle
   const heroSearchTrigger = document.getElementById('hero-search-trigger');
-  const headerSearchInput = document.getElementById('search-input');
+  const searchToggleBtn = document.getElementById('search-toggle-btn');
 
-  if (heroSearchTrigger && headerSearchInput) {
+  if (heroSearchTrigger && searchToggleBtn) {
     heroSearchTrigger.addEventListener('click', () => {
-      headerSearchInput.focus();
+      searchToggleBtn.click();
     });
   }
 

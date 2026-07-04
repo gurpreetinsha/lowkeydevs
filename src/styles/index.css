@@ -379,212 +379,7 @@ html[data-theme="dark"] {
   --form-focus-ring: 0 0 0 3px rgba(41, 151, 255, 0.35);
 }
 
-/* Theme: Cyberpunk (Glassified) */
-html[data-theme="cyberpunk"] {
-  --liquid-bg: linear-gradient(135deg, #120324 0%, #06010f 100%);
-  --glass-bg: rgba(30, 10, 50, 0.4);
-  --glass-bg-hover: rgba(45, 15, 75, 0.55);
-  --glass-border: rgba(255, 0, 127, 0.3);
-  --glass-border-hover: rgba(255, 0, 127, 0.6);
-  --glass-shadow: rgba(255, 0, 127, 0.1);
-  --glass-shadow-hover: rgba(255, 0, 127, 0.2);
 
-  --ds-text: #00FFFF;
-  --ds-text-subtle: #d946ef;
-  --ds-text-subtlest: #8b5cf6;
-  --ds-text-selected: #FF007F;
-  --ds-border: rgba(255, 0, 127, 0.2);
-  --ds-border-bold: #FF007F;
-  --ds-border-focused: #00FFFF;
-  --ds-background-neutral: rgba(26, 21, 37, 0.6);
-  --ds-background-brand-bold: #FF007F;
-  --ds-background-brand-bold-hovered: #ff3399;
-  --ds-surface: var(--glass-bg);
-}
-
-/* Theme: Dracula (Glassified) */
-html[data-theme="dracula"] {
-  --liquid-bg: linear-gradient(135deg, #1e1f29 0%, #282a36 100%);
-  --glass-bg: rgba(40, 42, 54, 0.5);
-  --glass-bg-hover: rgba(52, 55, 70, 0.65);
-  --glass-border: rgba(189, 147, 249, 0.25);
-  --glass-border-hover: rgba(189, 147, 249, 0.5);
-  --glass-shadow: rgba(0, 0, 0, 0.2);
-  --glass-shadow-hover: rgba(0, 0, 0, 0.3);
-
-  --ds-text: #F8F8F2;
-  --ds-text-subtle: #8BE9FD;
-  --ds-text-subtlest: #6272A4;
-  --ds-text-selected: #FF79C6;
-  --ds-border: rgba(98, 114, 164, 0.4);
-  --ds-border-bold: #BD93F9;
-  --ds-border-focused: #BD93F9;
-  --ds-background-neutral: #44475A;
-  --ds-background-brand-bold: #BD93F9;
-  --ds-background-brand-bold-hovered: #FF79C6;
-  --ds-surface: var(--glass-bg);
-}
-
-/* Theme: Solarized Light (Glassified) */
-html[data-theme="solarized-light"] {
-  --liquid-bg: linear-gradient(135deg, #fdf6e3 0%, #eee8d5 100%);
-  --glass-bg: rgba(253, 246, 227, 0.55);
-  --glass-bg-hover: rgba(239, 233, 216, 0.7);
-  --glass-border: rgba(38, 139, 210, 0.25);
-  --glass-border-hover: rgba(38, 139, 210, 0.5);
-  --glass-shadow: rgba(0, 0, 0, 0.04);
-  --glass-shadow-hover: rgba(0, 0, 0, 0.08);
-
-  --ds-text: #586E75;
-  --ds-text-subtle: #657B83;
-  --ds-text-subtlest: #93A1A1;
-  --ds-text-selected: #268BD2;
-  --ds-border: rgba(238, 232, 213, 0.8);
-  --ds-border-bold: #93A1A1;
-  --ds-border-focused: #268BD2;
-  --ds-background-neutral: #EEE8D5;
-  --ds-background-brand-bold: #268BD2;
-  --ds-background-brand-bold-hovered: #2AA198;
-  --ds-surface: var(--glass-bg);
-}
-
-/* Theme: Solarized Dark (Glassified) */
-html[data-theme="solarized-dark"] {
-  --liquid-bg: linear-gradient(135deg, #002b36 0%, #001f2b 100%);
-  --glass-bg: rgba(7, 54, 66, 0.55);
-  --glass-bg-hover: rgba(10, 75, 92, 0.7);
-  --glass-border: rgba(42, 161, 152, 0.25);
-  --glass-border-hover: rgba(42, 161, 152, 0.5);
-  --glass-shadow: rgba(0, 0, 0, 0.3);
-  --glass-shadow-hover: rgba(0, 0, 0, 0.45);
-
-  --ds-text: #93A1A1;
-  --ds-text-subtle: #839496;
-  --ds-text-subtlest: #586E75;
-  --ds-text-selected: #2AA198;
-  --ds-border: rgba(7, 54, 66, 0.8);
-  --ds-border-bold: #586E75;
-  --ds-border-focused: #2AA198;
-  --ds-background-neutral: #073642;
-  --ds-background-brand-bold: #2AA198;
-  --ds-background-brand-bold-hovered: #268BD2;
-  --ds-surface: var(--glass-bg);
-}
-
-/* Theme: Nord (Glassified) */
-html[data-theme="nord"] {
-  --liquid-bg: linear-gradient(135deg, #2e3440 0%, #242933 100%);
-  --glass-bg: rgba(59, 66, 82, 0.5);
-  --glass-bg-hover: rgba(76, 86, 106, 0.65);
-  --glass-border: rgba(136, 192, 208, 0.25);
-  --glass-border-hover: rgba(136, 192, 208, 0.5);
-  --glass-shadow: rgba(0, 0, 0, 0.25);
-  --glass-shadow-hover: rgba(0, 0, 0, 0.35);
-
-  --ds-text: #D8DEE9;
-  --ds-text-subtle: #ECEFF4;
-  --ds-text-subtlest: #4C566A;
-  --ds-text-selected: #88C0D0;
-  --ds-border: rgba(67, 76, 94, 0.6);
-  --ds-border-bold: #4C566A;
-  --ds-border-focused: #88C0D0;
-  --ds-background-neutral: #3B4252;
-  --ds-background-brand-bold: #88C0D0;
-  --ds-background-brand-bold-hovered: #81A1C1;
-  --ds-surface: var(--glass-bg);
-}
-
-/* Theme: Monokai (Glassified) */
-html[data-theme="monokai"] {
-  --liquid-bg: linear-gradient(135deg, #272822 0%, #1e1f1c 100%);
-  --glass-bg: rgba(62, 61, 50, 0.5);
-  --glass-bg-hover: rgba(78, 77, 63, 0.65);
-  --glass-border: rgba(166, 226, 46, 0.25);
-  --glass-border-hover: rgba(166, 226, 46, 0.5);
-  --glass-shadow: rgba(0, 0, 0, 0.3);
-  --glass-shadow-hover: rgba(0, 0, 0, 0.45);
-
-  --ds-text: #F8F8F2;
-  --ds-text-subtle: #66D9EF;
-  --ds-text-subtlest: #75715E;
-  --ds-text-selected: #A6E22E;
-  --ds-border: rgba(73, 72, 62, 0.6);
-  --ds-border-bold: #75715E;
-  --ds-border-focused: #A6E22E;
-  --ds-background-neutral: #3E3D32;
-  --ds-background-brand-bold: #A6E22E;
-  --ds-background-brand-bold-hovered: #F92672;
-  --ds-surface: var(--glass-bg);
-}
-
-/* Theme: Forest Green (Glassified) */
-html[data-theme="forest"] {
-  --liquid-bg: linear-gradient(135deg, #121b14 0%, #0d140f 100%);
-  --glass-bg: rgba(26, 46, 32, 0.5);
-  --glass-bg-hover: rgba(36, 62, 44, 0.65);
-  --glass-border: rgba(110, 231, 183, 0.2);
-  --glass-border-hover: rgba(110, 231, 183, 0.45);
-  --glass-shadow: rgba(0, 0, 0, 0.25);
-  --glass-shadow-hover: rgba(0, 0, 0, 0.4);
-
-  --ds-text: #ECFDF5;
-  --ds-text-subtle: #A7F3D0;
-  --ds-text-subtlest: #2C4C38;
-  --ds-text-selected: #34D399;
-  --ds-border: rgba(44, 76, 56, 0.6);
-  --ds-border-bold: #6EE7B7;
-  --ds-border-focused: #34D399;
-  --ds-background-neutral: #1A2E20;
-  --ds-background-brand-bold: #34D399;
-  --ds-background-brand-bold-hovered: #059669;
-  --ds-surface: var(--glass-bg);
-}
-
-/* Theme: Sakura (Glassified) */
-html[data-theme="sakura"] {
-  --liquid-bg: linear-gradient(135deg, #fff5f5 0%, #ffebeb 100%);
-  --glass-bg: rgba(252, 231, 243, 0.5);
-  --glass-bg-hover: rgba(253, 242, 248, 0.7);
-  --glass-border: rgba(244, 114, 182, 0.25);
-  --glass-border-hover: rgba(244, 114, 182, 0.5);
-  --glass-shadow: rgba(236, 72, 153, 0.04);
-  --glass-shadow-hover: rgba(236, 72, 153, 0.08);
-
-  --ds-text: #4C0519;
-  --ds-text-subtle: #DB2777;
-  --ds-text-subtlest: #FBCFE8;
-  --ds-text-selected: #EC4899;
-  --ds-border: rgba(251, 207, 232, 0.8);
-  --ds-border-bold: #F472B6;
-  --ds-border-focused: #EC4899;
-  --ds-background-neutral: #FCE7F3;
-  --ds-background-brand-bold: #EC4899;
-  --ds-background-brand-bold-hovered: #DB2777;
-  --ds-surface: var(--glass-bg);
-}
-
-/* Theme: Oceanic (Glassified) */
-html[data-theme="oceanic"] {
-  --liquid-bg: linear-gradient(135deg, #0b132b 0%, #070c1b 100%);
-  --glass-bg: rgba(28, 37, 65, 0.5);
-  --glass-bg-hover: rgba(38, 50, 85, 0.65);
-  --glass-border: rgba(0, 180, 216, 0.25);
-  --glass-border-hover: rgba(0, 180, 216, 0.5);
-  --glass-shadow: rgba(0, 0, 0, 0.35);
-  --glass-shadow-hover: rgba(0, 0, 0, 0.5);
-
-  --ds-text: #EDF2F4;
-  --ds-text-subtle: #8D99AE;
-  --ds-text-subtlest: #5C677D;
-  --ds-text-selected: #00B4D8;
-  --ds-border: rgba(58, 80, 107, 0.6);
-  --ds-border-bold: #5C677D;
-  --ds-border-focused: #00B4D8;
-  --ds-background-neutral: #1C2541;
-  --ds-background-brand-bold: #00B4D8;
-  --ds-background-brand-bold-hovered: #0077B6;
-  --ds-surface: var(--glass-bg);
-}
 
 
 /* --- CSS TRANSITIONS & BASE RESETS --- */
@@ -1293,4 +1088,238 @@ html[data-theme="dark"] .glass-effect-container {
   border-bottom-right-radius: var(--ds-radius-large) !important;
   border-right: 1px solid var(--glass-border) !important;
 }
+
+
+/* =======================================================
+   NAVBAR REDESIGN, SEARCH OVERLAY, & RESPONSIVENESS OVERRIDES
+   ======================================================= */
+
+/* 1. Header Round Circular Glass Buttons */
+.nav-icon-btn, .theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--glass-border);
+  color: var(--ds-text);
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+  padding: 0;
+  flex-shrink: 0;
+  box-shadow: var(--glass-shadow);
+}
+
+html[data-theme="dark"] .nav-icon-btn,
+html[data-theme="dark"] .theme-toggle-btn {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--ds-text);
+}
+
+.nav-icon-btn:hover, .theme-toggle-btn:hover {
+  background-color: var(--glass-bg-hover);
+  border-color: var(--glass-border-hover);
+  box-shadow: var(--glass-shadow-hover);
+  transform: translateY(-1px) scale(1.05);
+}
+
+.nav-icon-btn:active, .theme-toggle-btn:active {
+  transform: translateY(1px) scale(0.95);
+}
+
+/* 2. Theme Icon Switcher Visibility rules */
+html[data-theme="dark"] .theme-icon-light {
+  display: none !important;
+}
+html:not([data-theme="dark"]) .theme-icon-dark {
+  display: none !important;
+}
+
+/* 3. Search Overlay modal styles */
+.search-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(10, 6, 20, 0.4);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 10vh;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.search-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.search-modal {
+  width: 100%;
+  max-width: 580px;
+  margin-inline: var(--ds-space-200);
+  background-color: var(--ds-surface-overlay);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--ds-radius-xlarge);
+  box-shadow: var(--ds-shadow-overlay);
+  overflow: hidden;
+  transform: translateY(-20px);
+  transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.search-overlay.active .search-modal {
+  transform: translateY(0);
+}
+
+.search-modal-header {
+  display: flex;
+  align-items: center;
+  padding: var(--ds-space-200);
+  gap: var(--ds-space-150);
+}
+
+.search-modal-icon {
+  color: var(--ds-icon-subtle);
+  flex-shrink: 0;
+}
+
+/* Make search bar 100% curved in overlay */
+.search-modal-input-wrapper {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  background-color: var(--ds-background-input);
+  border: 1px solid var(--ds-border-input);
+  border-radius: var(--ds-radius-full);
+  padding: var(--ds-space-100) var(--ds-space-150);
+  gap: var(--ds-space-100);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-modal-input-wrapper:focus-within {
+  border-color: var(--ds-border-focused);
+  box-shadow: var(--form-focus-ring);
+  background-color: var(--ds-background-input-pressed);
+}
+
+.search-modal-input-wrapper input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--ds-text);
+  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  outline: none;
+  font-weight: 500;
+  padding: 0;
+}
+
+.search-modal-input-wrapper input::placeholder {
+  color: var(--ds-text-subtlest);
+}
+
+.search-close-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
+  color: var(--ds-icon-subtle);
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.search-close-btn:hover {
+  background-color: var(--glass-bg-hover);
+  color: var(--ds-text);
+}
+
+.search-modal .search-results {
+  position: static;
+  max-height: 380px;
+  overflow-y: auto;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: transparent;
+  padding: var(--ds-space-150);
+  border-top: 1px solid var(--ds-border);
+}
+
+/* 4. Global Tool Responsiveness Overrides */
+@media (max-width: 640px) {
+  /* Force columns on control bars */
+  div.tool-controls {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: var(--ds-space-150) !important;
+    gap: var(--ds-space-150) !important;
+  }
+
+  div.tool-controls > * {
+    width: 100% !important;
+  }
+
+  /* Make toggle buttons stack or behave neatly on mobile */
+  .toggle-group {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100% !important;
+  }
+
+  .toggle-btn {
+    flex: 1 !important;
+    padding: var(--ds-space-100) var(--ds-space-050) !important;
+    font-size: 0.8rem !important;
+    text-align: center !important;
+  }
+
+  .control-actions {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+  }
+
+  .control-actions button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* Ensure textareas and inputs behave responsively */
+  .editor-pane {
+    min-height: auto !important;
+    padding: var(--ds-space-150) !important;
+  }
+
+  textarea, input[type="text"] {
+    max-width: 100% !important;
+  }
+
+  /* Specific overrides for tools with inline forms */
+  .generator-controls {
+    padding-top: var(--ds-space-150) !important;
+    gap: var(--ds-space-150) !important;
+  }
+  
+  .options-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--ds-space-100) !important;
+  }
+}
+
 
