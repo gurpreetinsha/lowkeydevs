@@ -1,0 +1,279 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<html-to-markdown-tool class="tool-workspace">
+  <div class="tool-controls glass-panel">
+    <div class="control-label-group">
+      <span class="control-label-title">HTML to Markdown Converter</span>
+    </div>
+    
+    <div class="control-actions">
+      <button data-action="clear" class="btn btn-danger btn-compact-sm">
+        <Icon name="Trash2" size={16} />
+        Clear
+      </button>
+    </div>
+  </div>
+
+  <div class="editor-grid">
+    <!-- Input Pane -->
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Input HTML</span>
+        <button data-action="load-sample" class="btn-text">Load Sample</button>
+      </div>
+      <textarea 
+        id="html-input" 
+        placeholder="Paste your raw HTML here..." 
+        aria-label="HTML Input text"
+      ></textarea>
+    </div>
+
+    <!-- Output Pane -->
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Markdown Output</span>
+        <button data-action="copy" class="btn btn-secondary btn-sm" id="btn-copy">
+          <Icon name="Clipboard" size={14} class="copy-icon" />
+          <Icon name="Check" size={14} class="check-icon" />
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      
+      <div class="output-container">
+        <textarea 
+          id="markdown-output" 
+          placeholder="Markdown output will appear here..." 
+          readonly 
+          aria-label="Markdown Output text"
+        ></textarea>
+      </div>
+    </div>
+  </div>
+</html-to-markdown-tool>
+
+<style>
+  .tool-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .tool-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    gap: 1rem;
+  }
+
+  .control-label-title {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .control-actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .btn-compact-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  /* Grid Panes */
+  .editor-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .editor-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .editor-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 450px;
+    padding: 1.25rem;
+  }
+
+  .pane-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+  }
+
+  .pane-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .btn-text {
+    background: none;
+    border: none;
+    color: var(--primary-accent);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: var(--font-display);
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn-text:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
+
+  #html-input,
+  #markdown-output {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    min-height: 350px;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    resize: none;
+    outline: none;
+  }
+
+  #markdown-output {
+    color: var(--text-secondary);
+  }
+
+  .output-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  /* Copy Button states */
+  #btn-copy .check-icon {
+    display: none;
+  }
+
+  #btn-copy.copied .copy-icon {
+    display: none;
+  }
+
+  #btn-copy.copied .check-icon {
+    display: inline-block;
+    color: var(--success-color);
+  }
+
+  #btn-copy.copied {
+    border-color: var(--success-color);
+  }
+
+  .btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.85rem;
+    border-radius: var(--radius-sm);
+  }
+</style>
+
+<script>
+  import { htmlToMarkdown } from './logic';
+
+  class HtmlToMarkdownTool extends HTMLElement {
+    private inputEl!: HTMLTextAreaElement;
+    private outputEl!: HTMLTextAreaElement;
+
+    connectedCallback() {
+      this.inputEl = this.querySelector('#html-input') as HTMLTextAreaElement;
+      this.outputEl = this.querySelector('#markdown-output') as HTMLTextAreaElement;
+
+      // Event listener delegation
+      this.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const button = target.closest('button');
+        if (!button) return;
+
+        const action = button.getAttribute('data-action');
+        if (action === 'clear') this.handleClear();
+        if (action === 'copy') this.handleCopy();
+        if (action === 'load-sample') this.handleLoadSample();
+      });
+
+      // Live processing as user types
+      this.inputEl.addEventListener('input', () => this.processConversion());
+    }
+
+    private processConversion() {
+      const val = this.inputEl.value;
+      if (!val) {
+        this.outputEl.value = '';
+        return;
+      }
+      const markdown = htmlToMarkdown(val);
+      this.outputEl.value = markdown;
+    }
+
+    private handleClear() {
+      this.inputEl.value = '';
+      this.outputEl.value = '';
+      this.inputEl.focus();
+    }
+
+    private handleLoadSample() {
+      this.inputEl.value = `<h1>Astro Framework</h1>
+<p>Astro is the web framework for building <strong>content-driven websites</strong>.</p>
+<blockquote>Astro builds fast websites, faster.</blockquote>
+<p>Here are some benefits:</p>
+<ul>
+  <li>Zero JS by default</li>
+  <li>Server-first API design</li>
+  <li>Customizable island architecture</li>
+</ul>
+<p>Code example:</p>
+<pre><code>const name = "Astro";
+console.log(\`Hello \${name}\`);</code></pre>
+<p>Learn more at <a href="https://astro.build">astro.build</a>.</p>`;
+      this.processConversion();
+    }
+
+    private async handleCopy() {
+      const text = this.outputEl.value;
+      if (!text) return;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        const copyBtn = this.querySelector('#btn-copy') as HTMLButtonElement;
+        const copyText = copyBtn.querySelector('.copy-text') as HTMLSpanElement;
+
+        copyBtn.classList.add('copied');
+        copyText.textContent = 'Copied!';
+
+        setTimeout(() => {
+          copyBtn.classList.remove('copied');
+          copyText.textContent = 'Copy';
+        }, 2000);
+      } catch (e) {
+        console.error('Failed to copy', e);
+      }
+    }
+  }
+
+  if (!customElements.get('html-to-markdown-tool')) {
+    customElements.define('html-to-markdown-tool', HtmlToMarkdownTool);
+  }
+</script>

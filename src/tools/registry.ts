@@ -2,12 +2,36 @@ import type { ToolMeta, ToolCategory } from './definitions';
 import { meta as jsonFormatterMeta } from './list/json-formatter/meta';
 import { meta as passwordGeneratorMeta } from './list/password-generator/meta';
 import { meta as base64ConverterMeta } from './list/base64-converter/meta';
+import { meta as characterRemoverMeta } from './list/character-remover/meta';
+import { meta as duplicateWordFinderMeta } from './list/duplicate-word-finder/meta';
+import { meta as binaryCodeTranslatorMeta } from './list/binary-code-translator/meta';
+import { meta as hexToTextConverterMeta } from './list/hex-to-text-converter/meta';
+import { meta as htmlToMarkdownConverterMeta } from './list/html-to-markdown-converter/meta';
+import { meta as graphqlFormatterMeta } from './list/graphql-formatter/meta';
+import { meta as cssFormatterMeta } from './list/css-formatter/meta';
+import { meta as jsonStringifyTextMeta } from './list/json-stringify-text/meta';
+import { meta as jsonUnstringifierMeta } from './list/json-unstringifier/meta';
+import { meta as unicodeToTextConverterMeta } from './list/unicode-to-text-converter/meta';
+import { meta as plainTextConverterMeta } from './list/plain-text-converter/meta';
+import { meta as onlineNotepadMeta } from './list/online-notepad/meta';
 
 // Central Registry of all tools
 export const registry: ToolMeta[] = [
   jsonFormatterMeta,
   passwordGeneratorMeta,
-  base64ConverterMeta
+  base64ConverterMeta,
+  characterRemoverMeta,
+  duplicateWordFinderMeta,
+  binaryCodeTranslatorMeta,
+  hexToTextConverterMeta,
+  htmlToMarkdownConverterMeta,
+  graphqlFormatterMeta,
+  cssFormatterMeta,
+  jsonStringifyTextMeta,
+  jsonUnstringifierMeta,
+  unicodeToTextConverterMeta,
+  plainTextConverterMeta,
+  onlineNotepadMeta
 ];
 
 // Helper to find a tool by its slug
