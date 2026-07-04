@@ -18,6 +18,11 @@ import JSONUnstringifierUI from '../../tools/list/json-unstringifier/ui.astro';
 import UnicodeToTextConverterUI from '../../tools/list/unicode-to-text-converter/ui.astro';
 import PlainTextConverterUI from '../../tools/list/plain-text-converter/ui.astro';
 import OnlineNotepadUI from '../../tools/list/online-notepad/ui.astro';
+import UUIDGeneratorUI from '../../tools/list/uuid-generator/ui.astro';
+import CaseConverterUI from '../../tools/list/case-converter/ui.astro';
+import URLEncoderDecoderUI from '../../tools/list/url-encoder-decoder/ui.astro';
+import EpochConverterUI from '../../tools/list/epoch-converter/ui.astro';
+import HashGeneratorUI from '../../tools/list/hash-generator/ui.astro';
 
 // Map slugs to UI components
 const uiComponents: Record<string, any> = {
@@ -35,7 +40,12 @@ const uiComponents: Record<string, any> = {
   'json-unstringifier': JSONUnstringifierUI,
   'unicode-to-text-converter': UnicodeToTextConverterUI,
   'plain-text-converter': PlainTextConverterUI,
-  'online-notepad': OnlineNotepadUI
+  'online-notepad': OnlineNotepadUI,
+  'uuid-generator': UUIDGeneratorUI,
+  'case-converter': CaseConverterUI,
+  'url-encoder-decoder': URLEncoderDecoderUI,
+  'epoch-converter': EpochConverterUI,
+  'hash-generator': HashGeneratorUI
 };
 
 export async function getStaticPaths() {

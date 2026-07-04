@@ -14,6 +14,11 @@ import { meta as jsonUnstringifierMeta } from './list/json-unstringifier/meta';
 import { meta as unicodeToTextConverterMeta } from './list/unicode-to-text-converter/meta';
 import { meta as plainTextConverterMeta } from './list/plain-text-converter/meta';
 import { meta as onlineNotepadMeta } from './list/online-notepad/meta';
+import { meta as uuidGeneratorMeta } from './list/uuid-generator/meta';
+import { meta as caseConverterMeta } from './list/case-converter/meta';
+import { meta as urlEncoderDecoderMeta } from './list/url-encoder-decoder/meta';
+import { meta as epochConverterMeta } from './list/epoch-converter/meta';
+import { meta as hashGeneratorMeta } from './list/hash-generator/meta';
 
 // Central Registry of all tools
 export const registry: ToolMeta[] = [
@@ -31,7 +36,12 @@ export const registry: ToolMeta[] = [
   jsonUnstringifierMeta,
   unicodeToTextConverterMeta,
   plainTextConverterMeta,
-  onlineNotepadMeta
+  onlineNotepadMeta,
+  uuidGeneratorMeta,
+  caseConverterMeta,
+  urlEncoderDecoderMeta,
+  epochConverterMeta,
+  hashGeneratorMeta
 ];
 
 // Helper to find a tool by its slug
@@ -76,6 +86,18 @@ export const categories: CategoryDetail[] = [
     title: 'Text Tools',
     description: 'Manipulate casing, check diffs, count lines, or filter text data.',
     icon: 'Info'
+  },
+  {
+    slug: 'dev-utils',
+    title: 'Developer Utilities',
+    description: 'Useful utilities like Epoch converters, crontab editors, and regex checkers.',
+    icon: 'Terminal'
+  },
+  {
+    slug: 'security',
+    title: 'Security & Cryptography',
+    description: 'Generate secure hashes, inspect JWTs, encrypt/decrypt text, and verify signatures.',
+    icon: 'Shield'
   }
 ];
 
