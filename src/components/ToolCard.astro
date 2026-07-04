@@ -13,7 +13,7 @@ const categoryDetail = getCategoryDetail(tool.category);
 
 <a href={`/tools/${tool.slug}`} class="tool-card" aria-labelledby={`card-title-${tool.slug}`}>
   <div class="card-top">
-    <div class="card-icon-wrapper">
+    <div class="card-icon-wrapper widget-accentable">
       <Icon name={tool.icon} size={20} class="card-icon" />
     </div>
     {categoryDetail && (
@@ -24,7 +24,7 @@ const categoryDetail = getCategoryDetail(tool.category);
   </div>
   
   <div class="card-content">
-    <h3 id={`card-title-${tool.slug}`} class="card-title">{tool.title}</h3>
+    <h3 id={`card-title-${tool.slug}`} class="card-title widget-accentable">{tool.title}</h3>
     <p class="card-description">{tool.description}</p>
   </div>
   

@@ -9,6 +9,14 @@ const { name, class: className = "", size = 20 } = Astro.props;
 
 // SVG paths mapped to Lucide icon names
 const icons: Record<string, { viewBox: string; paths: string }> = {
+  sliders: {
+    viewBox: "0 0 24 24",
+    paths: `<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M2 14h4M10 8h4M18 16h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`
+  },
+  palette: {
+    viewBox: "0 0 24 24",
+    paths: `<path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 14.7255 3.09032 17.1962 4.85857 19H4.87C5.55 19 6 18.45 6 17.77C6 17.43 5.86 17.12 5.64 16.89L5.59 16.84C5.12 16.36 4.83 15.71 4.83 15C4.83 13.25 6.25 11.83 8 11.83H9.83C11.58 11.83 13 10.41 13 8.66V6.83C13 5.64 13.96 4.67 15.15 4.67C15.82 4.67 16.42 4.98 16.82 5.46L16.87 5.52C17.29 6.03 17.92 6.33 18.63 6.33C19.93 6.33 21 5.26 21 3.96C21 3.23 20.67 2.58 20.15 2.15C18.06 0.81 15.54 0 12.83 0C6.21 0 0.83 5.38 0.83 12C0.83 17.52 5.31 22 10.83 22H12Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`
+  },
   braces: {
     viewBox: "0 0 24 24",
     paths: `<path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5a2 2 0 0 0 2 2h1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 21h1a2 2 0 0 0 2-2v-5a2 2 0 0 1 2-2 2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`

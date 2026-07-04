@@ -26,12 +26,12 @@ const activeCategories = categories.filter(cat =>
     <!-- Hero Banner Section -->
     <section class="hero-section container" aria-labelledby="hero-title">
       <div class="hero-content">
-        <div class="hero-badge">
+        <div class="hero-badge widget-accentable">
           <Icon name="Lock" size={12} />
           100% client-side privacy
         </div>
-        <h1 id="hero-title" class="hero-title">
-          The internet's default <span class="coral-text">toolbox</span>
+        <h1 id="hero-title" class="hero-title widget-accentable">
+          The internet's default <span class="coral-text widget-accentable">toolbox</span>
         </h1>
         <p class="hero-subtitle">
           Instant, beautiful developer tools that run entirely in your browser. No forced logins, no intrusive popups, and no tracking.
@@ -39,8 +39,8 @@ const activeCategories = categories.filter(cat =>
 
         <!-- Search trigger -->
         <button class="hero-search-trigger" id="hero-search-trigger">
-          <Icon name="Search" size={16} />
-          <span>Search tools (type '/' anywhere)...</span>
+          <Icon name="Search" size={16} class="widget-accentable" />
+          <span class="widget-accentable">Search tools (type '/' anywhere)...</span>
           <kbd class="kbd-helper">/</kbd>
         </button>
       </div>
@@ -52,26 +52,28 @@ const activeCategories = categories.filter(cat =>
         <h2 class="section-title">All utilities</h2>
         
         <!-- Category Filter Tabs -->
-        <div class="category-tabs" role="tablist" aria-label="Tool Categories">
+        <div class="category-tabs glass-effect-container" role="tablist" aria-label="Tool Categories" style="padding: 4px; border-radius: 9999px;">
           <button 
-            class="tab-btn active" 
+            class="tab-btn glass-effect-union active" 
             role="tab" 
             aria-selected="true" 
             data-category="all"
             id="tab-all"
+            style="border-radius: 9999px; border: none;"
           >
             All tools
           </button>
           {activeCategories.map(cat => (
             <button 
-              class="tab-btn" 
+              class="tab-btn glass-effect-union" 
               role="tab" 
               aria-selected="false" 
               data-category={cat.slug}
               id={`tab-${cat.slug}`}
+              style="border-radius: 9999px; border: none;"
             >
-              <Icon name={cat.icon} size={14} />
-              {cat.title}
+              <Icon name={cat.icon} size={14} class="widget-accentable" />
+              <span class="widget-accentable">{cat.title}</span>
             </button>
           ))}
         </div>
@@ -98,33 +100,33 @@ const activeCategories = categories.filter(cat =>
 
     <!-- Why Us (Key Highlights - Styled as Quiet Editorial strip) -->
     <section class="features-section container" aria-labelledby="features-title">
-      <h2 id="features-title" class="features-title-header text-center">Built for speed and security</h2>
+      <h2 id="features-title" class="features-title-header text-center widget-accentable">Built for speed and security</h2>
       <div class="features-grid">
         <div class="feature-item">
-          <div class="feature-icon-wrapper">
+          <div class="feature-icon-wrapper widget-accentable">
             <Icon name="Lock" size={24} />
           </div>
-          <h3>Zero server logs</h3>
+          <h3 class="widget-accentable">Zero server logs</h3>
           <p>
             Your data never touches our servers. All calculations, parsing, and formatting happen locally in your browser.
           </p>
         </div>
         
         <div class="feature-item">
-          <div class="feature-icon-wrapper">
+          <div class="feature-icon-wrapper widget-accentable">
             <Icon name="RefreshCw" size={24} />
           </div>
-          <h3>Lightning fast</h3>
+          <h3 class="widget-accentable">Lightning fast</h3>
           <p>
             Statically pre-rendered pages load in milliseconds. Standard actions parse and update instantly as you type.
           </p>
         </div>
         
         <div class="feature-item">
-          <div class="feature-icon-wrapper">
+          <div class="feature-icon-wrapper widget-accentable">
             <Icon name="Braces" size={24} />
           </div>
-          <h3>Minimal & clean</h3>
+          <h3 class="widget-accentable">Minimal & clean</h3>
           <p>
             No annoying popups, cookie walls, or bloated advertisements. Just the tools you need, ready when you are.
           </p>

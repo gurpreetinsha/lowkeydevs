@@ -1078,3 +1078,219 @@ html[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ==========================================
+   LIQUID GLASS DESIGN SYSTEM (docs/design.md)
+   ========================================== */
+
+/* 1. Global Custom Property Variables */
+:root {
+  --widget-tint: #0071e3;
+  --widget-primary-color: #515154;
+  --widget-accent-color: #1d1d1f;
+  --glass-refraction: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+}
+
+html[data-theme="dark"] {
+  --widget-primary-color: #a1a1a6;
+  --widget-accent-color: #f5f5f7;
+  --glass-refraction: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+}
+
+/* 2. Glassmorphic Core Styling & Reflections */
+.glass-panel, .tool-card, .partner-card, .sidebar-widget {
+  background-color: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--ds-radius-large);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Dynamic Reflections / Lighting Outline */
+.glass-panel::before, .tool-card::before, .partner-card::before, .sidebar-widget::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: var(--glass-refraction);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* 3. Accented Rendering Mode (docs/design.md) */
+html[data-rendering-mode="accented"] {
+  --ds-text-selected: var(--widget-tint);
+  --ds-link: var(--widget-tint);
+  --ds-icon-selected: var(--widget-tint);
+  --ds-border-selected: var(--widget-tint);
+  --ds-border-focused: var(--widget-tint);
+  --ds-background-brand-bold: var(--widget-tint);
+  --ds-background-brand-bold-hovered: var(--widget-tint);
+  --ds-background-brand-bold-pressed: var(--widget-tint);
+}
+
+/* Accented mode desaturates non-accented content and applies the primary/accent colors */
+html[data-rendering-mode="accented"] .tool-card,
+html[data-rendering-mode="accented"] .glass-panel,
+html[data-rendering-mode="accented"] .partner-card,
+html[data-rendering-mode="accented"] .sidebar-widget {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02) !important;
+}
+
+html[data-theme="dark"][data-rendering-mode="accented"] .tool-card,
+html[data-theme="dark"][data-rendering-mode="accented"] .glass-panel,
+html[data-theme="dark"][data-rendering-mode="accented"] .partner-card,
+html[data-theme="dark"][data-rendering-mode="accented"] .sidebar-widget {
+  background-color: rgba(0, 0, 0, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* widget-accentable highlights key text/icons, others are desaturated primary */
+.widget-accentable {
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+html[data-rendering-mode="accented"] .widget-accentable {
+  color: var(--widget-tint) !important;
+}
+
+html[data-theme="dark"][data-rendering-mode="accented"] .widget-accentable {
+  color: #ffffff !important;
+}
+
+/* Primary desaturated components */
+html[data-rendering-mode="accented"] .tool-card .card-description,
+html[data-rendering-mode="accented"] .tool-card .card-category,
+html[data-rendering-mode="accented"] .partner-description,
+html[data-rendering-mode="accented"] .sidebar-widget p,
+html[data-rendering-mode="accented"] .breadcrumbs-nav,
+html[data-rendering-mode="accented"] .tool-description {
+  color: var(--widget-primary-color) !important;
+  opacity: 0.75;
+}
+
+html[data-rendering-mode="accented"] .card-icon-wrapper,
+html[data-rendering-mode="accented"] .category-icon-wrapper {
+  background-color: transparent !important;
+  border-color: var(--widget-primary-color) !important;
+  color: var(--widget-primary-color) !important;
+}
+
+html[data-rendering-mode="accented"] .tool-card:hover .card-icon-wrapper {
+  background-color: var(--widget-tint) !important;
+  border-color: transparent !important;
+  color: #ffffff !important;
+}
+
+/* 4. visionOS Texture Support (docs/design.md) */
+html[data-texture="paper"] body::after {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+html[data-theme="dark"][data-texture="paper"] body::after {
+  opacity: 0.06;
+}
+
+/* 5. Mounting Styles: Elevated vs Recessed (docs/design.md) */
+html[data-mounting="recessed"] .glass-panel,
+html[data-mounting="recessed"] .tool-card,
+html[data-mounting="recessed"] .partner-card,
+html[data-mounting="recessed"] .sidebar-widget {
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.08), 0 1px 1px rgba(255, 255, 255, 0.04) !important;
+  transform: none !important;
+}
+
+html[data-theme="dark"][data-mounting="recessed"] .glass-panel,
+html[data-theme="dark"][data-mounting="recessed"] .tool-card,
+html[data-theme="dark"][data-mounting="recessed"] .partner-card,
+html[data-theme="dark"][data-mounting="recessed"] .sidebar-widget {
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.35), 0 1px 1px rgba(255, 255, 255, 0.02) !important;
+  transform: none !important;
+}
+
+/* Disable hover shifts in Recessed mode */
+html[data-mounting="recessed"] .tool-card:hover,
+html[data-mounting="recessed"] .partner-card:hover {
+  transform: none !important;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.08), 0 1px 1px rgba(255, 255, 255, 0.04) !important;
+}
+
+/* 6. Level of Detail (docs/design.md) */
+html[data-detail-level="simplified"] .breadcrumbs-nav,
+html[data-detail-level="simplified"] .card-category,
+html[data-detail-level="simplified"] .partner-badge,
+html[data-detail-level="simplified"] .kbd-helper,
+html[data-detail-level="simplified"] .search-kbd,
+html[data-detail-level="simplified"] .card-bottom {
+  display: none !important;
+}
+
+html[data-detail-level="simplified"] .tools-grid {
+  gap: var(--ds-space-200);
+}
+
+html[data-detail-level="simplified"] .tool-card {
+  padding: var(--ds-space-200);
+}
+
+html[data-detail-level="simplified"] .features-grid {
+  gap: var(--ds-space-300);
+}
+
+html[data-detail-level="simplified"] h1 {
+  font-size: 2rem !important;
+}
+
+html[data-detail-level="simplified"] h2 {
+  font-size: 1.5rem !important;
+}
+
+/* 7. Glass Effect Container & Unions (docs/design.md) */
+.glass-effect-container {
+  display: flex;
+  gap: var(--ds-space-100);
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--glass-border);
+  padding: var(--ds-space-075);
+  border-radius: var(--ds-radius-xlarge);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+}
+
+html[data-theme="dark"] .glass-effect-container {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Union blends adjacent glass shapes into one continuous piece */
+.glass-effect-union {
+  border-radius: 0 !important;
+  border-left: none !important;
+  border-right: none !important;
+}
+
+.glass-effect-union:first-child {
+  border-top-left-radius: var(--ds-radius-large) !important;
+  border-bottom-left-radius: var(--ds-radius-large) !important;
+  border-left: 1px solid var(--glass-border) !important;
+}
+
+.glass-effect-union:last-child {
+  border-top-right-radius: var(--ds-radius-large) !important;
+  border-bottom-right-radius: var(--ds-radius-large) !important;
+  border-right: 1px solid var(--glass-border) !important;
+}
+

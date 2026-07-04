@@ -27,6 +27,19 @@ const {
       (function() {
         const savedTheme = localStorage.getItem('lowkeydevs-theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Liquid Glass Simulator Settings Initializer
+        const renderingMode = localStorage.getItem('lowkeydevs-rendering-mode') || 'fullColor';
+        const texture = localStorage.getItem('lowkeydevs-texture') || 'glass';
+        const mounting = localStorage.getItem('lowkeydevs-mounting') || 'elevated';
+        const detailLevel = localStorage.getItem('lowkeydevs-detail-level') || 'standard';
+        const tintColor = localStorage.getItem('lowkeydevs-tint-color') || '#0071e3';
+
+        document.documentElement.setAttribute('data-rendering-mode', renderingMode);
+        document.documentElement.setAttribute('data-texture', texture);
+        document.documentElement.setAttribute('data-mounting', mounting);
+        document.documentElement.setAttribute('data-detail-level', detailLevel);
+        document.documentElement.style.setProperty('--widget-tint', tintColor);
       })();
     </script>
 
@@ -75,6 +88,7 @@ const {
       <div class="glass-blob glass-blob-1"></div>
       <div class="glass-blob glass-blob-2"></div>
       <div class="glass-blob glass-blob-3"></div>
+      <div class="glass-blob glass-blob-4" style="width: 450px; height: 450px; background: radial-gradient(circle, rgba(166,226,46,0.6) 0%, rgba(255,0,127,0.3) 100%); bottom: 40%; left: -5%; animation-duration: 32s; animation-delay: -15s;"></div>
     </div>
     <slot />
   </body>

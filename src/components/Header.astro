@@ -101,6 +101,69 @@ const searchIndex = registry.map(tool => ({
           </div>
         </div>
       </div>
+
+      <!-- Liquid Glass Simulator settings -->
+      <div class="theme-switcher-wrapper" id="glass-switcher">
+        <button class="theme-btn" id="glass-menu-btn" aria-label="Liquid Glass Settings" aria-expanded="false">
+          <Icon name="Sliders" size={18} />
+          <span class="theme-btn-text">Liquid Glass</span>
+        </button>
+        
+        <div class="theme-dropdown" id="glass-dropdown" hidden style="width: 320px;">
+          <div class="theme-dropdown-header">Liquid Glass Settings</div>
+          
+          <div class="customizer-sections" style="display: flex; flex-direction: column; gap: var(--ds-space-200); padding-top: var(--ds-space-100);">
+            <!-- Rendering Mode -->
+            <div class="customizer-row" style="display: flex; justify-content: space-between; align-items: center; gap: var(--ds-space-100);">
+              <span class="label" style="font-size: 0.8rem; font-weight: 600;">Rendering Mode</span>
+              <div class="glass-effect-container" style="padding: 2px; border-radius: 8px; gap: 2px;">
+                <button class="tab-btn customizer-toggle" data-prop="rendering-mode" data-val="fullColor" style="padding: 4px 8px; font-size: 0.75rem; border-radius: 6px; border: none; cursor: pointer;">Full Color</button>
+                <button class="tab-btn customizer-toggle" data-prop="rendering-mode" data-val="accented" style="padding: 4px 8px; font-size: 0.75rem; border-radius: 6px; border: none; cursor: pointer;">Accented</button>
+              </div>
+            </div>
+            
+            <!-- visionOS Texture -->
+            <div class="customizer-row" style="display: flex; justify-content: space-between; align-items: center; gap: var(--ds-space-100);">
+              <span class="label" style="font-size: 0.8rem; font-weight: 600;">visionOS Texture</span>
+              <div class="glass-effect-container" style="padding: 2px; border-radius: 8px; gap: 2px;">
+                <button class="tab-btn customizer-toggle" data-prop="texture" data-val="glass" style="padding: 4px 8px; font-size: 0.75rem; border-radius: 6px; border: none; cursor: pointer;">Glass</button>
+                <button class="tab-btn customizer-toggle" data-prop="texture" data-val="paper" style="padding: 4px 8px; font-size: 0.75rem; border-radius: 6px; border: none; cursor: pointer;">Paper</button>
+              </div>
+            </div>
+
+            <!-- Mounting Style -->
+            <div class="customizer-row" style="display: flex; justify-content: space-between; align-items: center; gap: var(--ds-space-100);">
+              <span class="label" style="font-size: 0.8rem; font-weight: 600;">Mounting Style</span>
+              <div class="glass-effect-container" style="padding: 2px; border-radius: 8px; gap: 2px;">
+                <button class="tab-btn customizer-toggle" data-prop="mounting" data-val="elevated" style="padding: 4px 8px; font-size: 0.75rem; border-radius: 6px; border: none; cursor: pointer;">Elevated</button>
+                <button class="tab-btn customizer-toggle" data-prop="mounting" data-val="recessed" style="padding: 4px 8px; font-size: 0.75rem; border-radius: 6px; border: none; cursor: pointer;">Recessed</button>
+              </div>
+            </div>
+
+            <!-- Level of Detail -->
+            <div class="customizer-row" style="display: flex; justify-content: space-between; align-items: center; gap: var(--ds-space-100);">
+              <span class="label" style="font-size: 0.8rem; font-weight: 600;">Level of Detail</span>
+              <div class="glass-effect-container" style="padding: 2px; border-radius: 8px; gap: 2px;">
+                <button class="tab-btn customizer-toggle" data-prop="detail-level" data-val="standard" style="padding: 4px 8px; font-size: 0.75rem; border-radius: 6px; border: none; cursor: pointer;">Standard</button>
+                <button class="tab-btn customizer-toggle" data-prop="detail-level" data-val="simplified" style="padding: 4px 8px; font-size: 0.75rem; border-radius: 6px; border: none; cursor: pointer;">Simplified</button>
+              </div>
+            </div>
+
+            <!-- Tint Color Picker (shows in Accented Mode) -->
+            <div class="customizer-row tint-color-row" style="display: flex; flex-direction: column; gap: var(--ds-space-100); border-top: 1px solid var(--ds-border); padding-top: var(--ds-space-150);">
+              <span class="label" style="font-size: 0.8rem; font-weight: 600;">Monochrome Accent Tint</span>
+              <div style="display: flex; gap: var(--ds-space-100); justify-content: space-between;">
+                <button class="tint-color-option" data-tint="#0071e3" style="width: 24px; height: 24px; border-radius: 50%; background: #0071e3; border: 2px solid transparent; cursor: pointer;"></button>
+                <button class="tint-color-option" data-tint="#34c759" style="width: 24px; height: 24px; border-radius: 50%; background: #34c759; border: 2px solid transparent; cursor: pointer;"></button>
+                <button class="tint-color-option" data-tint="#ff9500" style="width: 24px; height: 24px; border-radius: 50%; background: #ff9500; border: 2px solid transparent; cursor: pointer;"></button>
+                <button class="tint-color-option" data-tint="#ff3b30" style="width: 24px; height: 24px; border-radius: 50%; background: #ff3b30; border: 2px solid transparent; cursor: pointer;"></button>
+                <button class="tint-color-option" data-tint="#af52de" style="width: 24px; height: 24px; border-radius: 50%; background: #af52de; border: 2px solid transparent; cursor: pointer;"></button>
+                <button class="tint-color-option" data-tint="#ff2d55" style="width: 24px; height: 24px; border-radius: 50%; background: #ff2d55; border: 2px solid transparent; cursor: pointer;"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -622,6 +685,99 @@ const searchIndex = registry.map(tool => ({
         themeDropdown.setAttribute('hidden', 'true');
         themeMenuBtn.setAttribute('aria-expanded', 'false');
       }
+    });
+  });
+
+  // Liquid Glass Customizer dropdown logic
+  const glassMenuBtn = document.getElementById('glass-menu-btn');
+  const glassDropdown = document.getElementById('glass-dropdown');
+  const customizerToggles = document.querySelectorAll('.customizer-toggle');
+  const tintColorOptions = document.querySelectorAll('.tint-color-option');
+
+  if (glassMenuBtn && glassDropdown) {
+    glassMenuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isHidden = glassDropdown.hasAttribute('hidden');
+      if (isHidden) {
+        glassDropdown.removeAttribute('hidden');
+        glassMenuBtn.setAttribute('aria-expanded', 'true');
+        highlightActiveCustomizer();
+      } else {
+        glassDropdown.setAttribute('hidden', 'true');
+        glassMenuBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!glassDropdown.contains(e.target) && e.target !== glassMenuBtn) {
+        glassDropdown.setAttribute('hidden', 'true');
+        glassMenuBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  function highlightActiveCustomizer() {
+    // Read state from document attributes
+    const renderingMode = document.documentElement.getAttribute('data-rendering-mode') || 'fullColor';
+    const texture = document.documentElement.getAttribute('data-texture') || 'glass';
+    const mounting = document.documentElement.getAttribute('data-mounting') || 'elevated';
+    const detailLevel = document.documentElement.getAttribute('data-detail-level') || 'standard';
+    const currentTint = localStorage.getItem('lowkeydevs-tint-color') || '#0071e3';
+
+    // Show/hide tint selection row depending on Accented mode
+    const tintRow = document.querySelector('.tint-color-row');
+    if (tintRow) {
+      tintRow.style.display = (renderingMode === 'accented') ? 'flex' : 'none';
+    }
+
+    customizerToggles.forEach(btn => {
+      const prop = btn.getAttribute('data-prop');
+      const val = btn.getAttribute('data-val');
+      
+      let isActive = false;
+      if (prop === 'rendering-mode' && renderingMode === val) isActive = true;
+      if (prop === 'texture' && texture === val) isActive = true;
+      if (prop === 'mounting' && mounting === val) isActive = true;
+      if (prop === 'detail-level' && detailLevel === val) isActive = true;
+
+      if (isActive) {
+        btn.style.backgroundColor = 'var(--ds-background-selected)';
+        btn.style.color = 'var(--ds-text-selected)';
+        btn.style.fontWeight = '700';
+      } else {
+        btn.style.backgroundColor = 'transparent';
+        btn.style.color = 'var(--ds-text-subtle)';
+        btn.style.fontWeight = '500';
+      }
+    });
+
+    tintColorOptions.forEach(opt => {
+      const tintVal = opt.getAttribute('data-tint');
+      if (tintVal === currentTint) {
+        opt.style.boxShadow = '0 0 0 2px var(--ds-text)';
+      } else {
+        opt.style.boxShadow = 'none';
+      }
+    });
+  }
+
+  customizerToggles.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const prop = btn.getAttribute('data-prop');
+      const val = btn.getAttribute('data-val');
+      
+      document.documentElement.setAttribute(`data-${prop}`, val);
+      localStorage.setItem(`lowkeydevs-${prop}`, val);
+      highlightActiveCustomizer();
+    });
+  });
+
+  tintColorOptions.forEach(opt => {
+    opt.addEventListener('click', () => {
+      const tintVal = opt.getAttribute('data-tint');
+      document.documentElement.style.setProperty('--widget-tint', tintVal);
+      localStorage.setItem('lowkeydevs-tint-color', tintVal);
+      highlightActiveCustomizer();
     });
   });
 </script>

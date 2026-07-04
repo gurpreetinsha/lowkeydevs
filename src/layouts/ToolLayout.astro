@@ -84,11 +84,11 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
       <!-- Active Tool Workspace -->
       <section class="tool-section" aria-labelledby="tool-title-heading">
         <header class="tool-header-block">
-          <span class="category-badge">
+          <span class="category-badge widget-accentable">
             <Icon name={categoryDetail?.icon || 'Info'} size={12} />
             {categoryDetail?.title}
           </span>
-          <h1 id="tool-title-heading" class="tool-title">{tool.title}</h1>
+          <h1 id="tool-title-heading" class="tool-title widget-accentable">{tool.title}</h1>
           <p class="tool-description">{tool.description}</p>
         </header>
 
@@ -103,15 +103,15 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
         <SponsorCard />
 
         <div class="sidebar-widget glass-panel">
-          <h2 class="widget-title">Related tools</h2>
+          <h2 class="widget-title widget-accentable">Related tools</h2>
           <div class="related-list">
             {relatedTools.map(t => (
               <a href={`/tools/${t.slug}`} class="related-item">
-                <div class="related-icon">
+                <div class="related-icon widget-accentable">
                   <Icon name={t.icon} size={14} />
                 </div>
                 <div class="related-info">
-                  <span class="related-title">{t.title}</span>
+                  <span class="related-title widget-accentable">{t.title}</span>
                   <span class="related-desc">{t.description}</span>
                 </div>
               </a>
@@ -121,8 +121,8 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
         <div class="sidebar-widget privacy-widget glass-panel">
           <div class="privacy-header">
-            <Icon name="Lock" size={16} class="privacy-icon" />
-            <h2 class="widget-title">100% client-side</h2>
+            <Icon name="Lock" size={16} class="privacy-icon widget-accentable" />
+            <h2 class="widget-title widget-accentable">100% client-side</h2>
           </div>
           <p class="privacy-text">
             All conversions and formatting happen strictly in your browser. We never save, upload, or transmit any of your text, JSON, or input data to servers.
@@ -136,10 +136,10 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
       <div class="edu-grid">
         <!-- Educational Guide -->
         <article class="edu-guide glass-panel">
-          <h2 class="edu-title">What is this tool?</h2>
+          <h2 class="edu-title widget-accentable">What is this tool?</h2>
           <p class="edu-para">{tool.educationalContent.whatIsIt}</p>
 
-          <h2 class="edu-title">How to use it</h2>
+          <h2 class="edu-title widget-accentable">How to use it</h2>
           <div class="steps-list">
             {tool.educationalContent.howToUse.split('\n').map(step => (
               <p class="step-item">{step}</p>
@@ -148,7 +148,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
           {tool.educationalContent.proTips && (
             <>
-              <h2 class="edu-title pro-tips-title">
+              <h2 class="edu-title pro-tips-title widget-accentable">
                 <Icon name="Info" size={14} />
                 Pro tips
               </h2>
@@ -164,7 +164,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
         <!-- FAQs Accordion -->
         {tool.faqs && tool.faqs.length > 0 && (
           <div class="faq-accordion glass-panel">
-            <h2 class="edu-title">Frequently asked questions</h2>
+            <h2 class="edu-title widget-accentable">Frequently asked questions</h2>
             <div class="accordion-wrapper">
               {tool.faqs.map((faq, idx) => (
                 <details class="faq-item" open={idx === 0}>
