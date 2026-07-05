@@ -1,450 +1,100 @@
-# Liquid Glass Design for Apple Widgets
+# LowKeyDevs Design System & Specification
 
-> Build widgets that feel native on iOS 26, iPadOS, macOS, and visionOS by adopting Apple's Liquid Glass design system.
-
-Liquid Glass is Apple's new adaptive material that gives interface elements the appearance of translucent glass while dynamically responding to the surrounding content. Widgets automatically participate in this system when configured correctly, but they also require changes to rendering, image handling, and backgrounds to look correct in every environment.
+This document defines the core visual design guidelines, design tokens, typography, and responsive layout specs for the LowKeyDevs online utility platform.
 
 ---
 
-# Widget Rendering Modes
+## 1. Typography
 
-Widgets can render in two different modes depending on the user's Home Screen appearance.
+The platform utilizes three distinct Google Fonts loaded asynchronously to optimize page loads:
 
-## Full Color
-
-The default mode.
-
-Characteristics:
-
-- Displays your original colors
-- Preserves gradients
-- Shows images exactly as designed
-- Uses your widget background
-
-Use this mode whenever your design depends on color, branding, or photography.
-
-```swift
-@Environment(\.widgetRenderingMode)
-private var renderingMode
-
-var body: some View {
-    if renderingMode == .fullColor {
-        FullColorWidget()
-    }
-}
-```
+*   **Headings**: `Poppins` (Weights: 500, 600, 700)
+    *   Used for main headers, section headings, and hero titles.
+    *   Responsive scaling is configured via `clamp()` (e.g., `clamp(42px, 5vw, 72px)`).
+*   **Body & UI Text**: `Inter` (Weights: 400, 500, 600)
+    *   Used for general descriptions, buttons, tags, form labels, and navigation.
+*   **Code & Input Elements**: `JetBrains Mono` (Weights: 400, 500)
+    *   Used in raw textareas, output boxes, input text fields, and code viewer panels.
 
 ---
 
-## Accented
+## 2. Color System & Themes
 
-Used when the user enables a **Tinted** or **Clear** Home Screen appearance.
+LowKeyDevs supports automatic system-preference theme detection and manual light/dark mode toggling, persisted in local storage.
 
-In accented mode:
+### Light Theme
+*   **Background (`--bg`)**: `#FCFCFD` (Cool off-white page background)
+*   **Primary Surface (`--surface`)**: `#FFFFFF` (Pure white for cards and widgets)
+*   **Surface Hover (`--surface-hover`)**: `#F4F4F5`
+*   **Borders (`--border` / `--border-hover`)**: `#E5E7EB` / `#D1D5DB`
+*   **Primary Text (`--text-primary`)**: `#18181B` (Dark charcoal)
+*   **Secondary Text (`--text-secondary`)**: `#6B7280` (Muted gray)
+*   **Accent Color (`--accent` / `--accent-hover`)**: `#C4A9F3` / `#B394E8` (Lavender violet)
+*   **Accent Text On (`--accent-on`)**: `#18181B` (Contrast text on lavender buttons)
+*   **Accent Subtle (`--accent-subtle`)**: `rgba(196, 169, 243, 0.1)` (Background for badges/pills)
 
-- Accent content becomes white
-- Primary content becomes tinted appropriately
-- Images are converted to monochrome
-- Widget backgrounds are replaced by the system's Liquid Glass material
-
-```swift
-@Environment(\.widgetRenderingMode)
-private var renderingMode
-
-var body: some View {
-    if renderingMode == .accented {
-        SimplifiedWidget()
-    }
-}
-```
-
----
-
-# Detect Rendering Mode
-
-Always check the current rendering mode before displaying complex UI.
-
-```swift
-struct MyWidgetView: View {
-
-    @Environment(\.widgetRenderingMode)
-    private var renderingMode
-
-    var body: some View {
-
-        switch renderingMode {
-
-        case .fullColor:
-            FullColorLayout()
-
-        case .accented:
-            AccentedLayout()
-
-        @unknown default:
-            FullColorLayout()
-        }
-    }
-}
-```
-
-This allows you to simplify layouts when colors are unavailable.
+### Dark Theme
+*   **Background (`--bg`)**: `#090909` (Deep near-black page background)
+*   **Primary Surface (`--surface`)**: `#111111` (Very dark gray for cards)
+*   **Surface Elevated (`--surface-elevated`)**: `#171717` (Used for active states/panels)
+*   **Surface Hover (`--surface-hover`)**: `#1F1F1F`
+*   **Borders (`--border` / `--border-hover`)**: `#262626` / `#3F3F46`
+*   **Primary Text (`--text-primary`)**: `#FAFAFA` (Off-white)
+*   **Secondary Text (`--text-secondary`)**: `#A1A1AA` (Muted gray)
+*   **Accent Color (`--accent` / `--accent-hover`)**: `#C4A9F3` / `#D3BFF6`
+*   **Accent Text On (`--accent-on`)**: `#111111`
 
 ---
 
-# Create Accent Groups
+## 3. Spacing Grid
 
-Widgets should separate content into **primary** and **accent** groups.
+We use an 8-point spacing grid for layout margins, padding, and element gaps:
 
-Use:
-
-```swift
-.widgetAccentable()
-```
-
-Example:
-
-```swift
-VStack(alignment: .leading) {
-
-    Text("Weather")
-        .font(.headline)
-        .widgetAccentable()
-
-    Text("27°")
-        .font(.largeTitle)
-        .widgetAccentable()
-
-    Text("Mostly Sunny")
-}
-```
-
-Here:
-
-- Title belongs to accent group
-- Temperature belongs to accent group
-- Description remains primary
-
-This creates visual hierarchy automatically in accented mode.
+*   `--space-0-5`: `2px`
+*   `--space-1`: `4px`
+*   `--space-1-5`: `6px`
+*   `--space-2`: `8px`
+*   `--space-3`: `12px`
+*   `--space-4`: `16px`
+*   `--space-5`: `20px`
+*   `--space-6`: `24px`
+*   `--space-8`: `32px`
+*   `--space-10`: `40px`
+*   `--space-12`: `48px`
+*   `--space-16`: `64px`
+*   `--space-20`: `80px`
+*   `--space-24`: `96px`
 
 ---
 
-# Rendering Images
+## 4. Borders & Corner Radii
 
-Images require special handling because the system cannot preserve full color during accented rendering.
+Borders are strictly kept to a subtle `1px` width. Corner rounding is structured in scales:
 
-Use:
-
-```swift
-.widgetAccentedRenderingMode(...)
-```
-
-Example:
-
-```swift
-Image("weather")
-    .widgetAccentedRenderingMode(.monochrome)
-```
-
-Available rendering modes include:
-
-| Mode | Purpose |
-|-------|----------|
-| `.monochrome` | Converts image into a single tinted color |
-| `.accented` | Uses accent rendering |
-| `.desaturated` | Removes saturation while preserving detail |
-| `.fullColor` | Always displays original colors |
-
-Choose the mode that best matches the role of the image.
+*   `--radius-sm`: `6px` (Small buttons, copy badges, keyboard shortcuts)
+*   `--radius-md`: `8px` (Inputs, textareas, category tabs, smaller widgets)
+*   `--radius-lg`: `12px` (Cards, sidebars, content widgets, search modals)
+*   `--radius-xl`: `16px` (Outer containers / main panels if needed)
+*   `--radius-full`: `9999px` (Pills, badges)
 
 ---
 
-# Widget Backgrounds
-
-Widgets should always use container backgrounds instead of manually drawing backgrounds.
-
-```swift
-.containerBackground(for: .widget) {
-
-    Color.blue.opacity(0.15)
-
-}
-```
-
-During accented rendering Apple automatically removes this background and replaces it with Liquid Glass.
-
-Do **not** manually recreate glass effects behind your widget.
-
----
-
-# Prevent Background Removal
-
-Normally Apple removes widget backgrounds in Lock Screen and tinted modes.
-
-If your widget absolutely depends on its own background:
-
-```swift
-.containerBackgroundRemovable(false)
-```
-
-Example:
-
-```swift
-StaticConfiguration(...) {
-
-    WidgetView()
-
-}
-.containerBackgroundRemovable(false)
-```
-
-> **Warning**
->
-> Widgets with non-removable backgrounds cannot appear in certain system contexts such as StandBy or the iPad Lock Screen.
-
-Use this only when absolutely necessary.
-
----
-
-# Applying Liquid Glass to Custom Elements
-
-SwiftUI provides a dedicated modifier:
-
-```swift
-.glassEffect()
-```
-
-Example:
-
-```swift
-Text("Now Playing")
-    .padding()
-    .glassEffect()
-```
-
-Default appearance:
-
-- Capsule shape
-- Adaptive blur
-- Dynamic reflections
-- Automatic lighting
-
----
-
-## Custom Shapes
-
-```swift
-Image(systemName: "star.fill")
-    .frame(width: 60, height: 60)
-    .glassEffect(
-        .regular,
-        in: .rect(cornerRadius: 16)
-    )
-```
-
-You can apply glass to:
-
-- rectangles
-- circles
-- rounded rectangles
-- custom shapes
-
----
-
-# Glass Buttons
-
-Buttons can automatically adopt the new appearance.
-
-```swift
-Button("Play") {
-
-}
-.buttonStyle(.glass)
-```
-
-This produces Apple's native floating glass button.
-
----
-
-# Combining Multiple Glass Elements
-
-Multiple glass elements should be wrapped inside a `GlassEffectContainer`.
-
-```swift
-GlassEffectContainer {
-
-    HStack {
-
-        Image(systemName: "cloud")
-            .glassEffect()
-
-        Image(systemName: "sun.max")
-            .glassEffect()
-    }
-}
-```
-
-This allows nearby glass surfaces to interact naturally.
-
----
-
-# Glass Effect Union
-
-Several elements can merge into a single glass surface.
-
-```swift
-GlassEffectContainer {
-
-    HStack {
-
-        Image(systemName: "cloud")
-            .glassEffect()
-            .glassEffectUnion(
-                id: "weather",
-                namespace: namespace
-            )
-
-        Image(systemName: "sun.max")
-            .glassEffect()
-            .glassEffectUnion(
-                id: "weather",
-                namespace: namespace
-            )
-    }
-}
-```
-
-Elements sharing the same union ID visually blend into one continuous piece of glass.
-
----
-
-# visionOS Support
-
-Widgets on visionOS gain additional customization.
-
-## Widget Texture
-
-Glass texture (default):
-
-```swift
-.widgetTexture(.glass)
-```
-
-Paper texture:
-
-```swift
-.widgetTexture(.paper)
-```
-
----
-
-## Mounting Style
-
-Supported mounting styles:
-
-```swift
-.supportedMountingStyles([
-    .recessed,
-    .elevated
-])
-```
-
-Available styles:
-
-| Style | Description |
-|--------|-------------|
-| `.elevated` | Floating above the surface |
-| `.recessed` | Embedded into a wall or panel |
-
----
-
-## Level of Detail
-
-visionOS widgets should react to viewing distance.
-
-```swift
-@Environment(\.levelOfDetail)
-private var levelOfDetail
-```
-
-Example:
-
-```swift
-var titleFont: Font {
-
-    levelOfDetail == .simplified
-        ? .largeTitle
-        : .title
-
-}
-```
-
-When the widget is viewed from farther away, simplify typography and reduce visual complexity.
-
----
-
-# Best Practices
-
-### Prefer system materials
-
-Avoid creating your own blur effects. Use Apple's built-in Liquid Glass APIs.
-
-### Keep accent groups meaningful
-
-Accent only important content such as:
-
-- Titles
-- Key values
-- Icons
-- Status indicators
-
-Avoid accenting everything.
-
-### Simplify accented layouts
-
-Complex gradients and colorful illustrations lose meaning when rendered monochromatically.
-
-Provide alternate layouts where appropriate.
-
-### Test transparency
-
-Always verify widgets against:
-
-- Light wallpapers
-- Dark wallpapers
-- Colorful wallpapers
-- Clear Home Screen mode
-- Tinted Home Screen mode
-
-### Use container backgrounds
-
-Never build widget backgrounds manually.
-
-Apple automatically replaces them with platform-appropriate Liquid Glass.
-
----
-
-# Testing Checklist
-
-Before shipping, verify your widget in:
-
-- Light Mode
-- Dark Mode
-- Full Color rendering
-- Accented rendering
-- Home Screen
-- Lock Screen
-- StandBy
-- Different widget sizes
-- Multiple accent colors
-- visionOS
-- Different viewing distances (visionOS)
-
----
-
-# References
-
-- https://developer.apple.com/documentation/WidgetKit/optimizing-your-widget-for-accented-rendering-mode-and-liquid-glass
-- https://developer.apple.com/documentation/SwiftUI/Applying-Liquid-Glass-to-custom-views
-- https://developer.apple.com/documentation/SwiftUI/Landmarks-Building-an-app-with-Liquid-Glass
-- https://developer.apple.com/documentation/WidgetKit/Displaying-the-right-widget-background
-- https://developer.apple.com/documentation/WidgetKit/Updating-your-widgets-for-visionOS
+## 5. Responsive Layout Architecture
+
+The site uses a fully fluid design that handles multiple screen widths:
+
+### Containers
+*   **Global Container (`.container`)**: Center-aligned layout container. `max-width: 1200px;` with horizontal padding fluidly scaling from `16px` to `32px` (`clamp(16px, 4vw, 32px)`).
+*   **Narrow Container (`.container-narrow`)**: Used for text-heavy focus pages (e.g., Privacy, About). `max-width: 720px;`.
+
+### Key Breakpoints & Adjustments
+*   **Desktop & Large Screen (> 1024px)**:
+    *   Tool layout displays in a two-column grid: a main work area and a `320px` sidebar containing sponsor cards, related utilities, and compliance badges.
+*   **Tablet View (<= 1024px)**:
+    *   Tool layout collapses sidebar below the main workspace area.
+*   **Mobile Switch (<= 768px)**:
+    *   Top navigation links collapse into an off-screen mobile drawer (slides from right using translation).
+    *   Editor workspace splits (input/output panels) switch from side-by-side (2 columns) to vertical stacking (1 column).
+*   **Compact Mobile (<= 640px / 480px)**:
+    *   Tool controls (action buttons, drop-downs, copy buttons) align vertically to prevent content squishing and overflow.
+    *   Overlays (Drawer overlay, search modal) transition visibility safely to avoid layout scrollbar bugs.

@@ -11,125 +11,131 @@ import { registry, categories } from '../tools/registry';
 const featuredTools = registry;
 
 // Filter active categories based on the featured tools
-const activeCategories = categories.filter(cat => 
+const activeCategories = categories.filter(cat =>
   featuredTools.some(tool => tool.category === cat.slug)
 );
 ---
 
-<Layout 
+<Layout
   title="LowKeyDevs - Fast, ad-free & private developer tools"
   description="The cleanest and fastest utility toolbox. Over a dozen web tools for formatting JSON, generating passwords, converting Base64. 100% private, runs entirely client-side."
 >
   <Header />
 
-  <main class="home-main">
-    <!-- Hero Banner Section -->
-    <section class="hero-section container" aria-labelledby="hero-title">
-      <div class="hero-content">
-        <div class="hero-badge widget-accentable">
-          <Icon name="Lock" size={12} />
-          100% client-side privacy
-        </div>
-        <h1 id="hero-title" class="hero-title widget-accentable">
-          The internet's default <span class="coral-text widget-accentable">toolbox</span>
-        </h1>
-        <p class="hero-subtitle">
-          Instant, beautiful developer tools that run entirely in your browser. No forced logins, no intrusive popups, and no tracking.
-        </p>
+  <main id="main-content" class="home-main">
+    <!-- Hero Section -->
+    <section class="hero-section" aria-labelledby="hero-title">
+      <div class="container hero-container">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <Icon name="Lock" size={12} />
+            100% client-side privacy
+          </div>
+          <h1 id="hero-title" class="hero-title">
+            The internet's default <span class="accent-text">toolbox</span>
+          </h1>
+          <p class="hero-subtitle">
+            Instant, beautiful developer tools that run entirely in your browser. No forced logins, no intrusive popups, and no tracking.
+          </p>
 
-        <!-- Search trigger -->
-        <button class="hero-search-trigger" id="hero-search-trigger">
-          <Icon name="Search" size={16} class="widget-accentable" />
-          <span class="widget-accentable">Search tools (type '/' anywhere)...</span>
-          <kbd class="kbd-helper">/</kbd>
-        </button>
-      </div>
-    </section>
-
-    <!-- Categories Filter & Tools List Section -->
-    <section class="tools-directory container" aria-label="Tools Directory">
-      <div class="directory-header">
-        <h2 class="section-title">All utilities</h2>
-        
-        <!-- Category Filter Tabs -->
-        <div class="category-tabs glass-effect-container" role="tablist" aria-label="Tool Categories" style="padding: 4px; border-radius: 9999px;">
-          <button 
-            class="tab-btn glass-effect-union active" 
-            role="tab" 
-            aria-selected="true" 
-            data-category="all"
-            id="tab-all"
-            style="border-radius: 9999px; border: none;"
-          >
-            All tools
+          <!-- Search trigger -->
+          <button class="hero-search-trigger" id="hero-search-trigger" aria-label="Search tools">
+            <Icon name="Search" size={16} />
+            <span>Search tools...</span>
+            <kbd class="kbd-helper">/</kbd>
           </button>
-          {activeCategories.map(cat => (
-            <button 
-              class="tab-btn glass-effect-union" 
-              role="tab" 
-              aria-selected="false" 
-              data-category={cat.slug}
-              id={`tab-${cat.slug}`}
-              style="border-radius: 9999px; border: none;"
-            >
-              <Icon name={cat.icon} size={14} class="widget-accentable" />
-              <span class="widget-accentable">{cat.title}</span>
-            </button>
-          ))}
         </div>
-      </div>
-
-      <!-- Tools Grid -->
-      <div class="tools-grid" id="tools-grid">
-        {featuredTools.map(tool => (
-          <div class="tool-card-container" data-tool-category={tool.category}>
-            <ToolCard tool={tool} />
-          </div>
-        ))}
-        <!-- Premium Sponsor Showcase (Ad) directly in grid -->
-        <div class="tool-card-container" data-tool-category="all">
-          <SponsorCard />
-        </div>
-      </div>
-      
-      <!-- Empty state -->
-      <div class="filtered-empty" id="filtered-empty" hidden>
-        No tools found in this category.
       </div>
     </section>
 
-    <!-- Why Us (Key Highlights - Styled as Quiet Editorial strip) -->
-    <section class="features-section container" aria-labelledby="features-title">
-      <h2 id="features-title" class="features-title-header text-center widget-accentable">Built for speed and security</h2>
-      <div class="features-grid">
-        <div class="feature-item">
-          <div class="feature-icon-wrapper widget-accentable">
-            <Icon name="Lock" size={24} />
+    <!-- Tools Directory -->
+    <section class="tools-directory" aria-label="Tools Directory">
+      <div class="container">
+        <div class="directory-header">
+          <h2 class="section-title">All utilities</h2>
+
+          <!-- Category Filter Tabs -->
+          <div class="category-tabs-wrapper">
+            <div class="category-tabs" role="tablist" aria-label="Tool Categories">
+              <button
+                class="tab-btn active"
+                role="tab"
+                aria-selected="true"
+                data-category="all"
+                id="tab-all"
+              >
+                All tools
+              </button>
+              {activeCategories.map(cat => (
+                <button
+                  class="tab-btn"
+                  role="tab"
+                  aria-selected="false"
+                  data-category={cat.slug}
+                  id={`tab-${cat.slug}`}
+                >
+                  <Icon name={cat.icon} size={14} />
+                  <span>{cat.title}</span>
+                </button>
+              ))}
+            </div>
           </div>
-          <h3 class="widget-accentable">Zero server logs</h3>
-          <p>
-            Your data never touches our servers. All calculations, parsing, and formatting happen locally in your browser.
-          </p>
         </div>
-        
-        <div class="feature-item">
-          <div class="feature-icon-wrapper widget-accentable">
-            <Icon name="RefreshCw" size={24} />
+
+        <!-- Tools Grid -->
+        <div class="tools-grid" id="tools-grid">
+          {featuredTools.map(tool => (
+            <div class="tool-card-container" data-tool-category={tool.category}>
+              <ToolCard tool={tool} />
+            </div>
+          ))}
+          <!-- Sponsor Card -->
+          <div class="tool-card-container" data-tool-category="all">
+            <SponsorCard />
           </div>
-          <h3 class="widget-accentable">Lightning fast</h3>
-          <p>
-            Statically pre-rendered pages load in milliseconds. Standard actions parse and update instantly as you type.
-          </p>
         </div>
-        
-        <div class="feature-item">
-          <div class="feature-icon-wrapper widget-accentable">
-            <Icon name="Braces" size={24} />
+
+        <!-- Empty state -->
+        <div class="filtered-empty" id="filtered-empty" hidden>
+          No tools found in this category.
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" aria-labelledby="features-title">
+      <div class="container">
+        <h2 id="features-title" class="features-heading">Built for speed and security</h2>
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon-wrapper">
+              <Icon name="Lock" size={24} />
+            </div>
+            <h3>Zero server logs</h3>
+            <p>
+              Your data never touches our servers. All calculations, parsing, and formatting happen locally in your browser.
+            </p>
           </div>
-          <h3 class="widget-accentable">Minimal & clean</h3>
-          <p>
-            No annoying popups, cookie walls, or bloated advertisements. Just the tools you need, ready when you are.
-          </p>
+
+          <div class="feature-item">
+            <div class="feature-icon-wrapper">
+              <Icon name="RefreshCw" size={24} />
+            </div>
+            <h3>Lightning fast</h3>
+            <p>
+              Statically pre-rendered pages load in milliseconds. Standard actions parse and update instantly as you type.
+            </p>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon-wrapper">
+              <Icon name="Braces" size={24} />
+            </div>
+            <h3>Minimal & clean</h3>
+            <p>
+              No annoying popups, cookie walls, or bloated advertisements. Just the tools you need, ready when you are.
+            </p>
+          </div>
         </div>
       </div>
     </section>
@@ -140,16 +146,25 @@ const activeCategories = categories.filter(cat =>
 
 <style>
   .home-main {
-    padding-top: var(--ds-space-600);
-    padding-bottom: var(--ds-space-1000);
     display: flex;
     flex-direction: column;
-    gap: var(--ds-space-1000);
+    gap: 0;
   }
 
-  /* Hero Section */
+  /* === Hero Section === */
   .hero-section {
-    position: relative;
+    padding: var(--space-24) 0 var(--space-16) 0;
+  }
+
+  @media (max-width: 768px) {
+    .hero-section {
+      padding: var(--space-12) 0 var(--space-10) 0;
+    }
+  }
+
+  .hero-container {
+    display: flex;
+    justify-content: center;
   }
 
   .hero-content {
@@ -157,192 +172,226 @@ const activeCategories = categories.filter(cat =>
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: var(--ds-space-800) var(--ds-space-300);
-    position: relative;
-    overflow: hidden;
+    max-width: 720px;
+    gap: var(--space-5);
   }
 
   .hero-badge {
     display: inline-flex;
     align-items: center;
-    gap: var(--ds-space-075);
-    background-color: rgba(0, 113, 227, 0.08);
-    color: var(--ds-text-selected);
-    border: 1px solid rgba(0, 113, 227, 0.15);
-    padding: var(--ds-space-075) var(--ds-space-150);
-    border-radius: var(--ds-radius-full);
-    font-size: 0.75rem;
-    font-weight: 700;
-    margin-bottom: var(--ds-space-300);
-    font-family: var(--font-sans);
+    gap: var(--space-1-5);
+    background-color: var(--accent-subtle);
+    color: var(--accent);
+    border: 1px solid var(--border);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  html[data-theme="dark"] .hero-badge {
-    background-color: rgba(41, 151, 255, 0.12);
-    border-color: rgba(41, 151, 255, 0.25);
+    letter-spacing: 0.04em;
   }
 
   .hero-title {
-    font-family: var(--font-display);
-    font-size: clamp(2.25rem, 6vw, 3.75rem);
-    font-weight: 800;
-    line-height: 1.1;
-    margin-bottom: var(--ds-space-200);
-    letter-spacing: -0.04em;
-    color: var(--ds-text);
+    font-family: var(--font-heading);
+    font-size: clamp(28px, 6vw, 64px);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
   }
 
-  .coral-text {
-    color: var(--ds-text-selected);
+  .accent-text {
+    color: var(--accent);
   }
 
   .hero-subtitle {
-    color: var(--ds-text-subtle);
-    font-size: 1.125rem;
-    max-width: 650px;
-    line-height: 1.6;
-    margin-bottom: var(--ds-space-400);
+    color: var(--text-secondary);
+    font-size: clamp(16px, 1.5vw, 18px);
+    font-weight: 400;
+    max-width: 560px;
+    line-height: 1.7;
   }
 
-  /* Trigger input styled button */
+  /* Search trigger */
   .hero-search-trigger {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    max-width: 440px;
-    background-color: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    color: var(--ds-text-subtlest);
-    border-radius: var(--ds-radius-medium);
-    padding: var(--ds-space-150) var(--ds-space-200);
+    max-width: 420px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-tertiary);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
     font-family: var(--font-sans);
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: 400;
     cursor: pointer;
-    box-shadow: var(--glass-shadow);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    transition: all 0.2s ease;
+    margin-top: var(--space-3);
+    transition: all var(--duration-fast) var(--ease-out);
+    box-shadow: var(--shadow-xs);
   }
 
   .hero-search-trigger:hover {
-    border-color: var(--glass-border-hover);
-    background-color: var(--glass-bg-hover);
-    color: var(--ds-text-subtle);
-    box-shadow: var(--glass-shadow-hover);
-    transform: translateY(-1px);
+    border-color: var(--border-hover);
+    color: var(--text-secondary);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .hero-search-trigger:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 
   .kbd-helper {
-    background-color: var(--ds-background-neutral);
-    border: 1px solid var(--ds-border);
-    color: var(--ds-text-subtlest);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 0.65rem;
-    font-weight: 700;
+    background-color: var(--surface-hover);
+    border: 1px solid var(--border);
+    color: var(--text-tertiary);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    font-family: var(--font-mono);
   }
 
-  /* Tools Directory list */
+  /* === Tools Directory === */
+  .tools-directory {
+    padding: var(--space-10) 0 var(--space-16) 0;
+  }
+
   .directory-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: var(--ds-space-300);
-    margin-bottom: var(--ds-space-400);
-    border-bottom: 1px solid var(--ds-border);
-    padding-bottom: var(--ds-space-200);
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--space-5);
   }
 
   .section-title {
-    font-size: 1.6rem;
-    font-weight: 800;
-    color: var(--ds-text);
-    font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
   }
 
-  .text-center {
-    text-align: center;
+  .category-tabs-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .category-tabs-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 48px;
+    background: linear-gradient(to right, rgba(252, 252, 253, 0), var(--bg));
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Support dark theme background for fading indicator */
+  :global(html[data-theme="dark"]) .category-tabs-wrapper::after {
+    background: linear-gradient(to right, rgba(9, 9, 9, 0), var(--bg));
   }
 
   .category-tabs {
     display: flex;
-    gap: var(--ds-space-100);
+    gap: var(--space-2);
     overflow-x: auto;
     padding-bottom: 4px;
+    padding-right: 48px;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 
-  /* Category Tabs Styling */
+  .category-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
   .tab-btn {
-    border: none;
-    background: transparent;
-    color: var(--ds-text-subtle);
-    padding: var(--ds-space-100) var(--ds-space-150);
-    border-bottom: 2px solid transparent;
-    border-radius: 0;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-md);
     font-family: var(--font-sans);
-    font-weight: 600;
-    font-size: 0.875rem;
+    font-weight: 500;
+    font-size: 13px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: var(--ds-space-100);
+    gap: var(--space-1-5);
     white-space: nowrap;
-    transition: all 0.15s ease;
+    transition: all var(--duration-fast) var(--ease-out);
+    min-height: 44px;
   }
 
   .tab-btn:hover {
-    color: var(--ds-text);
-    border-bottom-color: var(--ds-border-bold);
+    background-color: var(--surface-hover);
+    border-color: var(--border-hover);
+    color: var(--text-primary);
   }
 
   .tab-btn.active {
-    color: var(--ds-text-selected);
-    border-bottom-color: var(--ds-border-selected);
+    background-color: var(--accent);
+    color: var(--accent-on);
+    border-color: var(--accent);
+  }
+
+  .tab-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 
   /* Cards Grid */
   .tools-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: var(--ds-space-300);
+    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+    gap: var(--space-5);
+  }
+
+  .tool-card-container {
+    display: flex;
   }
 
   .filtered-empty {
-    padding: var(--ds-space-600);
+    padding: var(--space-12);
     text-align: center;
-    color: var(--ds-text-subtlest);
-    font-size: 0.875rem;
-    border: var(--ds-border-width-default) dashed var(--ds-border-bold);
-    border-radius: var(--ds-radius-large);
+    color: var(--text-tertiary);
+    font-size: 14px;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+    margin-top: var(--space-8);
   }
 
-  /* Highlights Section */
-  .features-title-header {
-    font-size: 1.85rem;
-    font-weight: 800;
-    font-family: var(--font-display);
-    margin-bottom: var(--ds-space-600);
-    color: var(--ds-text);
+  /* === Features Section === */
+  .features-section {
+    padding: var(--space-16) 0 var(--space-20) 0;
+    background-color: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+
+  .features-heading {
+    font-family: var(--font-heading);
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 700;
+    text-align: center;
+    color: var(--text-primary);
+    margin-bottom: var(--space-12);
   }
 
   .features-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--ds-space-600);
-  }
-
-  @media (max-width: 900px) {
-    .features-grid {
-      grid-template-columns: 1fr;
-      gap: var(--ds-space-400);
-    }
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: clamp(16px, 3vw, 32px);
   }
 
   .feature-item {
@@ -350,14 +399,12 @@ const activeCategories = categories.filter(cat =>
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: var(--ds-space-300);
-    gap: var(--ds-space-200);
-    background-color: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--ds-radius-large);
-    box-shadow: var(--glass-shadow);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    padding: var(--space-8);
+    gap: var(--space-4);
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xs);
   }
 
   .feature-icon-wrapper {
@@ -366,37 +413,47 @@ const activeCategories = categories.filter(cat =>
     justify-content: center;
     width: 48px;
     height: 48px;
-    color: var(--ds-text-selected);
-    margin-bottom: var(--ds-space-100);
+    color: var(--accent);
+    background-color: var(--accent-subtle);
+    border-radius: var(--radius-md);
   }
 
   .feature-item h3 {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--ds-text);
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
   }
 
   .feature-item p {
-    font-size: 0.875rem;
-    color: var(--ds-text-subtle);
-    line-height: 1.6;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
     max-width: 280px;
   }
 
-  @media (max-width: 640px) {
-    .hero-title {
-      font-size: 2.25rem;
+  /* Responsive adjustments */
+  @media (max-width: 960px) {
+    .directory-header {
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--space-4);
     }
-    
-    .hero-content {
-      padding: var(--ds-space-600) var(--ds-space-150);
+
+    .category-tabs {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero-search-trigger {
+      max-width: 100%;
     }
   }
 </style>
 
 <script>
-  // Hero search trigger opens the search overlay modal via clicking the header search toggle
+  // Hero search trigger opens the search overlay modal
   const heroSearchTrigger = document.getElementById('hero-search-trigger');
   const searchToggleBtn = document.getElementById('search-toggle-btn');
 
@@ -431,7 +488,7 @@ const activeCategories = categories.filter(cat =>
         const toolCategory = htmlCard.getAttribute('data-tool-category');
 
         if (selectedCategory === 'all' || toolCategory === selectedCategory) {
-          htmlCard.style.display = 'block';
+          htmlCard.style.display = 'flex';
           visibleCount++;
         } else {
           htmlCard.style.display = 'none';

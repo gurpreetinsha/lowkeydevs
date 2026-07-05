@@ -1,5 +1,6 @@
 ---
 import Icon from './base/Icon.astro';
+import ThemeToggle from './ThemeToggle.astro';
 import { registry } from '../tools/registry';
 
 // Serialize tools metadata for client-side instant search
@@ -13,27 +14,61 @@ const searchIndex = registry.map(tool => ({
 }));
 ---
 
-<header class="site-header">
+<header class="site-header" id="site-header">
   <div class="container nav-container">
     <a href="/" class="logo" aria-label="LowKeyDevs Homepage">
       <span class="logo-text">LowKey<span class="logo-accent">Devs</span></span>
     </a>
 
-    <!-- Right Actions: Search Toggle + Theme Switcher -->
+    <!-- Desktop Navigation -->
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/about" class="nav-link">About</a>
+    </nav>
+
+    <!-- Right Actions -->
     <div class="right-header-group">
-      <!-- Search Button (Pill Search Bar replaced by round glass button) -->
       <button class="nav-icon-btn" id="search-toggle-btn" aria-label="Search tools" title="Search tools (/)">
         <Icon name="Search" size={18} />
       </button>
 
-      <!-- Theme Switcher (Simple Tap Toggle) -->
-      <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle theme" title="Toggle theme">
-        <span class="theme-icon-light"><Icon name="Moon" size={18} /></span>
-        <span class="theme-icon-dark"><Icon name="Sun" size={18} /></span>
+      <ThemeToggle />
+
+      <!-- Mobile menu button -->
+      <button class="nav-icon-btn mobile-menu-btn" id="mobile-menu-btn" aria-label="Open menu" aria-expanded="false">
+        <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="6" x2="20" y2="6"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="18" x2="20" y2="18"></line>
+        </svg>
+        <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
       </button>
     </div>
   </div>
 </header>
+
+<!-- Mobile Drawer -->
+<div class="mobile-drawer-overlay" id="mobile-drawer-overlay">
+  <nav class="mobile-drawer" aria-label="Mobile navigation">
+    <div class="mobile-drawer-header">
+      <span class="logo-text">LowKey<span class="logo-accent">Devs</span></span>
+      <button class="nav-icon-btn" id="mobile-drawer-close" aria-label="Close menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <div class="mobile-nav-links">
+      <a href="/" class="mobile-nav-link">Home</a>
+      <a href="/about" class="mobile-nav-link">About</a>
+      <a href="/privacy" class="mobile-nav-link">Privacy</a>
+    </div>
+  </nav>
+</div>
 
 <!-- Search Overlay Modal -->
 <div class="search-overlay" id="search-overlay">
@@ -41,93 +76,80 @@ const searchIndex = registry.map(tool => ({
     <div class="search-modal-header">
       <div class="search-modal-input-wrapper">
         <Icon name="Search" class="search-modal-icon" size={18} />
-        <input 
-          type="text" 
-          id="search-input" 
-          placeholder="Search tools (e.g. json, password)..." 
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Search tools..."
           autocomplete="off"
           aria-label="Search tools"
         />
       </div>
       <button class="search-close-btn" id="search-close-btn" aria-label="Close search">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
       </button>
     </div>
-    
+
     <!-- Results Container -->
     <div class="search-results" id="search-results" hidden>
       <ul id="results-list" role="listbox" aria-label="Search results"></ul>
       <div class="search-empty" id="search-empty" hidden>
-        No tools found. Try searching for something else!
+        No tools found. Try a different search term.
       </div>
     </div>
   </div>
 </div>
 
-<style>
-  .site-header {
-    background-color: rgba(255, 255, 255, 0.3);
-    border-bottom: 1px solid var(--ds-border);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    height: 70px;
-    display: flex;
-    align-items: center;
-  }
-
-  html[data-theme="dark"] .site-header {
-    background-color: rgba(10, 6, 20, 0.5);
-  }
-
-  .nav-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: var(--ds-space-200);
-  }
-
-  .right-header-group {
-    display: flex;
-    align-items: center;
-    gap: var(--ds-space-150);
-  }
-
-  .logo {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-  }
-
-  .logo-text {
-    font-family: var(--font-display);
-    font-size: 1.35rem;
-    font-weight: 800;
-    color: var(--ds-text);
-    letter-spacing: -0.04em;
-  }
-
-  .logo-accent {
-    color: var(--ds-text-selected);
-  }
-
-  @media (max-width: 640px) {
-    .logo-text {
-      font-size: 1.15rem;
-    }
-    .site-header {
-      height: 64px;
-    }
-  }
-</style>
-
 <script define:vars={{ searchIndex }}>
-  // Instant search functionality & overlay triggers
+  // --- Header scroll behavior ---
+  const header = document.getElementById('site-header');
+  let ticking = false;
+
+  function updateHeader() {
+    if (window.scrollY > 10) {
+      header?.classList.add('scrolled');
+    } else {
+      header?.classList.remove('scrolled');
+    }
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(updateHeader);
+      ticking = true;
+    }
+  }, { passive: true });
+
+  updateHeader();
+
+  // --- Mobile Drawer ---
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileDrawerOverlay = document.getElementById('mobile-drawer-overlay');
+  const mobileDrawerClose = document.getElementById('mobile-drawer-close');
+
+  function openDrawer() {
+    mobileDrawerOverlay?.classList.add('active');
+    mobileMenuBtn?.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDrawer() {
+    mobileDrawerOverlay?.classList.remove('active');
+    mobileMenuBtn?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  mobileMenuBtn?.addEventListener('click', openDrawer);
+  mobileDrawerClose?.addEventListener('click', closeDrawer);
+
+  mobileDrawerOverlay?.addEventListener('click', (e) => {
+    if (e.target === mobileDrawerOverlay) closeDrawer();
+  });
+
+  // --- Search Overlay ---
   const searchToggleBtn = document.getElementById('search-toggle-btn');
   const searchCloseBtn = document.getElementById('search-close-btn');
   const searchOverlay = document.getElementById('search-overlay');
@@ -135,49 +157,44 @@ const searchIndex = registry.map(tool => ({
   const resultsContainer = document.getElementById('search-results');
   const resultsList = document.getElementById('results-list');
   const searchEmpty = document.getElementById('search-empty');
-  
+
   let activeIndex = -1;
   let items = [];
 
-  // Toggle Search Overlay
   function openSearch() {
-    searchOverlay.classList.add('active');
+    searchOverlay?.classList.add('active');
+    document.body.style.overflow = 'hidden';
     setTimeout(() => {
-      searchInput.focus();
+      searchInput?.focus();
     }, 50);
   }
 
   function closeSearch() {
-    searchOverlay.classList.remove('active');
-    searchInput.value = '';
+    searchOverlay?.classList.remove('active');
+    document.body.style.overflow = '';
+    if (searchInput) searchInput.value = '';
     hideResults();
-    searchInput.blur();
+    searchInput?.blur();
   }
 
-  if (searchToggleBtn) {
-    searchToggleBtn.addEventListener('click', openSearch);
-  }
+  searchToggleBtn?.addEventListener('click', openSearch);
+  searchCloseBtn?.addEventListener('click', closeSearch);
 
-  if (searchCloseBtn) {
-    searchCloseBtn.addEventListener('click', closeSearch);
-  }
-
-  // Close on overlay background click
-  if (searchOverlay) {
-    searchOverlay.addEventListener('click', (e) => {
-      if (e.target === searchOverlay) {
-        closeSearch();
-      }
-    });
-  }
+  searchOverlay?.addEventListener('click', (e) => {
+    if (e.target === searchOverlay) closeSearch();
+  });
 
   // Keyboard triggers: '/' to open, Escape to close
   document.addEventListener('keydown', (e) => {
     if (e.key === '/' && document.activeElement !== searchInput) {
       e.preventDefault();
       openSearch();
-    } else if (e.key === 'Escape' && searchOverlay.classList.contains('active')) {
-      closeSearch();
+    } else if (e.key === 'Escape') {
+      if (searchOverlay?.classList.contains('active')) {
+        closeSearch();
+      } else if (mobileDrawerOverlay?.classList.contains('active')) {
+        closeDrawer();
+      }
     }
   });
 
@@ -188,7 +205,6 @@ const searchIndex = registry.map(tool => ({
       return;
     }
 
-    // Filter tools by title, description, category, keywords
     const filtered = searchIndex.filter(tool => {
       return (
         tool.title.toLowerCase().includes(term) ||
@@ -206,16 +222,16 @@ const searchIndex = registry.map(tool => ({
     activeIndex = -1;
 
     if (results.length === 0) {
-      searchEmpty.removeAttribute('hidden');
+      searchEmpty?.removeAttribute('hidden');
       resultsList.style.display = 'none';
-      resultsContainer.removeAttribute('hidden');
+      resultsContainer?.removeAttribute('hidden');
       items = [];
       return;
     }
 
-    searchEmpty.setAttribute('hidden', 'true');
+    searchEmpty?.setAttribute('hidden', 'true');
     resultsList.style.display = 'block';
-    resultsContainer.removeAttribute('hidden');
+    resultsContainer?.removeAttribute('hidden');
 
     results.forEach((tool, idx) => {
       const li = document.createElement('li');
@@ -223,19 +239,16 @@ const searchIndex = registry.map(tool => ({
       li.setAttribute('role', 'option');
       li.id = `search-item-${idx}`;
 
-      // Search results now only render the title (name of tool) and not the description
       li.innerHTML = `
         <a href="/tools/${tool.slug}">
-          <div class="search-item-icon-wrapper">
+          <div style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; color: var(--accent); flex-shrink: 0;">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
               <path d="M9 17H7A2 2 0 0 1 5 15V9A2 2 0 0 1 7 7h2"/>
               <path d="m15 7 5 5-5 5"/>
             </svg>
           </div>
-          <div class="search-item-info">
-            <span class="search-item-title">${tool.title}</span>
-          </div>
+          <span style="font-weight: 500; font-size: 14px;">${tool.title}</span>
         </a>
       `;
       resultsList.appendChild(li);
@@ -245,12 +258,12 @@ const searchIndex = registry.map(tool => ({
   }
 
   function hideResults() {
-    resultsContainer.setAttribute('hidden', 'true');
+    resultsContainer?.setAttribute('hidden', 'true');
     activeIndex = -1;
   }
 
   // Keyboard navigation inside search results
-  searchInput.addEventListener('keydown', (e) => {
+  searchInput?.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       if (items.length === 0) return;
@@ -268,26 +281,14 @@ const searchIndex = registry.map(tool => ({
     } else if (e.key === 'Enter') {
       if (activeIndex !== -1 && items[activeIndex]) {
         e.preventDefault();
-        items[activeIndex].querySelector('a').click();
+        items[activeIndex].querySelector('a')?.click();
       }
     } else if (e.key === 'Escape') {
       closeSearch();
     }
   });
 
-  searchInput.addEventListener('input', (e) => {
+  searchInput?.addEventListener('input', (e) => {
     performSearch(e.target.value);
   });
-
-  // Theme selection logic (direct two-theme toggle)
-  const themeToggleBtn = document.getElementById('theme-toggle-btn');
-
-  if (themeToggleBtn) {
-    themeToggleBtn.addEventListener('click', () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', newTheme);
-      localStorage.setItem('lowkeydevs-theme', newTheme);
-    });
-  }
 </script>

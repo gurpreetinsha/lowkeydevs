@@ -12,7 +12,7 @@ const {
   title = 'LowKeyDevs - Fast, Private Online Tools',
   description = 'The internet\'s default toolbox. Free, client-side, privacy-respecting online developer tools and utilities with zero registration required.',
   canonicalUrl = Astro.url.href,
-  ogImage = '/og-default.png' // Default image fallback
+  ogImage = '/og-default.png'
 } = Astro.props;
 ---
 
@@ -21,35 +21,11 @@ const {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- Theme Initializer: Prevent theme flash (FOUC) -->
-    <script is:inline>
-      (function() {
-        let savedTheme = localStorage.getItem('lowkeydevs-theme') || 'light';
-        if (savedTheme !== 'light' && savedTheme !== 'dark') {
-          savedTheme = 'light';
-        }
-        document.documentElement.setAttribute('data-theme', savedTheme);
-
-        // Liquid Glass Simulator Settings Initializer
-        const renderingMode = localStorage.getItem('lowkeydevs-rendering-mode') || 'fullColor';
-        const texture = localStorage.getItem('lowkeydevs-texture') || 'glass';
-        const mounting = localStorage.getItem('lowkeydevs-mounting') || 'elevated';
-        const detailLevel = localStorage.getItem('lowkeydevs-detail-level') || 'standard';
-        const tintColor = localStorage.getItem('lowkeydevs-tint-color') || '#0071e3';
-
-        document.documentElement.setAttribute('data-rendering-mode', renderingMode);
-        document.documentElement.setAttribute('data-texture', texture);
-        document.documentElement.setAttribute('data-mounting', mounting);
-        document.documentElement.setAttribute('data-detail-level', detailLevel);
-        document.documentElement.style.setProperty('--widget-tint', tintColor);
-      })();
-    </script>
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
-    
+
     <!-- SEO Tags -->
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -72,27 +48,26 @@ const {
     <!-- Google Fonts Preconnect and Load -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link 
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" 
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;1,14..32,400&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
-      media="print"
-      onload="this.media='all'"
     />
-    <noscript>
-      <link 
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" 
-        rel="stylesheet"
-      />
-    </noscript>
+
+    <!-- Theme detection (runs before paint to prevent flash) -->
+    <script is:inline>
+      (function() {
+        const stored = localStorage.getItem('lowkeydevs-theme');
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', stored);
+        } else {
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+        }
+      })();
+    </script>
   </head>
   <body>
-    <!-- Decorative background blobs for Apple Liquid Glass -->
-    <div class="glass-blobs-container">
-      <div class="glass-blob glass-blob-1"></div>
-      <div class="glass-blob glass-blob-2"></div>
-      <div class="glass-blob glass-blob-3"></div>
-      <div class="glass-blob glass-blob-4" style="width: 450px; height: 450px; background: radial-gradient(circle, rgba(166,226,46,0.6) 0%, rgba(255,0,127,0.3) 100%); bottom: 40%; left: -5%; animation-duration: 32s; animation-delay: -15s;"></div>
-    </div>
+    <a href="#main-content" class="skip-link">Skip to content</a>
     <slot />
   </body>
 </html>

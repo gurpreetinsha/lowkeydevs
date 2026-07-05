@@ -56,8 +56,8 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 } : null;
 ---
 
-<Layout 
-  title={`${tool.title} - LowKeyDevs`} 
+<Layout
+  title={`${tool.title} - LowKeyDevs`}
   description={tool.description}
 >
   <Header />
@@ -65,30 +65,34 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   <!-- Breadcrumbs -->
   <nav class="breadcrumbs-nav" aria-label="Breadcrumb">
     <div class="container breadcrumbs-container">
-      <a href="/" class="breadcrumb-item">Home</a>
-      <span class="separator">/</span>
+      <a href="/" class="breadcrumb-link">Home</a>
+      <span class="breadcrumb-sep" aria-hidden="true">
+        <Icon name="ChevronRight" size={14} />
+      </span>
       {categoryDetail && (
         <>
-          <a href={`/tools/category/${tool.category}`} class="breadcrumb-item">
+          <a href={`/tools/category/${tool.category}`} class="breadcrumb-link">
             {categoryDetail.title}
           </a>
-          <span class="separator">/</span>
+          <span class="breadcrumb-sep" aria-hidden="true">
+            <Icon name="ChevronRight" size={14} />
+          </span>
         </>
       )}
-      <span class="breadcrumb-item active" aria-current="page">{tool.title}</span>
+      <span class="breadcrumb-current" aria-current="page">{tool.title}</span>
     </div>
   </nav>
 
-  <main class="tool-main-layout container">
-    <div class="tool-grid-container">
-      <!-- Active Tool Workspace -->
+  <main id="main-content" class="tool-main container">
+    <div class="tool-grid">
+      <!-- Main tool workspace -->
       <section class="tool-section" aria-labelledby="tool-title-heading">
-        <header class="tool-header-block">
-          <span class="category-badge widget-accentable">
+        <header class="tool-header">
+          <span class="category-badge">
             <Icon name={categoryDetail?.icon || 'Info'} size={12} />
             {categoryDetail?.title}
           </span>
-          <h1 id="tool-title-heading" class="tool-title widget-accentable">{tool.title}</h1>
+          <h1 id="tool-title-heading" class="tool-title">{tool.title}</h1>
           <p class="tool-description">{tool.description}</p>
         </header>
 
@@ -97,21 +101,20 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
         </div>
       </section>
 
-      <!-- Sidebar / Related tools -->
+      <!-- Sidebar -->
       <aside class="tool-sidebar">
-        <!-- Sidebar Ad/Sponsorship Placement -->
         <SponsorCard />
 
-        <div class="sidebar-widget glass-panel">
-          <h2 class="widget-title widget-accentable">Related tools</h2>
+        <div class="sidebar-widget">
+          <h2 class="widget-title">Related tools</h2>
           <div class="related-list">
             {relatedTools.map(t => (
               <a href={`/tools/${t.slug}`} class="related-item">
-                <div class="related-icon widget-accentable">
+                <div class="related-icon">
                   <Icon name={t.icon} size={14} />
                 </div>
                 <div class="related-info">
-                  <span class="related-title widget-accentable">{t.title}</span>
+                  <span class="related-title">{t.title}</span>
                   <span class="related-desc">{t.description}</span>
                 </div>
               </a>
@@ -119,10 +122,10 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
           </div>
         </div>
 
-        <div class="sidebar-widget privacy-widget glass-panel">
+        <div class="sidebar-widget privacy-widget">
           <div class="privacy-header">
-            <Icon name="Lock" size={16} class="privacy-icon widget-accentable" />
-            <h2 class="widget-title widget-accentable">100% client-side</h2>
+            <Icon name="Lock" size={16} />
+            <h2 class="widget-title privacy-widget-title">100% client-side</h2>
           </div>
           <p class="privacy-text">
             All conversions and formatting happen strictly in your browser. We never save, upload, or transmit any of your text, JSON, or input data to servers.
@@ -131,15 +134,15 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
       </aside>
     </div>
 
-    <!-- Educational & FAQ Accordion Section -->
+    <!-- Educational & FAQ Section -->
     <section class="content-section" aria-label="How to use the tool">
       <div class="edu-grid">
         <!-- Educational Guide -->
-        <article class="edu-guide glass-panel">
-          <h2 class="edu-title widget-accentable">What is this tool?</h2>
+        <article class="edu-guide">
+          <h2 class="edu-title">What is this tool?</h2>
           <p class="edu-para">{tool.educationalContent.whatIsIt}</p>
 
-          <h2 class="edu-title widget-accentable">How to use it</h2>
+          <h2 class="edu-title">How to use it</h2>
           <div class="steps-list">
             {tool.educationalContent.howToUse.split('\n').map(step => (
               <p class="step-item">{step}</p>
@@ -148,7 +151,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
           {tool.educationalContent.proTips && (
             <>
-              <h2 class="edu-title pro-tips-title widget-accentable">
+              <h2 class="edu-title pro-tips-title">
                 <Icon name="Info" size={14} />
                 Pro tips
               </h2>
@@ -163,8 +166,8 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
         <!-- FAQs Accordion -->
         {tool.faqs && tool.faqs.length > 0 && (
-          <div class="faq-accordion glass-panel">
-            <h2 class="edu-title widget-accentable">Frequently asked questions</h2>
+          <div class="faq-accordion">
+            <h2 class="edu-title">Frequently asked questions</h2>
             <div class="accordion-wrapper">
               {tool.faqs.map((faq, idx) => (
                 <details class="faq-item" open={idx === 0}>
@@ -186,7 +189,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
   <Footer />
 
-  <!-- Inject Structured Schema-LD for SEO -->
+  <!-- Structured Schema-LD for SEO -->
   <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
   {faqSchema && (
     <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
@@ -196,157 +199,161 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 <style>
   /* Breadcrumbs */
   .breadcrumbs-nav {
-    background-color: rgba(255, 255, 255, 0.05);
-    border-bottom: 1px solid var(--ds-border);
-    padding: var(--ds-space-150) 0;
-    font-size: 0.8125rem;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
-  
-  html[data-theme="dark"] .breadcrumbs-nav {
-    background-color: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--border);
+    padding: var(--space-3) 0;
+    font-size: 14px;
   }
 
   .breadcrumbs-container {
     display: flex;
     align-items: center;
-    gap: var(--ds-space-100);
-    flex-wrap: wrap;
+    gap: var(--space-1-5);
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 
-  .breadcrumb-item {
-    color: var(--ds-text-subtle);
+  .breadcrumbs-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .breadcrumb-link, .breadcrumb-current {
+    white-space: nowrap;
+  }
+
+  .breadcrumb-link {
+    color: var(--text-secondary);
     text-decoration: none;
-    transition: color 0.15s ease;
+    font-weight: 500;
+    transition: color var(--duration-fast) var(--ease-out);
   }
 
-  .breadcrumb-item:hover {
-    color: var(--ds-link);
+  .breadcrumb-link:hover {
+    color: var(--accent);
     text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
-  .breadcrumb-item.active {
-    color: var(--ds-text-subtlest);
-    pointer-events: none;
-    text-decoration: none;
+  .breadcrumb-sep {
+    color: var(--text-tertiary);
+    display: flex;
+    align-items: center;
   }
 
-  .separator {
-    color: var(--ds-text-subtlest);
-    user-select: none;
+  .breadcrumb-current {
+    color: var(--text-tertiary);
+    font-weight: 400;
   }
 
-  /* Layout Structure */
-  .tool-main-layout {
-    padding-top: var(--ds-space-400);
-    padding-bottom: var(--ds-space-1000);
+  /* Layout */
+  .tool-main {
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-20);
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: var(--ds-space-600);
+    gap: var(--space-12);
   }
 
-  .tool-grid-container {
+  .tool-grid {
     display: grid;
-    grid-template-columns: 1fr 320px;
-    gap: var(--ds-space-400);
+    grid-template-columns: 1fr min(320px, 100%);
+    gap: clamp(16px, 4vw, 32px);
     align-items: start;
   }
 
   @media (max-width: 1024px) {
-    .tool-grid-container {
+    .tool-grid {
       grid-template-columns: 1fr;
     }
   }
 
-  /* Header details */
-  .tool-header-block {
-    margin-bottom: var(--ds-space-300);
+  /* Tool header */
+  .tool-header {
+    margin-bottom: var(--space-6);
     display: flex;
     flex-direction: column;
-    gap: var(--ds-space-100);
+    gap: var(--space-3);
   }
 
   .category-badge {
     align-self: flex-start;
     display: inline-flex;
     align-items: center;
-    gap: var(--ds-space-075);
-    background-color: rgba(0, 113, 227, 0.08);
-    color: var(--ds-text-selected);
-    border: 1px solid rgba(0, 113, 227, 0.15);
-    padding: var(--ds-space-050) var(--ds-space-150);
-    border-radius: var(--ds-radius-full);
-    font-size: 0.75rem;
+    gap: var(--space-1-5);
+    background-color: var(--accent-subtle);
+    color: var(--accent);
+    border: 1px solid var(--border);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: 11px;
     font-weight: 600;
-    font-family: var(--font-sans);
-  }
-
-  html[data-theme="dark"] .category-badge {
-    background-color: rgba(41, 151, 255, 0.12);
-    color: var(--ds-text-selected);
-    border-color: rgba(41, 151, 255, 0.25);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
   }
 
   .tool-title {
-    font-size: 2.25rem;
-    font-weight: 800;
-    color: var(--ds-text);
-    letter-spacing: -0.03em;
-    line-height: 1.15;
+    font-family: var(--font-heading);
+    font-size: clamp(30px, 4vw, 48px);
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
   }
 
   .tool-description {
-    color: var(--ds-text-subtle);
-    font-size: 0.9375rem;
-    max-width: 800px;
-    line-height: 1.5;
+    color: var(--text-secondary);
+    font-size: clamp(16px, 1.5vw, 18px);
+    font-weight: 400;
+    max-width: 600px;
+    line-height: 1.7;
   }
 
-  /* Tool Workspace Frame */
+  /* Tool workspace */
   .tool-workspace-wrapper {
-    margin-top: var(--ds-space-200);
+    margin-top: var(--space-2);
   }
 
   /* Sidebar */
   .tool-sidebar {
     display: flex;
     flex-direction: column;
-    gap: var(--ds-space-300);
+    gap: var(--space-5);
   }
 
   .sidebar-widget {
-    padding: var(--ds-space-250);
+    padding: var(--space-5);
   }
 
   .widget-title {
-    font-family: var(--font-display);
-    font-size: 0.8rem;
-    font-weight: 700;
-    margin-bottom: var(--ds-space-200);
-    color: var(--ds-text);
-    letter-spacing: -0.01em;
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+    color: var(--text-primary);
   }
 
   .related-list {
     display: flex;
     flex-direction: column;
-    gap: var(--ds-space-150);
+    gap: var(--space-2);
   }
 
   .related-item {
     display: flex;
     align-items: flex-start;
-    gap: var(--ds-space-150);
-    padding: var(--ds-space-100);
-    border-radius: var(--ds-radius-medium);
+    gap: var(--space-3);
+    padding: var(--space-2);
+    border-radius: var(--radius-md);
     text-decoration: none;
-    transition: background-color 0.15s ease;
+    transition: background-color var(--duration-fast) var(--ease-out);
   }
 
   .related-item:hover {
-    background-color: var(--ds-background-neutral-hovered);
+    background-color: var(--surface-hover);
+    text-decoration: none;
   }
 
   .related-icon {
@@ -355,180 +362,178 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
     justify-content: center;
     width: 32px;
     height: 32px;
-    background-color: var(--ds-background-neutral);
-    color: var(--ds-icon-subtle);
-    border-radius: var(--ds-radius-small);
+    background-color: var(--accent-subtle);
+    color: var(--accent);
+    border-radius: var(--radius-sm);
     flex-shrink: 0;
-    transition: color 0.15s ease, background-color 0.15s ease;
-  }
-
-  .related-item:hover .related-icon {
-    color: #ffffff;
-    background-color: var(--ds-background-brand-bold);
   }
 
   .related-info {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    gap: var(--space-0-5);
   }
 
   .related-title {
-    font-family: var(--font-sans);
     font-weight: 600;
-    font-size: 0.875rem;
-    color: var(--ds-text);
+    font-size: 14px;
+    color: var(--text-primary);
   }
 
   .related-desc {
-    font-size: 0.75rem;
-    color: var(--ds-text-subtlest);
+    font-size: 13px;
+    color: var(--text-secondary);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
+  /* Privacy widget */
   .privacy-widget {
-    border-color: var(--ds-border-success-subtle) !important;
-    background-color: var(--ds-background-success) !important;
+    border-color: var(--border);
   }
 
   .privacy-header {
     display: flex;
     align-items: center;
-    gap: var(--ds-space-100);
-    color: var(--ds-text-success);
-    margin-bottom: var(--ds-space-100);
+    gap: var(--space-2);
+    color: var(--success);
+    margin-bottom: var(--space-3);
   }
 
-  .privacy-header .widget-title {
+  .privacy-header .privacy-widget-title {
     margin-bottom: 0;
-    color: var(--ds-text-success-bolder);
+    color: var(--success);
     font-weight: 700;
+    font-size: 14px;
   }
 
   .privacy-text {
-    font-size: 0.8125rem;
-    color: var(--ds-text-subtle);
-    line-height: 1.5;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
   }
 
-  /* Educational Content & FAQs */
+  /* Educational content */
   .edu-grid {
     display: grid;
     grid-template-columns: 1.2fr 0.8fr;
-    gap: var(--ds-space-400);
+    gap: clamp(16px, 4vw, 32px);
     align-items: start;
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 992px) {
     .edu-grid {
       grid-template-columns: 1fr;
     }
   }
 
   .edu-guide, .faq-accordion {
-    padding: var(--ds-space-300);
+    padding: clamp(16px, 4vw, 24px);
   }
 
   .edu-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: var(--ds-space-150);
-    color: var(--ds-text);
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: var(--space-3);
+    color: var(--text-primary);
   }
 
   .edu-title:not(:first-child) {
-    margin-top: var(--ds-space-300);
+    margin-top: var(--space-8);
   }
 
   .edu-para {
-    color: var(--ds-text-subtle);
-    font-size: 0.875rem;
-    line-height: 1.6;
-    margin-bottom: var(--ds-space-150);
+    color: var(--text-secondary);
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: var(--space-2);
   }
 
   .steps-list {
     display: flex;
     flex-direction: column;
-    gap: var(--ds-space-100);
+    gap: var(--space-2);
   }
 
   .step-item {
-    font-size: 0.875rem;
-    color: var(--ds-text-subtle);
-    line-height: 1.6;
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.7;
   }
 
   .pro-tips-title {
     display: inline-flex;
     align-items: center;
-    gap: var(--ds-space-100);
-    color: var(--ds-text-accent-orange-bolder) !important;
+    gap: var(--space-2);
+    color: var(--accent);
   }
 
   .pro-tips-list {
     list-style-type: none;
     display: flex;
     flex-direction: column;
-    gap: var(--ds-space-100);
+    gap: var(--space-3);
   }
 
   .pro-tips-list li {
-    font-size: 0.875rem;
-    color: var(--ds-text-subtle);
+    font-size: 15px;
+    color: var(--text-secondary);
     position: relative;
-    padding-left: var(--ds-space-250);
+    padding-left: var(--space-5);
+    line-height: 1.7;
   }
 
   .pro-tips-list li::before {
     content: "✦";
     position: absolute;
     left: 0;
-    color: var(--ds-text-accent-orange);
+    color: var(--accent);
   }
 
-  /* Accordion styling */
+  /* FAQ Accordion */
   .accordion-wrapper {
     display: flex;
     flex-direction: column;
-    gap: var(--ds-space-150);
-    margin-top: var(--ds-space-200);
+    gap: var(--space-2);
+    margin-top: var(--space-4);
   }
 
   .faq-item {
-    border: var(--ds-border-width-default) solid var(--ds-border);
-    border-radius: var(--ds-radius-medium);
-    background-color: var(--ds-surface-sunken);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background-color: var(--bg);
     overflow: hidden;
-    transition: border-color 0.15s ease;
-  }
-
-  .faq-item:hover {
-    border-color: var(--ds-border-bold);
   }
 
   .faq-question {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--ds-space-200);
+    padding: var(--space-3) var(--space-4);
     cursor: pointer;
-    font-family: var(--font-sans);
     font-weight: 600;
-    font-size: 0.875rem;
+    font-size: 14px;
     user-select: none;
-    list-style: none; /* Hide default triangle */
+    list-style: none;
+    color: var(--text-primary);
+    transition: background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .faq-question:hover {
+    background-color: var(--surface-hover);
   }
 
   .faq-question::-webkit-details-marker {
-    display: none; /* Hide default triangle in Safari */
+    display: none;
   }
 
   .faq-question .chevron {
-    color: var(--ds-icon-subtle);
-    transition: transform 0.15s ease;
+    color: var(--text-tertiary);
+    transition: transform var(--duration-fast) var(--ease-out);
+    flex-shrink: 0;
   }
 
   .faq-item[open] .faq-question .chevron {
@@ -536,15 +541,14 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   }
 
   .faq-answer {
-    padding: 0 var(--ds-space-200) var(--ds-space-200) var(--ds-space-200);
-    border-top: var(--ds-border-width-default) solid var(--ds-border);
-    background-color: var(--ds-surface);
+    padding: 0 var(--space-4) var(--space-4) var(--space-4);
+    border-top: 1px solid var(--border);
   }
 
   .faq-answer p {
-    font-size: 0.875rem;
-    color: var(--ds-text-subtle);
-    line-height: 1.6;
-    margin-top: var(--ds-space-150);
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-top: var(--space-3);
   }
 </style>
