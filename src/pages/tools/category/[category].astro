@@ -35,7 +35,7 @@ const tools = getToolsByCategory(category.slug);
   </nav>
 
   <main id="main-content" class="category-main container">
-    <header class="category-header">
+    <header class="category-header max-w-narrow">
       <div class="category-icon-title">
         <div class="category-icon-wrapper">
           <Icon name={category.icon} size={24} />
@@ -121,7 +121,6 @@ const tools = getToolsByCategory(category.slug);
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
-    max-width: 720px;
   }
 
   .category-icon-title {

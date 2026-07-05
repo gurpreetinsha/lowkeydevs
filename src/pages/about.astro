@@ -11,7 +11,7 @@ import Footer from '../components/Footer.astro';
   <Header />
 
   <main id="main-content" class="about-main container">
-    <header class="about-header">
+    <header class="about-header max-w-narrow mx-auto w-full">
       <h1 class="about-title">Why we built <span class="accent-text">LowKeyDevs</span></h1>
       <p class="about-subtitle">The story and core principles behind the fastest toolbox on the web.</p>
     </header>
@@ -44,7 +44,7 @@ import Footer from '../components/Footer.astro';
         </article>
       </div>
 
-      <div class="about-cta">
+      <div class="about-cta max-w-narrow mx-auto w-full">
         <h2>Open source & community driven</h2>
         <p>
           LowKeyDevs is designed to scale to hundreds of utilities. We are continuously adding new tools. Have an idea or need a specific converter? Let us know!
@@ -72,8 +72,6 @@ import Footer from '../components/Footer.astro';
     flex-direction: column;
     gap: var(--space-4);
     text-align: center;
-    max-width: 720px;
-    margin: 0 auto;
   }
 
   .about-title {
@@ -92,8 +90,6 @@ import Footer from '../components/Footer.astro';
     color: var(--text-secondary);
     font-size: clamp(15px, 1.5vw, 18px);
     font-weight: 400;
-    max-width: 560px;
-    margin: 0 auto;
     line-height: 1.7;
   }
 
@@ -105,7 +101,7 @@ import Footer from '../components/Footer.astro';
 
   .about-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: clamp(16px, 4vw, 24px);
   }
 
@@ -161,8 +157,6 @@ import Footer from '../components/Footer.astro';
 
   .about-cta {
     padding: clamp(24px, 6vw, 40px) clamp(16px, 5vw, 32px);
-    max-width: 640px;
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -171,7 +165,6 @@ import Footer from '../components/Footer.astro';
     background-color: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    width: 100%;
   }
 
   .about-cta h2 {
