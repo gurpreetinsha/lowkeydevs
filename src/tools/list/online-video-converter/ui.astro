@@ -1,0 +1,721 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<video-converter-tool class="tool-workspace">
+  <div class="editor-grid">
+    <!-- Upload & Controls -->
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Video Input & Options</span>
+      </div>
+
+      <!-- Video Upload Dropzone -->
+      <div class="dropzone" id="vid-dropzone">
+        <input type="file" id="vid-file-input" accept="video/*" class="hidden-input" aria-label="Upload video file" />
+        
+        <div class="dropzone-content" id="vid-idle-state">
+          <Icon name="Video" size={44} />
+          <p class="dropzone-text">Drag & drop your video here or <span>browse</span></p>
+          <p class="dropzone-subtext">Supports MP4, WebM, OGG (Max 100MB)</p>
+        </div>
+
+        <div class="preview-state hidden" id="vid-preview-state">
+          <video id="vid-preview-player" controls muted class="video-player"></video>
+          <button class="btn-remove-preview" id="btn-remove-vid" aria-label="Remove video">✕</button>
+        </div>
+      </div>
+
+      <!-- Controls Panel -->
+      <div class="settings-panel" id="vid-settings">
+        <div class="setting-row">
+          <label for="vid-format">Output Format:</label>
+          <select id="vid-format" aria-label="Output format selection">
+            <optgroup label="Video formats">
+              <option value="webm">WebM Video (.webm)</option>
+              <option value="mp4">MP4 Video (.mp4)</option>
+            </optgroup>
+            <optgroup label="Audio Extraction">
+              <option value="wav">WAV Audio (.wav)</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="setting-row">
+          <label for="vid-resolution">Resolution:</label>
+          <select id="vid-resolution" aria-label="Output resolution selector">
+            <option value="1">Original Scale (100%)</option>
+            <option value="0.75">Medium Scale (75%)</option>
+            <option value="0.5">Low Scale (50%)</option>
+          </select>
+        </div>
+
+        <div class="setting-row">
+          <label for="vid-speed">Playback Speed:</label>
+          <select id="vid-speed" aria-label="Transcode playback speed selector">
+            <option value="1">Normal (1.0x)</option>
+            <option value="1.5">Fast (1.5x)</option>
+            <option value="2">Double (2.0x)</option>
+            <option value="0.5">Slow (0.5x)</option>
+          </select>
+        </div>
+
+        <div class="checkbox-row">
+          <input type="checkbox" id="vid-mute" aria-label="Mute Audio Option" />
+          <label for="vid-mute">Mute audio track</label>
+        </div>
+      </div>
+
+      <button id="btn-transcode" class="btn btn-primary w-full" disabled>
+        <Icon name="Sparkles" size={16} />
+        Convert Video
+      </button>
+    </div>
+
+    <!-- Output & Status -->
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Conversion Status & Output</span>
+      </div>
+
+      <!-- Progress Panel -->
+      <div class="progress-box hidden" id="transcode-progress-box">
+        <div class="spinner-wrapper">
+          <div class="loading-spinner"></div>
+        </div>
+        <span class="status-message" id="transcode-status">Processing video streams...</span>
+        <div class="progress-bar-wrapper">
+          <div class="progress-bar-fill" id="transcode-progress-bar"></div>
+        </div>
+      </div>
+
+      <!-- Results View -->
+      <div class="results-box hidden" id="transcode-results">
+        <div class="success-banner">
+          <span class="badge-icon">✓</span>
+          Conversion Successful!
+        </div>
+
+        <div class="stats-table">
+          <div class="stat-row">
+            <span class="stat-label">File Type:</span>
+            <span class="stat-value" id="res-type">WebM</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">File Size:</span>
+            <span class="stat-value" id="res-size">0 KB</span>
+          </div>
+        </div>
+
+        <!-- Download Buttons -->
+        <a id="btn-download-vid" class="btn btn-success w-full download-link">
+          <Icon name="Download" size={18} />
+          Download Converted File
+        </a>
+      </div>
+
+      <!-- Placeholder -->
+      <div class="output-placeholder" id="output-empty-state">
+        <Icon name="Video" size={32} />
+        <p>Your converted video file details will appear here after conversion.</p>
+      </div>
+    </div>
+  </div>
+</video-converter-tool>
+
+<style>
+  .tool-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .editor-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .editor-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .editor-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.25rem;
+    min-height: 480px;
+  }
+
+  .pane-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+  }
+
+  .pane-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  /* Dropzone */
+  .dropzone {
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-lg);
+    min-height: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.01);
+    overflow: hidden;
+  }
+
+  .dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    pointer-events: none;
+    text-align: center;
+  }
+
+  .dropzone-text {
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .dropzone-text span {
+    color: var(--primary-accent);
+    text-decoration: underline;
+  }
+
+  .dropzone-subtext {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+  }
+
+  .preview-state {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+  }
+
+  .video-player {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .btn-remove-preview {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    border: none;
+    color: #fff;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.75rem;
+    z-index: 4;
+  }
+
+  /* Settings Panel */
+  .settings-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+  }
+
+  .setting-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+
+  .setting-row select {
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: var(--radius-sm);
+    padding: 0.25rem 0.5rem;
+    outline: none;
+  }
+
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+  }
+
+  .w-full {
+    width: 100%;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  /* Output / Progress */
+  .output-placeholder {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .progress-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .spinner-wrapper {
+    position: relative;
+  }
+
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--primary-accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .status-message {
+    font-size: 0.85rem;
+    color: var(--text-primary);
+  }
+
+  .progress-bar-wrapper {
+    width: 80%;
+    height: 4px;
+    background: var(--border-color);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--primary-accent);
+    transition: width 0.1s linear;
+  }
+
+  .results-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.25rem;
+  }
+
+  .success-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--success-color);
+    font-weight: 600;
+    justify-content: center;
+  }
+
+  .badge-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: rgba(var(--success-color-rgb), 0.15);
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: bold;
+  }
+
+  .stats-table {
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+  }
+
+  .stats-table .stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.4rem 0;
+    font-size: 0.85rem;
+  }
+
+  .stats-table .stat-row:not(:last-child) {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .stat-label {
+    color: var(--text-secondary);
+  }
+
+  .stat-value {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .download-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    text-decoration: none;
+  }
+</style>
+
+<script>
+  import { formatBytes } from './logic';
+
+  class VideoConverterTool extends HTMLElement {
+    private fileInputEl!: HTMLInputElement;
+    private dropzoneEl!: HTMLDivElement;
+    private previewStateEl!: HTMLDivElement;
+    private previewPlayerEl!: HTMLVideoElement;
+    private removeBtn!: HTMLButtonElement;
+    private transcodeBtn!: HTMLButtonElement;
+    private formatSelectEl!: HTMLSelectElement;
+    private resSelectEl!: HTMLSelectElement;
+    private speedSelectEl!: HTMLSelectElement;
+    private muteCheckboxEl!: HTMLInputElement;
+    
+    private progressBoxEl!: HTMLDivElement;
+    private progressStatusEl!: HTMLSpanElement;
+    private progressBarEl!: HTMLDivElement;
+    private resultsBoxEl!: HTMLDivElement;
+    private emptyStateEl!: HTMLDivElement;
+    private resTypeEl!: HTMLSpanElement;
+    private resSizeEl!: HTMLSpanElement;
+    private downloadBtn!: HTMLAnchorElement;
+
+    private selectedFile: File | null = null;
+    private objectUrl: string = '';
+
+    connectedCallback() {
+      this.fileInputEl = this.querySelector('#vid-file-input') as HTMLInputElement;
+      this.dropzoneEl = this.querySelector('#vid-dropzone') as HTMLDivElement;
+      this.previewStateEl = this.querySelector('#vid-preview-state') as HTMLDivElement;
+      this.previewPlayerEl = this.querySelector('#vid-preview-player') as HTMLVideoElement;
+      this.removeBtn = this.querySelector('#btn-remove-vid') as HTMLButtonElement;
+      this.transcodeBtn = this.querySelector('#btn-transcode') as HTMLButtonElement;
+      
+      this.formatSelectEl = this.querySelector('#vid-format') as HTMLSelectElement;
+      this.resSelectEl = this.querySelector('#vid-resolution') as HTMLSelectElement;
+      this.speedSelectEl = this.querySelector('#vid-speed') as HTMLSelectElement;
+      this.muteCheckboxEl = this.querySelector('#vid-mute') as HTMLInputElement;
+
+      this.progressBoxEl = this.querySelector('#transcode-progress-box') as HTMLDivElement;
+      this.progressStatusEl = this.querySelector('#transcode-status') as HTMLSpanElement;
+      this.progressBarEl = this.querySelector('#transcode-progress-bar') as HTMLDivElement;
+      this.resultsBoxEl = this.querySelector('#transcode-results') as HTMLDivElement;
+      this.emptyStateEl = this.querySelector('#output-empty-state') as HTMLDivElement;
+      
+      this.resTypeEl = this.querySelector('#res-type') as HTMLSpanElement;
+      this.resSizeEl = this.querySelector('#res-size') as HTMLSpanElement;
+      this.downloadBtn = this.querySelector('#btn-download-vid') as HTMLAnchorElement;
+
+      this.dropzoneEl.addEventListener('dragover', (e) => {
+        e.preventDefault();
+      });
+
+      this.dropzoneEl.addEventListener('drop', (e) => {
+        e.preventDefault();
+        if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
+          this.handleFileSelect(e.dataTransfer.files[0]);
+        }
+      });
+
+      this.fileInputEl.addEventListener('change', () => {
+        if (this.fileInputEl.files && this.fileInputEl.files.length > 0) {
+          this.handleFileSelect(this.fileInputEl.files[0]);
+        }
+      });
+
+      this.removeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.resetConverter();
+      });
+
+      this.transcodeBtn.addEventListener('click', () => this.runConversion());
+    }
+
+    private handleFileSelect(file: File) {
+      if (!file.type.startsWith('video/')) {
+        alert('Invalid file format. Please upload a valid video.');
+        return;
+      }
+
+      this.selectedFile = file;
+      this.objectUrl = URL.createObjectURL(file);
+      this.previewPlayerEl.src = this.objectUrl;
+      this.previewStateEl.classList.remove('hidden');
+      this.transcodeBtn.disabled = false;
+    }
+
+    private resetConverter() {
+      this.selectedFile = null;
+      if (this.objectUrl) {
+        URL.revokeObjectURL(this.objectUrl);
+        this.objectUrl = '';
+      }
+      this.previewPlayerEl.src = '';
+      this.previewStateEl.classList.add('hidden');
+      this.transcodeBtn.disabled = true;
+      
+      this.progressBoxEl.classList.add('hidden');
+      this.resultsBoxEl.classList.add('hidden');
+      this.emptyStateEl.classList.remove('hidden');
+    }
+
+    private async runConversion() {
+      if (!this.selectedFile) return;
+
+      this.emptyStateEl.classList.add('hidden');
+      this.resultsBoxEl.classList.add('hidden');
+      this.progressBoxEl.classList.remove('hidden');
+
+      const format = this.formatSelectEl.value;
+      const mute = this.muteCheckboxEl.checked;
+      const speed = parseFloat(this.speedSelectEl.value);
+      const scale = parseFloat(this.resSelectEl.value);
+
+      if (format === 'wav') {
+        // Audio Extraction Path
+        this.progressStatusEl.textContent = 'Decoding audio tracks...';
+        this.progressBarEl.style.width = '30%';
+
+        try {
+          const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+          const audioCtx = new AudioContextClass();
+          const arrayBuffer = await this.selectedFile.arrayBuffer();
+          
+          this.progressStatusEl.textContent = 'Analyzing audio frequencies...';
+          this.progressBarEl.style.width = '60%';
+          
+          const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+
+          this.progressStatusEl.textContent = 'Formatting WAV file output...';
+          this.progressBarEl.style.width = '85%';
+
+          const wavBlob = this.bufferToWav(audioBuffer);
+          const downloadUrl = URL.createObjectURL(wavBlob);
+
+          this.resTypeEl.textContent = 'WAV Audio';
+          this.resSizeEl.textContent = formatBytes(wavBlob.size);
+          this.downloadBtn.href = downloadUrl;
+          
+          const baseName = this.selectedFile.name.substring(0, this.selectedFile.name.lastIndexOf('.'));
+          this.downloadBtn.download = `${baseName}.wav`;
+
+          this.progressBoxEl.classList.add('hidden');
+          this.resultsBoxEl.classList.remove('hidden');
+        } catch (err) {
+          console.error(err);
+          this.progressStatusEl.textContent = 'Error decoding audio from video.';
+        }
+      } else {
+        // Video Transcoding / Recording Path
+        this.progressStatusEl.textContent = 'Initializing canvas renderer...';
+        this.progressBarEl.style.width = '20%';
+
+        const video = document.createElement('video');
+        video.src = this.objectUrl;
+        video.muted = true;
+        video.playsInline = true;
+        
+        await new Promise((resolve) => {
+          video.onloadedmetadata = resolve;
+        });
+
+        const targetWidth = Math.round(video.videoWidth * scale);
+        const targetHeight = Math.round(video.videoHeight * scale);
+
+        const canvas = document.createElement('canvas');
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        // Record the canvas output streams
+        const fps = 25;
+        const stream = canvas.captureStream(fps);
+        
+        // Handle audio tracks if not muted
+        if (!mute) {
+          try {
+            const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+            const audioCtx = new AudioContextClass();
+            const dest = audioCtx.createMediaStreamDestination();
+            const source = audioCtx.createMediaElementSource(video);
+            source.connect(dest);
+            source.connect(audioCtx.destination);
+            
+            const audioTrack = dest.stream.getAudioTracks()[0];
+            if (audioTrack) {
+              stream.addTrack(audioTrack);
+            }
+          } catch (e) {
+            console.warn('Audio capture failed or unsupported in browser security context.', e);
+          }
+        }
+
+        const options = { mimeType: format === 'mp4' ? 'video/webm;codecs=h264' : 'video/webm' };
+        let mediaRecorder: MediaRecorder;
+        
+        try {
+          mediaRecorder = new MediaRecorder(stream, options);
+        } catch (e) {
+          // Fallback to default WebM if codecs are not supported
+          mediaRecorder = new MediaRecorder(stream);
+        }
+
+        const chunks: Blob[] = [];
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data.size > 0) chunks.push(e.data);
+        };
+
+        mediaRecorder.onstop = () => {
+          const transcodeBlob = new Blob(chunks, { type: format === 'mp4' ? 'video/mp4' : 'video/webm' });
+          const downloadUrl = URL.createObjectURL(transcodeBlob);
+
+          this.resTypeEl.textContent = format.toUpperCase();
+          this.resSizeEl.textContent = formatBytes(transcodeBlob.size);
+          this.downloadBtn.href = downloadUrl;
+          
+          const baseName = this.selectedFile!.name.substring(0, this.selectedFile!.name.lastIndexOf('.'));
+          this.downloadBtn.download = `${baseName}_converted.${format}`;
+
+          this.progressBoxEl.classList.add('hidden');
+          this.resultsBoxEl.classList.remove('hidden');
+        };
+
+        // Render frames inside animation loop while video plays
+        video.playbackRate = speed;
+        video.play();
+        mediaRecorder.start();
+
+        const duration = video.duration;
+        this.progressStatusEl.textContent = 'Transcoding video frames...';
+
+        const updateFrame = () => {
+          if (video.paused || video.ended) {
+            mediaRecorder.stop();
+            return;
+          }
+
+          ctx.drawImage(video, 0, 0, targetWidth, targetHeight);
+          
+          const percent = Math.round((video.currentTime / duration) * 100);
+          this.progressBarEl.style.width = `${percent}%`;
+          this.progressStatusEl.textContent = `Transcoding frames: ${percent}%`;
+
+          requestAnimationFrame(updateFrame);
+        };
+
+        requestAnimationFrame(updateFrame);
+      }
+    }
+
+    private bufferToWav(buffer: AudioBuffer): Blob {
+      const numOfChan = buffer.numberOfChannels;
+      const length = buffer.length * numOfChan * 2 + 44;
+      const bufferArr = new ArrayBuffer(length);
+      const view = new DataView(bufferArr);
+      const channels: Float32Array[] = [];
+      let offset = 0;
+      let pos = 0;
+
+      const setUint16 = (data: number) => {
+        view.setUint16(pos, data, true);
+        pos += 2;
+      };
+
+      const setUint32 = (data: number) => {
+        view.setUint32(pos, data, true);
+        pos += 4;
+      };
+
+      setUint32(0x46464952); // "RIFF"
+      setUint32(length - 8); // file length - 8
+      setUint32(0x45564157); // "WAVE"
+      setUint32(0x20746d66); // "fmt " chunk
+      setUint32(16);         // chunk length
+      setUint16(1);          // sample format (raw PCM)
+      setUint16(numOfChan);
+      setUint32(buffer.sampleRate);
+      setUint32(buffer.sampleRate * 2 * numOfChan); // byte rate
+      setUint16(numOfChan * 2);                     // block align
+      setUint16(16);                                // bits per sample
+      setUint32(0x61746164);                        // "data" - chunk
+      setUint32(length - pos - 4);                  // chunk length
+
+      for (let i = 0; i < buffer.numberOfChannels; i++) {
+        channels.push(buffer.getChannelData(i));
+      }
+
+      while (pos < length) {
+        for (let i = 0; i < numOfChan; i++) {
+          let sample = Math.max(-1, Math.min(1, channels[i][offset]));
+          sample = (sample < 0 ? sample * 0x8000 : sample * 0x7FFF);
+          view.setInt16(pos, sample, true);
+          pos += 2;
+        }
+        offset++;
+      }
+
+      return new Blob([view], { type: 'audio/wav' });
+    }
+  }
+
+  if (!customElements.get('video-converter-tool')) {
+    customElements.define('video-converter-tool', VideoConverterTool);
+  }
+</script>

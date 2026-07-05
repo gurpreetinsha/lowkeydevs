@@ -1,0 +1,549 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<whatsapp-font-tool class="tool-workspace">
+  <div class="editor-grid">
+    <!-- Input Pane -->
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Input Text</span>
+        <button data-action="load-sample" class="btn-text">Load Sample</button>
+      </div>
+      <textarea 
+        id="wa-input" 
+        placeholder="Type your WhatsApp message here..." 
+        aria-label="WhatsApp Message Input"
+      ></textarea>
+      <div class="control-actions">
+        <button data-action="clear" class="btn btn-danger btn-sm">
+          <Icon name="Trash2" size={14} />
+          Clear
+        </button>
+      </div>
+    </div>
+
+    <!-- WhatsApp Chat Simulator Pane -->
+    <div class="editor-pane glass-panel simulator-pane">
+      <div class="pane-header">
+        <span class="pane-title">WhatsApp Chat Preview</span>
+      </div>
+      
+      <div class="wa-mock-chat">
+        <div class="wa-chat-header">
+          <div class="wa-header-left">
+            <Icon name="ArrowRight" class="wa-back" size={16} style="transform: rotate(180deg);" />
+            <div class="wa-avatar"></div>
+            <div class="wa-contact-info">
+              <span class="wa-contact-name">Best Friend</span>
+              <span class="wa-status">online</span>
+            </div>
+          </div>
+          <div class="wa-header-icons">
+            <span class="wa-icon-placeholder">📞</span>
+            <span class="wa-icon-placeholder">⋮</span>
+          </div>
+        </div>
+        
+        <div class="wa-chat-body">
+          <div class="wa-bubble wa-bubble-in">
+            <div class="wa-message-text">Hey! Did you check out those new font styles for WhatsApp? They look amazing!</div>
+            <span class="wa-time">10:41 AM</span>
+          </div>
+          
+          <div class="wa-bubble wa-bubble-out">
+            <div class="wa-message-text" id="wa-preview-bubble">Type on the left to reply...</div>
+            <div class="wa-time-check">
+              <span class="wa-time" id="wa-preview-time">10:42 AM</span>
+              <span class="wa-check-blue">✓✓</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="wa-chat-input-bar">
+          <span class="wa-emoji-btn">😊</span>
+          <div class="wa-chat-input-field">Type a message</div>
+          <span class="wa-mic-btn">🎙️</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Section -->
+  <div class="results-section glass-panel">
+    <h3 class="section-title">WhatsApp Text Options</h3>
+    
+    <div class="results-list" id="wa-results">
+      <div class="empty-state">
+        Type some text above to see WhatsApp font options...
+      </div>
+    </div>
+  </div>
+</whatsapp-font-tool>
+
+<style>
+  .tool-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .editor-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .editor-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .editor-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem;
+    min-height: 400px;
+  }
+
+  .pane-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+  }
+
+  .pane-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .btn-text {
+    background: none;
+    border: none;
+    color: var(--primary-accent);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: var(--font-display);
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn-text:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
+
+  #wa-input {
+    flex: 1;
+    width: 100%;
+    min-height: 250px;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    resize: none;
+    outline: none;
+  }
+
+  .control-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+  }
+
+  /* WhatsApp Chat Mock */
+  .simulator-pane {
+    background: var(--card-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .wa-mock-chat {
+    width: 100%;
+    max-width: 320px;
+    height: 420px;
+    background: #0b141a; /* WhatsApp Dark Mode Background */
+    border: 6px solid #202c33;
+    border-radius: 24px;
+    color: #e9edef;
+    font-family: Segoe UI, Helvetica Neue, Helvetica, Lucida Grande, Arial, Ubuntu, Cantarell, Fira Sans, sans-serif;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  .wa-chat-header {
+    background: #202c33;
+    padding: 0.6rem 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .wa-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .wa-back {
+    color: #aebac1;
+    cursor: pointer;
+  }
+
+  .wa-avatar {
+    width: 32px;
+    height: 32px;
+    background: #6f7c85;
+    border-radius: 50%;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23e9edef"><circle cx="12" cy="8" r="4"/><path d="M12 14c-4.42 0-8 2-8 5v1h16v-1c0-3-3.58-5-8-5z"/></svg>');
+    background-size: 60%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .wa-contact-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .wa-contact-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .wa-status {
+    font-size: 0.65rem;
+    color: #53bdeb;
+  }
+
+  .wa-header-icons {
+    color: #aebac1;
+    display: flex;
+    gap: 0.8rem;
+    font-size: 0.95rem;
+  }
+
+  .wa-chat-body {
+    flex: 1;
+    padding: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%230b141a"/><circle cx="10" cy="10" r="1" fill="%231f2c34"/><circle cx="50" cy="30" r="1.5" fill="%231f2c34"/><circle cx="90" cy="20" r="1" fill="%231f2c34"/><circle cx="30" cy="70" r="1" fill="%231f2c34"/><circle cx="70" cy="80" r="1.2" fill="%231f2c34"/></svg>');
+    background-size: cover;
+    overflow-y: auto;
+  }
+
+  .wa-bubble {
+    max-width: 80%;
+    padding: 0.45rem 0.6rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    position: relative;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .wa-bubble-in {
+    background: #202c33;
+    align-self: flex-start;
+    border-top-left-radius: 0;
+  }
+
+  .wa-bubble-out {
+    background: #005c4b; /* WhatsApp Sent Bubble color */
+    align-self: flex-end;
+    border-top-right-radius: 0;
+  }
+
+  .wa-message-text {
+    line-height: 1.4;
+    word-break: break-word;
+    white-space: pre-wrap;
+  }
+
+  .wa-time-check {
+    display: flex;
+    align-self: flex-end;
+    align-items: center;
+    gap: 0.2rem;
+    margin-top: 0.15rem;
+  }
+
+  .wa-time {
+    font-size: 0.6rem;
+    color: #8696a0;
+  }
+
+  .wa-bubble-out .wa-time {
+    color: #8cbaa3;
+  }
+
+  .wa-check-blue {
+    font-size: 0.65rem;
+    color: #53bdeb;
+  }
+
+  .wa-chat-input-bar {
+    background: #202c33;
+    padding: 0.5rem 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .wa-emoji-btn, .wa-mic-btn {
+    font-size: 1rem;
+    color: #8696a0;
+    cursor: pointer;
+  }
+
+  .wa-chat-input-field {
+    flex: 1;
+    background: #2a3942;
+    border-radius: 8px;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+    color: #8696a0;
+  }
+
+  /* Results Section */
+  .results-section {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .results-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 768px) {
+    .results-list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .result-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    transition: all 0.2s ease;
+  }
+
+  .result-card:hover {
+    border-color: var(--primary-accent);
+    background-color: var(--surface-hover);
+  }
+
+  .result-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .result-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .result-text {
+    font-size: 1.05rem;
+    color: var(--text-primary);
+    word-break: break-all;
+    user-select: all;
+  }
+
+  .empty-state {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.85rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .copied-btn {
+    border-color: var(--success-color) !important;
+    color: var(--success-color) !important;
+  }
+</style>
+
+<script>
+  import { generateWhatsAppFonts } from './logic';
+
+  class WhatsAppFontTool extends HTMLElement {
+    private inputEl!: HTMLTextAreaElement;
+    private resultsEl!: HTMLDivElement;
+    private previewBubbleEl!: HTMLDivElement;
+    private previewTimeEl!: HTMLDivElement;
+
+    connectedCallback() {
+      this.inputEl = this.querySelector('#wa-input') as HTMLTextAreaElement;
+      this.resultsEl = this.querySelector('#wa-results') as HTMLDivElement;
+      this.previewBubbleEl = this.querySelector('#wa-preview-bubble') as HTMLDivElement;
+      this.previewTimeEl = this.querySelector('#wa-preview-time') as HTMLDivElement;
+
+      this.inputEl.addEventListener('input', () => this.handleUpdate());
+
+      this.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const button = target.closest('button');
+        if (!button) return;
+
+        const action = button.getAttribute('data-action');
+        if (action === 'clear') this.handleClear();
+        if (action === 'load-sample') this.handleLoadSample();
+        if (button.classList.contains('btn-copy')) {
+          const index = parseInt(button.getAttribute('data-index') || '0');
+          this.handleCopy(button, index);
+        }
+      });
+
+      this.updateTime();
+      this.handleLoadSample();
+    }
+
+    private updateTime() {
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12;
+      this.previewTimeEl.textContent = `${hours}:${minutes} ${ampm}`;
+    }
+
+    private handleUpdate() {
+      const text = this.inputEl.value;
+
+      if (!text) {
+        this.previewBubbleEl.innerHTML = 'Type on the left to reply...';
+        this.resultsEl.innerHTML = `
+          <div class="empty-state">
+            Type some text above to see WhatsApp font options...
+          </div>
+        `;
+        return;
+      }
+
+      const fonts = generateWhatsAppFonts(text);
+
+      // Set preview text, parsing markdown for native tags or showing text
+      // Let's use the first native bold/italic as active or show formatted input
+      this.previewBubbleEl.innerHTML = this.formatWhatsAppMarkdown(text);
+
+      this.resultsEl.innerHTML = fonts.map((res, index) => `
+        <div class="result-card">
+          <div class="result-info">
+            <span class="result-label">${res.name} ${res.isNative ? '(Native Shortcut)' : '(Unicode)'}</span>
+            <div class="result-text" id="wa-text-${index}">${this.escapeHtml(res.text)}</div>
+          </div>
+          <button class="btn btn-secondary btn-sm btn-copy" data-index="${index}" aria-label="Copy ${res.name}">
+            Copy
+          </button>
+        </div>
+      `).join('');
+    }
+
+    private handleClear() {
+      this.inputEl.value = '';
+      this.handleUpdate();
+      this.inputEl.focus();
+    }
+
+    private handleLoadSample() {
+      this.inputEl.value = '*Bold text* and _italics_ look cool!';
+      this.handleUpdate();
+    }
+
+    private async handleCopy(button: HTMLButtonElement, index: number) {
+      const textEl = this.querySelector(`#wa-text-${index}`) as HTMLDivElement;
+      if (!textEl) return;
+
+      const text = textEl.textContent || '';
+      
+      try {
+        await navigator.clipboard.writeText(text);
+        
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        button.classList.add('copied-btn');
+
+        // Render copy selection inside the preview bubble
+        this.previewBubbleEl.innerHTML = this.formatWhatsAppMarkdown(text);
+
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.classList.remove('copied-btn');
+        }, 1500);
+      } catch (err) {
+        console.error('Failed to copy', err);
+      }
+    }
+
+    private formatWhatsAppMarkdown(text: string): string {
+      let html = this.escapeHtml(text);
+      
+      // Combined styles
+      html = html.replace(/\*_\~([^*~_]+)~\_\*/g, '<strong><em><del>$1</del></em></strong>');
+      html = html.replace(/\*_([^*_]+)_\*/g, '<strong><em>$1</em></strong>');
+      html = html.replace(/\*~([^*~]+)~\*/g, '<strong><del>$1</del></strong>');
+      html = html.replace(/_\~([^_~]+)~\_/g, '<em><del>$1</del></em>');
+      
+      // Single styles
+      html = html.replace(/\*([^*]+)\*/g, '<strong>$1</strong>');
+      html = html.replace(/_([^_]+)_/g, '<em>$1</em>');
+      html = html.replace(/~([^~]+)~/g, '<del>$1</del>');
+      html = html.replace(/```([^`]+)```/g, '<code style="font-family: monospace; background: rgba(255,255,255,0.1); padding: 2px 4px; border-radius: 4px;">$1</code>');
+      
+      return html;
+    }
+
+    private escapeHtml(str: string): string {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  }
+
+  if (!customElements.get('whatsapp-font-tool')) {
+    customElements.define('whatsapp-font-tool', WhatsAppFontTool);
+  }
+</script>
