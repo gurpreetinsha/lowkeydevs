@@ -12,51 +12,51 @@ import Icon from '../components/base/Icon.astro';
   <Header />
 
   <main class="privacy-main container">
-    <article class="privacy-content glass-panel">
+    <article class="privacy-content">
       <header class="privacy-header">
         <div class="lock-icon-title">
-          <div class="lock-wrapper widget-accentable">
+          <div class="lock-wrapper">
             <Icon name="Lock" size={20} />
           </div>
-          <h1 class="privacy-title widget-accentable">Privacy policy</h1>
+          <h1 class="privacy-title">Privacy policy</h1>
         </div>
         <p class="privacy-date">Last updated: July 4, 2026</p>
       </header>
 
       <section class="privacy-body">
-        <h2 class="widget-accentable">Plain English summary</h2>
+        <h2>Plain English summary</h2>
         <p class="highlight-text">
           <strong>Your data is yours alone.</strong> We do not collect, send, save, or store any of the input values, files, text, keys, or passwords you process on our website. All processing happens entirely inside your browser via JavaScript.
         </p>
 
-        <h2 class="widget-accentable">1. Personal data collection</h2>
+        <h2>1. Personal data collection</h2>
         <p>
           We do not require you to create an account, register, or log in to use LowKeyDevs. We do not collect personal identifiers such as your name, email address, IP address, or physical location.
         </p>
 
-        <h2 class="widget-accentable">2. Data processing (client-side only)</h2>
+        <h2>2. Data processing (client-side only)</h2>
         <p>
           All operations (such as formatting JSON, generating passwords, or encoding/decoding Base64) are performed locally inside your browser's sandboxed environment. Your input strings and resulting output values are never transmitted to our servers or any third parties.
         </p>
 
-        <h2 class="widget-accentable">3. Cookies and localStorage</h2>
+        <h2>3. Cookies and localStorage</h2>
         <p>
           We do not use tracking cookies or advertising pixels. We use standard browser `localStorage` solely to save your design preference (light mode vs. dark mode) so that it persists when you return to the site. This preference data is saved locally on your device and is never sent to us.
         </p>
 
-        <h2 class="widget-accentable">4. Third-party analytics</h2>
+        <h2>4. Third-party analytics</h2>
         <p>
           To understand basic usage (such as total pageviews and common browser agents), we may use privacy-friendly, lightweight web analytics. These analytics do not use cookies, do not track you across sites, and comply fully with GDPR, CCPA, and PECR standards.
         </p>
 
-        <h2 class="widget-accentable">5. Changes to this policy</h2>
+        <h2>5. Changes to this policy</h2>
         <p>
           If we add tools that require server-side computing, we will explicitly mark those tools and update this policy to reflect what data is processed. For now, every tool on LowKeyDevs is 100% client-side.
         </p>
       </section>
 
       <div class="privacy-footer text-center">
-        <a href="/" class="btn btn-primary widget-accentable">Return to homepage</a>
+        <a href="/" class="btn btn-primary">Return to homepage</a>
       </div>
     </article>
   </main>
@@ -75,7 +75,7 @@ import Icon from '../components/base/Icon.astro';
 
   .privacy-content {
     max-width: 800px;
-    padding: var(--ds-space-600) var(--ds-space-400);
+    padding: var(--ds-space-400) var(--ds-space-300);
     display: flex;
     flex-direction: column;
     gap: var(--ds-space-400);
@@ -83,7 +83,7 @@ import Icon from '../components/base/Icon.astro';
 
   @media (max-width: 640px) {
     .privacy-content {
-      padding: var(--ds-space-400) var(--ds-space-200);
+      padding: var(--ds-space-200) var(--ds-space-100);
     }
   }
 
@@ -91,7 +91,7 @@ import Icon from '../components/base/Icon.astro';
     display: flex;
     flex-direction: column;
     gap: var(--ds-space-100);
-    border-bottom: 1px solid var(--ds-border);
+    border-bottom: 1px solid var(--border-default);
     padding-bottom: var(--ds-space-300);
   }
 
@@ -107,23 +107,23 @@ import Icon from '../components/base/Icon.astro';
     justify-content: center;
     width: 40px;
     height: 40px;
-    background-color: rgba(52, 199, 89, 0.08);
-    color: var(--ds-text-success);
-    border: 1px solid rgba(52, 199, 89, 0.15);
+    background-color: rgba(48, 209, 88, 0.08);
+    color: #30d158;
+    border: 1px solid var(--border-default);
     border-radius: var(--ds-radius-medium);
   }
 
   .privacy-title {
-    font-family: var(--font-display);
-    font-size: 2rem;
-    font-weight: 800;
+    font-size: 66px;
+    font-weight: 700;
     letter-spacing: -0.03em;
-    color: var(--ds-text);
+    color: #FEFEFE;
+    text-balance: overflow;
   }
 
   .privacy-date {
-    color: var(--ds-text-subtlest);
-    font-size: 0.8125rem;
+    color: #838285;
+    font-size: 13px;
     font-weight: 500;
   }
 
@@ -132,32 +132,37 @@ import Icon from '../components/base/Icon.astro';
     flex-direction: column;
     gap: var(--ds-space-250);
     line-height: 1.6;
-    color: var(--ds-text-subtle);
-    font-size: 0.9rem;
+    color: #838285;
+    font-size: 15px;
   }
 
   .privacy-body h2 {
-    font-family: var(--font-display);
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: var(--ds-text);
+    font-size: 19px;
+    font-weight: 500;
+    color: #FEFEFE;
     margin-top: var(--ds-space-150);
   }
 
   .highlight-text {
-    background-color: var(--ds-background-success);
-    border: 1px solid var(--ds-border-success-subtle);
-    color: var(--ds-text-success-bolder);
+    background-color: rgba(48, 209, 88, 0.08);
+    border: 1px solid var(--border-default);
+    color: #30d158;
     padding: var(--ds-space-250);
-    border-radius: var(--ds-radius-large);
+    border-radius: var(--ds-radius-medium);
   }
 
   .privacy-footer {
-    border-top: 1px solid var(--ds-border);
+    border-top: 1px solid var(--border-default);
     padding-top: var(--ds-space-300);
   }
 
   .text-center {
     text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    .privacy-title {
+      font-size: 40px; /* Neatly scale down for mobile viewports */
+    }
   }
 </style>

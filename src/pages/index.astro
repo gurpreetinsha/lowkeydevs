@@ -26,21 +26,21 @@ const activeCategories = categories.filter(cat =>
     <!-- Hero Banner Section -->
     <section class="hero-section container" aria-labelledby="hero-title">
       <div class="hero-content">
-        <div class="hero-badge widget-accentable">
+        <div class="hero-badge">
           <Icon name="Lock" size={12} />
           100% client-side privacy
         </div>
-        <h1 id="hero-title" class="hero-title widget-accentable">
-          The internet's default <span class="coral-text widget-accentable">toolbox</span>
+        <h1 id="hero-title" class="hero-title">
+          The internet's default <span class="coral-text">toolbox</span>
         </h1>
         <p class="hero-subtitle">
           Instant, beautiful developer tools that run entirely in your browser. No forced logins, no intrusive popups, and no tracking.
         </p>
 
         <!-- Search trigger -->
-        <button class="hero-search-trigger" id="hero-search-trigger">
-          <Icon name="Search" size={16} class="widget-accentable" />
-          <span class="widget-accentable">Search tools (type '/' anywhere)...</span>
+        <button class="hero-search-trigger" id="hero-search-trigger" aria-label="Search tools">
+          <Icon name="Search" size={16} />
+          <span>Search tools (type '/' anywhere)...</span>
           <kbd class="kbd-helper">/</kbd>
         </button>
       </div>
@@ -52,28 +52,26 @@ const activeCategories = categories.filter(cat =>
         <h2 class="section-title">All utilities</h2>
         
         <!-- Category Filter Tabs -->
-        <div class="category-tabs glass-effect-container" role="tablist" aria-label="Tool Categories" style="padding: 4px; border-radius: 9999px;">
+        <div class="category-tabs" role="tablist" aria-label="Tool Categories">
           <button 
-            class="tab-btn glass-effect-union active" 
+            class="tab-btn active" 
             role="tab" 
             aria-selected="true" 
             data-category="all"
             id="tab-all"
-            style="border-radius: 9999px; border: none;"
           >
             All tools
           </button>
           {activeCategories.map(cat => (
             <button 
-              class="tab-btn glass-effect-union" 
+              class="tab-btn" 
               role="tab" 
               aria-selected="false" 
               data-category={cat.slug}
               id={`tab-${cat.slug}`}
-              style="border-radius: 9999px; border: none;"
             >
-              <Icon name={cat.icon} size={14} class="widget-accentable" />
-              <span class="widget-accentable">{cat.title}</span>
+              <Icon name={cat.icon} size={14} />
+              <span>{cat.title}</span>
             </button>
           ))}
         </div>
@@ -100,33 +98,33 @@ const activeCategories = categories.filter(cat =>
 
     <!-- Why Us (Key Highlights - Styled as Quiet Editorial strip) -->
     <section class="features-section container" aria-labelledby="features-title">
-      <h2 id="features-title" class="features-title-header text-center widget-accentable">Built for speed and security</h2>
+      <h2 id="features-title" class="features-title-header text-center">Built for speed and security</h2>
       <div class="features-grid">
         <div class="feature-item">
-          <div class="feature-icon-wrapper widget-accentable">
+          <div class="feature-icon-wrapper">
             <Icon name="Lock" size={24} />
           </div>
-          <h3 class="widget-accentable">Zero server logs</h3>
+          <h3>Zero server logs</h3>
           <p>
             Your data never touches our servers. All calculations, parsing, and formatting happen locally in your browser.
           </p>
         </div>
         
         <div class="feature-item">
-          <div class="feature-icon-wrapper widget-accentable">
+          <div class="feature-icon-wrapper">
             <Icon name="RefreshCw" size={24} />
           </div>
-          <h3 class="widget-accentable">Lightning fast</h3>
+          <h3>Lightning fast</h3>
           <p>
             Statically pre-rendered pages load in milliseconds. Standard actions parse and update instantly as you type.
           </p>
         </div>
         
         <div class="feature-item">
-          <div class="feature-icon-wrapper widget-accentable">
+          <div class="feature-icon-wrapper">
             <Icon name="Braces" size={24} />
           </div>
-          <h3 class="widget-accentable">Minimal & clean</h3>
+          <h3>Minimal & clean</h3>
           <p>
             No annoying popups, cookie walls, or bloated advertisements. Just the tools you need, ready when you are.
           </p>
@@ -157,7 +155,7 @@ const activeCategories = categories.filter(cat =>
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: var(--ds-space-800) var(--ds-space-300);
+    padding: var(--ds-space-400) 0;
     position: relative;
     overflow: hidden;
   }
@@ -166,83 +164,82 @@ const activeCategories = categories.filter(cat =>
     display: inline-flex;
     align-items: center;
     gap: var(--ds-space-075);
-    background-color: rgba(0, 113, 227, 0.08);
-    color: var(--ds-text-selected);
-    border: 1px solid rgba(0, 113, 227, 0.15);
-    padding: var(--ds-space-075) var(--ds-space-150);
+    background-color: rgba(196, 169, 243, 0.1);
+    color: var(--accent);
+    border: 1px solid var(--border-default);
+    padding: 4px 12px;
     border-radius: var(--ds-radius-full);
-    font-size: 0.75rem;
+    font-size: 11px;
     font-weight: 700;
     margin-bottom: var(--ds-space-300);
-    font-family: var(--font-sans);
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
 
-  html[data-theme="dark"] .hero-badge {
-    background-color: rgba(41, 151, 255, 0.12);
-    border-color: rgba(41, 151, 255, 0.25);
-  }
-
   .hero-title {
-    font-family: var(--font-display);
-    font-size: clamp(2.25rem, 6vw, 3.75rem);
-    font-weight: 800;
+    font-size: 66px;
+    font-weight: 700;
     line-height: 1.1;
     margin-bottom: var(--ds-space-200);
     letter-spacing: -0.04em;
-    color: var(--ds-text);
+    color: #262628;
+    text-balance: overflow;
   }
 
   .coral-text {
-    color: var(--ds-text-selected);
+    color: var(--accent);
   }
 
   .hero-subtitle {
-    color: var(--ds-text-subtle);
-    font-size: 1.125rem;
-    max-width: 650px;
-    line-height: 1.6;
+    color: #292929;
+    font-size: 26px;
+    font-weight: 700;
+    max-width: 800px;
+    line-height: 1.4;
     margin-bottom: var(--ds-space-400);
+    text-pretty: overflow;
   }
 
-  /* Trigger input styled button */
+  /* Trigger input styled button (with height: 0px constraint applied visually) */
   .hero-search-trigger {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
     max-width: 440px;
-    background-color: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    color: var(--ds-text-subtlest);
+    background-color: var(--surface-base);
+    border: 1px solid var(--border-default);
+    color: var(--text-secondary);
     border-radius: var(--ds-radius-medium);
-    padding: var(--ds-space-150) var(--ds-space-200);
+    padding: 12px 16px;
     font-family: var(--font-sans);
-    font-size: 0.875rem;
+    font-size: 15px;
     font-weight: 500;
     cursor: pointer;
-    box-shadow: var(--glass-shadow);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    transition: all 0.2s ease;
+    transition: all 0.15s ease-out;
+    height: 0px !important;
+    min-height: 0px !important;
+    box-sizing: content-box !important;
   }
 
   .hero-search-trigger:hover {
-    border-color: var(--glass-border-hover);
-    background-color: var(--glass-bg-hover);
-    color: var(--ds-text-subtle);
-    box-shadow: var(--glass-shadow-hover);
-    transform: translateY(-1px);
+    border-color: var(--text-secondary);
+    color: var(--text-primary);
+  }
+
+  .hero-search-trigger:focus {
+    border-color: var(--accent);
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 
   .kbd-helper {
-    background-color: var(--ds-background-neutral);
-    border: 1px solid var(--ds-border);
-    color: var(--ds-text-subtlest);
+    background-color: var(--border-default);
+    border: 1px solid var(--border-default);
+    color: var(--text-secondary);
     padding: 2px 6px;
     border-radius: 4px;
-    font-size: 0.65rem;
+    font-size: 11px;
     font-weight: 700;
   }
 
@@ -254,16 +251,14 @@ const activeCategories = categories.filter(cat =>
     flex-wrap: wrap;
     gap: var(--ds-space-300);
     margin-bottom: var(--ds-space-400);
-    border-bottom: 1px solid var(--ds-border);
+    border-bottom: 1px solid var(--border-default);
     padding-bottom: var(--ds-space-200);
   }
 
   .section-title {
-    font-size: 1.6rem;
-    font-weight: 800;
-    color: var(--ds-text);
-    font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    font-size: 19px;
+    font-weight: 700;
+    color: #262628;
   }
 
   .text-center {
@@ -280,31 +275,36 @@ const activeCategories = categories.filter(cat =>
 
   /* Category Tabs Styling */
   .tab-btn {
-    border: none;
-    background: transparent;
-    color: var(--ds-text-subtle);
-    padding: var(--ds-space-100) var(--ds-space-150);
-    border-bottom: 2px solid transparent;
-    border-radius: 0;
+    border: 1px solid var(--border-default);
+    background: var(--surface-base);
+    color: var(--text-secondary);
+    padding: 6px 12px;
+    border-radius: var(--ds-radius-medium);
     font-family: var(--font-sans);
     font-weight: 600;
-    font-size: 0.875rem;
+    font-size: 15px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     gap: var(--ds-space-100);
     white-space: nowrap;
-    transition: all 0.15s ease;
+    transition: all 0.15s ease-out;
   }
 
   .tab-btn:hover {
-    color: var(--ds-text);
-    border-bottom-color: var(--ds-border-bold);
+    background-color: var(--surface-raised);
+    color: #ffffff;
   }
 
   .tab-btn.active {
-    color: var(--ds-text-selected);
-    border-bottom-color: var(--ds-border-selected);
+    background-color: var(--accent);
+    color: var(--surface-raised);
+    border-color: var(--border-default);
+  }
+
+  .tab-btn:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 
   /* Cards Grid */
@@ -317,19 +317,18 @@ const activeCategories = categories.filter(cat =>
   .filtered-empty {
     padding: var(--ds-space-600);
     text-align: center;
-    color: var(--ds-text-subtlest);
-    font-size: 0.875rem;
-    border: var(--ds-border-width-default) dashed var(--ds-border-bold);
-    border-radius: var(--ds-radius-large);
+    color: var(--text-secondary);
+    font-size: 15px;
+    border: 1px dashed var(--border-default);
+    border-radius: var(--ds-radius-medium);
   }
 
   /* Highlights Section */
   .features-title-header {
-    font-size: 1.85rem;
-    font-weight: 800;
-    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 700;
     margin-bottom: var(--ds-space-600);
-    color: var(--ds-text);
+    color: #262628;
   }
 
   .features-grid {
@@ -352,12 +351,11 @@ const activeCategories = categories.filter(cat =>
     text-align: center;
     padding: var(--ds-space-300);
     gap: var(--ds-space-200);
-    background-color: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--ds-radius-large);
-    box-shadow: var(--glass-shadow);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background-color: var(--surface-raised) !important;
+    border: 1px solid var(--border-default) !important;
+    border-radius: var(--ds-radius-medium) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    color: #E9E9E9 !important;
   }
 
   .feature-icon-wrapper {
@@ -366,31 +364,30 @@ const activeCategories = categories.filter(cat =>
     justify-content: center;
     width: 48px;
     height: 48px;
-    color: var(--ds-text-selected);
+    color: var(--accent);
     margin-bottom: var(--ds-space-100);
   }
 
   .feature-item h3 {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--ds-text);
+    font-size: 18px;
+    font-weight: 500;
+    color: #FEFEFE !important;
   }
 
   .feature-item p {
-    font-size: 0.875rem;
-    color: var(--ds-text-subtle);
+    font-size: 15px;
+    color: #838285 !important;
     line-height: 1.6;
     max-width: 280px;
   }
 
   @media (max-width: 640px) {
     .hero-title {
-      font-size: 2.25rem;
+      font-size: 40px; /* Neatly scale down for smaller viewports */
     }
     
     .hero-content {
-      padding: var(--ds-space-600) var(--ds-space-150);
+      padding: var(--ds-space-400) 0;
     }
   }
 </style>

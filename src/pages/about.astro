@@ -12,14 +12,14 @@ import Footer from '../components/Footer.astro';
 
   <main class="about-main container">
     <header class="about-header text-center">
-      <h1 class="about-title widget-accentable">Why we built <span class="coral-text widget-accentable">LowKeyDevs</span></h1>
+      <h1 class="about-title">Why we built <span class="coral-text">LowKeyDevs</span></h1>
       <p class="about-subtitle">The story and core principles behind the fastest toolbox on the web.</p>
     </header>
 
     <section class="about-content">
       <div class="about-grid">
-        <article class="about-card glass-panel">
-          <h2 class="widget-accentable">Our mission</h2>
+        <article class="about-card">
+          <h2>Our mission</h2>
           <p>
             Developer utility tools are everywhere. But almost all of them suffer from the same issues: intrusive ads, cookie popups, slow loading speeds, and forced account registrations. 
           </p>
@@ -28,8 +28,8 @@ import Footer from '../components/Footer.astro';
           </p>
         </article>
 
-        <article class="about-card glass-panel">
-          <h2 class="widget-accentable">The core principles</h2>
+        <article class="about-card">
+          <h2>The core principles</h2>
           <ul class="principles-list">
             <li>
               <strong>Instant:</strong> No unnecessary loading. Paste your content, and results render immediately.
@@ -44,12 +44,12 @@ import Footer from '../components/Footer.astro';
         </article>
       </div>
 
-      <div class="about-cta glass-panel text-center">
-        <h2 class="widget-accentable">Open source & community driven</h2>
+      <div class="about-cta text-center">
+        <h2>Open source & community driven</h2>
         <p>
           LowKeyDevs is designed to scale to hundreds of utilities. We are continuously adding new tools. Have an idea or need a specific converter? Let us know!
         </p>
-        <a href="/" class="btn btn-primary widget-accentable">Browse all tools</a>
+        <a href="/" class="btn btn-primary">Browse all tools</a>
       </div>
     </section>
   </main>
@@ -74,23 +74,25 @@ import Footer from '../components/Footer.astro';
   }
 
   .about-title {
-    font-family: var(--font-display);
-    font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 800;
+    font-size: 66px;
+    font-weight: 700;
     letter-spacing: -0.035em;
-    color: var(--ds-text);
+    color: #262628;
+    text-balance: overflow;
   }
 
   .coral-text {
-    color: var(--ds-text-selected);
+    color: var(--accent);
   }
 
   .about-subtitle {
-    color: var(--ds-text-subtle);
-    font-size: 1rem;
-    max-width: 600px;
+    color: #292929;
+    font-size: 26px;
+    font-weight: 700;
+    max-width: 800px;
     margin: 0 auto;
-    line-height: 1.5;
+    line-height: 1.4;
+    text-pretty: overflow;
   }
 
   .about-grid {
@@ -107,22 +109,21 @@ import Footer from '../components/Footer.astro';
   }
 
   .about-card {
-    padding: var(--ds-space-400);
+    padding: var(--ds-space-300);
     display: flex;
     flex-direction: column;
     gap: var(--ds-space-200);
   }
 
   .about-card h2 {
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--ds-text);
+    font-size: 19px;
+    font-weight: 500;
+    color: #FEFEFE;
   }
 
   .about-card p {
-    color: var(--ds-text-subtle);
-    font-size: 0.875rem;
+    color: #838285;
+    font-size: 17px;
     line-height: 1.6;
   }
 
@@ -134,8 +135,8 @@ import Footer from '../components/Footer.astro';
   }
 
   .principles-list li {
-    font-size: 0.875rem;
-    color: var(--ds-text-subtle);
+    font-size: 17px;
+    color: #838285;
     line-height: 1.6;
     position: relative;
     padding-left: var(--ds-space-300);
@@ -145,12 +146,12 @@ import Footer from '../components/Footer.astro';
     content: "✓";
     position: absolute;
     left: 0;
-    color: var(--ds-text-success);
+    color: #30d158;
     font-weight: bold;
   }
 
   .about-cta {
-    padding: var(--ds-space-600) var(--ds-space-400);
+    padding: var(--ds-space-400) var(--ds-space-300);
     max-width: 720px;
     margin: 0 auto;
     display: flex;
@@ -160,15 +161,14 @@ import Footer from '../components/Footer.astro';
   }
 
   .about-cta h2 {
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--ds-text);
+    font-size: 19px;
+    font-weight: 500;
+    color: #FEFEFE;
   }
 
   .about-cta p {
-    color: var(--ds-text-subtle);
-    font-size: 0.875rem;
+    color: #838285;
+    font-size: 17px;
     max-width: 500px;
     line-height: 1.6;
     margin-bottom: var(--ds-space-100);
@@ -176,5 +176,11 @@ import Footer from '../components/Footer.astro';
 
   .text-center {
     text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    .about-title {
+      font-size: 40px; /* Neatly scale down for mobile viewports */
+    }
   }
 </style>
