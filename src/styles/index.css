@@ -305,7 +305,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: clamp(42px, 5vw, 72px);
+  font-size: clamp(32px, 5vw, 72px);
   letter-spacing: -0.03em;
 }
 
@@ -993,10 +993,8 @@ input::placeholder, textarea::placeholder {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  min-width: 44px;
-  min-height: 44px;
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius-md);
   background-color: transparent;
   border: 1px solid transparent;

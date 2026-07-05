@@ -191,7 +191,7 @@ const activeCategories = categories.filter(cat =>
 
   .hero-title {
     font-family: var(--font-heading);
-    font-size: clamp(42px, 5vw, 72px);
+    font-size: clamp(32px, 5vw, 72px);
     font-weight: 700;
     line-height: 1.08;
     letter-spacing: -0.03em;
@@ -414,12 +414,19 @@ const activeCategories = categories.filter(cat =>
   }
 
   /* Responsive adjustments */
-  @media (max-width: 480px) {
+  @media (max-width: 960px) {
     .directory-header {
       flex-direction: column;
-      align-items: flex-start;
+      align-items: stretch;
+      gap: var(--space-4);
     }
 
+    .category-tabs {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
     .hero-search-trigger {
       max-width: 100%;
     }
