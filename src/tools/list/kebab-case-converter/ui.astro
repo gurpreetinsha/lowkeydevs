@@ -1,0 +1,321 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<kebabcase-converter-tool class="tool-workspace">
+  <!-- Controls Panel -->
+  <div class="tool-controls glass-panel">
+    <div class="control-actions">
+      <label class="checkbox-container">
+        <input type="checkbox" id="opt-linebyline" checked />
+        <span class="checkmark"></span>
+        Convert line-by-line
+      </label>
+    </div>
+    <div class="control-danger">
+      <button data-action="clear" class="btn btn-danger btn-sm">
+        <Icon name="Trash2" size={14} />
+        Clear
+      </button>
+    </div>
+  </div>
+
+  <!-- Dual Pane Grid -->
+  <div class="editor-grid">
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Input Text</span>
+        <button data-action="load-sample" class="btn-text">Load Sample</button>
+      </div>
+      <textarea
+        id="text-input"
+        placeholder="Type or paste your text here (e.g. User Account Details, camelCaseInput, my_database_table)..."
+        aria-label="Text Input"
+      ></textarea>
+      
+      <!-- Live Stats -->
+      <div class="stats-row">
+        <div class="stat-item"><span class="stat-label">Chars:</span> <strong id="stat-chars">0</strong></div>
+        <div class="stat-item"><span class="stat-label">Words:</span> <strong id="stat-words">0</strong></div>
+        <div class="stat-item"><span class="stat-label">Lines:</span> <strong id="stat-lines">0</strong></div>
+      </div>
+    </div>
+
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">kebab-case Result</span>
+        <button data-action="copy" class="btn btn-secondary btn-sm" id="btn-copy">
+          <Icon name="Clipboard" size={14} class="copy-icon" />
+          <Icon name="Check" size={14} class="check-icon" />
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <textarea
+        id="text-output"
+        readonly
+        placeholder="kebab-case output will appear here..."
+        aria-label="kebab-case Output"
+      ></textarea>
+    </div>
+  </div>
+</kebabcase-converter-tool>
+
+<style>
+  .tool-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .tool-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+  }
+
+  .control-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .editor-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .editor-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .editor-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 400px;
+    padding: 1.25rem;
+  }
+
+  .pane-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.75rem;
+  }
+
+  .pane-title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .btn-text {
+    background: none;
+    border: none;
+    color: var(--accent);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn-text:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
+
+  #text-input, #text-output {
+    flex: 1;
+    width: 100%;
+    min-height: 280px;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    resize: vertical;
+    outline: none;
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border);
+    padding-top: 0.75rem;
+  }
+
+  .checkbox-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-left: 2rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    user-select: none;
+  }
+
+  .checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  .checkmark {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 18px;
+    width: 18px;
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: all 0.2s ease;
+  }
+
+  .checkbox-container:hover input ~ .checkmark {
+    border-color: var(--accent);
+  }
+
+  .checkbox-container input:checked ~ .checkmark {
+    background: var(--accent);
+    border-color: transparent;
+  }
+
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  .checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+  }
+
+  .checkbox-container .checkmark:after {
+    left: 6px;
+    top: 2px;
+    width: 4px;
+    height: 8px;
+    border: solid var(--bg);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  #btn-copy .check-icon {
+    display: none;
+  }
+
+  #btn-copy.copied .copy-icon {
+    display: none;
+  }
+
+  #btn-copy.copied .check-icon {
+    display: inline-block;
+    color: var(--success);
+  }
+
+  #btn-copy.copied {
+    border-color: var(--success);
+  }
+</style>
+
+<script>
+  import { convertToKebabCase } from './logic';
+
+  class KebabCaseConverterTool extends HTMLElement {
+    private textInput!: HTMLTextAreaElement;
+    private textOutput!: HTMLTextAreaElement;
+    private optLineByLine!: HTMLInputElement;
+    private btnCopy!: HTMLButtonElement;
+    private statChars!: HTMLElement;
+    private statWords!: HTMLElement;
+    private statLines!: HTMLElement;
+
+    connectedCallback() {
+      this.textInput = this.querySelector('#text-input') as HTMLTextAreaElement;
+      this.textOutput = this.querySelector('#text-output') as HTMLTextAreaElement;
+      this.optLineByLine = this.querySelector('#opt-linebyline') as HTMLInputElement;
+      this.btnCopy = this.querySelector('#btn-copy') as HTMLButtonElement;
+      
+      this.statChars = this.querySelector('#stat-chars') as HTMLElement;
+      this.statWords = this.querySelector('#stat-words') as HTMLElement;
+      this.statLines = this.querySelector('#stat-lines') as HTMLElement;
+
+      this.textInput.addEventListener('input', () => this.handleConvert());
+      this.optLineByLine.addEventListener('change', () => this.handleConvert());
+
+      this.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const button = target.closest('button');
+        if (!button) return;
+
+        const action = button.getAttribute('data-action');
+        if (action === 'clear') this.handleClear();
+        if (action === 'load-sample') this.handleLoadSample();
+        if (action === 'copy') this.handleCopy();
+      });
+    }
+
+    private handleConvert() {
+      const text = this.textInput.value;
+      const lineByLine = this.optLineByLine.checked;
+      this.textOutput.value = convertToKebabCase(text, lineByLine);
+      
+      // Update statistics
+      this.statChars.textContent = text.length.toString();
+      this.statWords.textContent = text.trim() ? text.trim().split(/\s+/).length.toString() : '0';
+      this.statLines.textContent = text ? text.split('\n').length.toString() : '0';
+    }
+
+    private handleClear() {
+      this.textInput.value = '';
+      this.handleConvert();
+      this.textInput.focus();
+    }
+
+    private handleLoadSample() {
+      this.textInput.value = 'hello world\nuser_profile_data\nAPI-Response-Handler\nfirst name';
+      this.handleConvert();
+    }
+
+    private async handleCopy() {
+      const text = this.textOutput.value;
+      if (!text) return;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        const copyText = this.btnCopy.querySelector('.copy-text') as HTMLSpanElement;
+
+        this.btnCopy.classList.add('copied');
+        copyText.textContent = 'Copied!';
+
+        setTimeout(() => {
+          this.btnCopy.classList.remove('copied');
+          copyText.textContent = 'Copy';
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy text', err);
+      }
+    }
+  }
+
+  if (!customElements.get('kebabcase-converter-tool')) {
+    customElements.define('kebabcase-converter-tool', KebabCaseConverterTool);
+  }
+</script>

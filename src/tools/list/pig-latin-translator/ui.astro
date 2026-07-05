@@ -1,0 +1,274 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<piglatin-translator-tool class="tool-workspace">
+  <!-- Controls Panel -->
+  <div class="tool-controls glass-panel">
+    <div class="control-actions">
+      <!-- Direction Toggle -->
+      <div class="toggle-group">
+        <button class="toggle-btn active" data-mode="to-piglatin">English ➜ Pig Latin</button>
+        <button class="toggle-btn" data-mode="from-piglatin">Pig Latin ➜ English</button>
+      </div>
+    </div>
+    <div class="control-danger">
+      <button data-action="clear" class="btn btn-danger btn-sm">
+        <Icon name="Trash2" size={14} />
+        Clear
+      </button>
+    </div>
+  </div>
+
+  <!-- Dual Pane Grid -->
+  <div class="editor-grid">
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Input Text</span>
+        <button data-action="load-sample" class="btn-text">Load Sample</button>
+      </div>
+      <textarea
+        id="text-input"
+        placeholder="Enter text to translate here..."
+        aria-label="Text Input"
+      ></textarea>
+    </div>
+
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Translation Result</span>
+        <button data-action="copy" class="btn btn-secondary btn-sm" id="btn-copy">
+          <Icon name="Clipboard" size={14} class="copy-icon" />
+          <Icon name="Check" size={14} class="check-icon" />
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <textarea
+        id="text-output"
+        readonly
+        placeholder="Translated text will appear here..."
+        aria-label="Translation Output"
+      ></textarea>
+    </div>
+  </div>
+</piglatin-translator-tool>
+
+<style>
+  .tool-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .tool-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+  }
+
+  .control-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .editor-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .editor-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .editor-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 380px;
+    padding: 1.25rem;
+  }
+
+  .pane-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.75rem;
+  }
+
+  .pane-title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .btn-text {
+    background: none;
+    border: none;
+    color: var(--accent);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn-text:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
+
+  #text-input, #text-output {
+    flex: 1;
+    width: 100%;
+    min-height: 260px;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    resize: vertical;
+    outline: none;
+  }
+
+  /* Toggle Group */
+  .toggle-group {
+    display: inline-flex;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .toggle-btn {
+    padding: var(--space-2) var(--space-4);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: var(--surface);
+    border: none;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+    white-space: nowrap;
+  }
+
+  .toggle-btn:hover {
+    color: var(--text-primary);
+    background: var(--surface-hover);
+  }
+
+  .toggle-btn.active {
+    background: var(--accent);
+    color: var(--accent-on);
+  }
+
+  #btn-copy .check-icon {
+    display: none;
+  }
+
+  #btn-copy.copied .copy-icon {
+    display: none;
+  }
+
+  #btn-copy.copied .check-icon {
+    display: inline-block;
+    color: var(--success);
+  }
+
+  #btn-copy.copied {
+    border-color: var(--success);
+  }
+</style>
+
+<script>
+  import { translatePigLatin } from './logic';
+
+  class PigLatinTranslatorTool extends HTMLElement {
+    private textInput!: HTMLTextAreaElement;
+    private textOutput!: HTMLTextAreaElement;
+    private btnCopy!: HTMLButtonElement;
+    private toPigLatin = true;
+
+    connectedCallback() {
+      this.textInput = this.querySelector('#text-input') as HTMLTextAreaElement;
+      this.textOutput = this.querySelector('#text-output') as HTMLTextAreaElement;
+      this.btnCopy = this.querySelector('#btn-copy') as HTMLButtonElement;
+
+      this.textInput.addEventListener('input', () => this.handleTranslate());
+
+      // Toggle buttons logic
+      const toggleBtns = this.querySelectorAll('.toggle-btn');
+      toggleBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          toggleBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const mode = btn.getAttribute('data-mode');
+          this.toPigLatin = (mode === 'to-piglatin');
+          this.handleTranslate();
+        });
+      });
+
+      this.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const button = target.closest('button');
+        if (!button) return;
+
+        const action = button.getAttribute('data-action');
+        if (action === 'clear') this.handleClear();
+        if (action === 'load-sample') this.handleLoadSample();
+        if (action === 'copy') this.handleCopy();
+      });
+    }
+
+    private handleTranslate() {
+      const text = this.textInput.value;
+      this.textOutput.value = translatePigLatin(text, this.toPigLatin);
+    }
+
+    private handleClear() {
+      this.textInput.value = '';
+      this.handleTranslate();
+      this.textInput.focus();
+    }
+
+    private handleLoadSample() {
+      this.textInput.value = this.toPigLatin 
+        ? 'Hello, friend! Pig Latin is a secret language game.'
+        : 'Ellohay, iendfray! Igpay Atinlay isway away ecretsay anguagelay amegay.';
+      this.handleTranslate();
+    }
+
+    private async handleCopy() {
+      const text = this.textOutput.value;
+      if (!text) return;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        const copyText = this.btnCopy.querySelector('.copy-text') as HTMLSpanElement;
+
+        this.btnCopy.classList.add('copied');
+        copyText.textContent = 'Copied!';
+
+        setTimeout(() => {
+          this.btnCopy.classList.remove('copied');
+          copyText.textContent = 'Copy';
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy text', err);
+      }
+    }
+  }
+
+  if (!customElements.get('piglatin-translator-tool')) {
+    customElements.define('piglatin-translator-tool', PigLatinTranslatorTool);
+  }
+</script>

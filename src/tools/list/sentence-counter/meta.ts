@@ -1,0 +1,32 @@
+import type { ToolMeta } from '../../definitions';
+
+export const meta: ToolMeta = {
+  slug: 'sentence-counter',
+  title: 'Sentence Counter',
+  description: 'Count the number of sentences, words, characters, and paragraphs in your text instantly. Analyze average sentence lengths and estimated reading time.',
+  category: 'text',
+  keywords: ['sentence counter', 'count sentences', 'paragraph counter', 'word counter', 'character count', 'text analysis', 'reading time calculator', 'sentence length checker'],
+  icon: 'Type',
+  faqs: [
+    {
+      question: 'How does the tool define a sentence?',
+      answer: 'A sentence is defined as a sequence of characters ending with a period (.), exclamation mark (!), or question mark (?), followed by whitespace, a newline, or the end of the text. Common abbreviations like "e.g." or "Mr." are handled to prevent false positives.'
+    },
+    {
+      question: 'Is my text sent to any server for analysis?',
+      answer: 'No. Just like all tools on LowKeyDevs, the Sentence Counter processes your text entirely client-side. Your text never leaves your browser, ensuring complete privacy.'
+    },
+    {
+      question: 'How is the Reading Time calculated?',
+      answer: 'Reading time is calculated based on an average adult reading speed of 225 words per minute (WPM). The formula simply divides the total word count by 225.'
+    }
+  ],
+  educationalContent: {
+    whatIsIt: 'The Sentence Counter is a text analysis utility designed for writers, students, editors, and marketers. It provides quick, precise structural metrics of any text body, helping you keep track of sentence structures, word limits, and reading readability.',
+    howToUse: '1. Type or paste your document into the Input editor.\n2. The stats panel will update in real-time as you type.\n3. Review detailed metrics like sentences, paragraphs, words, and characters.\n4. Read the computed average sentence length and reading time predictions.',
+    proTips: [
+      'Aim for an average sentence length of 15–20 words to maximize readability and comprehension for general audiences.',
+      'Use paragraph breaks every 3–4 sentences to make your digital content more scannable and user-friendly.'
+    ]
+  }
+};

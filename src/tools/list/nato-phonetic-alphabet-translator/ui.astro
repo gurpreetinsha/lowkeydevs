@@ -1,0 +1,258 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<nato-translator-tool class="tool-workspace">
+  <!-- Controls Panel -->
+  <div class="tool-controls glass-panel">
+    <div class="control-actions">
+      <!-- Separator selector -->
+      <div class="control-group">
+        <label for="separator-select" class="label">Separator:</label>
+        <select id="separator-select" class="select select-compact">
+          <option value=" ">Space ( )</option>
+          <option value="-">Hyphen (-)</option>
+          <option value=", ">Comma (, )</option>
+          <option value=" | ">Pipe ( | )</option>
+        </select>
+      </div>
+
+      <!-- Casing selector -->
+      <div class="control-group">
+        <label for="casing-select" class="label">Casing:</label>
+        <select id="casing-select" class="select select-compact">
+          <option value="Title">Title Case</option>
+          <option value="Upper">UPPERCASE</option>
+          <option value="Lower">lowercase</option>
+        </select>
+      </div>
+    </div>
+    <div class="control-danger">
+      <button data-action="clear" class="btn btn-danger btn-sm">
+        <Icon name="Trash2" size={14} />
+        Clear
+      </button>
+    </div>
+  </div>
+
+  <!-- Dual Pane Grid -->
+  <div class="editor-grid">
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Input Text</span>
+        <button data-action="load-sample" class="btn-text">Load Sample</button>
+      </div>
+      <textarea
+        id="text-input"
+        placeholder="Enter text to spell phonetically here (e.g. John Doe, Flight 123)..."
+        aria-label="Text Input"
+      ></textarea>
+    </div>
+
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">NATO Phonetic Spelling</span>
+        <button data-action="copy" class="btn btn-secondary btn-sm" id="btn-copy">
+          <Icon name="Clipboard" size={14} class="copy-icon" />
+          <Icon name="Check" size={14} class="check-icon" />
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <textarea
+        id="text-output"
+        readonly
+        placeholder="Phonetic translation will appear here..."
+        aria-label="Phonetic Output"
+      ></textarea>
+    </div>
+  </div>
+</nato-translator-tool>
+
+<style>
+  .tool-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .tool-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+  }
+
+  .control-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .control-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .editor-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .editor-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .editor-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 380px;
+    padding: 1.25rem;
+  }
+
+  .pane-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.75rem;
+  }
+
+  .pane-title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .btn-text {
+    background: none;
+    border: none;
+    color: var(--accent);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn-text:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
+
+  #text-input, #text-output {
+    flex: 1;
+    width: 100%;
+    min-height: 260px;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    resize: vertical;
+    outline: none;
+  }
+
+  #btn-copy .check-icon {
+    display: none;
+  }
+
+  #btn-copy.copied .copy-icon {
+    display: none;
+  }
+
+  #btn-copy.copied .check-icon {
+    display: inline-block;
+    color: var(--success);
+  }
+
+  #btn-copy.copied {
+    border-color: var(--success);
+  }
+</style>
+
+<script>
+  import { translateToNato, type NatoOptions } from './logic';
+
+  class NatoTranslatorTool extends HTMLElement {
+    private textInput!: HTMLTextAreaElement;
+    private textOutput!: HTMLTextAreaElement;
+    private sepSelect!: HTMLSelectElement;
+    private casingSelect!: HTMLSelectElement;
+    private btnCopy!: HTMLButtonElement;
+
+    connectedCallback() {
+      this.textInput = this.querySelector('#text-input') as HTMLTextAreaElement;
+      this.textOutput = this.querySelector('#text-output') as HTMLTextAreaElement;
+      this.sepSelect = this.querySelector('#separator-select') as HTMLSelectElement;
+      this.casingSelect = this.querySelector('#casing-select') as HTMLSelectElement;
+      this.btnCopy = this.querySelector('#btn-copy') as HTMLButtonElement;
+
+      this.textInput.addEventListener('input', () => this.handleTranslate());
+      this.sepSelect.addEventListener('change', () => this.handleTranslate());
+      this.casingSelect.addEventListener('change', () => this.handleTranslate());
+
+      this.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const button = target.closest('button');
+        if (!button) return;
+
+        const action = button.getAttribute('data-action');
+        if (action === 'clear') this.handleClear();
+        if (action === 'load-sample') this.handleLoadSample();
+        if (action === 'copy') this.handleCopy();
+      });
+    }
+
+    private handleTranslate() {
+      const text = this.textInput.value;
+      const separator = this.sepSelect.value;
+      const casing = this.casingSelect.value as NatoOptions['casing'];
+      this.textOutput.value = translateToNato(text, { separator, casing });
+    }
+
+    private handleClear() {
+      this.textInput.value = '';
+      this.handleTranslate();
+      this.textInput.focus();
+    }
+
+    private handleLoadSample() {
+      this.textInput.value = 'LowKeyDevs 101';
+      this.handleTranslate();
+    }
+
+    private async handleCopy() {
+      const text = this.textOutput.value;
+      if (!text) return;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        const copyText = this.btnCopy.querySelector('.copy-text') as HTMLSpanElement;
+
+        this.btnCopy.classList.add('copied');
+        copyText.textContent = 'Copied!';
+
+        setTimeout(() => {
+          this.btnCopy.classList.remove('copied');
+          copyText.textContent = 'Copy';
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy text', err);
+      }
+    }
+  }
+
+  if (!customElements.get('nato-translator-tool')) {
+    customElements.define('nato-translator-tool', NatoTranslatorTool);
+  }
+</script>

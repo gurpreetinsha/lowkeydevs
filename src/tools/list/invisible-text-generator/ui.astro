@@ -1,0 +1,428 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<invisible-text-tool class="tool-workspace">
+  <!-- Tabs Navigation -->
+  <div class="tabs-nav glass-panel">
+    <button class="tab-btn active" data-tab="blank-gen">
+      <Icon name="Type" size={16} />
+      Blank Space Generator
+    </button>
+    <button class="tab-btn" data-tab="stego-hide">
+      <Icon name="Lock" size={16} />
+      Hide Secret Message
+    </button>
+    <button class="tab-btn" data-tab="stego-reveal">
+      <Icon name="Eyeoff" size={16} />
+      Extract Secret Message
+    </button>
+  </div>
+
+  <!-- Tab Content: Blank Space Generator -->
+  <div class="tab-content active glass-panel" id="tab-blank-gen">
+    <div class="tab-header">
+      <h3>Blank Space Generator</h3>
+      <p class="tab-desc">Generate invisible Unicode characters. These are useful for bypassing copy-paste name validations or spacing tags.</p>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="blank-char-type" class="label">Invisible Character Type</label>
+        <select id="blank-char-type" class="select-input">
+          <option value="zwsp">Zero-Width Space (\\u200B)</option>
+          <option value="zwnj">Zero-Width Non-Joiner (\\u200C)</option>
+          <option value="zwj">Zero-Width Joiner (\\u200D)</option>
+          <option value="wj">Word Joiner (\\u2060)</option>
+          <option value="invisible-sep">Invisible Separator (\\u2063)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="blank-count" class="label">Character Count</label>
+        <input type="number" id="blank-count" value="10" min="1" max="1000" class="input" />
+      </div>
+    </div>
+
+    <div class="action-card-group">
+      <button data-action="generate-blank" class="btn btn-primary">
+        <Icon name="Clipboard" size={16} />
+        Generate & Copy Blank Text
+      </button>
+      <span class="status-msg" id="blank-status"></span>
+    </div>
+  </div>
+
+  <!-- Tab Content: Hide Secret Message (Encode) -->
+  <div class="tab-content glass-panel" id="tab-stego-hide" style="display: none;">
+    <div class="tab-header">
+      <h3>Hide Secret Message (Encoding)</h3>
+      <p class="tab-desc">Embed a secret hidden message inside normal, public cover text invisibly.</p>
+    </div>
+
+    <div class="stego-grid">
+      <div class="form-group">
+        <label for="stego-cover" class="label">Public Cover Text (Visible)</label>
+        <textarea id="stego-cover" placeholder="Type standard visible text here..." class="textarea-mid"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="stego-secret" class="label">Secret Message (Will Be Invisible)</label>
+        <input type="text" id="stego-secret" placeholder="Type hidden secret message here..." class="input" />
+      </div>
+    </div>
+
+    <div class="encode-actions">
+      <button data-action="encode" class="btn btn-primary">
+        <Icon name="Lock" size={16} />
+        Encode & Copy Hidden Text
+      </button>
+      <span class="status-msg" id="encode-status"></span>
+    </div>
+
+    <div class="result-box" style="display: none;" id="encode-result-container">
+      <label class="label">Combined Encoded Output (Ready to Copy/Share)</label>
+      <div class="output-container">
+        <textarea id="encode-output" readonly></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab Content: Extract Secret Message (Decode) -->
+  <div class="tab-content glass-panel" id="tab-stego-reveal" style="display: none;">
+    <div class="tab-header">
+      <h3>Extract Secret Message (Decoding)</h3>
+      <p class="tab-desc">Paste text containing hidden steganographic data to extract the invisible secret message.</p>
+    </div>
+
+    <div class="form-group">
+      <label for="stego-decode-input" class="label">Paste Encoded Text</label>
+      <textarea id="stego-decode-input" placeholder="Paste your text with the hidden watermark here..." class="textarea-mid"></textarea>
+    </div>
+
+    <div class="encode-actions">
+      <button data-action="decode" class="btn btn-primary">
+        <Icon name="Eyeoff" size={16} />
+        Extract Secret Message
+      </button>
+      <button data-action="clear-decode" class="btn btn-danger">
+        <Icon name="Trash2" size={16} />
+        Clear
+      </button>
+    </div>
+
+    <div class="result-box" style="display: none;" id="decode-result-container">
+      <label class="label">Decoded Secret Message</label>
+      <div class="decoded-output-wrapper">
+        <textarea id="decode-output" readonly placeholder="No secret message found..."></textarea>
+      </div>
+    </div>
+  </div>
+</invisible-text-tool>
+
+<style>
+  .tool-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .tabs-nav {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    overflow-x: auto;
+  }
+
+  .tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-secondary);
+    padding: 0.625rem 1.25rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .tab-btn:hover {
+    color: var(--text-primary);
+    background-color: var(--surface-hover);
+  }
+
+  .tab-btn.active {
+    color: var(--text-primary);
+    background-color: var(--bg-color);
+    border-color: var(--border-color);
+  }
+
+  .tab-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.75rem;
+  }
+
+  .tab-header h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .tab-desc {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1.5fr 0.5fr;
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 600px) {
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .select-input {
+    width: 100%;
+    padding: 0.625rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    outline: none;
+  }
+
+  .action-card-group, .encode-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+
+  .status-msg {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--success-color);
+    animation: fadeIn 0.2s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-5px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .stego-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .textarea-mid {
+    width: 100%;
+    min-height: 120px;
+    padding: 0.75rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    outline: none;
+    font-family: var(--font-sans);
+    resize: vertical;
+  }
+
+  .textarea-mid:focus {
+    border-color: var(--primary-accent);
+  }
+
+  .result-box {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    animation: fadeIn 0.3s ease;
+  }
+
+  #encode-output, #decode-output {
+    width: 100%;
+    min-height: 100px;
+    padding: 0.75rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    background-color: var(--surface-hover);
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    outline: none;
+    resize: vertical;
+  }
+
+  .decoded-output-wrapper textarea {
+    color: var(--text-primary) !important;
+  }
+</style>
+
+<script>
+  import { generateBlankText, encodeHiddenText, decodeHiddenText } from './logic';
+
+  class InvisibleTextTool extends HTMLElement {
+    // Navigation Tabs elements
+    private tabs!: HTMLButtonElement[];
+    private tabContents!: HTMLDivElement[];
+
+    // Blank Gen elements
+    private blankTypeEl!: HTMLSelectElement;
+    private blankCountEl!: HTMLInputElement;
+    private blankStatusEl!: HTMLSpanElement;
+
+    // Stego Hide elements
+    private stegoCoverEl!: HTMLTextAreaElement;
+    private stegoSecretEl!: HTMLInputElement;
+    private encodeStatusEl!: HTMLSpanElement;
+    private encodeResultContainerEl!: HTMLDivElement;
+    private encodeOutputEl!: HTMLTextAreaElement;
+
+    // Stego Reveal elements
+    private stegoDecodeInputEl!: HTMLTextAreaElement;
+    private decodeResultContainerEl!: HTMLDivElement;
+    private decodeOutputEl!: HTMLTextAreaElement;
+
+    connectedCallback() {
+      // Init elements
+      this.tabs = Array.from(this.querySelectorAll('.tab-btn')) as HTMLButtonElement[];
+      this.tabContents = [
+        this.querySelector('#tab-blank-gen') as HTMLDivElement,
+        this.querySelector('#tab-stego-hide') as HTMLDivElement,
+        this.querySelector('#tab-stego-reveal') as HTMLDivElement
+      ];
+
+      this.blankTypeEl = this.querySelector('#blank-char-type') as HTMLSelectElement;
+      this.blankCountEl = this.querySelector('#blank-count') as HTMLInputElement;
+      this.blankStatusEl = this.querySelector('#blank-status') as HTMLSpanElement;
+
+      this.stegoCoverEl = this.querySelector('#stego-cover') as HTMLTextAreaElement;
+      this.stegoSecretEl = this.querySelector('#stego-secret') as HTMLInputElement;
+      this.encodeStatusEl = this.querySelector('#encode-status') as HTMLSpanElement;
+      this.encodeResultContainerEl = this.querySelector('#encode-result-container') as HTMLDivElement;
+      this.encodeOutputEl = this.querySelector('#encode-output') as HTMLTextAreaElement;
+
+      this.stegoDecodeInputEl = this.querySelector('#stego-decode-input') as HTMLTextAreaElement;
+      this.decodeResultContainerEl = this.querySelector('#decode-result-container') as HTMLDivElement;
+      this.decodeOutputEl = this.querySelector('#decode-output') as HTMLTextAreaElement;
+
+      // Setup tab switcher
+      this.tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const tabName = tab.getAttribute('data-tab');
+          this.tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+
+          this.tabContents.forEach(content => {
+            if (content.id === `tab-${tabName}`) {
+              content.style.display = 'flex';
+            } else {
+              content.style.display = 'none';
+            }
+          });
+        });
+      });
+
+      // Action clicks
+      this.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const button = target.closest('button');
+        if (!button) return;
+
+        const action = button.getAttribute('data-action');
+        if (action === 'generate-blank') this.handleGenerateBlank();
+        if (action === 'encode') this.handleEncode();
+        if (action === 'decode') this.handleDecode();
+        if (action === 'clear-decode') this.handleClearDecode();
+      });
+    }
+
+    private async handleGenerateBlank() {
+      const type = this.blankTypeEl.value as any;
+      const count = parseInt(this.blankCountEl.value) || 10;
+      
+      const blankStr = generateBlankText(type, count);
+
+      try {
+        await navigator.clipboard.writeText(blankStr);
+        this.blankStatusEl.textContent = `Generated & Copied ${count} blank characters!`;
+        setTimeout(() => {
+          this.blankStatusEl.textContent = '';
+        }, 3000);
+      } catch (err) {
+        console.error('Failed to copy blank characters', err);
+        this.blankStatusEl.textContent = 'Failed to copy to clipboard.';
+      }
+    }
+
+    private async handleEncode() {
+      const coverText = this.stegoCoverEl.value || ' ';
+      const secretText = this.stegoSecretEl.value;
+
+      if (!secretText) {
+        this.encodeStatusEl.textContent = 'Please enter a secret message to hide!';
+        this.encodeStatusEl.style.color = 'var(--error-color)';
+        return;
+      }
+
+      const encoded = encodeHiddenText(coverText, secretText);
+      this.encodeOutputEl.value = encoded;
+      this.encodeResultContainerEl.style.display = 'flex';
+
+      try {
+        await navigator.clipboard.writeText(encoded);
+        this.encodeStatusEl.textContent = 'Encoded & Copied to clipboard!';
+        this.encodeStatusEl.style.color = 'var(--success-color)';
+        setTimeout(() => {
+          this.encodeStatusEl.textContent = '';
+        }, 3000);
+      } catch (err) {
+        console.error('Failed to copy encoded message', err);
+        this.encodeStatusEl.textContent = 'Encoded successfully! Copy output below.';
+        this.encodeStatusEl.style.color = 'var(--text-primary)';
+      }
+    }
+
+    private handleDecode() {
+      const text = this.stegoDecodeInputEl.value;
+      if (!text) {
+        this.decodeOutputEl.value = 'Please paste some text to inspect.';
+        this.decodeResultContainerEl.style.display = 'flex';
+        return;
+      }
+
+      const decoded = decodeHiddenText(text);
+      if (decoded) {
+        this.decodeOutputEl.value = decoded;
+      } else {
+        this.decodeOutputEl.value = 'No hidden message found in this text.';
+      }
+      this.decodeResultContainerEl.style.display = 'flex';
+    }
+
+    private handleClearDecode() {
+      this.stegoDecodeInputEl.value = '';
+      this.decodeOutputEl.value = '';
+      this.decodeResultContainerEl.style.display = 'none';
+      this.stegoDecodeInputEl.focus();
+    }
+  }
+
+  if (!customElements.get('invisible-text-tool')) {
+    customElements.define('invisible-text-tool', InvisibleTextTool);
+  }
+</script>

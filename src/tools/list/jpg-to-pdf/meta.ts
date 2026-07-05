@@ -1,0 +1,32 @@
+import type { ToolMeta } from '../../definitions';
+
+export const meta: ToolMeta = {
+  slug: 'jpg-to-pdf',
+  title: 'JPG to PDF Converter',
+  description: 'Convert JPG, PNG, and other images to a single PDF document. Customizable page sizes, orientation, and margins. 100% private.',
+  category: 'pdf',
+  keywords: ['jpg to pdf', 'convert images to pdf', 'png to pdf', 'webp to pdf', 'images to pdf converter', 'online image to pdf'],
+  icon: 'FileText',
+  faqs: [
+    {
+      question: 'Which image formats are supported?',
+      answer: 'You can upload JPG, JPEG, PNG, WebP, SVG, and GIF. The tool processes them locally and outputs a standard, high-quality PDF document.'
+    },
+    {
+      question: 'Can I reorder my images before merging them into a PDF?',
+      answer: 'Yes! After uploading, you will see a list of images. You can use the "Move Up" and "Move Down" buttons to arrange them in your preferred sequence.'
+    },
+    {
+      question: 'Can I customize the page sizes and margins?',
+      answer: 'Yes. You can select page formats like A4, Letter, or choose "Auto" to match the page size to the exact size of the image. Margins can be adjusted to None, Small, or Large.'
+    }
+  ],
+  educationalContent: {
+    whatIsIt: 'JPG to PDF is a client-side utility that compiles multiple images into a single formatted PDF document. It converts all images into high-compression JPEG streams and embeds them into pages utilizing pdf-lib.',
+    howToUse: '1. Upload or drag and drop one or more image files.\n2. Reorder them as needed using the up/down controls.\n3. Customize settings: Page Size (Auto, A4, Letter), Orientation, and Margins.\n4. Click "Generate PDF" to render.\n5. Click the "Download" button to save your PDF file.',
+    proTips: [
+      'Choose "Auto" page size and "None" margins to create a presentation-like PDF where images fit the screen perfectly without white borders.',
+      'For printing, choose A4 page size, Portrait orientation, and Small margins to align images cleanly on pages.'
+    ]
+  }
+};

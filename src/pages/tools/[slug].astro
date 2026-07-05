@@ -1,0 +1,236 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import { registry } from '../../tools/registry';
+
+// Import all tool UI components statically
+import JSONFormatterUI from '../../tools/list/json-formatter/ui.astro';
+import PasswordGeneratorUI from '../../tools/list/password-generator/ui.astro';
+import Base64ConverterUI from '../../tools/list/base64-converter/ui.astro';
+import CharacterRemoverUI from '../../tools/list/character-remover/ui.astro';
+import DuplicateWordFinderUI from '../../tools/list/duplicate-word-finder/ui.astro';
+import BinaryCodeTranslatorUI from '../../tools/list/binary-code-translator/ui.astro';
+import HexToTextConverterUI from '../../tools/list/hex-to-text-converter/ui.astro';
+import HTMLToMarkdownConverterUI from '../../tools/list/html-to-markdown-converter/ui.astro';
+import GraphQLFormatterUI from '../../tools/list/graphql-formatter/ui.astro';
+import CSSFormatterUI from '../../tools/list/css-formatter/ui.astro';
+import JSONStringifyTextUI from '../../tools/list/json-stringify-text/ui.astro';
+import JSONUnstringifierUI from '../../tools/list/json-unstringifier/ui.astro';
+import UnicodeToTextConverterUI from '../../tools/list/unicode-to-text-converter/ui.astro';
+import PlainTextConverterUI from '../../tools/list/plain-text-converter/ui.astro';
+import OnlineNotepadUI from '../../tools/list/online-notepad/ui.astro';
+import UUIDGeneratorUI from '../../tools/list/uuid-generator/ui.astro';
+import CaseConverterUI from '../../tools/list/case-converter/ui.astro';
+import URLEncoderDecoderUI from '../../tools/list/url-encoder-decoder/ui.astro';
+import EpochConverterUI from '../../tools/list/epoch-converter/ui.astro';
+import HashGeneratorUI from '../../tools/list/hash-generator/ui.astro';
+import SentenceCounterUI from '../../tools/list/sentence-counter/ui.astro';
+import SortWordsAlphabeticallyUI from '../../tools/list/sort-words-alphabetically/ui.astro';
+import FindAndReplaceUI from '../../tools/list/find-and-replace-text/ui.astro';
+import RemoveDuplicateLinesUI from '../../tools/list/remove-duplicate-lines/ui.astro';
+import RemoveTextFormattingUI from '../../tools/list/remove-text-formatting/ui.astro';
+import RepeatTextGeneratorUI from '../../tools/list/repeat-text-generator/ui.astro';
+import ReverseTextGeneratorUI from '../../tools/list/reverse-text-generator/ui.astro';
+import InvisibleTextGeneratorUI from '../../tools/list/invisible-text-generator/ui.astro';
+import FancyTextGeneratorUI from '../../tools/list/fancy-text-generator/ui.astro';
+import BoldTextGeneratorUI from '../../tools/list/bold-text-generator/ui.astro';
+import ItalicTextGeneratorUI from '../../tools/list/italic-text-generator/ui.astro';
+import UnderlineTextGeneratorUI from '../../tools/list/underline-text-generator/ui.astro';
+import StrikethroughTextGeneratorUI from '../../tools/list/strikethrough-text-generator/ui.astro';
+import BubbleTextGeneratorUI from '../../tools/list/bubble-text-generator/ui.astro';
+import SmallTextGeneratorUI from '../../tools/list/small-text-generator/ui.astro';
+import BigTextGeneratorUI from '../../tools/list/big-text-generator/ui.astro';
+import GothicTextGeneratorUI from '../../tools/list/gothic-text-generator/ui.astro';
+import MirrorTextGeneratorUI from '../../tools/list/mirror-text-generator/ui.astro';
+
+// Import newly added tools
+import FontsForInstagramUI from '../../tools/list/fonts-for-instagram/ui.astro';
+import WhatsappFontUI from '../../tools/list/whatsapp-font-generator/ui.astro';
+import TiktokFontUI from '../../tools/list/tiktok-font-generator/ui.astro';
+import DiscordFontUI from '../../tools/list/discord-font-generator/ui.astro';
+import FacebookFontUI from '../../tools/list/facebook-font-generator/ui.astro';
+import TwitterFontUI from '../../tools/list/twitter-font-generator/ui.astro';
+import CuteFontUI from '../../tools/list/cute-font-generator/ui.astro';
+import UnicodeTextConverterUI from '../../tools/list/unicode-text-converter/ui.astro';
+import DoubleStruckTextUI from '../../tools/list/double-struck-text/ui.astro';
+import WideTextGeneratorUI from '../../tools/list/wide-text-generator/ui.astro';
+import ImageToTextOcrUI from '../../tools/list/image-to-text-ocr/ui.astro';
+import JpgToPngUI from '../../tools/list/jpg-to-png/ui.astro';
+import PngToJpgUI from '../../tools/list/png-to-jpg/ui.astro';
+import JpgToWebpUI from '../../tools/list/jpg-to-webp/ui.astro';
+import WebpToJpgUI from '../../tools/list/webp-to-jpg/ui.astro';
+import PngToWebpUI from '../../tools/list/png-to-webp/ui.astro';
+import WebpToPngUI from '../../tools/list/webp-to-png/ui.astro';
+import SvgToPngUI from '../../tools/list/svg-to-png/ui.astro';
+import ImageToAsciiUI from '../../tools/list/image-to-ascii/ui.astro';
+import OnlineVideoConverterUI from '../../tools/list/online-video-converter/ui.astro';
+
+// New utilities imports
+import CamelCaseConverterUI from '../../tools/list/camelcase-converter/ui.astro';
+import KebabCaseConverterUI from '../../tools/list/kebab-case-converter/ui.astro';
+import DotCaseConverterUI from '../../tools/list/dot-case-converter/ui.astro';
+import CaesarCipherToolUI from '../../tools/list/caesar-cipher-tool/ui.astro';
+import NatoPhoneticAlphabetTranslatorUI from '../../tools/list/nato-phonetic-alphabet-translator/ui.astro';
+import PigLatinTranslatorUI from '../../tools/list/pig-latin-translator/ui.astro';
+import RomanNumeralDatesUI from '../../tools/list/roman-numeral-dates/ui.astro';
+import UnicodeConverterUI from '../../tools/list/unicode-converter/ui.astro';
+import RemoveUnderscoresUI from '../../tools/list/remove-underscores/ui.astro';
+import RemoveEmDashUI from '../../tools/list/remove-em-dash/ui.astro';
+import RandomNumberGeneratorUI from '../../tools/list/random-number-generator/ui.astro';
+import RandomPasswordGeneratorUI from '../../tools/list/random-password-generator/ui.astro';
+import RandomChoiceGeneratorUI from '../../tools/list/random-choice-generator/ui.astro';
+import RandomDateGeneratorUI from '../../tools/list/random-date-generator/ui.astro';
+import RandomLetterGeneratorUI from '../../tools/list/random-letter-generator/ui.astro';
+import RandomMonthGeneratorUI from '../../tools/list/random-month-generator/ui.astro';
+import RandomIpAddressGeneratorUI from '../../tools/list/random-ip-address-generator/ui.astro';
+import NanoidGeneratorUI from '../../tools/list/nanoid-generator/ui.astro';
+import StrongPasswordGeneratorUI from '../../tools/list/strong-password-generator/ui.astro';
+import ApaCitationGeneratorUI from '../../tools/list/apa-citation-generator/ui.astro';
+
+// PDF tools UI imports
+import MergePdfUI from '../../tools/list/merge-pdf/ui.astro';
+import SplitPdfUI from '../../tools/list/split-pdf/ui.astro';
+import CompressPdfUI from '../../tools/list/compress-pdf/ui.astro';
+import PdfToWordUI from '../../tools/list/pdf-to-word/ui.astro';
+import WordToPdfUI from '../../tools/list/word-to-pdf/ui.astro';
+import JpgToPdfUI from '../../tools/list/jpg-to-pdf/ui.astro';
+import PdfToJpgUI from '../../tools/list/pdf-to-jpg/ui.astro';
+import EditPdfUI from '../../tools/list/edit-pdf/ui.astro';
+import SignPdfUI from '../../tools/list/sign-pdf/ui.astro';
+import UnlockPdfUI from '../../tools/list/unlock-pdf/ui.astro';
+
+// PDF tools Set 2 UI imports
+import ProtectPdfUI from '../../tools/list/protect-pdf/ui.astro';
+import PdfToExcelUI from '../../tools/list/pdf-to-excel/ui.astro';
+import ExcelToPdfUI from '../../tools/list/excel-to-pdf/ui.astro';
+import PdfToPowerpointUI from '../../tools/list/pdf-to-powerpoint/ui.astro';
+import PowerpointToPdfUI from '../../tools/list/powerpoint-to-pdf/ui.astro';
+import OrganizePdfUI from '../../tools/list/organize-pdf/ui.astro';
+import AddPageNumbersUI from '../../tools/list/add-page-numbers/ui.astro';
+import AddWatermarkUI from '../../tools/list/add-watermark/ui.astro';
+import RotatePdfUI from '../../tools/list/rotate-pdf/ui.astro';
+import ScanToPdfUI from '../../tools/list/scan-to-pdf/ui.astro';
+
+// Map slugs to UI components
+const uiComponents: Record<string, any> = {
+  'json-formatter': JSONFormatterUI,
+  'password-generator': PasswordGeneratorUI,
+  'base64-converter': Base64ConverterUI,
+  'character-remover': CharacterRemoverUI,
+  'duplicate-word-finder': DuplicateWordFinderUI,
+  'binary-code-translator': BinaryCodeTranslatorUI,
+  'hex-to-text-converter': HexToTextConverterUI,
+  'html-to-markdown-converter': HTMLToMarkdownConverterUI,
+  'graphql-formatter': GraphQLFormatterUI,
+  'css-formatter': CSSFormatterUI,
+  'json-stringify-text': JSONStringifyTextUI,
+  'json-unstringifier': JSONUnstringifierUI,
+  'unicode-to-text-converter': UnicodeToTextConverterUI,
+  'plain-text-converter': PlainTextConverterUI,
+  'online-notepad': OnlineNotepadUI,
+  'uuid-generator': UUIDGeneratorUI,
+  'case-converter': CaseConverterUI,
+  'url-encoder-decoder': URLEncoderDecoderUI,
+  'epoch-converter': EpochConverterUI,
+  'hash-generator': HashGeneratorUI,
+  'sentence-counter': SentenceCounterUI,
+  'sort-words-alphabetically': SortWordsAlphabeticallyUI,
+  'find-and-replace-text': FindAndReplaceUI,
+  'remove-duplicate-lines': RemoveDuplicateLinesUI,
+  'remove-text-formatting': RemoveTextFormattingUI,
+  'repeat-text-generator': RepeatTextGeneratorUI,
+  'reverse-text-generator': ReverseTextGeneratorUI,
+  'invisible-text-generator': InvisibleTextGeneratorUI,
+  'fancy-text-generator': FancyTextGeneratorUI,
+  'bold-text-generator': BoldTextGeneratorUI,
+  'italic-text-generator': ItalicTextGeneratorUI,
+  'underline-text-generator': UnderlineTextGeneratorUI,
+  'strikethrough-text-generator': StrikethroughTextGeneratorUI,
+  'bubble-text-generator': BubbleTextGeneratorUI,
+  'small-text-generator': SmallTextGeneratorUI,
+  'big-text-generator': BigTextGeneratorUI,
+  'gothic-text-generator': GothicTextGeneratorUI,
+  'mirror-text-generator': MirrorTextGeneratorUI,
+
+  // New tools
+  'fonts-for-instagram': FontsForInstagramUI,
+  'whatsapp-font-generator': WhatsappFontUI,
+  'tiktok-font-generator': TiktokFontUI,
+  'discord-font-generator': DiscordFontUI,
+  'facebook-font-generator': FacebookFontUI,
+  'twitter-font-generator': TwitterFontUI,
+  'cute-font-generator': CuteFontUI,
+  'unicode-text-converter': UnicodeTextConverterUI,
+  'double-struck-text': DoubleStruckTextUI,
+  'wide-text-generator': WideTextGeneratorUI,
+  'image-to-text-ocr': ImageToTextOcrUI,
+  'jpg-to-png': JpgToPngUI,
+  'png-to-jpg': PngToJpgUI,
+  'jpg-to-webp': JpgToWebpUI,
+  'webp-to-jpg': WebpToJpgUI,
+  'png-to-webp': PngToWebpUI,
+  'webp-to-png': WebpToPngUI,
+  'svg-to-png': SvgToPngUI,
+  'image-to-ascii': ImageToAsciiUI,
+  'online-video-converter': OnlineVideoConverterUI,
+
+  // New utilities mappings
+  'camelcase-converter': CamelCaseConverterUI,
+  'kebab-case-converter': KebabCaseConverterUI,
+  'dot-case-converter': DotCaseConverterUI,
+  'caesar-cipher-tool': CaesarCipherToolUI,
+  'nato-phonetic-alphabet-translator': NatoPhoneticAlphabetTranslatorUI,
+  'pig-latin-translator': PigLatinTranslatorUI,
+  'roman-numeral-dates': RomanNumeralDatesUI,
+  'unicode-converter': UnicodeConverterUI,
+  'remove-underscores': RemoveUnderscoresUI,
+  'remove-em-dash': RemoveEmDashUI,
+  'random-number-generator': RandomNumberGeneratorUI,
+  'random-password-generator': RandomPasswordGeneratorUI,
+  'random-choice-generator': RandomChoiceGeneratorUI,
+  'random-date-generator': RandomDateGeneratorUI,
+  'random-letter-generator': RandomLetterGeneratorUI,
+  'random-month-generator': RandomMonthGeneratorUI,
+  'random-ip-address-generator': RandomIpAddressGeneratorUI,
+  'nanoid-generator': NanoidGeneratorUI,
+  'strong-password-generator': StrongPasswordGeneratorUI,
+  'apa-citation-generator': ApaCitationGeneratorUI,
+  'merge-pdf': MergePdfUI,
+  'split-pdf': SplitPdfUI,
+  'compress-pdf': CompressPdfUI,
+  'pdf-to-word': PdfToWordUI,
+  'word-to-pdf': WordToPdfUI,
+  'jpg-to-pdf': JpgToPdfUI,
+  'pdf-to-jpg': PdfToJpgUI,
+  'edit-pdf': EditPdfUI,
+  'sign-pdf': SignPdfUI,
+  'unlock-pdf': UnlockPdfUI,
+  'protect-pdf': ProtectPdfUI,
+  'pdf-to-excel': PdfToExcelUI,
+  'excel-to-pdf': ExcelToPdfUI,
+  'pdf-to-powerpoint': PdfToPowerpointUI,
+  'powerpoint-to-pdf': PowerpointToPdfUI,
+  'organize-pdf': OrganizePdfUI,
+  'add-page-numbers': AddPageNumbersUI,
+  'add-watermark': AddWatermarkUI,
+  'rotate-pdf': RotatePdfUI,
+  'scan-to-pdf': ScanToPdfUI
+};
+
+export async function getStaticPaths() {
+  return registry.map(tool => ({
+    params: { slug: tool.slug },
+    props: { tool }
+  }));
+}
+
+const { tool } = Astro.props;
+const ActiveToolUI = uiComponents[tool.slug];
+---
+
+{ActiveToolUI ? (
+  <ToolLayout tool={tool}>
+    <ActiveToolUI />
+  </ToolLayout>
+) : (
+  <div>Tool workspace not found.</div>
+)}

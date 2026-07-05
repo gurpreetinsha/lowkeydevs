@@ -1,0 +1,32 @@
+import type { ToolMeta } from '../../definitions';
+
+export const meta: ToolMeta = {
+  slug: 'scan-to-pdf',
+  title: 'Scan to PDF',
+  description: 'Use your webcam or device camera to scan paper documents and compile them into a clean PDF document locally in your browser.',
+  category: 'pdf',
+  keywords: ['scan to pdf', 'camera scanner to pdf', 'webcam pdf scanner', 'convert camera to pdf', 'online document scanner', 'local camera scanner'],
+  icon: 'FileText',
+  faqs: [
+    {
+      question: 'How do I use my device camera as a scanner?',
+      answer: 'This tool requests browser permissions to access your webcam or integrated device camera. Simply align your paper document inside the camera frame and click "Capture Page".'
+    },
+    {
+      question: 'Which visual filters are supported?',
+      answer: 'You can choose between "Normal (Color)" mode, "Grayscale" mode (which removes color layers), and "High Contrast (Document Scan)" mode, which formats page text like physical scanner outputs.'
+    },
+    {
+      question: 'Is my camera feed private?',
+      answer: 'Yes, 100%. The camera capture, image processing, and PDF assembly are executed entirely client-side. No media data or camera feeds are ever sent over the network.'
+    }
+  ],
+  educationalContent: {
+    whatIsIt: 'Scan to PDF accesses local media streams (via navigator.mediaDevices API), captures frame snapshots on a Canvas, applies pixel filters (grayscale/high-contrast), and merges pages into a PDF using pdf-lib.',
+    howToUse: '1. Click "Start Camera" and allow browser webcam permissions.\n2. Align your document in the video frame, select a filter (Color, Grayscale, Document Scan), and click "Capture Page".\n3. Repeat to capture all pages.\n4. Reorder or delete captured frames if needed.\n5. Click "Compile Scan to PDF" to save.',
+    proTips: [
+      'For best results, align your page flat on a table in a well-lit room to capture sharp text.',
+      'The "Document Scan" filter is excellent for black-and-white printouts to make texts stand out.'
+    ]
+  }
+};

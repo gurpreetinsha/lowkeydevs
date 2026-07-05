@@ -1,0 +1,478 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<png-webp-tool class="tool-workspace" data-from="image/png" data-to="image/webp" data-ext="webp">
+  <div class="converter-container glass-panel">
+    <div class="converter-header">
+      <h3 class="converter-title">Convert PNG to WebP</h3>
+      <p class="converter-subtitle">Convert transparent PNG files to lightweight WebP format effortlessly.</p>
+    </div>
+
+    <!-- Upload Box -->
+    <div class="dropzone" id="conv-dropzone">
+      <input type="file" id="conv-file-input" accept=".png" class="hidden-input" aria-label="Upload PNG image" />
+      
+      <div class="dropzone-content" id="conv-idle-state">
+        <Icon name="Image" size={48} />
+        <p class="dropzone-text">Drag & drop your PNG image here or <span>browse</span></p>
+        <p class="dropzone-subtext">Supports PNG format (Max 50MB)</p>
+      </div>
+
+      <div class="preview-state hidden" id="conv-preview-state">
+        <div class="preview-image-container">
+          <img id="conv-preview-img" src="" alt="Source preview" />
+        </div>
+        <div class="preview-details">
+          <span class="file-name" id="source-name">image.png</span>
+          <span class="file-size" id="source-size">0 KB</span>
+        </div>
+        <button class="btn-remove-preview" id="btn-remove-conv" aria-label="Clear selection">✕</button>
+      </div>
+    </div>
+
+    <!-- Action Section -->
+    <div class="converter-actions hidden" id="actions-panel">
+      <button id="btn-convert" class="btn btn-primary btn-lg">
+        Convert to WebP
+      </button>
+    </div>
+
+    <!-- Status & Results Section -->
+    <div class="converter-results hidden" id="results-panel">
+      <div class="divider"></div>
+      <div class="success-badge">
+        <span class="badge-icon">✓</span>
+        Conversion Complete!
+      </div>
+      
+      <div class="conversion-stats">
+        <div class="stat-card">
+          <span class="stat-label">Original PNG Size</span>
+          <span class="stat-value" id="stats-orig-size">0 KB</span>
+        </div>
+        <div class="stat-arrow">➔</div>
+        <div class="stat-card">
+          <span class="stat-label">Converted WebP Size</span>
+          <span class="stat-value" id="stats-conv-size">0 KB</span>
+        </div>
+      </div>
+
+      <div class="download-box">
+        <a id="btn-download" class="btn btn-success btn-lg download-link">
+          <Icon name="Download" size={18} />
+          Download WebP Image
+        </a>
+      </div>
+    </div>
+  </div>
+</png-webp-tool>
+
+<style>
+  .tool-workspace {
+    width: 100%;
+  }
+
+  .converter-container {
+    width: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .converter-header {
+    text-align: center;
+  }
+
+  .converter-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+
+  .converter-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  /* Dropzone Styling */
+  .dropzone {
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-lg);
+    min-height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.01);
+    transition: all 0.2s ease;
+  }
+
+  .dropzone:hover, .dropzone.dragover {
+    border-color: var(--primary-accent);
+    background: rgba(var(--primary-accent-rgb), 0.02);
+  }
+
+  .hidden-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    pointer-events: none;
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .dropzone-text {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .dropzone-text span {
+    color: var(--primary-accent);
+    text-decoration: underline;
+  }
+
+  .dropzone-subtext {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  /* Preview State */
+  .preview-state {
+    width: 100%;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    z-index: 3;
+  }
+
+  .preview-image-container {
+    max-width: 180px;
+    max-height: 180px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    background: #111;
+  }
+
+  #conv-preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .preview-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+  }
+
+  .file-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    word-break: break-all;
+    text-align: center;
+  }
+
+  .file-size {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  .btn-remove-preview {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.6);
+    border: none;
+    color: #fff;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.8rem;
+    z-index: 4;
+  }
+
+  .btn-remove-preview:hover {
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  .converter-actions {
+    display: flex;
+    justify-content: center;
+  }
+
+  .btn-lg {
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+  }
+
+  /* Success & Stats */
+  .converter-results {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    align-items: center;
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background-color: var(--border-color);
+  }
+
+  .success-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--success-color);
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+
+  .badge-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: rgba(var(--success-color-rgb), 0.15);
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: bold;
+  }
+
+  .conversion-stats {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 140px;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .stat-arrow {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+  }
+
+  .download-box {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .download-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+  }
+</style>
+
+<script>
+  import { formatBytes } from './logic';
+
+  class ImageConverterTool extends HTMLElement {
+    private fromType!: string;
+    private toType!: string;
+    private toExt!: string;
+
+    private fileInputEl!: HTMLInputElement;
+    private dropzoneEl!: HTMLDivElement;
+    private idleStateEl!: HTMLDivElement;
+    private previewStateEl!: HTMLDivElement;
+    private previewImgEl!: HTMLImageElement;
+    private sourceNameEl!: HTMLSpanElement;
+    private sourceSizeEl!: HTMLSpanElement;
+    private removeBtn!: HTMLButtonElement;
+    private actionsEl!: HTMLDivElement;
+    private convertBtn!: HTMLButtonElement;
+    private resultsEl!: HTMLDivElement;
+    private statsOrigSizeEl!: HTMLSpanElement;
+    private statsConvSizeEl!: HTMLSpanElement;
+    private downloadBtn!: HTMLAnchorElement;
+
+    private selectedFile: File | null = null;
+    private convertedBlob: Blob | null = null;
+
+    connectedCallback() {
+      this.fromType = this.getAttribute('data-from') || 'image/png';
+      this.toType = this.getAttribute('data-to') || 'image/webp';
+      this.toExt = this.getAttribute('data-ext') || 'webp';
+
+      this.fileInputEl = this.querySelector('#conv-file-input') as HTMLInputElement;
+      this.dropzoneEl = this.querySelector('#conv-dropzone') as HTMLDivElement;
+      this.idleStateEl = this.querySelector('#conv-idle-state') as HTMLDivElement;
+      this.previewStateEl = this.querySelector('#conv-preview-state') as HTMLDivElement;
+      this.previewImgEl = this.querySelector('#conv-preview-img') as HTMLImageElement;
+      this.sourceNameEl = this.querySelector('#source-name') as HTMLSpanElement;
+      this.sourceSizeEl = this.querySelector('#source-size') as HTMLSpanElement;
+      this.removeBtn = this.querySelector('#btn-remove-conv') as HTMLButtonElement;
+      this.actionsEl = this.querySelector('#actions-panel') as HTMLDivElement;
+      this.convertBtn = this.querySelector('#btn-convert') as HTMLButtonElement;
+      this.resultsEl = this.querySelector('#results-panel') as HTMLDivElement;
+      this.statsOrigSizeEl = this.querySelector('#stats-orig-size') as HTMLSpanElement;
+      this.statsConvSizeEl = this.querySelector('#stats-conv-size') as HTMLSpanElement;
+      this.downloadBtn = this.querySelector('#btn-download') as HTMLAnchorElement;
+
+      // Dropzone bindings
+      this.dropzoneEl.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        this.dropzoneEl.classList.add('dragover');
+      });
+
+      this.dropzoneEl.addEventListener('dragleave', () => {
+        this.dropzoneEl.classList.remove('dragover');
+      });
+
+      this.dropzoneEl.addEventListener('drop', (e) => {
+        e.preventDefault();
+        this.dropzoneEl.classList.remove('dragover');
+        if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
+          this.handleFileSelect(e.dataTransfer.files[0]);
+        }
+      });
+
+      this.fileInputEl.addEventListener('change', () => {
+        if (this.fileInputEl.files && this.fileInputEl.files.length > 0) {
+          this.handleFileSelect(this.fileInputEl.files[0]);
+        }
+      });
+
+      this.removeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.resetConverter();
+      });
+
+      this.convertBtn.addEventListener('click', () => this.runConversion());
+    }
+
+    private handleFileSelect(file: File) {
+      if (this.fromType !== '*' && !file.type.startsWith('image/')) {
+        alert('Invalid file format.');
+        return;
+      }
+
+      this.selectedFile = file;
+      this.sourceNameEl.textContent = file.name;
+      this.sourceSizeEl.textContent = formatBytes(file.size);
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.previewImgEl.src = e.target?.result as string;
+        this.idleStateEl.classList.add('hidden');
+        this.previewStateEl.classList.remove('hidden');
+        this.actionsEl.classList.remove('hidden');
+        this.resultsEl.classList.add('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    private resetConverter() {
+      this.selectedFile = null;
+      this.convertedBlob = null;
+      this.fileInputEl.value = '';
+      this.previewImgEl.src = '';
+      this.idleStateEl.classList.remove('hidden');
+      this.previewStateEl.classList.add('hidden');
+      this.actionsEl.classList.add('hidden');
+      this.resultsEl.classList.add('hidden');
+    }
+
+    private runConversion() {
+      if (!this.selectedFile) return;
+
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        // Draw image directly (preserves alpha channel)
+        ctx.drawImage(img, 0, 0);
+
+        canvas.toBlob((blob) => {
+          if (!blob) return;
+
+          this.convertedBlob = blob;
+          this.statsOrigSizeEl.textContent = formatBytes(this.selectedFile!.size);
+          this.statsConvSizeEl.textContent = formatBytes(blob.size);
+
+          const url = URL.createObjectURL(blob);
+          this.downloadBtn.href = url;
+          
+          const baseName = this.selectedFile!.name.substring(0, this.selectedFile!.name.lastIndexOf('.'));
+          this.downloadBtn.download = `${baseName}.${this.toExt}`;
+
+          this.resultsEl.classList.remove('hidden');
+          this.resultsEl.scrollIntoView({ behavior: 'smooth' });
+        }, this.toType, 0.90);
+      };
+
+      img.src = this.previewImgEl.src;
+    }
+  }
+
+  if (!customElements.get('png-webp-tool')) {
+    customElements.define('png-webp-tool', ImageConverterTool);
+  }
+</script>

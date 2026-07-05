@@ -1,0 +1,576 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<discord-font-tool class="tool-workspace">
+  <div class="editor-grid">
+    <!-- Input Pane -->
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Input Text</span>
+        <button data-action="load-sample" class="btn-text">Load Sample</button>
+      </div>
+      <textarea 
+        id="discord-input" 
+        placeholder="Type your Discord message here..." 
+        aria-label="Discord Text Input"
+      ></textarea>
+      <div class="control-actions">
+        <button data-action="clear" class="btn btn-danger btn-sm">
+          <Icon name="Trash2" size={14} />
+          Clear
+        </button>
+      </div>
+    </div>
+
+    <!-- Discord Simulator Pane -->
+    <div class="editor-pane glass-panel simulator-pane">
+      <div class="pane-header">
+        <span class="pane-title">Discord Chat Simulator</span>
+        <button id="discord-theme-toggle" class="btn-text">Switch to Light Mode</button>
+      </div>
+      
+      <div class="discord-mock-chat dark-theme">
+        <div class="discord-message">
+          <div class="discord-avatar"></div>
+          <div class="discord-msg-content">
+            <div class="discord-msg-header">
+              <span class="discord-username">lowkey_gamer</span>
+              <span class="discord-bot-tag">BOT</span>
+              <span class="discord-timestamp">Today at 12:02 PM</span>
+            </div>
+            <div class="discord-body" id="discord-preview-body">
+              Type on the left to see your formatted message here...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Section -->
+  <div class="results-section glass-panel">
+    <h3 class="section-title">Copy Discord Fonts & Formatting</h3>
+    
+    <div class="results-list" id="discord-results">
+      <div class="empty-state">
+        Type some text above to generate Discord formatted text...
+      </div>
+    </div>
+  </div>
+</discord-font-tool>
+
+<style>
+  .tool-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .editor-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .editor-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .editor-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem;
+    min-height: 400px;
+  }
+
+  .pane-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+  }
+
+  .pane-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .btn-text {
+    background: none;
+    border: none;
+    color: var(--primary-accent);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: var(--font-display);
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn-text:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
+
+  #discord-input {
+    flex: 1;
+    width: 100%;
+    min-height: 250px;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    resize: none;
+    outline: none;
+  }
+
+  .control-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+  }
+
+  /* Discord Simulator */
+  .simulator-pane {
+    background: var(--card-bg);
+  }
+
+  .discord-mock-chat {
+    flex: 1;
+    border-radius: 12px;
+    padding: 1.25rem;
+    font-family: 'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+  }
+
+  .discord-mock-chat.dark-theme {
+    background: #313338;
+    color: #dbdee1;
+  }
+
+  .discord-mock-chat.light-theme {
+    background: #f2f3f5;
+    color: #313338;
+  }
+
+  .discord-message {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .discord-avatar {
+    width: 40px;
+    height: 40px;
+    background-color: #5865f2; /* Discord Blurple */
+    border-radius: 50%;
+    flex-shrink: 0;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36" fill="%23ffffff"><path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.86,54.65,1,77.53A105.73,105.73,0,0,0,32,96.36a77.7,77.7,0,0,0,6.63-10.85,68.43,68.43,0,0,1-10.5-5c.9-.65,1.76-1.34,2.58-2a75.58,75.58,0,0,0,73.08,0c.83.68,1.69,1.37,2.58,2a68.43,68.43,0,0,1-10.5,5,77.7,77.7,0,0,0,6.63,10.85,105.73,105.73,0,0,0,31.06-18.83C129,50.7,122.64,27.78,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.83,46,53.83,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.07,46,96.07,53,91,65.69,84.69,65.69Z"/></svg>');
+    background-size: 60%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .discord-msg-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  .discord-msg-header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .discord-username {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .discord-mock-chat.dark-theme .discord-username {
+    color: #f2f3f5;
+  }
+
+  .discord-mock-chat.light-theme .discord-username {
+    color: #060607;
+  }
+
+  .discord-bot-tag {
+    background: #5865f2;
+    color: #ffffff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.1rem 0.25rem;
+    border-radius: 3px;
+    line-height: 1;
+  }
+
+  .discord-timestamp {
+    font-size: 0.75rem;
+    color: #949ba4;
+  }
+
+  .discord-body {
+    font-size: 0.95rem;
+    line-height: 1.375;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+  }
+
+  /* Discord styled formats inside simulator */
+  :global(.discord-body strong) {
+    font-weight: 700;
+  }
+
+  :global(.discord-body em) {
+    font-style: italic;
+  }
+
+  :global(.discord-body u) {
+    text-decoration: underline;
+  }
+
+  :global(.discord-body del) {
+    text-decoration: line-through;
+  }
+
+  :global(.discord-body .discord-spoiler) {
+    background: #2b2d31;
+    color: transparent;
+    cursor: pointer;
+    border-radius: 3px;
+    padding: 0 2px;
+    user-select: none;
+    transition: background 0.2s;
+  }
+
+  .discord-mock-chat.light-theme :global(.discord-body .discord-spoiler) {
+    background: #e3e5e8;
+  }
+
+  :global(.discord-body .discord-spoiler.revealed) {
+    background: rgba(255,255,255,0.1);
+    color: inherit;
+    user-select: text;
+  }
+
+  .discord-mock-chat.light-theme :global(.discord-body .discord-spoiler.revealed) {
+    background: rgba(0,0,0,0.06);
+  }
+
+  :global(.discord-body .discord-quote) {
+    border-left: 4px solid #4e5058;
+    margin: 0;
+    padding-left: 0.75rem;
+  }
+
+  .discord-mock-chat.light-theme :global(.discord-body .discord-quote) {
+    border-left-color: #d4d7dc;
+  }
+
+  :global(.discord-body .discord-inline-code) {
+    background: #2b2d31;
+    font-family: Consolas, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, Monaco, Courier New, Courier, monospace;
+    font-size: 85%;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+  }
+
+  .discord-mock-chat.light-theme :global(.discord-body .discord-inline-code) {
+    background: #e3e5e8;
+  }
+
+  :global(.discord-body .discord-code-block) {
+    background: #2b2d31;
+    font-family: Consolas, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, Monaco, Courier New, Courier, monospace;
+    font-size: 87.5%;
+    line-height: 1.125rem;
+    padding: 0.5rem;
+    border-radius: 4px;
+    margin: 0.25rem 0;
+    overflow-x: auto;
+    border: 1px solid rgba(0,0,0,0.2);
+  }
+
+  .discord-mock-chat.light-theme :global(.discord-body .discord-code-block) {
+    background: #e3e5e8;
+    border-color: rgba(0,0,0,0.05);
+  }
+
+  /* Copy Section */
+  .results-section {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .results-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 768px) {
+    .results-list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .result-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    transition: all 0.2s ease;
+  }
+
+  .result-card:hover {
+    border-color: var(--primary-accent);
+    background-color: var(--surface-hover);
+  }
+
+  .result-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .result-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .result-text {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    word-break: break-all;
+    user-select: all;
+    font-family: var(--font-mono);
+    white-space: pre-wrap;
+  }
+
+  .empty-state {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.85rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .copied-btn {
+    border-color: var(--success-color) !important;
+    color: var(--success-color) !important;
+  }
+</style>
+
+<script>
+  import { generateDiscordFonts } from './logic';
+
+  class DiscordFontTool extends HTMLElement {
+    private inputEl!: HTMLTextAreaElement;
+    private resultsEl!: HTMLDivElement;
+    private previewBodyEl!: HTMLDivElement;
+    private themeToggleBtn!: HTMLButtonElement;
+    private mockChatEl!: HTMLDivElement;
+
+    connectedCallback() {
+      this.inputEl = this.querySelector('#discord-input') as HTMLTextAreaElement;
+      this.resultsEl = this.querySelector('#discord-results') as HTMLDivElement;
+      this.previewBodyEl = this.querySelector('#discord-preview-body') as HTMLDivElement;
+      this.themeToggleBtn = this.querySelector('#discord-theme-toggle') as HTMLButtonElement;
+      this.mockChatEl = this.querySelector('.discord-mock-chat') as HTMLDivElement;
+
+      this.inputEl.addEventListener('input', () => this.handleUpdate());
+      
+      this.themeToggleBtn.addEventListener('click', () => {
+        if (this.mockChatEl.classList.contains('dark-theme')) {
+          this.mockChatEl.classList.remove('dark-theme');
+          this.mockChatEl.classList.add('light-theme');
+          this.themeToggleBtn.textContent = 'Switch to Dark Mode';
+        } else {
+          this.mockChatEl.classList.remove('light-theme');
+          this.mockChatEl.classList.add('dark-theme');
+          this.themeToggleBtn.textContent = 'Switch to Light Mode';
+        }
+      });
+
+      this.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        
+        // Handle Spoiler clicking in preview
+        if (target.classList.contains('discord-spoiler')) {
+          target.classList.toggle('revealed');
+          return;
+        }
+
+        const button = target.closest('button');
+        if (!button) return;
+
+        const action = button.getAttribute('data-action');
+        if (action === 'clear') this.handleClear();
+        if (action === 'load-sample') this.handleLoadSample();
+        if (button.classList.contains('btn-copy')) {
+          const index = parseInt(button.getAttribute('data-index') || '0');
+          this.handleCopy(button, index);
+        }
+      });
+
+      this.handleLoadSample();
+    }
+
+    private handleUpdate() {
+      const text = this.inputEl.value;
+
+      if (!text) {
+        this.previewBodyEl.innerHTML = 'Type on the left to see your formatted message here...';
+        this.resultsEl.innerHTML = `
+          <div class="empty-state">
+            Type some text above to generate Discord formatted text...
+          </div>
+        `;
+        return;
+      }
+
+      const fonts = generateDiscordFonts(text);
+      this.previewBodyEl.innerHTML = this.formatDiscordMarkdown(text);
+
+      this.resultsEl.innerHTML = fonts.map((res, index) => `
+        <div class="result-card">
+          <div class="result-info">
+            <span class="result-label">${res.name}</span>
+            <div class="result-text" id="discord-text-${index}">${this.escapeHtml(res.text)}</div>
+          </div>
+          <button class="btn btn-secondary btn-sm btn-copy" data-index="${index}" aria-label="Copy ${res.name}">
+            Copy
+          </button>
+        </div>
+      `).join('');
+    }
+
+    private handleClear() {
+      this.inputEl.value = '';
+      this.handleUpdate();
+      this.inputEl.focus();
+    }
+
+    private handleLoadSample() {
+      this.inputEl.value = '**Check out** this ||secret message|| and some `code`!\n\n> "This tool is awesome"';
+      this.handleUpdate();
+    }
+
+    private async handleCopy(button: HTMLButtonElement, index: number) {
+      const textEl = this.querySelector(`#discord-text-${index}`) as HTMLDivElement;
+      if (!textEl) return;
+
+      const text = textEl.textContent || '';
+      
+      try {
+        await navigator.clipboard.writeText(text);
+        
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        button.classList.add('copied-btn');
+
+        this.previewBodyEl.innerHTML = this.formatDiscordMarkdown(text);
+
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.classList.remove('copied-btn');
+        }, 1500);
+      } catch (err) {
+        console.error('Failed to copy', err);
+      }
+    }
+
+    private formatDiscordMarkdown(text: string): string {
+      // Escape HTML first
+      let html = this.escapeHtml(text);
+
+      // 1. Spoilers: ||text||
+      html = html.replace(/\|\|(.*?)\|\|/g, '<span class="discord-spoiler" title="Click to reveal">$1</span>');
+
+      // 2. Multi-line code block: ```ansi / ```text / ```
+      html = html.replace(/```(ansi|[\w-]*)\n([\s\S]*?)```/g, (_, lang, content) => {
+        if (lang === 'ansi') {
+          // Parse ANSI Escape codes for preview
+          let formattedContent = content;
+          // Replace color escape sequences
+          // Red: \u001b[2;31m or \u001b[31m
+          formattedContent = formattedContent
+            .replace(/\u001b\[2;31m|\u001b\[31m/g, '<span style="color: #ff5555">')
+            .replace(/\u001b\[2;32m|\u001b\[32m/g, '<span style="color: #50fa7b">')
+            .replace(/\u001b\[2;33m|\u001b\[33m/g, '<span style="color: #f1fa8c">')
+            .replace(/\u001b\[2;34m|\u001b\[34m/g, '<span style="color: #8be9fd">')
+            .replace(/\u001b\[2;35m|\u001b\[35m/g, '<span style="color: #ff79c6">')
+            .replace(/\u001b\[2;36m|\u001b\[36m/g, '<span style="color: #8be9fd">')
+            .replace(/\u001b\[2;43m|\u001b\[43m/g, '<span style="background-color: #f1fa8c; color: #000000; padding: 0 2px; border-radius: 2px;">')
+            .replace(/\u001b\[0m/g, '</span>');
+          return `<pre class="discord-code-block">${formattedContent}</pre>`;
+        }
+        return `<pre class="discord-code-block">${content}</pre>`;
+      });
+
+      // 3. Inline code: `text`
+      html = html.replace(/`([^`]+)`/g, '<code class="discord-inline-code">$1</code>');
+
+      // 4. Bold + Italic + Underline variations
+      html = html.replace(/___ \*\* (.*?) \*\* ___/g, '<u><em><strong>$1</strong></em></u>');
+      html = html.replace(/\*\*\*([^*]+)\*\*\*/g, '<strong><em>$1</em></strong>');
+      html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+      html = html.replace(/__([^_]+)__/g, '<u>$1</u>');
+      html = html.replace(/~~([^~]+)~~/g, '<del>$1</del>');
+
+      // 5. Block quotes: > text (single line)
+      html = html.replace(/^&gt;\s+(.*?)$/gm, '<blockquote class="discord-quote">$1</blockquote>');
+
+      return html;
+    }
+
+    private escapeHtml(str: string): string {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  }
+
+  if (!customElements.get('discord-font-tool')) {
+    customElements.define('discord-font-tool', DiscordFontTool);
+  }
+</script>
