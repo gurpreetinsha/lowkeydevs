@@ -31,6 +31,16 @@ import RemoveTextFormattingUI from '../../tools/list/remove-text-formatting/ui.a
 import RepeatTextGeneratorUI from '../../tools/list/repeat-text-generator/ui.astro';
 import ReverseTextGeneratorUI from '../../tools/list/reverse-text-generator/ui.astro';
 import InvisibleTextGeneratorUI from '../../tools/list/invisible-text-generator/ui.astro';
+import FancyTextGeneratorUI from '../../tools/list/fancy-text-generator/ui.astro';
+import BoldTextGeneratorUI from '../../tools/list/bold-text-generator/ui.astro';
+import ItalicTextGeneratorUI from '../../tools/list/italic-text-generator/ui.astro';
+import UnderlineTextGeneratorUI from '../../tools/list/underline-text-generator/ui.astro';
+import StrikethroughTextGeneratorUI from '../../tools/list/strikethrough-text-generator/ui.astro';
+import BubbleTextGeneratorUI from '../../tools/list/bubble-text-generator/ui.astro';
+import SmallTextGeneratorUI from '../../tools/list/small-text-generator/ui.astro';
+import BigTextGeneratorUI from '../../tools/list/big-text-generator/ui.astro';
+import GothicTextGeneratorUI from '../../tools/list/gothic-text-generator/ui.astro';
+import MirrorTextGeneratorUI from '../../tools/list/mirror-text-generator/ui.astro';
 
 // Map slugs to UI components
 const uiComponents: Record<string, any> = {
@@ -61,7 +71,17 @@ const uiComponents: Record<string, any> = {
   'remove-text-formatting': RemoveTextFormattingUI,
   'repeat-text-generator': RepeatTextGeneratorUI,
   'reverse-text-generator': ReverseTextGeneratorUI,
-  'invisible-text-generator': InvisibleTextGeneratorUI
+  'invisible-text-generator': InvisibleTextGeneratorUI,
+  'fancy-text-generator': FancyTextGeneratorUI,
+  'bold-text-generator': BoldTextGeneratorUI,
+  'italic-text-generator': ItalicTextGeneratorUI,
+  'underline-text-generator': UnderlineTextGeneratorUI,
+  'strikethrough-text-generator': StrikethroughTextGeneratorUI,
+  'bubble-text-generator': BubbleTextGeneratorUI,
+  'small-text-generator': SmallTextGeneratorUI,
+  'big-text-generator': BigTextGeneratorUI,
+  'gothic-text-generator': GothicTextGeneratorUI,
+  'mirror-text-generator': MirrorTextGeneratorUI
 };
 
 export async function getStaticPaths() {
