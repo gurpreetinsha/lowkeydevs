@@ -180,6 +180,62 @@ const getAlternateUrl = (lang: string) => {
         return current;
       }
 
+      function translateToolUI(rootEl: Element, langDict: any) {
+        const walker = document.createTreeWalker(
+          rootEl,
+          NodeFilter.SHOW_TEXT,
+          null
+        );
+
+        let node;
+        const replacements = [];
+        
+        while (node = walker.nextNode()) {
+          const trimmed = node.nodeValue ? node.nodeValue.trim() : '';
+          if (!trimmed) continue;
+          
+          const cleanKey = trimmed.replace(/:$/, '').trim();
+          const translation = langDict[`common.${cleanKey}`];
+          if (translation !== undefined && typeof translation === 'string') {
+            const finalTranslation = trimmed.endsWith(':') ? translation + ':' : translation;
+            replacements.push({ node, value: finalTranslation });
+          }
+        }
+
+        replacements.forEach(({ node, value }) => {
+          node.nodeValue = value;
+        });
+
+        rootEl.querySelectorAll('option').forEach(opt => {
+          const trimmed = opt.textContent ? opt.textContent.trim() : '';
+          const translation = langDict[`common.${trimmed}`];
+          if (translation !== undefined && typeof translation === 'string') {
+            opt.textContent = translation;
+          }
+        });
+
+        rootEl.querySelectorAll('input, textarea').forEach(el => {
+          const placeholder = el.getAttribute('placeholder');
+          if (placeholder) {
+            const trimmed = placeholder.trim();
+            const translation = langDict[`common.${trimmed}`];
+            if (translation !== undefined && typeof translation === 'string') {
+              el.setAttribute('placeholder', translation);
+            }
+          }
+        });
+
+        rootEl.querySelectorAll('input[type="button"], input[type="submit"]').forEach(el => {
+          // @ts-ignore
+          const val = el.value ? el.value.trim() : '';
+          const translation = langDict[`common.${val}`];
+          if (translation !== undefined && typeof translation === 'string') {
+            // @ts-ignore
+            el.value = translation;
+          }
+        });
+      }
+
       async function translatePage(lang: string) {
         const dict = await fetchTranslations();
         if (!dict || !dict[lang]) {
@@ -305,6 +361,12 @@ const getAlternateUrl = (lang: string) => {
             });
           }
         });
+
+        // 5. Translate Custom Tool UI Content
+        const toolWorkspace = document.querySelector('.tool-workspace-wrapper');
+        if (toolWorkspace) {
+          translateToolUI(toolWorkspace, langDict);
+        }
 
         // Remove the blocking style to render the translated page
         removeFoucBlocker();
