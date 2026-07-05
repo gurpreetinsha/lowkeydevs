@@ -1,0 +1,32 @@
+import type { ToolMeta } from '../../definitions';
+
+export const meta: ToolMeta = {
+  slug: 'unlock-pdf',
+  title: 'Unlock PDF',
+  description: 'Remove password protection and decryption locks from PDF files instantly. Runs 100% locally in your browser for total security.',
+  category: 'pdf',
+  keywords: ['unlock pdf', 'remove pdf password', 'decrypt pdf online', 'pdf restriction remover', 'local pdf unlocker', 'free pdf unlocker'],
+  icon: 'FileText',
+  faqs: [
+    {
+      question: 'Can I unlock a PDF if I do not know the password?',
+      answer: 'No. To unlock a password-protected PDF, you must enter the correct password. This tool decrypts the document using the password and saves a copy without restrictions so you do not have to type the password every time.'
+    },
+    {
+      question: 'Which restrictions does this tool remove?',
+      answer: 'It removes owner passwords, user passwords, printing locks, editing blocks, and copy-paste restrictions.'
+    },
+    {
+      question: 'Is it safe to type my password here?',
+      answer: 'Yes, completely. The decryption happens entirely client-side on your local device. Your password and PDF files are never uploaded to any servers, ensuring absolute privacy and security.'
+    }
+  ],
+  educationalContent: {
+    whatIsIt: 'Unlock PDF removes security layers, passwords, and user restrictions from standard PDF files. It decrypts page objects and structures locally using pdf-lib.',
+    howToUse: '1. Select and upload a password-protected PDF file.\n2. When prompted, type the document password.\n3. Click "Unlock & Decrypt".\n4. Download the decrypted PDF document to save it password-free.',
+    proTips: [
+      'If your document has printing locked, this tool removes it instantly so you can print it freely.',
+      'Unlocking the document beforehand is recommended if you plan to edit or merge it using our other PDF tools.'
+    ]
+  }
+};

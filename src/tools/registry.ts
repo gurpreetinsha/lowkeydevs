@@ -82,6 +82,18 @@ import { meta as nanoidGeneratorMeta } from './list/nanoid-generator/meta';
 import { meta as strongPasswordGeneratorMeta } from './list/strong-password-generator/meta';
 import { meta as apaCitationGeneratorMeta } from './list/apa-citation-generator/meta';
 
+// PDF tools imports
+import { meta as mergePdfMeta } from './list/merge-pdf/meta';
+import { meta as splitPdfMeta } from './list/split-pdf/meta';
+import { meta as compressPdfMeta } from './list/compress-pdf/meta';
+import { meta as pdfToWordMeta } from './list/pdf-to-word/meta';
+import { meta as wordToPdfMeta } from './list/word-to-pdf/meta';
+import { meta as jpgToPdfMeta } from './list/jpg-to-pdf/meta';
+import { meta as pdfToJpgMeta } from './list/pdf-to-jpg/meta';
+import { meta as editPdfMeta } from './list/edit-pdf/meta';
+import { meta as signPdfMeta } from './list/sign-pdf/meta';
+import { meta as unlockPdfMeta } from './list/unlock-pdf/meta';
+
 // Central Registry of all tools
 export const registry: ToolMeta[] = [
   jsonFormatterMeta,
@@ -165,7 +177,19 @@ export const registry: ToolMeta[] = [
   randomIpAddressGeneratorMeta,
   nanoidGeneratorMeta,
   strongPasswordGeneratorMeta,
-  apaCitationGeneratorMeta
+  apaCitationGeneratorMeta,
+
+  // PDF tools
+  mergePdfMeta,
+  splitPdfMeta,
+  compressPdfMeta,
+  pdfToWordMeta,
+  wordToPdfMeta,
+  jpgToPdfMeta,
+  pdfToJpgMeta,
+  editPdfMeta,
+  signPdfMeta,
+  unlockPdfMeta
 ];
 
 // Helper to find a tool by its slug
@@ -234,6 +258,12 @@ export const categories: CategoryDetail[] = [
     title: 'Security & Cryptography',
     description: 'Generate secure hashes, inspect JWTs, encrypt/decrypt text, and verify signatures.',
     icon: 'Shield'
+  },
+  {
+    slug: 'pdf',
+    title: 'PDF Utilities',
+    description: 'Merge, split, compress, sign, edit, or unlock PDF files directly in your browser.',
+    icon: 'FileText'
   }
 ];
 
