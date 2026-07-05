@@ -1032,12 +1032,15 @@ input::placeholder, textarea::placeholder {
   background-color: var(--overlay-bg);
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--duration-normal) var(--ease-out);
+  visibility: hidden;
+  transition: opacity var(--duration-normal) var(--ease-out),
+              visibility var(--duration-normal) var(--ease-out);
 }
 
 .mobile-drawer-overlay.active {
   opacity: 1;
   pointer-events: auto;
+  visibility: visible;
 }
 
 .mobile-drawer {
@@ -1103,16 +1106,19 @@ input::placeholder, textarea::placeholder {
   padding-top: min(10vh, 120px);
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--duration-normal) var(--ease-out);
+  visibility: hidden;
+  transition: opacity var(--duration-normal) var(--ease-out),
+              visibility var(--duration-normal) var(--ease-out);
 }
 
 .search-overlay.active {
   opacity: 1;
   pointer-events: auto;
+  visibility: visible;
 }
 
 .search-modal {
-  width: 100%;
+  width: calc(100% - var(--space-8));
   max-width: 560px;
   margin-inline: var(--space-4);
   background-color: var(--surface);
