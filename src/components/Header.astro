@@ -1,6 +1,5 @@
 ---
 import Icon from './base/Icon.astro';
-import ThemeToggle from './ThemeToggle.astro';
 import { registry } from '../tools/registry';
 
 // Serialize tools metadata for client-side instant search
@@ -17,6 +16,7 @@ const searchIndex = registry.map(tool => ({
 <header class="site-header" id="site-header">
   <div class="container nav-container">
     <a href="/" class="logo" aria-label="LowKeyDevs Homepage">
+      <Icon name="Logo" size={20} class="logo-icon" />
       <span class="logo-text">LowKey<span class="logo-accent">Devs</span></span>
     </a>
 
@@ -32,7 +32,7 @@ const searchIndex = registry.map(tool => ({
         <Icon name="Search" size={18} />
       </button>
 
-      <ThemeToggle />
+
 
       <!-- Mobile menu button -->
       <button class="nav-icon-btn mobile-menu-btn" id="mobile-menu-btn" aria-label="Open menu" aria-expanded="false">
@@ -54,7 +54,10 @@ const searchIndex = registry.map(tool => ({
 <div class="mobile-drawer-overlay" id="mobile-drawer-overlay">
   <nav class="mobile-drawer" aria-label="Mobile navigation">
     <div class="mobile-drawer-header">
-      <span class="logo-text">LowKey<span class="logo-accent">Devs</span></span>
+      <div class="logo">
+        <Icon name="Logo" size={20} class="logo-icon" />
+        <span class="logo-text">LowKey<span class="logo-accent">Devs</span></span>
+      </div>
       <button class="nav-icon-btn" id="mobile-drawer-close" aria-label="Close menu">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" y1="6" x2="6" y2="18"></line>

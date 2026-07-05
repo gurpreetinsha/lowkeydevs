@@ -156,11 +156,6 @@ const activeCategories = categories.filter(cat =>
     position: relative;
     overflow: hidden;
     padding: var(--space-24) 0 var(--space-16) 0;
-    background: radial-gradient(circle at 50% -20%, rgba(140, 82, 255, 0.08) 0%, transparent 60%);
-  }
-
-  :global(html[data-theme="dark"]) .hero-section {
-    background: radial-gradient(circle at 50% -20%, rgba(140, 82, 255, 0.15) 0%, transparent 70%);
   }
 
   @media (max-width: 768px) {
@@ -291,22 +286,6 @@ const activeCategories = categories.filter(cat =>
     overflow: hidden;
   }
 
-  .category-tabs-wrapper::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 48px;
-    background: linear-gradient(to right, rgba(252, 252, 253, 0), var(--bg));
-    pointer-events: none;
-    z-index: 2;
-  }
-
-  /* Support dark theme background for fading indicator */
-  :global(html[data-theme="dark"]) .category-tabs-wrapper::after {
-    background: linear-gradient(to right, rgba(9, 9, 9, 0), var(--bg));
-  }
 
   .category-tabs {
     display: flex;
