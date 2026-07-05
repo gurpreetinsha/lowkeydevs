@@ -259,7 +259,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
   .tool-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, min(320px, 100%));
+    grid-template-columns: minmax(0, 1fr) 320px;
     gap: clamp(16px, 4vw, 32px);
     align-items: start;
   }
@@ -423,7 +423,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
     align-items: start;
   }
 
-  @media (max-width: 992px) {
+  @media (max-width: 1024px) {
     .edu-grid {
       grid-template-columns: 1fr;
     }
