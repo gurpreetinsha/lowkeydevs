@@ -41,23 +41,28 @@ const categoryDetail = getCategoryDetail(tool.category);
     height: 100%;
     text-decoration: none;
     cursor: pointer;
-    padding: var(--spacing-xl); /* 24px */
-    gap: var(--spacing-md);
-    background-color: var(--color-canvas);
-    border: 1px solid var(--color-hairline);
-    border-radius: var(--radius-sm); /* 8px */
-    box-shadow: none;
-    transition: border-color var(--duration-normal) var(--ease-out);
+    /* Responsive padding: smaller spacing on mobile screens, scales up to desktop size */
+    padding: clamp(var(--space-4), 3.5vw, var(--space-6));
+    /* Responsive gap: smaller gap on mobile, scales up to desktop size */
+    gap: clamp(var(--space-3), 2.5vw, var(--space-4));
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xs);
+    transition: transform var(--duration-normal) var(--ease-out),
+                border-color var(--duration-normal) var(--ease-out),
+                box-shadow var(--duration-normal) var(--ease-out);
   }
 
   .tool-card:hover {
-    border-color: var(--color-primary);
-    box-shadow: none;
+    border-color: var(--accent);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
     text-decoration: none;
   }
 
   .tool-card:focus-visible {
-    outline: 2px solid var(--color-focus-blue);
+    outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
 
@@ -65,8 +70,11 @@ const categoryDetail = getCategoryDetail(tool.category);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    /* Allow the row content to wrap on extremely narrow viewports */
     flex-wrap: wrap;
-    gap: var(--spacing-xs);
+    /* Spacing between wrapped items */
+    gap: var(--space-2);
+    /* Prevent flex child overflow */
     min-width: 0;
   }
 
@@ -76,89 +84,100 @@ const categoryDetail = getCategoryDetail(tool.category);
     justify-content: center;
     width: 40px;
     height: 40px;
-    background-color: var(--color-soft-stone);
-    color: var(--color-ink);
-    border-radius: var(--radius-xs); /* 4px */
+    background-color: var(--accent-subtle);
+    color: var(--accent);
+    border-radius: var(--radius-md);
     transition: all var(--duration-normal) var(--ease-out);
+    /* Prevent icon wrapper from shrinking on small/squeezed screens */
     flex-shrink: 0;
   }
 
   .tool-card:hover .card-icon-wrapper {
-    background-color: var(--color-primary);
-    color: var(--color-on-primary);
+    background-color: var(--accent);
+    color: var(--accent-on);
   }
 
   .card-category {
-    font-size: 14px;
-    font-family: var(--font-mono);
-    font-weight: 400;
-    color: var(--color-muted);
+    font-size: 11px;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    color: var(--text-tertiary);
     text-transform: uppercase;
-    letter-spacing: 0.28px;
+    letter-spacing: 0.05em;
+    /* Prevent text cutoff inside flex parent */
     min-width: 0;
+    /* Allow very long category names to wrap without overflowing */
     overflow-wrap: anywhere;
   }
 
   .card-content {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-xs);
+    gap: var(--space-2);
     flex: 1;
+    /* Prevent flex item overflow, allowing text wrapping */
     min-width: 0;
   }
 
   .card-title {
-    font-family: var(--font-sans);
-    font-size: 24px; /* feature-heading */
-    font-weight: 400;
-    color: var(--color-ink);
+    font-family: var(--font-heading);
+    /* Responsive typography scaling: scales from 16px on mobile to 18px on desktop */
+    font-size: clamp(16px, 4vw, 18px);
+    font-weight: 600;
+    color: var(--text-primary);
     line-height: 1.3;
-    letter-spacing: 0;
     transition: color var(--duration-fast) var(--ease-out);
+    /* Force long contiguous words to wrap, avoiding card overflow */
     overflow-wrap: anywhere;
   }
 
   .tool-card:hover .card-title {
-    color: var(--color-action-blue);
+    color: var(--accent);
   }
 
   .card-description {
     font-family: var(--font-sans);
-    font-size: 16px; /* body */
-    color: var(--color-body-muted);
-    line-height: 1.5;
+    /* Responsive typography scaling: scales from 13px on mobile to 14px on desktop */
+    font-size: clamp(13px, 3.5vw, 14px);
+    color: var(--text-secondary);
+    line-height: 1.6;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    /* Force long text to wrap if there are no spaces */
     overflow-wrap: anywhere;
   }
 
   .card-bottom {
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
-    font-size: 16px; /* button/body link */
-    font-weight: 500;
+    /* Spacing between label and arrow, wraps nicely on narrow screens */
+    gap: var(--space-1-5);
+    font-size: 14px;
+    font-weight: 600;
     font-family: var(--font-sans);
-    color: var(--color-ink);
+    color: var(--accent);
     margin-top: auto;
-    padding-top: var(--spacing-md);
-    border-top: 1px solid var(--color-hairline);
+    /* Responsive top padding: smaller on mobile, scales to desktop space-4 */
+    padding-top: clamp(var(--space-3), 2.5vw, var(--space-4));
+    border-top: 1px solid var(--border);
     transition: color var(--duration-fast) var(--ease-out);
+    /* Prevent layout overflow issues */
     min-width: 0;
+    /* Allow bottom content to wrap if viewport is exceptionally small */
     flex-wrap: wrap;
-    text-decoration: underline;
-    text-underline-offset: 4px;
   }
 
   .tool-card:hover .card-bottom {
-    color: var(--color-action-blue);
+    color: var(--accent-hover);
   }
 
   .card-arrow {
     transition: transform var(--duration-normal) var(--ease-out);
+    /* Prevent arrow icon from shrinking when card shrinks */
     flex-shrink: 0;
+    /* Ensure icon never overflows its container bounds */
     max-width: 100%;
   }
 

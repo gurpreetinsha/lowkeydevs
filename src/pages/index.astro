@@ -24,68 +24,26 @@ const activeCategories = categories.filter(cat =>
 
   <main id="main-content" class="home-main">
     <!-- Hero Section -->
-    <section class="hero-band" aria-labelledby="hero-title">
-      <div class="container hero-container">
-        <div class="hero-text-content">
-          <span class="mono-label hero-badge">
+    <section class="hero-section" aria-labelledby="hero-title">
+      <div class="container container-narrow hero-container">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <Icon name="Lock" size={12} />
             100% client-side privacy
-          </span>
-          <h1 id="hero-title" class="hero-display">
-            The internet's default toolbox.
+          </div>
+          <h1 id="hero-title" class="hero-title">
+            The internet's default <span class="accent-text">toolbox</span>
           </h1>
-          <p class="hero-subtitle body-large">
+          <p class="hero-subtitle">
             Instant, beautiful developer tools that run entirely in your browser. No forced logins, no intrusive popups, and no tracking.
           </p>
-          <div class="hero-buttons">
-            <button class="btn-primary" id="hero-search-trigger" aria-label="Search tools">
-              <Icon name="Search" size={14} />
-              <span>Search tools...</span>
-              <kbd class="kbd-helper">/</kbd>
-            </button>
-            <a href="/about" class="btn-secondary">Learn more</a>
-          </div>
-        </div>
 
-        <!-- Two-Card Media Composition -->
-        <div class="hero-media-composition">
-          <!-- Wide Card: agent-console-card -->
-          <div class="agent-console-card">
-            <div class="console-header">
-              <div class="console-dots">
-                <span class="console-dot dot-red"></span>
-                <span class="console-dot dot-yellow"></span>
-                <span class="console-dot dot-green"></span>
-              </div>
-              <span class="console-title">lowkeydevs ~ client-side sandbox</span>
-            </div>
-            <div class="console-body">
-              <div class="console-line"><span class="console-prompt">$</span> lowkeydevs --version</div>
-              <div class="console-line console-output">v1.4.0 (Secure client-side sandbox)</div>
-              <div class="console-line"><span class="console-prompt">$</span> run json-formatter --input data.json</div>
-              <div class="console-line console-output-success">✓ JSON parsed and formatted locally in 0.8ms</div>
-              <div class="console-line"><span class="console-prompt">$</span> generate-password --length 32</div>
-              <div class="console-line console-output-accent">🔑 e9$aLp!92*Mv_qRz-LpW2_uY9x@Z4</div>
-            </div>
-          </div>
-
-          <!-- Narrow Card: hero-photo-card -->
-          <div class="hero-photo-card">
-            <img src="/hero-claymation.png" alt="Playful 3D claymation landscape with character mascots" class="hero-photo-img" />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Trust Logo Strip -->
-    <section class="trust-logo-strip" aria-label="Trusted technology partners">
-      <div class="container">
-        <p class="trust-caption">Built on modern, open-source technology</p>
-        <div class="logos-row">
-          <span class="mono-label">Astro</span>
-          <span class="mono-label">GitHub</span>
-          <span class="mono-label">Vercel</span>
-          <span class="mono-label">Netlify</span>
-          <span class="mono-label">WebAssembly</span>
+          <!-- Search trigger -->
+          <button class="hero-search-trigger" id="hero-search-trigger" aria-label="Search tools">
+            <Icon name="Search" size={16} />
+            <span>Search tools...</span>
+            <kbd class="kbd-helper">/</kbd>
+          </button>
         </div>
       </div>
     </section>
@@ -100,7 +58,7 @@ const activeCategories = categories.filter(cat =>
           <div class="category-tabs-wrapper">
             <div class="category-tabs" role="tablist" aria-label="Tool Categories">
               <button
-                class="blog-filter-chip tab-btn active"
+                class="tab-btn active"
                 role="tab"
                 aria-selected="true"
                 data-category="all"
@@ -110,7 +68,7 @@ const activeCategories = categories.filter(cat =>
               </button>
               {activeCategories.map(cat => (
                 <button
-                  class="blog-filter-chip tab-btn"
+                  class="tab-btn"
                   role="tab"
                   aria-selected="false"
                   data-category={cat.slug}
@@ -145,83 +103,39 @@ const activeCategories = categories.filter(cat =>
     </section>
 
     <!-- Features Section -->
-    <section class="features-section container" aria-labelledby="features-title">
-      <div class="dark-feature-band">
-        <h2 id="features-title" class="section-heading features-heading">Built for speed and security</h2>
+    <section class="features-section" aria-labelledby="features-title">
+      <div class="container">
+        <h2 id="features-title" class="features-heading">Built for speed and security</h2>
         <div class="features-grid">
-          <!-- Card 1: Zero server logs -->
-          <div class="feature-card-translucent">
-            <div class="card-feature-header">
-              <div class="feature-icon-wrapper">
-                <Icon name="Lock" size={24} />
-              </div>
-              <h3 class="feature-heading">Zero server logs</h3>
+          <div class="feature-item">
+            <div class="feature-icon-wrapper">
+              <Icon name="Lock" size={24} />
             </div>
-            <p class="body-text">
+            <h3>Zero server logs</h3>
+            <p>
               Your data never touches our servers. All calculations, parsing, and formatting happen locally in your browser.
             </p>
-            <div class="product-ui-fragment">
-              <div class="ui-log-line"><span class="log-tag tag-green">Client</span> Local sandboxed run...</div>
-              <div class="ui-log-line"><span class="log-tag tag-gray">Network</span> 0 bytes transmitted</div>
-              <div class="ui-log-line"><span class="log-tag tag-blue">Privacy</span> 100% Offline Secured</div>
-            </div>
           </div>
 
-          <!-- Card 2: Lightning fast -->
-          <div class="feature-card-translucent">
-            <div class="card-feature-header">
-              <div class="feature-icon-wrapper">
-                <Icon name="RefreshCw" size={24} />
-              </div>
-              <h3 class="feature-heading">Lightning fast</h3>
+          <div class="feature-item">
+            <div class="feature-icon-wrapper">
+              <Icon name="RefreshCw" size={24} />
             </div>
-            <p class="body-text">
+            <h3>Lightning fast</h3>
+            <p>
               Statically pre-rendered pages load in milliseconds. Standard actions parse and update instantly as you type.
             </p>
-            <div class="product-ui-fragment">
-              <div class="ui-perf-metric">🚀 Parse duration: <strong>1.4ms</strong></div>
-              <div class="ui-perf-bar"><div class="ui-perf-fill" style="width: 95%;"></div></div>
-            </div>
           </div>
 
-          <!-- Card 3: Minimal & clean -->
-          <div class="feature-card-translucent">
-            <div class="card-feature-header">
-              <div class="feature-icon-wrapper">
-                <Icon name="Braces" size={24} />
-              </div>
-              <h3 class="feature-heading">Minimal & clean</h3>
+          <div class="feature-item">
+            <div class="feature-icon-wrapper">
+              <Icon name="Braces" size={24} />
             </div>
-            <p class="body-text">
+            <h3>Minimal & clean</h3>
+            <p>
               No annoying popups, cookie walls, or bloated advertisements. Just the tools you need, ready when you are.
             </p>
-            <div class="product-ui-fragment">
-              <div class="ui-toggle-row">
-                <span>Ad-free UI</span>
-                <span class="ui-toggle active"></span>
-              </div>
-              <div class="ui-toggle-row">
-                <span>Private Local Storage</span>
-                <span class="ui-toggle active"></span>
-              </div>
-            </div>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Pre-footer CTA Section -->
-    <section class="cta-section container" aria-labelledby="cta-title">
-      <div class="cta-band-illustrated">
-        <div class="cta-left">
-          <h2 id="cta-title" class="section-heading">Work with absolute privacy and speed today</h2>
-          <p class="cta-subtitle body-large">
-            Save time, secure your tokens and keys, and enjoy ad-free developer tools built exclusively for high performance.
-          </p>
-          <a href="/about" class="btn-primary">About our mission</a>
-        </div>
-        <div class="cta-right">
-          <img src="/mascot-claymation.png" alt="Waving claymation character mascot" class="cta-mascot-img" />
         </div>
       </div>
     </section>
@@ -237,212 +151,113 @@ const activeCategories = categories.filter(cat =>
     gap: 0;
   }
 
-  /* === Hero Band === */
-  .hero-band {
-    background-color: var(--color-canvas);
-    color: var(--color-ink);
-    padding: var(--spacing-section) 0;
+  /* === Hero Section === */
+  .hero-section {
+    padding: var(--space-24) 0 var(--space-16) 0;
+  }
+
+  @media (max-width: 768px) {
+    .hero-section {
+      padding: var(--space-12) 0 var(--space-10) 0;
+    }
   }
 
   .hero-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: var(--spacing-xl);
+    justify-content: center;
   }
 
-  .hero-text-content {
+  .hero-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--spacing-md);
-    max-width: 800px;
-    margin: 0 auto;
+    text-align: center;
+    width: 100%;
+    gap: var(--space-5);
   }
 
   .hero-badge {
-    background-color: var(--color-soft-stone);
-    color: var(--color-ink);
-    padding: 6px 12px;
-    border-radius: var(--radius-pill);
-    border: 1px solid var(--color-hairline);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1-5);
+    background-color: var(--accent-subtle);
+    color: var(--accent);
+    border: 1px solid var(--border);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .hero-title {
+    font-family: var(--font-heading);
+    font-size: clamp(28px, 6vw, 64px);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+  }
+
+  .accent-text {
+    color: var(--accent);
   }
 
   .hero-subtitle {
-    color: var(--color-body-muted);
-    max-width: 600px;
+    color: var(--text-secondary);
+    font-size: clamp(16px, 1.5vw, 18px);
+    font-weight: 400;
+    max-width: 560px;
+    line-height: 1.7;
   }
 
-  .hero-buttons {
-    display: flex;
-    gap: var(--spacing-md);
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: var(--spacing-sm);
-  }
-
-  #hero-search-trigger {
-    min-height: 44px;
-    height: 44px;
-    cursor: pointer;
-  }
-
-  .kbd-helper {
-    background-color: var(--color-primary);
-    color: var(--color-on-primary);
-    padding: 2px 8px;
-    border-radius: var(--radius-xs);
-    font-size: 12px;
-    font-weight: 500;
-    font-family: var(--font-mono);
-    margin-left: var(--spacing-xs);
-  }
-
-  /* === Two-Card Media Composition === */
-  .hero-media-composition {
-    display: grid;
-    grid-template-columns: 7fr 5fr;
-    gap: var(--spacing-lg);
-    width: 100%;
-    margin-top: var(--spacing-xxl);
-    align-items: stretch;
-  }
-
-  @media (max-width: 768px) {
-    .hero-media-composition {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  .agent-console-card {
-    background-color: var(--color-primary);
-    color: var(--color-on-dark);
-    border-radius: var(--radius-sm); /* 8px */
-    padding: 24px;
-    font-family: var(--font-mono);
-    font-size: 13px;
-    border: 1px solid var(--color-hairline);
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-md);
-  }
-
-  .console-header {
+  /* Search trigger */
+  .hero-search-trigger {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 12px;
-  }
-
-  .console-dots {
-    display: flex;
-    gap: 6px;
-  }
-
-  .console-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: var(--radius-full);
-  }
-
-  .dot-red { background-color: #ff5f56; }
-  .dot-yellow { background-color: #ffbd2e; }
-  .dot-green { background-color: #27c93f; }
-
-  .console-title {
-    color: var(--color-muted);
-    font-size: 11px;
-  }
-
-  .console-body {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    line-height: 1.6;
-  }
-
-  .console-line {
-    color: var(--color-on-dark);
-  }
-
-  .console-prompt {
-    color: var(--color-coral);
-    font-weight: 500;
-  }
-
-  .console-output {
-    color: var(--color-muted);
-    padding-left: 12px;
-  }
-
-  .console-output-success {
-    color: var(--color-pale-green);
-    padding-left: 12px;
-  }
-
-  .console-output-accent {
-    color: var(--color-coral-soft);
-    padding-left: 12px;
-  }
-
-  .hero-photo-card {
-    background-color: var(--color-canvas);
-    border-radius: var(--radius-lg); /* 22px */
-    border: 1px solid var(--color-hairline);
-    overflow: hidden;
-    height: 100%;
-    min-height: 250px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .hero-photo-img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  /* === Trust Logo Strip === */
-  .trust-logo-strip {
-    background-color: var(--color-canvas);
-    color: var(--color-ink);
-    padding: 60px 0;
-    text-align: center;
-    border-top: 1px solid var(--color-hairline);
-  }
-
-  .trust-caption {
+    max-width: 420px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-tertiary);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
     font-family: var(--font-sans);
     font-size: 14px;
     font-weight: 400;
-    line-height: 1.4;
-    color: var(--color-muted);
-    margin-bottom: 24px;
-    text-transform: uppercase;
-    letter-spacing: 0.28px;
+    cursor: pointer;
+    margin-top: var(--space-3);
+    transition: all var(--duration-fast) var(--ease-out);
+    box-shadow: var(--shadow-xs);
   }
 
-  .logos-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 56px;
-    flex-wrap: wrap;
+  .hero-search-trigger:hover {
+    border-color: var(--border-hover);
+    color: var(--text-secondary);
+    box-shadow: var(--shadow-sm);
   }
 
-  .logos-row .mono-label {
-    color: var(--color-slate);
-    font-size: 14px;
+  .hero-search-trigger:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .kbd-helper {
+    background-color: var(--surface-hover);
+    border: 1px solid var(--border);
+    color: var(--text-tertiary);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    font-family: var(--font-mono);
   }
 
   /* === Tools Directory === */
   .tools-directory {
-    padding: var(--spacing-section) 0;
-    border-top: 1px solid var(--color-hairline);
+    padding: var(--space-10) 0 var(--space-16) 0;
   }
 
   .directory-header {
@@ -450,31 +265,49 @@ const activeCategories = categories.filter(cat =>
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-xl);
-    border-bottom: 1px solid var(--color-hairline);
-    padding-bottom: var(--spacing-md);
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--space-5);
   }
 
   .section-title {
-    color: var(--color-ink);
-    font-family: var(--font-sans);
-    font-size: 32px; /* card-heading scale */
-    font-weight: 400;
-    line-height: 1.2;
-    letter-spacing: -0.32px;
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
   }
 
   .category-tabs-wrapper {
     position: relative;
+    width: 100%;
     overflow: hidden;
+  }
+
+  .category-tabs-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 48px;
+    background: linear-gradient(to right, rgba(252, 252, 253, 0), var(--bg));
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Support dark theme background for fading indicator */
+  :global(html[data-theme="dark"]) .category-tabs-wrapper::after {
+    background: linear-gradient(to right, rgba(9, 9, 9, 0), var(--bg));
   }
 
   .category-tabs {
     display: flex;
-    gap: var(--spacing-xs);
+    gap: var(--space-2);
     overflow-x: auto;
     padding-bottom: 4px;
+    padding-right: 48px;
+    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
@@ -483,100 +316,95 @@ const activeCategories = categories.filter(cat =>
     display: none;
   }
 
-  /* Blog filter chip styling for tab buttons */
   .tab-btn {
-    border: 1px solid var(--color-coral-soft);
-    background: transparent;
-    color: var(--color-coral);
-    padding: 8px 14px;
-    border-radius: var(--radius-sm); /* 8px */
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-md);
     font-family: var(--font-sans);
-    font-weight: 400;
-    font-size: 24px; /* oversized typography */
-    line-height: 1.2;
-    letter-spacing: -0.32px;
+    font-weight: 500;
+    font-size: 13px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-xs);
+    gap: var(--space-1-5);
     white-space: nowrap;
     transition: all var(--duration-fast) var(--ease-out);
     min-height: 44px;
   }
 
   .tab-btn:hover {
-    background-color: var(--color-pale-blue);
-    color: var(--color-coral);
+    background-color: var(--surface-hover);
+    border-color: var(--border-hover);
+    color: var(--text-primary);
   }
 
   .tab-btn.active {
-    background-color: var(--color-coral);
-    color: var(--color-cohere-black);
-    border-color: var(--color-coral);
+    background-color: var(--accent);
+    color: var(--accent-on);
+    border-color: var(--accent);
   }
 
+  .tab-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* Cards Grid */
   .tools-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
-    gap: var(--spacing-lg);
+    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+    gap: var(--space-5);
+  }
+
+  .tool-card-container {
+    display: flex;
   }
 
   .filtered-empty {
-    padding: var(--spacing-xl);
+    padding: var(--space-12);
     text-align: center;
-    color: var(--color-muted);
+    color: var(--text-tertiary);
     font-size: 14px;
-    border: 1px dashed var(--color-hairline);
+    border: 1px dashed var(--border);
     border-radius: var(--radius-lg);
-    margin-top: var(--spacing-xl);
+    margin-top: var(--space-8);
   }
 
   /* === Features Section === */
   .features-section {
-    padding: var(--spacing-section) 0;
-    background-color: var(--color-canvas);
+    padding: var(--space-16) 0 var(--space-20) 0;
+    background-color: var(--surface);
+    border-top: 1px solid var(--border);
   }
 
   .features-heading {
+    font-family: var(--font-heading);
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 700;
     text-align: center;
-    color: var(--color-on-dark) !important;
-    margin-bottom: var(--spacing-xxl);
+    color: var(--text-primary);
+    margin-bottom: var(--space-12);
   }
 
   .features-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-lg);
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    gap: clamp(16px, 3vw, 32px);
   }
 
-  @media (max-width: 1024px) {
-    .features-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (max-width: 768px) {
-    .features-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  /* Dark translucent feature cards in deep-green band */
-  .feature-card-translucent {
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: var(--color-on-dark);
-    border-radius: var(--radius-sm); /* 8px */
-    padding: var(--spacing-xl);
+  .feature-item {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-md);
-  }
-
-  .card-feature-header {
-    display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
+    text-align: center;
+    padding: var(--space-8);
+    gap: var(--space-4);
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xs);
   }
 
   .feature-icon-wrapper {
@@ -585,163 +413,41 @@ const activeCategories = categories.filter(cat =>
     justify-content: center;
     width: 48px;
     height: 48px;
-    border-radius: var(--radius-xs); /* 4px */
-    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--accent);
+    background-color: var(--accent-subtle);
+    border-radius: var(--radius-md);
   }
 
-  .feature-card-translucent p {
-    color: var(--color-on-dark);
-    opacity: 0.85;
-    font-size: 16px;
-    line-height: 1.5;
+  .feature-item h3 {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
   }
 
-  /* Product UI Fragment inside cards */
-  .product-ui-fragment {
-    margin-top: auto;
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: var(--radius-xs);
-    padding: var(--spacing-md);
-    font-family: var(--font-mono);
-    font-size: 13px;
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xxs);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+  .feature-item p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-width: 280px;
   }
 
-  .ui-log-line {
-    display: flex;
-    gap: var(--spacing-xs);
-    align-items: center;
-    color: #ffffff;
-  }
-
-  .log-tag {
-    font-size: 10px;
-    padding: 2px 6px;
-    border-radius: var(--radius-xs);
-    font-weight: 500;
-    text-transform: uppercase;
-  }
-
-  .tag-green { background-color: #003c33; color: #edfce9; border: 1px solid var(--color-hairline); }
-  .tag-gray { background-color: #212121; color: #93939f; }
-  .tag-blue { background-color: #1863dc; color: #ffffff; }
-
-  .ui-perf-metric {
-    font-weight: 400;
-    color: #ffffff;
-  }
-
-  .ui-perf-bar {
-    width: 100%;
-    height: 6px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-pill);
-    overflow: hidden;
-  }
-
-  .ui-perf-fill {
-    height: 100%;
-    background-color: var(--color-coral);
-    border-radius: var(--radius-pill);
-  }
-
-  .ui-toggle-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: var(--color-on-dark);
-    font-weight: 400;
-  }
-
-  .ui-toggle {
-    width: 32px;
-    height: 18px;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius-pill);
-    position: relative;
-    cursor: pointer;
-  }
-
-  .ui-toggle.active {
-    background-color: var(--color-coral);
-  }
-
-  .ui-toggle::after {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 14px;
-    height: 14px;
-    background-color: var(--color-primary);
-    border-radius: 50%;
-    transition: transform var(--duration-fast);
-  }
-
-  .ui-toggle.active::after {
-    transform: translateX(14px);
-  }
-
-  /* === Pre-footer CTA Section === */
-  .cta-section {
-    padding: var(--spacing-section) 0;
-  }
-
-  .cta-band-illustrated {
-    background-color: var(--color-soft-stone);
-    border-radius: var(--radius-lg); /* 22px */
-    padding: 80px;
-    display: grid;
-    grid-template-columns: 7fr 5fr;
-    gap: var(--spacing-xxl);
-    align-items: center;
-    border: 1px solid var(--color-hairline);
-  }
-
-  @media (max-width: 768px) {
-    .cta-band-illustrated {
-      grid-template-columns: 1fr;
-      padding: 40px var(--spacing-xl);
-      gap: var(--spacing-lg);
-    }
-  }
-
-  .cta-left {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-lg);
-    align-items: flex-start;
-  }
-
-  .cta-subtitle {
-    color: var(--color-body-muted);
-    max-width: 480px;
-  }
-
-  .cta-right {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-  }
-
-  .cta-mascot-img {
-    max-width: 200px;
-    height: auto;
-    object-fit: contain;
-  }
-
+  /* Responsive adjustments */
   @media (max-width: 960px) {
     .directory-header {
       flex-direction: column;
       align-items: stretch;
-      gap: var(--spacing-md);
+      gap: var(--space-4);
     }
 
     .category-tabs {
       width: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero-search-trigger {
+      max-width: 100%;
     }
   }
 </style>

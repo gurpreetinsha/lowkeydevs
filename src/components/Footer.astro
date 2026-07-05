@@ -4,19 +4,17 @@ import Icon from './base/Icon.astro';
 
 <footer class="site-footer">
   <div class="container footer-container">
-    <!-- Column 1: Brand -->
-    <div class="footer-column footer-brand">
+    <div class="footer-brand">
       <a href="/" class="logo" aria-label="LowKeyDevs Homepage">
-        <span class="logo-text footer-logo-text">LowKey<span class="logo-accent">Devs</span></span>
+        <span class="logo-text">LowKey<span class="logo-accent">Devs</span></span>
       </a>
       <p class="brand-tagline">
         The fastest, cleanest collection of 100% private client-side utilities. Zero trackers, zero server logs.
       </p>
     </div>
 
-    <!-- Column 2: Platform -->
-    <div class="footer-column footer-links">
-      <h4 class="footer-heading">Platform</h4>
+    <div class="footer-links">
+      <h3 class="footer-heading">Platform</h3>
       <ul>
         <li><a href="/">Home</a></li>
         <li><a href="/about">About us</a></li>
@@ -24,21 +22,12 @@ import Icon from './base/Icon.astro';
       </ul>
     </div>
 
-    <!-- Column 3: Popular Utilities -->
-    <div class="footer-column footer-links">
-      <h4 class="footer-heading">Popular Tools</h4>
-      <ul>
-        <li><a href="/tools/json-formatter">JSON Formatter</a></li>
-        <li><a href="/tools/password-generator">Password Generator</a></li>
-        <li><a href="/tools/base64-converter">Base64 Converter</a></li>
-      </ul>
-    </div>
-
-    <!-- Column 4: Newsletter -->
-    <div class="footer-column footer-newsletter">
-      <div class="footer-newsletter-label">LowKeyDevs moves fast</div>
-      <h4 class="footer-newsletter-headline">Stay updated</h4>
-      <p class="newsletter-text micro-text">Receive updates when new offline tools are added.</p>
+    <div class="footer-newsletter">
+      <h3 class="footer-heading">
+        <span class="new-tools-badge">New tools</span>
+        Stay updated
+      </h3>
+      <p class="newsletter-text">Receive updates when new offline tools are added.</p>
       <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed!');">
         <input
           type="email"
@@ -64,46 +53,31 @@ import Icon from './base/Icon.astro';
 
 <style>
   .site-footer {
-    background-color: var(--color-primary); /* #17171c */
-    color: var(--color-muted);
-    border-top: 1px solid var(--color-hairline);
-    padding: var(--spacing-section) 0 0 0; /* 80px */
+    background-color: var(--surface);
+    color: var(--text-primary);
+    border-top: 1px solid var(--border);
+    padding: var(--space-16) 0 var(--space-10) 0;
     margin-top: auto;
-    position: relative;
-    overflow: hidden;
   }
 
   .footer-container {
     display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
-    gap: var(--spacing-xxl); /* 32px */
-    margin-bottom: 60px;
-  }
-
-  @media (max-width: 1024px) {
-    .footer-container {
-      grid-template-columns: 1fr 1fr;
-      gap: var(--spacing-xxl);
-    }
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1.5fr);
+    gap: var(--space-12);
+    margin-bottom: var(--space-10);
   }
 
   @media (max-width: 768px) {
     .footer-container {
       grid-template-columns: 1fr;
-      gap: var(--spacing-xl);
+      gap: var(--space-10);
     }
-  }
-
-  .footer-column {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-md);
   }
 
   .footer-brand {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-md);
+    gap: var(--space-4);
   }
 
   .footer-brand .logo {
@@ -111,76 +85,71 @@ import Icon from './base/Icon.astro';
     width: fit-content;
   }
 
-  .footer-logo-text {
-    color: var(--color-on-primary) !important;
-  }
-
   .brand-tagline {
-    color: var(--color-muted);
+    color: var(--text-secondary);
     font-size: 14px;
-    line-height: 1.6;
+    line-height: 1.7;
     max-width: 320px;
   }
 
   .footer-heading {
     font-family: var(--font-sans);
-    font-size: 14px; /* caption */
-    font-weight: 500;
-    color: var(--color-on-primary);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-tertiary);
     text-transform: uppercase;
-    letter-spacing: 0.28px;
-    margin-bottom: var(--spacing-xs);
+    letter-spacing: 0.06em;
+    margin-bottom: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    align-items: flex-start;
   }
 
-  .footer-newsletter-label {
-    font-family: var(--font-mono);
-    color: var(--color-coral);
-    font-size: 14px;
+  .new-tools-badge {
+    background-color: var(--success-subtle);
+    color: var(--success);
+    font-size: 11px;
+    padding: var(--space-0-5) var(--space-2);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    font-weight: 600;
+    letter-spacing: 0.02em;
     text-transform: uppercase;
-    letter-spacing: 0.28px;
-  }
-
-  .footer-newsletter-headline {
-    font-family: var(--font-sans);
-    font-size: 32px; /* card-heading */
-    font-weight: 400;
-    color: var(--color-on-primary);
-    line-height: 1.2;
-    letter-spacing: -0.32px;
   }
 
   .footer-links ul {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-sm);
+    gap: var(--space-3);
   }
 
   .footer-links a {
-    color: var(--color-muted);
-    font-size: 16px; /* body */
+    color: var(--text-secondary);
+    font-size: 14px;
     text-decoration: none;
     transition: color var(--duration-fast) var(--ease-out);
-    font-weight: 400;
+    font-weight: 500;
   }
 
   .footer-links a:hover {
-    color: var(--color-on-primary);
+    color: var(--accent);
     text-decoration: underline;
-    text-underline-offset: 4px;
+    text-underline-offset: 3px;
   }
 
   .footer-newsletter {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-sm);
+    gap: var(--space-3);
     max-width: 360px;
   }
 
   .newsletter-text {
-    color: var(--color-muted);
-    font-size: 12px; /* micro */
-    line-height: 1.4;
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.6;
   }
 
   .newsletter-form {
@@ -191,21 +160,23 @@ import Icon from './base/Icon.astro';
 
   .newsletter-input {
     width: 100%;
-    background-color: var(--color-cohere-black);
-    border: 1px solid var(--color-hairline);
-    color: var(--color-on-primary);
-    border-radius: var(--radius-xs); /* 4px */
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    border-radius: var(--radius-md);
     padding: 12px 60px 12px 16px;
     outline: none;
     font-family: var(--font-sans);
     font-size: 14px;
     font-weight: 400;
-    transition: border-color var(--duration-fast) var(--ease-out);
-    min-height: 44px;
+    transition: border-color var(--duration-fast) var(--ease-out),
+                box-shadow var(--duration-fast) var(--ease-out);
+    min-height: 52px;
   }
 
   .newsletter-input:focus {
-    border-color: var(--color-on-primary);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-subtle);
   }
 
   .newsletter-submit {
@@ -213,30 +184,29 @@ import Icon from './base/Icon.astro';
     right: 4px;
     top: 50%;
     transform: translateY(-50%);
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     background: transparent;
     border: none;
-    color: var(--color-muted);
+    color: var(--text-secondary);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--radius-xs);
+    border-radius: var(--radius-sm);
     transition: all var(--duration-fast) var(--ease-out);
   }
 
   .newsletter-submit:hover {
-    color: var(--color-on-primary);
-    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--accent);
+    background-color: var(--accent-subtle);
   }
 
   .footer-bottom {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: var(--spacing-lg);
-    padding-bottom: var(--spacing-lg);
-    font-size: 12px; /* micro */
-    color: var(--color-muted);
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-6);
+    font-size: 13px;
+    color: var(--text-tertiary);
   }
 
   .footer-bottom-container {
@@ -244,7 +214,7 @@ import Icon from './base/Icon.astro';
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: var(--spacing-sm);
+    gap: var(--space-4);
   }
 
   @media (max-width: 480px) {
@@ -252,18 +222,5 @@ import Icon from './base/Icon.astro';
       flex-direction: column;
       text-align: center;
     }
-  }
-
-  .footer-mountain-wrapper {
-    width: 100%;
-    overflow: hidden;
-    line-height: 0;
-    margin-top: 20px;
-  }
-
-  .footer-mountain {
-    width: 100%;
-    height: 120px;
-    display: block;
   }
 </style>
