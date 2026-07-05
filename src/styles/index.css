@@ -4,7 +4,7 @@
    ============================================================ */
 
 /* --- FONT IMPORTS --- */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 
 /* ============================================================
    DESIGN TOKENS
@@ -62,7 +62,8 @@
   --z-modal: 400;
 
   /* --- Container max-widths --- */
-  --container-max-width: 100%; /* Stretches fluidly on ultrawide monitors */
+  --container-max-width: 100%;
+  /* Stretches fluidly on ultrawide monitors */
   --container-max-width-narrow: 720px;
 }
 
@@ -71,7 +72,8 @@
    ============================================================ */
 
 /* Light Theme */
-html[data-theme="light"], html:not([data-theme]) {
+html[data-theme="light"],
+html:not([data-theme]) {
   --bg: #FFFFFF;
   --surface: #FFFFFF;
   --surface-elevated: #FFFFFF;
@@ -253,7 +255,7 @@ html[data-theme="dark"] {
   --success-color: var(--success);
   --error-color: var(--error);
   --error-border: rgba(239, 68, 68, 0.3);
-  
+
   /* Additional legacy aliases for tools */
   --bg-color: var(--bg);
   --surface-color: var(--surface);
@@ -299,7 +301,11 @@ body {
   color: var(--text-primary);
 }
 
-img, picture, video, canvas, svg {
+img,
+picture,
+video,
+canvas,
+svg {
   display: block;
   max-width: 100%;
 }
@@ -308,7 +314,12 @@ img, picture, video, canvas, svg {
    TYPOGRAPHY
    ============================================================ */
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
   font-weight: 500;
   line-height: 1.15;
@@ -350,7 +361,9 @@ h6 {
   line-height: 1.5;
 }
 
-p, li, div {
+p,
+li,
+div {
   font-family: var(--font-sans);
 }
 
@@ -373,7 +386,8 @@ a:hover {
   text-underline-offset: 3px;
 }
 
-pre, code {
+pre,
+code {
   font-family: var(--font-mono);
   font-size: 0.875em;
 }
@@ -445,7 +459,8 @@ strong {
    BUTTONS
    ============================================================ */
 
-.btn, button.btn {
+.btn,
+button.btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -469,64 +484,74 @@ strong {
   transition: all var(--duration-fast) var(--ease-out);
 }
 
-.btn:hover, button.btn:hover {
+.btn:hover,
+button.btn:hover {
   background-color: var(--surface-hover);
   border-color: var(--border-hover);
   text-decoration: none;
   color: var(--text-primary);
 }
 
-.btn:focus-visible, button:focus-visible {
+.btn:focus-visible,
+button:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
 /* Primary */
-.btn-primary, button.btn-primary {
+.btn-primary,
+button.btn-primary {
   background-color: var(--accent);
   color: var(--accent-on);
   border-color: var(--accent);
 }
 
-.btn-primary:hover, button.btn-primary:hover {
+.btn-primary:hover,
+button.btn-primary:hover {
   background-color: var(--accent-hover);
   border-color: var(--accent-hover);
   color: var(--accent-on);
 }
 
 /* Secondary */
-.btn-secondary, button.btn-secondary {
+.btn-secondary,
+button.btn-secondary {
   background-color: var(--surface);
   color: var(--text-primary);
   border: 1px solid var(--border);
 }
 
-.btn-secondary:hover, button.btn-secondary:hover {
+.btn-secondary:hover,
+button.btn-secondary:hover {
   background-color: var(--surface-hover);
   border-color: var(--border-hover);
   color: var(--text-primary);
 }
 
 /* Ghost */
-.btn-ghost, button.btn-ghost {
+.btn-ghost,
+button.btn-ghost {
   background-color: transparent;
   color: var(--text-secondary);
   border: none;
 }
 
-.btn-ghost:hover, button.btn-ghost:hover {
+.btn-ghost:hover,
+button.btn-ghost:hover {
   background-color: var(--surface-hover);
   color: var(--text-primary);
 }
 
 /* Danger */
-.btn-danger, button.btn-danger {
+.btn-danger,
+button.btn-danger {
   background-color: var(--error);
   color: #ffffff;
   border-color: var(--error);
 }
 
-.btn-danger:hover, button.btn-danger:hover {
+.btn-danger:hover,
+button.btn-danger:hover {
   opacity: 0.9;
 }
 
@@ -560,7 +585,8 @@ strong {
 }
 
 /* Disabled */
-button:disabled, .btn:disabled {
+button:disabled,
+.btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
@@ -584,8 +610,12 @@ button:disabled, .btn:disabled {
   color: var(--text-primary);
 }
 
-input, textarea, select,
-.input, .textarea, .select {
+input,
+textarea,
+select,
+.input,
+.textarea,
+.select {
   width: 100%;
   background-color: var(--bg);
   border: 1px solid var(--border);
@@ -596,15 +626,17 @@ input, textarea, select,
   font-family: var(--font-mono);
   font-size: 14px;
   transition: border-color var(--duration-fast) var(--ease-out),
-              box-shadow var(--duration-fast) var(--ease-out);
+    box-shadow var(--duration-fast) var(--ease-out);
 }
 
-textarea, .textarea {
+textarea,
+.textarea {
   min-height: 140px;
   resize: vertical;
 }
 
-select, .select {
+select,
+.select {
   cursor: pointer;
   appearance: none;
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='m4 6 4 4 4-4'/%3e%3c/svg%3e");
@@ -619,23 +651,34 @@ select, .select {
   min-height: auto;
 }
 
-input:hover, textarea:hover, select:hover,
-.input:hover, .textarea:hover, .select:hover {
+input:hover,
+textarea:hover,
+select:hover,
+.input:hover,
+.textarea:hover,
+.select:hover {
   border-color: var(--border-hover);
 }
 
-input:focus, textarea:focus, select:focus,
-.input:focus, .textarea:focus, .select:focus {
+input:focus,
+textarea:focus,
+select:focus,
+.input:focus,
+.textarea:focus,
+.select:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-subtle);
 }
 
-input:disabled, textarea:disabled, select:disabled {
+input:disabled,
+textarea:disabled,
+select:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-input::placeholder, textarea::placeholder {
+input::placeholder,
+textarea::placeholder {
   color: var(--text-tertiary);
 }
 
@@ -661,18 +704,23 @@ input::placeholder, textarea::placeholder {
 }
 
 /* Title inside cards */
-.card h2, .card h3,
-.glass-panel h2, .glass-panel h3,
+.card h2,
+.card h3,
+.glass-panel h2,
+.glass-panel h3,
 .partner-card .partner-title,
 .sidebar-widget .widget-title,
-.about-card h2, .about-card h3,
+.about-card h2,
+.about-card h3,
 .edu-title {
   color: var(--text-primary);
 }
 
 /* Description inside cards */
-.card p, .card li,
-.glass-panel p, .glass-panel li,
+.card p,
+.card li,
+.glass-panel p,
+.glass-panel li,
 .partner-card .partner-description,
 .sidebar-widget p,
 .about-card p,
@@ -862,8 +910,8 @@ input::placeholder, textarea::placeholder {
   gap: var(--space-4);
   height: 100%;
   transition: transform var(--duration-normal) var(--ease-out),
-              border-color var(--duration-normal) var(--ease-out),
-              box-shadow var(--duration-normal) var(--ease-out);
+    border-color var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
 }
 
 .partner-card:hover {
@@ -953,7 +1001,7 @@ input::placeholder, textarea::placeholder {
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid transparent;
   transition: border-color var(--duration-normal) var(--ease-out),
-              background-color var(--duration-normal) var(--ease-out);
+    background-color var(--duration-normal) var(--ease-out);
 }
 
 .site-header.scrolled {
@@ -1030,7 +1078,8 @@ input::placeholder, textarea::placeholder {
 }
 
 /* Icon buttons (search, theme, menu) */
-.nav-icon-btn, .theme-toggle-btn {
+.nav-icon-btn,
+.theme-toggle-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1046,7 +1095,8 @@ input::placeholder, textarea::placeholder {
   transition: all var(--duration-fast) var(--ease-out);
 }
 
-.nav-icon-btn:hover, .theme-toggle-btn:hover {
+.nav-icon-btn:hover,
+.theme-toggle-btn:hover {
   background-color: var(--surface-hover);
   color: var(--text-primary);
   border-color: var(--border);
@@ -1073,7 +1123,7 @@ input::placeholder, textarea::placeholder {
   pointer-events: none;
   visibility: hidden;
   transition: opacity var(--duration-normal) var(--ease-out),
-              visibility var(--duration-normal) var(--ease-out);
+    visibility var(--duration-normal) var(--ease-out);
 }
 
 .mobile-drawer-overlay.active {
@@ -1147,7 +1197,7 @@ input::placeholder, textarea::placeholder {
   pointer-events: none;
   visibility: hidden;
   transition: opacity var(--duration-normal) var(--ease-out),
-              visibility var(--duration-normal) var(--ease-out);
+    visibility var(--duration-normal) var(--ease-out);
 }
 
 .search-overlay.active {
@@ -1254,11 +1304,13 @@ input::placeholder, textarea::placeholder {
   font-weight: 500;
 }
 
-.search-item:hover, .search-item.active {
+.search-item:hover,
+.search-item.active {
   background-color: var(--surface-hover);
 }
 
-.search-item:hover a, .search-item.active a {
+.search-item:hover a,
+.search-item.active a {
   color: var(--text-primary);
   text-decoration: none;
 }
@@ -1282,7 +1334,7 @@ input::placeholder, textarea::placeholder {
     gap: var(--space-3);
   }
 
-  div.tool-controls > * {
+  div.tool-controls>* {
     width: 100%;
   }
 
@@ -1315,7 +1367,8 @@ input::placeholder, textarea::placeholder {
     padding: var(--space-4);
   }
 
-  textarea, input[type="text"] {
+  textarea,
+  input[type="text"] {
     max-width: 100%;
   }
 
@@ -1334,6 +1387,7 @@ input::placeholder, textarea::placeholder {
    ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -1348,8 +1402,14 @@ input::placeholder, textarea::placeholder {
    UTILITY CLASSES
    ============================================================ */
 
-.text-center { text-align: center; }
-.tabular-nums { font-variant-numeric: tabular-nums; }
+.text-center {
+  text-align: center;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -1373,6 +1433,7 @@ input::placeholder, textarea::placeholder {
 }
 
 @media (max-width: 768px) {
+
   .editor-grid,
   :global(.editor-grid) {
     grid-template-columns: minmax(0, 1fr) !important;
