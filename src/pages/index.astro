@@ -55,28 +55,30 @@ const activeCategories = categories.filter(cat =>
           <h2 class="section-title">All utilities</h2>
 
           <!-- Category Filter Tabs -->
-          <div class="category-tabs" role="tablist" aria-label="Tool Categories">
-            <button
-              class="tab-btn active"
-              role="tab"
-              aria-selected="true"
-              data-category="all"
-              id="tab-all"
-            >
-              All tools
-            </button>
-            {activeCategories.map(cat => (
+          <div class="category-tabs-wrapper">
+            <div class="category-tabs" role="tablist" aria-label="Tool Categories">
               <button
-                class="tab-btn"
+                class="tab-btn active"
                 role="tab"
-                aria-selected="false"
-                data-category={cat.slug}
-                id={`tab-${cat.slug}`}
+                aria-selected="true"
+                data-category="all"
+                id="tab-all"
               >
-                <Icon name={cat.icon} size={14} />
-                <span>{cat.title}</span>
+                All tools
               </button>
-            ))}
+              {activeCategories.map(cat => (
+                <button
+                  class="tab-btn"
+                  role="tab"
+                  aria-selected="false"
+                  data-category={cat.slug}
+                  id={`tab-${cat.slug}`}
+                >
+                  <Icon name={cat.icon} size={14} />
+                  <span>{cat.title}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -191,7 +193,7 @@ const activeCategories = categories.filter(cat =>
 
   .hero-title {
     font-family: var(--font-heading);
-    font-size: clamp(32px, 5vw, 72px);
+    font-size: clamp(28px, 6vw, 64px);
     font-weight: 700;
     line-height: 1.08;
     letter-spacing: -0.03em;
@@ -276,11 +278,35 @@ const activeCategories = categories.filter(cat =>
     color: var(--text-primary);
   }
 
+  .category-tabs-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .category-tabs-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 48px;
+    background: linear-gradient(to right, rgba(252, 252, 253, 0), var(--bg));
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Support dark theme background for fading indicator */
+  :global(html[data-theme="dark"]) .category-tabs-wrapper::after {
+    background: linear-gradient(to right, rgba(9, 9, 9, 0), var(--bg));
+  }
+
   .category-tabs {
     display: flex;
     gap: var(--space-2);
     overflow-x: auto;
     padding-bottom: 4px;
+    padding-right: 48px;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -294,7 +320,7 @@ const activeCategories = categories.filter(cat =>
     border: 1px solid var(--border);
     background: var(--surface);
     color: var(--text-secondary);
-    padding: var(--space-2) var(--space-3);
+    padding: var(--space-2) var(--space-4);
     border-radius: var(--radius-md);
     font-family: var(--font-sans);
     font-weight: 500;
@@ -305,7 +331,7 @@ const activeCategories = categories.filter(cat =>
     gap: var(--space-1-5);
     white-space: nowrap;
     transition: all var(--duration-fast) var(--ease-out);
-    min-height: 36px;
+    min-height: 44px;
   }
 
   .tab-btn:hover {
@@ -364,15 +390,8 @@ const activeCategories = categories.filter(cat =>
 
   .features-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-8);
-  }
-
-  @media (max-width: 768px) {
-    .features-grid {
-      grid-template-columns: 1fr;
-      gap: var(--space-6);
-    }
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: clamp(16px, 3vw, 32px);
   }
 
   .feature-item {

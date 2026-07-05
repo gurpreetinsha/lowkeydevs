@@ -208,7 +208,19 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
     display: flex;
     align-items: center;
     gap: var(--space-1-5);
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .breadcrumbs-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .breadcrumb-link, .breadcrumb-current {
+    white-space: nowrap;
   }
 
   .breadcrumb-link {
@@ -248,7 +260,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   .tool-grid {
     display: grid;
     grid-template-columns: 1fr min(320px, 100%);
-    gap: var(--space-8);
+    gap: clamp(16px, 4vw, 32px);
     align-items: start;
   }
 
@@ -407,18 +419,18 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   .edu-grid {
     display: grid;
     grid-template-columns: 1.2fr 0.8fr;
-    gap: var(--space-8);
+    gap: clamp(16px, 4vw, 32px);
     align-items: start;
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 992px) {
     .edu-grid {
       grid-template-columns: 1fr;
     }
   }
 
   .edu-guide, .faq-accordion {
-    padding: var(--space-6);
+    padding: clamp(16px, 4vw, 24px);
   }
 
   .edu-title {
