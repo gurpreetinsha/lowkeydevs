@@ -166,10 +166,15 @@ const getAlternateUrl = (lang: string) => {
 
       function getNestedValue(obj: any, path: string): string | any {
         if (!obj) return null;
+        // Direct flat key lookup (highly efficient for our translations map)
+        if (obj[path] !== undefined) {
+          return obj[path];
+        }
+        // Nested path fallback traversal
         const parts = path.split('.');
         let current = obj;
         for (const part of parts) {
-          if (current[part] === undefined) return null;
+          if (current === null || current === undefined || current[part] === undefined) return null;
           current = current[part];
         }
         return current;
@@ -337,7 +342,7 @@ const getAlternateUrl = (lang: string) => {
       }) as EventListener);
 
       // Perform initial translation on page load
-      document.addEventListener('DOMContentLoaded', () => {
+      function initTranslation() {
         // @ts-ignore
         const currentLang = window.__i18n ? window.__i18n.currentLang : 'en';
         
@@ -345,7 +350,13 @@ const getAlternateUrl = (lang: string) => {
           const event = new CustomEvent('language-initialized', { detail: { lang: currentLang } });
           window.dispatchEvent(event);
         });
-      });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initTranslation);
+      } else {
+        initTranslation();
+      }
     </script>
   </body>
 </html>

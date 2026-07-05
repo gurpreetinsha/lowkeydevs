@@ -443,26 +443,26 @@ const languages = [
     }
   }
 
-  // Initialize all switcher instances on the page
-  const switcherEl = document.getElementById('lang-switcher');
-  if (switcherEl) {
-    new LanguageSwitcher(switcherEl);
-  }
-  
-  // drawer-level language switcher in mobile (if exists)
-  document.addEventListener('DOMContentLoaded', () => {
+  // Initialize switcher instances on the page
+  function initSwitchers() {
+    const switcherEl = document.getElementById('lang-switcher');
+    if (switcherEl && !switcherEl.classList.contains('js-instantiated')) {
+      switcherEl.classList.add('js-instantiated');
+      new LanguageSwitcher(switcherEl);
+    }
+
     const sws = document.querySelectorAll('.lang-switcher-container');
     sws.forEach(s => {
-      // Check if it's already instantiated or instantiate it
-      // To prevent double execution we check a class
       if (!s.classList.contains('js-instantiated')) {
         s.classList.add('js-instantiated');
-        // If not the main one, we can instantiate it
-        if (s.id !== 'lang-switcher') {
-          // Instantiate as a separate switcher object
-          new LanguageSwitcher(s as HTMLElement);
-        }
+        new LanguageSwitcher(s as HTMLElement);
       }
     });
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSwitchers);
+  } else {
+    initSwitchers();
+  }
 </script>
