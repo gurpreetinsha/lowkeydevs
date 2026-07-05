@@ -201,14 +201,14 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   .breadcrumbs-nav {
     border-bottom: 1px solid var(--color-hairline);
     padding: var(--spacing-sm) 0;
-    font-size: 14px; /* body-sm */
+    font-size: 14px; /* caption */
     background-color: var(--color-canvas);
   }
 
   .breadcrumbs-container {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--spacing-sm);
     flex-wrap: nowrap;
     overflow-x: auto;
     scrollbar-width: none;
@@ -238,24 +238,24 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   }
 
   .breadcrumb-sep {
-    color: var(--color-muted-soft);
+    color: var(--color-muted);
     display: flex;
     align-items: center;
   }
 
   .breadcrumb-current {
-    color: var(--color-muted-soft);
+    color: var(--color-muted);
     font-weight: 400;
   }
 
   /* Layout */
   .tool-main {
-    padding-top: var(--spacing-xl); /* 32px */
-    padding-bottom: var(--spacing-section); /* 96px */
+    padding-top: var(--spacing-xl); /* 24px */
+    padding-bottom: var(--spacing-section); /* 80px */
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-xxl); /* 48px */
+    gap: var(--spacing-xxl); /* 32px */
   }
 
   .tool-grid {
@@ -283,38 +283,38 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
     align-self: flex-start;
     display: inline-flex;
     align-items: center;
-    gap: var(--space-2);
-    background-color: var(--color-surface-card); /* #f5f0e0 */
-    color: var(--color-ink); /* #0a0a0a */
+    gap: var(--spacing-xs);
+    background-color: var(--color-soft-stone); /* #eeece7 */
+    color: var(--color-ink);
     border: 1px solid var(--color-hairline);
-    padding: 4px 12px; /* badge-pill */
-    border-radius: var(--radius-pill); /* rounded.pill */
-    font-size: 13px; /* typography.caption */
-    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: var(--radius-pill); /* 32px */
+    font-size: 14px; /* caption */
+    font-weight: 400;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.28px;
   }
 
   .tool-title {
     font-family: var(--font-heading);
-    font-size: 40px; /* display-md */
-    font-weight: 500;
+    font-size: 72px; /* product-display scale */
+    font-weight: 400;
     color: var(--color-ink);
-    letter-spacing: -1px;
-    line-height: 1.1;
+    letter-spacing: -1.44px;
+    line-height: 1.0;
   }
 
   .tool-description {
-    color: var(--color-body);
-    font-size: 16px; /* body-md */
+    color: var(--color-body-muted);
+    font-size: 18px; /* body-large */
     font-weight: 400;
     max-width: 600px;
-    line-height: 1.55;
+    line-height: 1.4;
   }
 
   /* Tool workspace */
   .tool-workspace-wrapper {
-    margin-top: var(--space-2);
+    margin-top: var(--spacing-xs);
   }
 
   /* Sidebar */
@@ -327,15 +327,15 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   .sidebar-widget {
     background-color: var(--color-canvas);
     border: 1px solid var(--color-hairline);
-    border-radius: var(--radius-lg); /* 16px */
-    padding: var(--spacing-lg); /* 24px */
+    border-radius: var(--radius-sm); /* 8px */
+    padding: var(--spacing-xl); /* 24px */
     color: var(--color-ink);
   }
 
   .widget-title {
     font-family: var(--font-sans);
-    font-size: 16px; /* title-sm */
-    font-weight: 600;
+    font-size: 18px; /* body-large */
+    font-weight: 500;
     margin-bottom: var(--spacing-sm);
     color: var(--color-ink);
   }
@@ -343,21 +343,21 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   .related-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: var(--spacing-xs);
   }
 
   .related-item {
     display: flex;
     align-items: flex-start;
-    gap: var(--space-3);
-    padding: var(--space-2);
-    border-radius: var(--radius-md); /* 12px */
+    gap: var(--spacing-xs);
+    padding: 8px;
+    border-radius: var(--radius-xs); /* 4px */
     text-decoration: none;
     transition: background-color var(--duration-fast) var(--ease-out);
   }
 
   .related-item:hover {
-    background-color: var(--color-surface-soft);
+    background-color: var(--color-soft-stone);
     text-decoration: none;
   }
 
@@ -367,9 +367,9 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
     justify-content: center;
     width: 32px;
     height: 32px;
-    background-color: var(--color-surface-card);
+    background-color: var(--color-soft-stone);
     color: var(--color-ink);
-    border-radius: var(--radius-sm); /* 8px */
+    border-radius: var(--radius-xs); /* 4px */
     flex-shrink: 0;
   }
 
@@ -377,18 +377,18 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    gap: var(--space-0-5);
+    gap: 2px;
   }
 
   .related-title {
-    font-weight: 600;
+    font-weight: 500;
     font-size: 14px;
     color: var(--color-ink);
   }
 
   .related-desc {
     font-size: 13px;
-    color: var(--color-body);
+    color: var(--color-body-muted);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -396,31 +396,31 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
   /* Privacy widget */
   .privacy-widget {
-    background-color: var(--color-surface-card); /* #f5f0e0 */
+    background-color: var(--color-soft-stone); /* #eeece7 */
     border: 1px solid var(--color-hairline);
-    border-radius: var(--radius-lg); /* 16px */
-    padding: var(--spacing-lg); /* 24px */
+    border-radius: var(--radius-sm); /* 8px */
+    padding: var(--spacing-xl); /* 24px */
   }
 
   .privacy-header {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
-    color: var(--color-success);
-    margin-bottom: var(--space-3);
+    gap: var(--spacing-xs);
+    color: var(--color-deep-green);
+    margin-bottom: var(--spacing-xs);
   }
 
   .privacy-header .privacy-widget-title {
     margin-bottom: 0;
-    color: var(--color-success);
-    font-weight: 700;
-    font-size: 14px;
+    color: var(--color-deep-green);
+    font-weight: 500;
+    font-size: 16px;
   }
 
   .privacy-text {
     font-size: 14px;
-    color: var(--color-body);
-    line-height: 1.55;
+    color: var(--color-body-muted);
+    line-height: 1.4;
   }
 
   /* Educational content */
@@ -438,20 +438,20 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   }
 
   .edu-guide, .faq-accordion {
-    background-color: var(--color-surface-card); /* #f5f0e0 */
+    background-color: var(--color-soft-stone); /* #eeece7 */
     border: 1px solid var(--color-hairline);
-    border-radius: var(--radius-lg); /* 16px */
-    padding: var(--spacing-lg); /* 24px */
+    border-radius: var(--radius-sm); /* 8px */
+    padding: var(--spacing-xl); /* 24px */
   }
 
   .edu-title {
-    font-family: var(--font-heading);
-    font-size: 32px; /* display-sm */
-    font-weight: 500;
+    font-family: var(--font-sans);
+    font-size: 32px; /* card-heading */
+    font-weight: 400;
     margin-bottom: var(--spacing-sm);
     color: var(--color-ink);
-    letter-spacing: -0.5px;
-    line-height: 1.15;
+    letter-spacing: -0.32px;
+    line-height: 1.2;
   }
 
   .edu-title:not(:first-child) {
@@ -459,31 +459,31 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   }
 
   .edu-para {
-    color: var(--color-body);
-    font-size: 16px; /* body-md */
-    line-height: 1.55;
-    margin-bottom: var(--space-2);
+    color: var(--color-body-muted);
+    font-size: 16px; /* body */
+    line-height: 1.5;
+    margin-bottom: var(--spacing-sm);
   }
 
   .steps-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: var(--spacing-xs);
   }
 
   .step-item {
     font-size: 16px;
-    color: var(--color-body);
-    line-height: 1.55;
+    color: var(--color-body-muted);
+    line-height: 1.5;
   }
 
   .pro-tips-title {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--spacing-xs);
     color: var(--color-ink) !important;
-    font-size: 18px !important; /* title-md */
-    font-weight: 600 !important;
+    font-size: 24px !important; /* feature-heading */
+    font-weight: 400 !important;
     font-family: var(--font-sans) !important;
   }
 
@@ -491,15 +491,15 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
     list-style-type: none;
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
+    gap: var(--spacing-xs);
   }
 
   .pro-tips-list li {
     font-size: 16px;
-    color: var(--color-body);
+    color: var(--color-body-muted);
     position: relative;
-    padding-left: var(--space-5);
-    line-height: 1.55;
+    padding-left: var(--spacing-xl);
+    line-height: 1.5;
   }
 
   .pro-tips-list li::before {
@@ -513,14 +513,14 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   .accordion-wrapper {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
-    margin-top: var(--space-4);
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-md);
   }
 
   .faq-item {
     border: 1px solid var(--color-hairline);
-    border-radius: var(--radius-md); /* 12px */
-    background-color: var(--color-canvas); /* #fffaf0 */
+    border-radius: var(--radius-xs); /* 4px */
+    background-color: var(--color-canvas);
     overflow: hidden;
   }
 
@@ -528,9 +528,9 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--space-3) var(--space-4);
+    padding: var(--spacing-sm) var(--spacing-md);
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 14px;
     user-select: none;
     list-style: none;
@@ -539,7 +539,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   }
 
   .faq-question:hover {
-    background-color: var(--color-surface-soft);
+    background-color: var(--color-soft-stone);
   }
 
   .faq-question::-webkit-details-marker {
@@ -557,14 +557,14 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   }
 
   .faq-answer {
-    padding: 0 var(--space-4) var(--space-4) var(--space-4);
+    padding: 0 var(--spacing-md) var(--spacing-md) var(--spacing-md);
     border-top: 1px solid var(--color-hairline);
   }
 
   .faq-answer p {
     font-size: 14px;
-    color: var(--color-body);
-    line-height: 1.55;
-    margin-top: var(--space-3);
+    color: var(--color-body-muted);
+    line-height: 1.4;
+    margin-top: var(--spacing-sm);
   }
 </style>

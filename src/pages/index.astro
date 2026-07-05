@@ -25,31 +25,67 @@ const activeCategories = categories.filter(cat =>
   <main id="main-content" class="home-main">
     <!-- Hero Section -->
     <section class="hero-band" aria-labelledby="hero-title">
-      <div class="container hero-container-grid">
-        <div class="hero-left">
-          <span class="badge-pill hero-pill">
-            <Icon name="Lock" size={12} />
+      <div class="container hero-container">
+        <div class="hero-text-content">
+          <span class="mono-label hero-badge">
             100% client-side privacy
           </span>
-          <h1 id="hero-title" class="display-xl">
-            The internet's default <span class="accent-text">toolbox.</span>
+          <h1 id="hero-title" class="hero-display">
+            The internet's default toolbox.
           </h1>
-          <p class="hero-subtitle body-md">
+          <p class="hero-subtitle body-large">
             Instant, beautiful developer tools that run entirely in your browser. No forced logins, no intrusive popups, and no tracking.
           </p>
           <div class="hero-buttons">
-            <button class="btn btn-primary" id="hero-search-trigger" aria-label="Search tools">
+            <button class="btn-primary" id="hero-search-trigger" aria-label="Search tools">
               <Icon name="Search" size={14} />
               <span>Search tools...</span>
               <kbd class="kbd-helper">/</kbd>
             </button>
-            <a href="/about" class="btn btn-secondary">Learn more</a>
+            <a href="/about" class="btn-secondary">Learn more</a>
           </div>
         </div>
-        <div class="hero-right">
-          <div class="hero-illustration-card">
-            <img src="/hero-claymation.png" alt="Playful 3D claymation landscape with character mascots" class="hero-img" />
+
+        <!-- Two-Card Media Composition -->
+        <div class="hero-media-composition">
+          <!-- Wide Card: agent-console-card -->
+          <div class="agent-console-card">
+            <div class="console-header">
+              <div class="console-dots">
+                <span class="console-dot dot-red"></span>
+                <span class="console-dot dot-yellow"></span>
+                <span class="console-dot dot-green"></span>
+              </div>
+              <span class="console-title">lowkeydevs ~ client-side sandbox</span>
+            </div>
+            <div class="console-body">
+              <div class="console-line"><span class="console-prompt">$</span> lowkeydevs --version</div>
+              <div class="console-line console-output">v1.4.0 (Secure client-side sandbox)</div>
+              <div class="console-line"><span class="console-prompt">$</span> run json-formatter --input data.json</div>
+              <div class="console-line console-output-success">✓ JSON parsed and formatted locally in 0.8ms</div>
+              <div class="console-line"><span class="console-prompt">$</span> generate-password --length 32</div>
+              <div class="console-line console-output-accent">🔑 e9$aLp!92*Mv_qRz-LpW2_uY9x@Z4</div>
+            </div>
           </div>
+
+          <!-- Narrow Card: hero-photo-card -->
+          <div class="hero-photo-card">
+            <img src="/hero-claymation.png" alt="Playful 3D claymation landscape with character mascots" class="hero-photo-img" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust Logo Strip -->
+    <section class="trust-logo-strip" aria-label="Trusted technology partners">
+      <div class="container">
+        <p class="trust-caption">Built on modern, open-source technology</p>
+        <div class="logos-row">
+          <span class="mono-label">Astro</span>
+          <span class="mono-label">GitHub</span>
+          <span class="mono-label">Vercel</span>
+          <span class="mono-label">Netlify</span>
+          <span class="mono-label">WebAssembly</span>
         </div>
       </div>
     </section>
@@ -64,7 +100,7 @@ const activeCategories = categories.filter(cat =>
           <div class="category-tabs-wrapper">
             <div class="category-tabs" role="tablist" aria-label="Tool Categories">
               <button
-                class="tab-btn active"
+                class="blog-filter-chip tab-btn active"
                 role="tab"
                 aria-selected="true"
                 data-category="all"
@@ -74,7 +110,7 @@ const activeCategories = categories.filter(cat =>
               </button>
               {activeCategories.map(cat => (
                 <button
-                  class="tab-btn"
+                  class="blog-filter-chip tab-btn"
                   role="tab"
                   aria-selected="false"
                   data-category={cat.slug}
@@ -109,19 +145,19 @@ const activeCategories = categories.filter(cat =>
     </section>
 
     <!-- Features Section -->
-    <section class="features-section" aria-labelledby="features-title">
-      <div class="container">
-        <h2 id="features-title" class="display-lg features-heading">Built for speed and security</h2>
+    <section class="features-section container" aria-labelledby="features-title">
+      <div class="dark-feature-band">
+        <h2 id="features-title" class="section-heading features-heading">Built for speed and security</h2>
         <div class="features-grid">
-          <!-- Card 1: Pink (Zero server logs) -->
-          <div class="feature-card-pink">
+          <!-- Card 1: Zero server logs -->
+          <div class="feature-card-translucent">
             <div class="card-feature-header">
               <div class="feature-icon-wrapper">
                 <Icon name="Lock" size={24} />
               </div>
-              <h3 class="title-md">Zero server logs</h3>
+              <h3 class="feature-heading">Zero server logs</h3>
             </div>
-            <p class="body-md">
+            <p class="body-text">
               Your data never touches our servers. All calculations, parsing, and formatting happen locally in your browser.
             </p>
             <div class="product-ui-fragment">
@@ -131,15 +167,15 @@ const activeCategories = categories.filter(cat =>
             </div>
           </div>
 
-          <!-- Card 2: Teal (Lightning fast) -->
-          <div class="feature-card-teal">
+          <!-- Card 2: Lightning fast -->
+          <div class="feature-card-translucent">
             <div class="card-feature-header">
               <div class="feature-icon-wrapper">
                 <Icon name="RefreshCw" size={24} />
               </div>
-              <h3 class="title-md">Lightning fast</h3>
+              <h3 class="feature-heading">Lightning fast</h3>
             </div>
-            <p class="body-md">
+            <p class="body-text">
               Statically pre-rendered pages load in milliseconds. Standard actions parse and update instantly as you type.
             </p>
             <div class="product-ui-fragment">
@@ -148,15 +184,15 @@ const activeCategories = categories.filter(cat =>
             </div>
           </div>
 
-          <!-- Card 3: Lavender (Minimal & clean) -->
-          <div class="feature-card-lavender">
+          <!-- Card 3: Minimal & clean -->
+          <div class="feature-card-translucent">
             <div class="card-feature-header">
               <div class="feature-icon-wrapper">
                 <Icon name="Braces" size={24} />
               </div>
-              <h3 class="title-md">Minimal & clean</h3>
+              <h3 class="feature-heading">Minimal & clean</h3>
             </div>
-            <p class="body-md">
+            <p class="body-text">
               No annoying popups, cookie walls, or bloated advertisements. Just the tools you need, ready when you are.
             </p>
             <div class="product-ui-fragment">
@@ -178,11 +214,11 @@ const activeCategories = categories.filter(cat =>
     <section class="cta-section container" aria-labelledby="cta-title">
       <div class="cta-band-illustrated">
         <div class="cta-left">
-          <h2 id="cta-title" class="display-md">Work with absolute privacy and speed today</h2>
-          <p class="cta-subtitle body-md">
+          <h2 id="cta-title" class="section-heading">Work with absolute privacy and speed today</h2>
+          <p class="cta-subtitle body-large">
             Save time, secure your tokens and keys, and enjoy ad-free developer tools built exclusively for high performance.
           </p>
-          <a href="/about" class="btn btn-primary">About our mission</a>
+          <a href="/about" class="btn-primary">About our mission</a>
         </div>
         <div class="cta-right">
           <img src="/mascot-claymation.png" alt="Waving claymation character mascot" class="cta-mascot-img" />
@@ -201,105 +237,206 @@ const activeCategories = categories.filter(cat =>
     gap: 0;
   }
 
-  /* === Hero Band (hero-band) === */
+  /* === Hero Band === */
   .hero-band {
     background-color: var(--color-canvas);
     color: var(--color-ink);
     padding: var(--spacing-section) 0;
   }
 
-  .hero-container-grid {
-    display: grid;
-    grid-template-columns: 7fr 5fr;
-    gap: var(--spacing-xxl);
-    align-items: center;
-  }
-
-  @media (max-width: 768px) {
-    .hero-band {
-      padding: var(--spacing-xl) 0;
-    }
-    .hero-container-grid {
-      grid-template-columns: 1fr;
-      gap: var(--spacing-lg);
-    }
-  }
-
-  .hero-left {
+  .hero-container {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-lg);
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
+    gap: var(--spacing-xl);
   }
 
-  .hero-pill {
-    background-color: var(--color-surface-card);
-    color: var(--color-ink);
-    border: 1px solid var(--color-hairline);
-    padding: 4px 12px;
-    border-radius: var(--radius-pill);
-    font-size: 13px;
-    font-weight: 500;
-    display: inline-flex;
+  .hero-text-content {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--spacing-md);
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .hero-badge {
+    background-color: var(--color-soft-stone);
+    color: var(--color-ink);
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-hairline);
   }
 
   .hero-subtitle {
-    color: var(--color-body);
-    font-size: 16px;
-    line-height: 1.55;
-    max-width: 560px;
+    color: var(--color-body-muted);
+    max-width: 600px;
   }
 
   .hero-buttons {
     display: flex;
     gap: var(--spacing-md);
     flex-wrap: wrap;
+    justify-content: center;
+    margin-top: var(--spacing-sm);
   }
 
   #hero-search-trigger {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
     min-height: 44px;
     height: 44px;
     cursor: pointer;
   }
 
   .kbd-helper {
-    background-color: var(--color-primary-active);
+    background-color: var(--color-primary);
     color: var(--color-on-primary);
     padding: 2px 8px;
     border-radius: var(--radius-xs);
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 500;
     font-family: var(--font-mono);
-    margin-left: var(--space-2);
+    margin-left: var(--spacing-xs);
   }
 
-  .hero-right {
+  /* === Two-Card Media Composition === */
+  .hero-media-composition {
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: var(--spacing-lg);
+    width: 100%;
+    margin-top: var(--spacing-xxl);
+    align-items: stretch;
+  }
+
+  @media (max-width: 768px) {
+    .hero-media-composition {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .agent-console-card {
+    background-color: var(--color-primary);
+    color: var(--color-on-dark);
+    border-radius: var(--radius-sm); /* 8px */
+    padding: 24px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    border: 1px solid var(--color-hairline);
+    text-align: left;
     display: flex;
-    justify-content: center;
-    width: 100%;
+    flex-direction: column;
+    gap: var(--spacing-md);
   }
 
-  .hero-illustration-card {
-    background-color: var(--color-surface-soft);
-    border-radius: var(--radius-xl);
+  .console-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 12px;
+  }
+
+  .console-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .console-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: var(--radius-full);
+  }
+
+  .dot-red { background-color: #ff5f56; }
+  .dot-yellow { background-color: #ffbd2e; }
+  .dot-green { background-color: #27c93f; }
+
+  .console-title {
+    color: var(--color-muted);
+    font-size: 11px;
+  }
+
+  .console-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    line-height: 1.6;
+  }
+
+  .console-line {
+    color: var(--color-on-dark);
+  }
+
+  .console-prompt {
+    color: var(--color-coral);
+    font-weight: 500;
+  }
+
+  .console-output {
+    color: var(--color-muted);
+    padding-left: 12px;
+  }
+
+  .console-output-success {
+    color: var(--color-pale-green);
+    padding-left: 12px;
+  }
+
+  .console-output-accent {
+    color: var(--color-coral-soft);
+    padding-left: 12px;
+  }
+
+  .hero-photo-card {
+    background-color: var(--color-canvas);
+    border-radius: var(--radius-lg); /* 22px */
+    border: 1px solid var(--color-hairline);
     overflow: hidden;
-    width: 100%;
-    aspect-ratio: 4 / 3;
+    height: 100%;
+    min-height: 250px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--color-hairline);
   }
 
-  .hero-img {
+  .hero-photo-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  /* === Trust Logo Strip === */
+  .trust-logo-strip {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    padding: 60px 0;
+    text-align: center;
+    border-top: 1px solid var(--color-hairline);
+  }
+
+  .trust-caption {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--color-muted);
+    margin-bottom: 24px;
+    text-transform: uppercase;
+    letter-spacing: 0.28px;
+  }
+
+  .logos-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 56px;
+    flex-wrap: wrap;
+  }
+
+  .logos-row .mono-label {
+    color: var(--color-slate);
+    font-size: 14px;
   }
 
   /* === Tools Directory === */
@@ -321,11 +458,11 @@ const activeCategories = categories.filter(cat =>
 
   .section-title {
     color: var(--color-ink);
-    font-family: var(--font-heading);
-    font-size: 32px;
-    font-weight: 500;
-    line-height: 1.15;
-    letter-spacing: -0.5px;
+    font-family: var(--font-sans);
+    font-size: 32px; /* card-heading scale */
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.32px;
   }
 
   .category-tabs-wrapper {
@@ -346,38 +483,41 @@ const activeCategories = categories.filter(cat =>
     display: none;
   }
 
+  /* Blog filter chip styling for tab buttons */
   .tab-btn {
-    border: 1px solid transparent;
+    border: 1px solid var(--color-coral-soft);
     background: transparent;
-    color: var(--color-muted);
-    padding: 8px 16px;
-    border-radius: var(--radius-pill);
+    color: var(--color-coral);
+    padding: 8px 14px;
+    border-radius: var(--radius-sm); /* 8px */
     font-family: var(--font-sans);
-    font-weight: 500;
-    font-size: 14px;
+    font-weight: 400;
+    font-size: 24px; /* oversized typography */
+    line-height: 1.2;
+    letter-spacing: -0.32px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--spacing-xs);
     white-space: nowrap;
     transition: all var(--duration-fast) var(--ease-out);
-    min-height: 38px;
+    min-height: 44px;
   }
 
   .tab-btn:hover {
-    color: var(--color-ink);
-    background-color: var(--color-surface-soft);
+    background-color: var(--color-pale-blue);
+    color: var(--color-coral);
   }
 
   .tab-btn.active {
-    background-color: var(--color-surface-card);
-    color: var(--color-ink);
-    border-color: transparent;
+    background-color: var(--color-coral);
+    color: var(--color-cohere-black);
+    border-color: var(--color-coral);
   }
 
   .tools-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
     gap: var(--spacing-lg);
   }
 
@@ -395,12 +535,11 @@ const activeCategories = categories.filter(cat =>
   .features-section {
     padding: var(--spacing-section) 0;
     background-color: var(--color-canvas);
-    border-top: 1px solid var(--color-hairline);
   }
 
   .features-heading {
     text-align: center;
-    color: var(--color-ink);
+    color: var(--color-on-dark) !important;
     margin-bottom: var(--spacing-xxl);
   }
 
@@ -422,31 +561,12 @@ const activeCategories = categories.filter(cat =>
     }
   }
 
-  /* Saturated Feature Cards */
-  .feature-card-pink {
-    background-color: var(--color-brand-pink);
-    color: var(--color-on-primary);
-    border-radius: var(--radius-xl);
-    padding: var(--spacing-xl);
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-md);
-  }
-
-  .feature-card-teal {
-    background-color: var(--color-brand-teal);
+  /* Dark translucent feature cards in deep-green band */
+  .feature-card-translucent {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     color: var(--color-on-dark);
-    border-radius: var(--radius-xl);
-    padding: var(--spacing-xl);
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-md);
-  }
-
-  .feature-card-lavender {
-    background-color: var(--color-brand-lavender);
-    color: var(--color-ink);
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-sm); /* 8px */
     padding: var(--spacing-xl);
     display: flex;
     flex-direction: column;
@@ -456,7 +576,7 @@ const activeCategories = categories.filter(cat =>
   .card-feature-header {
     display: flex;
     align-items: center;
-    gap: var(--space-3);
+    gap: var(--spacing-sm);
   }
 
   .feature-icon-wrapper {
@@ -465,119 +585,88 @@ const activeCategories = categories.filter(cat =>
     justify-content: center;
     width: 48px;
     height: 48px;
-    border-radius: var(--radius-md);
-    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-xs); /* 4px */
+    background-color: rgba(255, 255, 255, 0.1);
   }
 
-  .feature-card-lavender .feature-icon-wrapper {
-    background-color: rgba(10, 10, 10, 0.08);
-  }
-
-  .feature-card-pink p,
-  .feature-card-teal p {
-    color: var(--color-on-primary);
-    opacity: 0.9;
+  .feature-card-translucent p {
+    color: var(--color-on-dark);
+    opacity: 0.85;
     font-size: 16px;
-    line-height: 1.55;
-  }
-
-  .feature-card-lavender p {
-    color: var(--color-body);
-    font-size: 16px;
-    line-height: 1.55;
+    line-height: 1.5;
   }
 
   /* Product UI Fragment inside cards */
   .product-ui-fragment {
     margin-top: auto;
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: var(--radius-lg);
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: var(--radius-xs);
     padding: var(--spacing-md);
     font-family: var(--font-mono);
     font-size: 13px;
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
-  }
-
-  .feature-card-lavender .product-ui-fragment {
-    background-color: rgba(255, 255, 255, 0.6);
-    border: 1px solid var(--color-hairline);
+    gap: var(--spacing-xxs);
+    border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .ui-log-line {
     display: flex;
-    gap: var(--space-2);
+    gap: var(--spacing-xs);
     align-items: center;
     color: #ffffff;
-  }
-
-  .feature-card-lavender .ui-log-line {
-    color: var(--color-ink);
   }
 
   .log-tag {
     font-size: 10px;
     padding: 2px 6px;
     border-radius: var(--radius-xs);
-    font-weight: 600;
+    font-weight: 500;
     text-transform: uppercase;
   }
 
-  .tag-green { background-color: #22c55e; color: #ffffff; }
-  .tag-gray { background-color: #555555; color: #ffffff; }
-  .tag-blue { background-color: #3b82f6; color: #ffffff; }
+  .tag-green { background-color: #003c33; color: #edfce9; border: 1px solid var(--color-hairline); }
+  .tag-gray { background-color: #212121; color: #93939f; }
+  .tag-blue { background-color: #1863dc; color: #ffffff; }
 
   .ui-perf-metric {
-    font-weight: 600;
+    font-weight: 400;
     color: #ffffff;
-  }
-
-  .feature-card-lavender .ui-perf-metric {
-    color: var(--color-ink);
   }
 
   .ui-perf-bar {
     width: 100%;
     height: 6px;
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-pill);
     overflow: hidden;
   }
 
-  .feature-card-lavender .ui-perf-bar {
-    background-color: rgba(10, 10, 10, 0.08);
-  }
-
   .ui-perf-fill {
     height: 100%;
-    background-color: #a4d4c5;
+    background-color: var(--color-coral);
     border-radius: var(--radius-pill);
-  }
-
-  .feature-card-pink .ui-perf-fill {
-    background-color: #ffffff;
   }
 
   .ui-toggle-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: var(--color-ink);
-    font-weight: 500;
+    color: var(--color-on-dark);
+    font-weight: 400;
   }
 
   .ui-toggle {
     width: 32px;
     height: 18px;
-    background-color: var(--color-primary-disabled);
+    background-color: rgba(255, 255, 255, 0.2);
     border-radius: var(--radius-pill);
     position: relative;
     cursor: pointer;
   }
 
   .ui-toggle.active {
-    background-color: var(--color-success);
+    background-color: var(--color-coral);
   }
 
   .ui-toggle::after {
@@ -587,7 +676,7 @@ const activeCategories = categories.filter(cat =>
     left: 2px;
     width: 14px;
     height: 14px;
-    background-color: #ffffff;
+    background-color: var(--color-primary);
     border-radius: 50%;
     transition: transform var(--duration-fast);
   }
@@ -602,8 +691,8 @@ const activeCategories = categories.filter(cat =>
   }
 
   .cta-band-illustrated {
-    background-color: var(--color-surface-soft);
-    border-radius: var(--radius-xl);
+    background-color: var(--color-soft-stone);
+    border-radius: var(--radius-lg); /* 22px */
     padding: 80px;
     display: grid;
     grid-template-columns: 7fr 5fr;
@@ -615,7 +704,7 @@ const activeCategories = categories.filter(cat =>
   @media (max-width: 768px) {
     .cta-band-illustrated {
       grid-template-columns: 1fr;
-      padding: var(--spacing-xl);
+      padding: 40px var(--spacing-xl);
       gap: var(--spacing-lg);
     }
   }
@@ -628,9 +717,7 @@ const activeCategories = categories.filter(cat =>
   }
 
   .cta-subtitle {
-    color: var(--color-body);
-    font-size: 16px;
-    line-height: 1.55;
+    color: var(--color-body-muted);
     max-width: 480px;
   }
 
@@ -650,7 +737,7 @@ const activeCategories = categories.filter(cat =>
     .directory-header {
       flex-direction: column;
       align-items: stretch;
-      gap: var(--space-4);
+      gap: var(--spacing-md);
     }
 
     .category-tabs {

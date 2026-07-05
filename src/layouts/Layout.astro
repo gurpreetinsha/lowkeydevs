@@ -49,28 +49,17 @@ const {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500&family=Inter:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
 
-    <!-- Theme configuration (forces light cream canvas) -->
+    <!-- Theme configuration (forces light canvas) -->
     <script is:inline>
       document.documentElement.setAttribute('data-theme', 'light');
     </script>
   </head>
   <body>
-    <div class="parallax-bg" aria-hidden="true"></div>
     <a href="#main-content" class="skip-link">Skip to content</a>
     <slot />
-
-    <script>
-      const bg = document.querySelector('.parallax-bg') as HTMLElement;
-      if (bg) {
-        window.addEventListener('scroll', () => {
-          const scrolled = window.scrollY;
-          bg.style.transform = `translate3d(0, ${scrolled * 0.12}px, 0)`;
-        }, { passive: true });
-      }
-    </script>
   </body>
 </html>

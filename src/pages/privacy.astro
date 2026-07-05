@@ -68,8 +68,8 @@ import Icon from '../components/base/Icon.astro';
 
 <style>
   .privacy-main {
-    padding-top: var(--spacing-xl); /* 32px */
-    padding-bottom: var(--spacing-section); /* 96px */
+    padding-top: var(--spacing-xl); /* 24px */
+    padding-bottom: var(--spacing-section); /* 80px */
     flex: 1;
     display: flex;
     justify-content: center;
@@ -79,21 +79,21 @@ import Icon from '../components/base/Icon.astro';
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-xxl); /* 48px */
+    gap: var(--spacing-xxl); /* 32px */
   }
 
   .privacy-header {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
+    gap: var(--spacing-xs);
     border-bottom: 1px solid var(--color-hairline);
-    padding-bottom: var(--spacing-lg); /* 24px */
+    padding-bottom: var(--spacing-lg); /* 16px */
   }
 
   .lock-icon-title {
     display: flex;
     align-items: center;
-    gap: var(--space-4);
+    gap: var(--spacing-md);
   }
 
   .lock-wrapper {
@@ -102,24 +102,24 @@ import Icon from '../components/base/Icon.astro';
     justify-content: center;
     width: 44px;
     height: 44px;
-    background-color: var(--color-surface-card); /* #f5f0e0 */
+    background-color: var(--color-soft-stone); /* #eeece7 */
     color: var(--color-ink);
     border: 1px solid var(--color-hairline);
-    border-radius: var(--radius-md); /* 12px */
+    border-radius: var(--radius-xs); /* 4px */
   }
 
   .privacy-title {
     font-family: var(--font-heading);
-    font-size: 40px; /* display-md */
-    font-weight: 500;
-    letter-spacing: -1px;
+    font-size: 48px; /* section-heading */
+    font-weight: 400;
+    letter-spacing: -0.48px;
     color: var(--color-ink);
-    line-height: 1.1;
+    line-height: 1.2;
   }
 
   .privacy-date {
     color: var(--color-muted);
-    font-size: 14px; /* body-sm */
+    font-size: 14px; /* caption */
     font-weight: 400;
   }
 
@@ -127,42 +127,42 @@ import Icon from '../components/base/Icon.astro';
     display: flex;
     flex-direction: column;
     gap: var(--spacing-lg);
-    line-height: 1.55;
+    line-height: 1.5;
   }
 
   .privacy-body h2 {
     font-family: var(--font-sans);
-    font-size: 24px; /* title-lg */
-    font-weight: 600;
+    font-size: 32px; /* card-heading */
+    font-weight: 400;
     color: var(--color-ink);
-    margin-top: var(--space-4);
+    margin-top: var(--spacing-md);
   }
 
   .privacy-body p {
-    color: var(--color-body);
-    font-size: 16px; /* body-md */
-    line-height: 1.55;
+    color: var(--color-body-muted);
+    font-size: 16px; /* body */
+    line-height: 1.5;
   }
 
   .privacy-body code {
-    background-color: var(--color-surface-soft);
+    background-color: var(--color-soft-stone);
     color: var(--color-ink);
     padding: 2px 6px;
     border-radius: var(--radius-xs);
-    font-size: 0.875em;
+    font-size: 14px;
   }
 
   .highlight-text {
-    background-color: var(--color-surface-card); /* #f5f0e0 */
+    background-color: var(--color-soft-stone); /* #eeece7 */
     border: 1px solid var(--color-hairline);
-    padding: var(--spacing-lg); /* 24px */
-    border-radius: var(--radius-lg); /* 16px */
+    padding: var(--spacing-xl); /* 24px */
+    border-radius: var(--radius-sm); /* 8px */
   }
 
   .highlight-text p {
-    color: var(--color-body-strong);
+    color: var(--color-ink);
     font-size: 16px;
-    line-height: 1.55;
+    line-height: 1.5;
   }
 
   .privacy-footer {
