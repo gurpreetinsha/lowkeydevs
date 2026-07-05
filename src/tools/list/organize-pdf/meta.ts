@@ -1,0 +1,32 @@
+import type { ToolMeta } from '../../definitions';
+
+export const meta: ToolMeta = {
+  slug: 'organize-pdf',
+  title: 'Organize PDF',
+  description: 'Rearrange pages, delete pages, rotate pages, or add blank pages to your PDF locally in the browser. 100% private.',
+  category: 'pdf',
+  keywords: ['organize pdf', 'rearrange pdf pages', 'delete pdf pages', 'rotate pdf pages', 'reorder pdf pages online', 'client side pdf organizer'],
+  icon: 'FileText',
+  faqs: [
+    {
+      question: 'How do I rearrange the PDF pages?',
+      answer: 'After uploading your PDF, you will see a thumbnail of each page. Simply use the "◀" and "▶" buttons on any page thumbnail card to move that page backward or forward in the sequence.'
+    },
+    {
+      question: 'Can I add blank pages or delete unwanted pages?',
+      answer: 'Yes! Click the "Add Blank Page" button to insert a blank page at the end of the document, which you can then rearrange. To delete a page, click the "✕ Delete" button on that page\'s thumbnail card.'
+    },
+    {
+      question: 'Is my document private?',
+      answer: 'Yes. The rendering, page mapping, rotations, reordering, and final PDF generation are executed entirely inside your web browser. No files are uploaded to any external server.'
+    }
+  ],
+  educationalContent: {
+    whatIsIt: 'Organize PDF is an interactive browser utility that copies original PDF page structures, adjusts their rotations and ordering sequences, and generates a new compiled PDF document using pdf-lib.',
+    howToUse: '1. Select and upload your PDF file.\n2. In the page grid, rearrange pages using the left/right arrow buttons, delete pages with the "✕" button, or rotate pages using the rotate button.\n3. Click "Add Blank Page" to insert empty pages if needed.\n4. Click "Apply & Save PDF" to build and download your organized document.',
+    proTips: [
+      'Rotating pages CW (clockwise) adds 90 degrees to their orientation. You can click it multiple times to rotate 180 or 270 degrees.',
+      'Always verify that all pages are in the correct sequence before clicking save.'
+    ]
+  }
+};

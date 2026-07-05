@@ -1354,3 +1354,31 @@ input::placeholder, textarea::placeholder {
   white-space: nowrap;
   border-width: 0;
 }
+
+/* ============================================================
+   RESPONSIVE LAYOUT OVERFLOW OVERRIDES
+   ============================================================ */
+
+/* Force all editor grids (including scoped tool instances) to allow horizontal shrinking */
+.editor-grid,
+:global(.editor-grid) {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+}
+
+@media (max-width: 768px) {
+  .editor-grid,
+  :global(.editor-grid) {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
+/* Constrain category filters from stretching the parent flex header */
+.category-tabs-wrapper {
+  min-width: 0;
+  width: 100%;
+}
+
+.category-tabs {
+  max-width: 100%;
+  overflow-x: auto;
+}

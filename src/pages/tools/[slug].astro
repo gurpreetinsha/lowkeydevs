@@ -86,6 +86,30 @@ import NanoidGeneratorUI from '../../tools/list/nanoid-generator/ui.astro';
 import StrongPasswordGeneratorUI from '../../tools/list/strong-password-generator/ui.astro';
 import ApaCitationGeneratorUI from '../../tools/list/apa-citation-generator/ui.astro';
 
+// PDF tools UI imports
+import MergePdfUI from '../../tools/list/merge-pdf/ui.astro';
+import SplitPdfUI from '../../tools/list/split-pdf/ui.astro';
+import CompressPdfUI from '../../tools/list/compress-pdf/ui.astro';
+import PdfToWordUI from '../../tools/list/pdf-to-word/ui.astro';
+import WordToPdfUI from '../../tools/list/word-to-pdf/ui.astro';
+import JpgToPdfUI from '../../tools/list/jpg-to-pdf/ui.astro';
+import PdfToJpgUI from '../../tools/list/pdf-to-jpg/ui.astro';
+import EditPdfUI from '../../tools/list/edit-pdf/ui.astro';
+import SignPdfUI from '../../tools/list/sign-pdf/ui.astro';
+import UnlockPdfUI from '../../tools/list/unlock-pdf/ui.astro';
+
+// PDF tools Set 2 UI imports
+import ProtectPdfUI from '../../tools/list/protect-pdf/ui.astro';
+import PdfToExcelUI from '../../tools/list/pdf-to-excel/ui.astro';
+import ExcelToPdfUI from '../../tools/list/excel-to-pdf/ui.astro';
+import PdfToPowerpointUI from '../../tools/list/pdf-to-powerpoint/ui.astro';
+import PowerpointToPdfUI from '../../tools/list/powerpoint-to-pdf/ui.astro';
+import OrganizePdfUI from '../../tools/list/organize-pdf/ui.astro';
+import AddPageNumbersUI from '../../tools/list/add-page-numbers/ui.astro';
+import AddWatermarkUI from '../../tools/list/add-watermark/ui.astro';
+import RotatePdfUI from '../../tools/list/rotate-pdf/ui.astro';
+import ScanToPdfUI from '../../tools/list/scan-to-pdf/ui.astro';
+
 // Map slugs to UI components
 const uiComponents: Record<string, any> = {
   'json-formatter': JSONFormatterUI,
@@ -169,7 +193,27 @@ const uiComponents: Record<string, any> = {
   'random-ip-address-generator': RandomIpAddressGeneratorUI,
   'nanoid-generator': NanoidGeneratorUI,
   'strong-password-generator': StrongPasswordGeneratorUI,
-  'apa-citation-generator': ApaCitationGeneratorUI
+  'apa-citation-generator': ApaCitationGeneratorUI,
+  'merge-pdf': MergePdfUI,
+  'split-pdf': SplitPdfUI,
+  'compress-pdf': CompressPdfUI,
+  'pdf-to-word': PdfToWordUI,
+  'word-to-pdf': WordToPdfUI,
+  'jpg-to-pdf': JpgToPdfUI,
+  'pdf-to-jpg': PdfToJpgUI,
+  'edit-pdf': EditPdfUI,
+  'sign-pdf': SignPdfUI,
+  'unlock-pdf': UnlockPdfUI,
+  'protect-pdf': ProtectPdfUI,
+  'pdf-to-excel': PdfToExcelUI,
+  'excel-to-pdf': ExcelToPdfUI,
+  'pdf-to-powerpoint': PdfToPowerpointUI,
+  'powerpoint-to-pdf': PowerpointToPdfUI,
+  'organize-pdf': OrganizePdfUI,
+  'add-page-numbers': AddPageNumbersUI,
+  'add-watermark': AddWatermarkUI,
+  'rotate-pdf': RotatePdfUI,
+  'scan-to-pdf': ScanToPdfUI
 };
 
 export async function getStaticPaths() {

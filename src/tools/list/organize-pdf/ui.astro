@@ -1,0 +1,778 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<!-- Load PDF.js and pdf-lib from CDNs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js" is:inline></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js" is:inline></script>
+
+<organize-pdf-tool class="tool-workspace">
+  <div class="converter-container glass-panel">
+    <div class="converter-header">
+      <h3 class="converter-title">Organize PDF</h3>
+      <p class="converter-subtitle">Rearrange, rotate, delete, or add blank pages to your PDF locally in your browser.</p>
+    </div>
+
+    <!-- Upload Box -->
+    <div class="dropzone" id="organize-dropzone">
+      <input type="file" id="organize-file-input" accept=".pdf" class="hidden-input" aria-label="Upload PDF file to organize" />
+      
+      <div class="dropzone-content">
+        <Icon name="FileText" size={48} />
+        <p class="dropzone-text">Drag & drop your PDF file here or <span>browse</span></p>
+        <p class="dropzone-subtext">Supports single PDF files (up to 60MB)</p>
+      </div>
+    </div>
+
+    <!-- Configuration Panel -->
+    <div class="config-panel hidden" id="config-panel">
+      <!-- File Metadata Details -->
+      <div class="file-details-card">
+        <div class="detail-row">
+          <span class="detail-label">File Name:</span>
+          <span class="detail-value" id="doc-name">document.pdf</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">File Size:</span>
+          <span class="detail-value" id="doc-size">0 KB</span>
+        </div>
+      </div>
+
+      <!-- Action toolbar -->
+      <div class="organize-toolbar">
+        <button id="btn-add-blank" class="btn btn-secondary btn-sm">
+          <Icon name="FileText" size={16} />
+          Add Blank Page
+        </button>
+      </div>
+
+      <!-- Pages Grid -->
+      <div class="pages-grid-wrapper">
+        <h4 class="section-subtitle">PDF Pages Layout</h4>
+        <div class="pages-grid" id="pages-grid">
+          <!-- Page Thumbnail Cards render here -->
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="panel-actions">
+        <button id="btn-cancel" class="btn btn-secondary">
+          Select Another File
+        </button>
+        <button id="btn-save" class="btn btn-primary btn-lg">
+          Apply & Save PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- Progress / Loading Section -->
+    <div class="converter-loading hidden" id="loading-panel">
+      <div class="spinner"></div>
+      <p id="loading-text">Rendering document layouts, please wait...</p>
+    </div>
+
+    <!-- Status & Results Section -->
+    <div class="converter-results hidden" id="results-panel">
+      <div class="divider"></div>
+      <div class="success-badge">
+        <span class="badge-icon">✓</span>
+        Document Reorganized Successfully!
+      </div>
+      
+      <div class="download-box">
+        <a id="btn-download" class="btn btn-success btn-lg download-link">
+          <Icon name="Download" size={18} />
+          Download Organized PDF
+        </a>
+      </div>
+    </div>
+  </div>
+</organize-pdf-tool>
+
+<style>
+  .tool-workspace {
+    width: 100%;
+  }
+
+  .converter-container {
+    width: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .converter-header {
+    text-align: center;
+  }
+
+  .converter-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+
+  .converter-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  /* Dropzone Styling */
+  .dropzone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-lg);
+    min-height: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.01);
+    transition: all 0.2s ease;
+  }
+
+  .dropzone:hover, .dropzone.dragover {
+    border-color: var(--accent);
+    background: var(--accent-subtle);
+  }
+
+  .hidden-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    pointer-events: none;
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .dropzone-text {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .dropzone-text span {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  .dropzone-subtext {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  /* Config Panel */
+  .config-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .file-details-card {
+    background: var(--surface-elevated);
+    border: 1px solid var(--border);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+  }
+
+  .detail-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .detail-value {
+    color: var(--text-primary);
+    font-weight: 600;
+    word-break: break-all;
+    text-align: right;
+  }
+
+  .section-subtitle {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+  }
+
+  /* Toolbar styling */
+  .organize-toolbar {
+    display: flex;
+    gap: 0.5rem;
+    background: var(--surface-elevated);
+    border: 1px solid var(--border);
+    padding: 0.5rem;
+    border-radius: var(--radius-md);
+  }
+
+  .btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+
+  /* Grid details */
+  .pages-grid-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 1.25rem;
+    max-height: 450px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    background: var(--surface-elevated);
+  }
+
+  /* Page Cards */
+  .page-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .page-card-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .page-card-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .btn-delete-card {
+    background: transparent;
+    border: none;
+    color: var(--error);
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.95rem;
+    padding: 0 4px;
+  }
+
+  .page-thumbnail-container {
+    width: 110px;
+    height: 140px;
+    border: 1px solid var(--border);
+    background: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    border-radius: var(--radius-sm);
+  }
+
+  .page-canvas {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform var(--duration-fast);
+  }
+
+  .blank-page-label {
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .page-card-actions {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 0.25rem;
+  }
+
+  .btn-icon {
+    background: var(--surface-hover);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 0.25rem 0.4rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    flex-grow: 1;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-icon:hover {
+    color: var(--text-primary);
+    border-color: var(--border-hover);
+    background: var(--surface-elevated);
+  }
+
+  .panel-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  .btn-lg {
+    padding: 0.75rem 2.5rem;
+    font-size: 1rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  /* Success & Stats */
+  .converter-results {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    align-items: center;
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background-color: var(--border);
+  }
+
+  .success-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--success);
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+
+  .badge-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: var(--success-subtle);
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: bold;
+  }
+
+  .download-box {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .btn-success {
+    background: var(--success);
+    color: white;
+    border: none;
+  }
+
+  .btn-success:hover {
+    opacity: 0.9;
+  }
+
+  .download-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+  }
+
+  /* Spinner */
+  .converter-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
+
+<script>
+  interface PageItem {
+    id: string;
+    type: 'original' | 'blank';
+    origIdx: number; // 0-indexed page index in the original file
+    rotation: number; // 0, 90, 180, 270 relative rotation degrees
+  }
+
+  function formatBytes(bytes: number, decimals: number = 2): string {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
+
+  class OrganizePdfTool extends HTMLElement {
+    private fileInputEl!: HTMLInputElement;
+    private dropzoneEl!: HTMLDivElement;
+    private configPanelEl!: HTMLDivElement;
+    private docNameEl!: HTMLSpanElement;
+    private docSizeEl!: HTMLSpanElement;
+    private btnAddBlankEl!: HTMLButtonElement;
+    private pagesGridEl!: HTMLDivElement;
+    private btnCancelEl!: HTMLButtonElement;
+    private btnSaveEl!: HTMLButtonElement;
+    private loadingPanelEl!: HTMLDivElement;
+    private loadingTextEl!: HTMLParagraphElement;
+    private resultsPanelEl!: HTMLDivElement;
+    private downloadBtnEl!: HTMLAnchorElement;
+
+    private selectedFile: File | null = null;
+    private originalPdfBytes: ArrayBuffer | null = null;
+    private pages: PageItem[] = [];
+    private pageIdCounter = 0;
+
+    connectedCallback() {
+      this.fileInputEl = this.querySelector('#organize-file-input') as HTMLInputElement;
+      this.dropzoneEl = this.querySelector('#organize-dropzone') as HTMLDivElement;
+      this.configPanelEl = this.querySelector('#config-panel') as HTMLDivElement;
+      this.docNameEl = this.querySelector('#doc-name') as HTMLSpanElement;
+      this.docSizeEl = this.querySelector('#doc-size') as HTMLSpanElement;
+      this.btnAddBlankEl = this.querySelector('#btn-add-blank') as HTMLButtonElement;
+      this.pagesGridEl = this.querySelector('#pages-grid') as HTMLDivElement;
+      this.btnCancelEl = this.querySelector('#btn-cancel') as HTMLButtonElement;
+      this.btnSaveEl = this.querySelector('#btn-save') as HTMLButtonElement;
+      this.loadingPanelEl = this.querySelector('#loading-panel') as HTMLDivElement;
+      this.loadingTextEl = this.querySelector('#loading-text') as HTMLParagraphElement;
+      this.resultsPanelEl = this.querySelector('#results-panel') as HTMLDivElement;
+      this.downloadBtnEl = this.querySelector('#btn-download') as HTMLAnchorElement;
+
+      // Dropzone events
+      this.dropzoneEl.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        this.dropzoneEl.classList.add('dragover');
+      });
+
+      this.dropzoneEl.addEventListener('dragleave', () => {
+        this.dropzoneEl.classList.remove('dragover');
+      });
+
+      this.dropzoneEl.addEventListener('drop', (e) => {
+        e.preventDefault();
+        this.dropzoneEl.classList.remove('dragover');
+        if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
+          this.handleFile(e.dataTransfer.files[0]);
+        }
+      });
+
+      this.fileInputEl.addEventListener('change', () => {
+        if (this.fileInputEl.files && this.fileInputEl.files.length > 0) {
+          this.handleFile(this.fileInputEl.files[0]);
+        }
+      });
+
+      this.btnAddBlankEl.addEventListener('click', () => {
+        this.addBlankPage();
+      });
+
+      this.btnCancelEl.addEventListener('click', () => {
+        this.reset();
+      });
+
+      this.btnSaveEl.addEventListener('click', () => this.runSave());
+    }
+
+    private async handleFile(file: File) {
+      if (file.type !== 'application/pdf' && !file.name.endsWith('.pdf')) {
+        alert('Please upload a valid PDF file.');
+        return;
+      }
+
+      if (typeof window.pdfjsLib === 'undefined' || typeof window.PDFLib === 'undefined') {
+        alert('Libraries are loading. Please try again in a moment.');
+        return;
+      }
+
+      this.selectedFile = file;
+      this.docNameEl.textContent = file.name;
+      this.docSizeEl.textContent = formatBytes(file.size);
+
+      this.dropzoneEl.classList.add('hidden');
+      this.loadingPanelEl.classList.remove('hidden');
+      this.loadingTextEl.textContent = 'Rendering thumbnails...';
+
+      try {
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        
+        this.originalPdfBytes = await file.arrayBuffer();
+        const loadingTask = window.pdfjsLib.getDocument({ data: new Uint8Array(this.originalPdfBytes) });
+        const pdf = await loadingTask.promise;
+        const numPages = pdf.numPages;
+
+        this.pages = [];
+        this.pageIdCounter = 0;
+
+        for (let i = 0; i < numPages; i++) {
+          this.pages.push({
+            id: `p-${++this.pageIdCounter}`,
+            type: 'original',
+            origIdx: i,
+            rotation: 0
+          });
+        }
+
+        // Render thumbnails list
+        await this.renderGrid(pdf);
+
+        this.loadingPanelEl.classList.add('hidden');
+        this.configPanelEl.classList.remove('hidden');
+        this.resultsPanelEl.classList.add('hidden');
+      } catch (err) {
+        console.error(err);
+        alert('Error parsing PDF file.');
+        this.reset();
+      }
+    }
+
+    private async renderGrid(pdf: any) {
+      this.pagesGridEl.innerHTML = '';
+
+      for (let idx = 0; idx < this.pages.length; idx++) {
+        const item = this.pages[idx];
+        const card = document.createElement('div');
+        card.className = 'page-card';
+        card.dataset.id = item.id;
+
+        // Card Header
+        const header = document.createElement('div');
+        header.className = 'page-card-header';
+        header.innerHTML = `
+          <span class="page-card-title">Page ${idx + 1}</span>
+          <button class="btn-delete-card" title="Delete page">✕</button>
+        `;
+        header.querySelector('.btn-delete-card')?.addEventListener('click', () => this.deletePage(item.id, pdf));
+        card.appendChild(header);
+
+        // Card Thumbnail Container
+        const thumbContainer = document.createElement('div');
+        thumbContainer.className = 'page-thumbnail-container';
+
+        if (item.type === 'original') {
+          const canvas = document.createElement('canvas');
+          canvas.className = 'page-canvas';
+          canvas.style.transform = `rotate(${item.rotation}deg)`;
+          thumbContainer.appendChild(canvas);
+
+          // Render viewport
+          const page = await pdf.getPage(item.origIdx + 1);
+          const viewport = page.getViewport({ scale: 0.25 });
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            await page.render({ canvasContext: ctx, viewport }).promise;
+          }
+        } else {
+          // Blank
+          thumbContainer.innerHTML = '<span class="blank-page-label">Blank Page</span>';
+        }
+        card.appendChild(thumbContainer);
+
+        // Card Actions (Reordering & Rotations)
+        const actions = document.createElement('div');
+        actions.className = 'page-card-actions';
+
+        const btnLeft = document.createElement('button');
+        btnLeft.className = 'btn-icon';
+        btnLeft.innerHTML = '◀';
+        btnLeft.disabled = idx === 0;
+        btnLeft.addEventListener('click', () => this.movePage(idx, -1, pdf));
+
+        const btnRotate = document.createElement('button');
+        btnRotate.className = 'btn-icon';
+        btnRotate.innerHTML = '↻';
+        btnRotate.addEventListener('click', () => this.rotatePage(idx, pdf));
+
+        const btnRight = document.createElement('button');
+        btnRight.className = 'btn-icon';
+        btnRight.innerHTML = '▶';
+        btnRight.disabled = idx === this.pages.length - 1;
+        btnRight.addEventListener('click', () => this.movePage(idx, 1, pdf));
+
+        actions.appendChild(btnLeft);
+        actions.appendChild(btnRotate);
+        actions.appendChild(btnRight);
+        card.appendChild(actions);
+
+        this.pagesGridEl.appendChild(card);
+      }
+    }
+
+    private async deletePage(id: string, pdf: any) {
+      this.pages = this.pages.filter(p => p.id !== id);
+      await this.renderGrid(pdf);
+    }
+
+    private async rotatePage(idx: number, pdf: any) {
+      const item = this.pages[idx];
+      item.rotation = (item.rotation + 90) % 360;
+      await this.renderGrid(pdf);
+    }
+
+    private async movePage(idx: number, direction: number, pdf: any) {
+      const target = idx + direction;
+      if (target >= 0 && target < this.pages.length) {
+        const temp = this.pages[idx];
+        this.pages[idx] = this.pages[target];
+        this.pages[target] = temp;
+        await this.renderGrid(pdf);
+      }
+    }
+
+    private async addBlankPage() {
+      if (!this.selectedFile) return;
+
+      this.pages.push({
+        id: `p-${++this.pageIdCounter}`,
+        type: 'blank',
+        origIdx: -1,
+        rotation: 0
+      });
+
+      // Fetch active pdf reference from window task load
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+      const loadingTask = window.pdfjsLib.getDocument({ data: new Uint8Array(this.originalPdfBytes!) });
+      const pdf = await loadingTask.promise;
+      
+      await this.renderGrid(pdf);
+    }
+
+    private reset() {
+      this.selectedFile = null;
+      this.originalPdfBytes = null;
+      this.pages = [];
+      this.pageIdCounter = 0;
+      this.fileInputEl.value = '';
+      this.pagesGridEl.innerHTML = '';
+      
+      this.dropzoneEl.classList.remove('hidden');
+      this.configPanelEl.classList.add('hidden');
+      this.resultsPanelEl.classList.add('hidden');
+      this.loadingPanelEl.classList.add('hidden');
+    }
+
+    private async runSave() {
+      if (!this.selectedFile || !this.originalPdfBytes || this.pages.length === 0) return;
+
+      this.loadingPanelEl.classList.remove('hidden');
+      this.configPanelEl.classList.add('hidden');
+      this.resultsPanelEl.classList.add('hidden');
+      this.loadingTextEl.textContent = 'Generating PDF, please wait...';
+
+      try {
+        const { PDFDocument, degrees } = window.PDFLib;
+        
+        // Load original document
+        const srcPdf = await PDFDocument.load(this.originalPdfBytes);
+        const outPdf = await PDFDocument.create();
+
+        for (let idx = 0; idx < this.pages.length; idx++) {
+          const item = this.pages[idx];
+          this.loadingTextEl.textContent = `Processing page ${idx + 1} of ${this.pages.length}...`;
+
+          if (item.type === 'blank') {
+            // Add A4 blank page (595.28 x 841.89 points)
+            outPdf.addPage([595.28, 841.89]);
+          } else {
+            // Copy original page
+            const [copiedPage] = await outPdf.copyPages(srcPdf, [item.origIdx]);
+            
+            // Apply rotation offset
+            if (item.rotation > 0) {
+              const currentAngle = copiedPage.getRotation().angle;
+              copiedPage.setRotation(degrees(currentAngle + item.rotation));
+            }
+            outPdf.addPage(copiedPage);
+          }
+        }
+
+        const outBytes = await outPdf.save();
+        const blob = new Blob([outBytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+
+        this.downloadBtnEl.href = url;
+        const baseName = this.selectedFile.name.replace(/\.[^/.]+$/, "");
+        this.downloadBtnEl.download = `${baseName}_organized.pdf`;
+
+        this.loadingPanelEl.classList.add('hidden');
+        this.configPanelEl.classList.remove('hidden');
+        this.resultsPanelEl.classList.remove('hidden');
+        this.resultsPanelEl.scrollIntoView({ behavior: 'smooth' });
+      } catch (err) {
+        console.error(err);
+        alert(`Error organizing PDF: ${err instanceof Error ? err.message : 'Unknown error'}`);
+        this.loadingPanelEl.classList.add('hidden');
+        this.configPanelEl.classList.remove('hidden');
+      }
+    }
+  }
+
+  if (!customElements.get('organize-pdf-tool')) {
+    customElements.define('organize-pdf-tool', OrganizePdfTool);
+  }
+</script>

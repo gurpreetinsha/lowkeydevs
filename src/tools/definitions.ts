@@ -7,7 +7,8 @@ export type ToolCategory =
   | 'design'        // Color pickers, contrast checkers, image resizing
   | 'image'         // OCR, format converters, art generators
   | 'video'         // Format conversion, audio extraction
-  | 'security';     // Hashing (MD5, SHA), cryptography, password checkers
+  | 'security'      // Hashing (MD5, SHA), cryptography, password checkers
+  | 'pdf';          // PDF tools (Merge, split, compress, sign, unlock, edit)
 
 export interface ToolFAQ {
   question: string;
