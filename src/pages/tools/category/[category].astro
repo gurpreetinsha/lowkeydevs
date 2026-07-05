@@ -17,7 +17,7 @@ const { category } = Astro.props;
 const tools = getToolsByCategory(category.slug);
 ---
 
-<Layout 
+<Layout
   title={`Best ${category.title.toLowerCase()} tools online - LowKeyDevs`}
   description={category.description}
 >
@@ -26,17 +26,19 @@ const tools = getToolsByCategory(category.slug);
   <!-- Breadcrumbs -->
   <nav class="breadcrumbs-nav" aria-label="Breadcrumb">
     <div class="container breadcrumbs-container">
-      <a href="/" class="breadcrumb-item">Home</a>
-      <span class="separator">/</span>
-      <span class="breadcrumb-item active" aria-current="page">{category.title}</span>
+      <a href="/" class="breadcrumb-link">Home</a>
+      <span class="breadcrumb-sep" aria-hidden="true">
+        <Icon name="ChevronRight" size={14} />
+      </span>
+      <span class="breadcrumb-current" aria-current="page">{category.title}</span>
     </div>
   </nav>
 
-  <main class="category-main container">
+  <main id="main-content" class="category-main container">
     <header class="category-header">
       <div class="category-icon-title">
         <div class="category-icon-wrapper">
-          <Icon name={category.icon} size={28} />
+          <Icon name={category.icon} size={24} />
         </div>
         <h1 class="category-title">{category.title}</h1>
       </div>
@@ -51,8 +53,10 @@ const tools = getToolsByCategory(category.slug);
           ))}
         </div>
       ) : (
-        <div class="empty-state glass-panel">
-          <Icon name="Info" size={24} class="empty-icon" />
+        <div class="empty-state">
+          <div class="empty-icon-wrapper">
+            <Icon name="Info" size={24} />
+          </div>
           <h3>No tools available yet</h3>
           <p>We are actively building new utilities. Check back soon for updates!</p>
           <a href="/" class="btn btn-primary">Go back home</a>
@@ -67,106 +71,96 @@ const tools = getToolsByCategory(category.slug);
 <style>
   /* Breadcrumbs */
   .breadcrumbs-nav {
-    background-color: rgba(255, 255, 255, 0.05);
-    border-bottom: 1px solid var(--ds-border);
-    padding: var(--ds-space-150) 0;
-    font-size: 0.8125rem;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
-
-  html[data-theme="dark"] .breadcrumbs-nav {
-    background-color: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--border);
+    padding: var(--space-3) 0;
+    font-size: 14px;
   }
 
   .breadcrumbs-container {
     display: flex;
     align-items: center;
-    gap: var(--ds-space-100);
+    gap: var(--space-1-5);
     flex-wrap: wrap;
   }
 
-  .breadcrumb-item {
-    color: var(--ds-text-subtle);
+  .breadcrumb-link {
+    color: var(--text-secondary);
     text-decoration: none;
-    transition: color 0.15s ease;
+    font-weight: 500;
+    transition: color var(--duration-fast) var(--ease-out);
   }
 
-  .breadcrumb-item:hover {
-    color: var(--ds-link);
+  .breadcrumb-link:hover {
+    color: var(--accent);
     text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
-  .breadcrumb-item.active {
-    color: var(--ds-text-subtlest);
-    pointer-events: none;
-    text-decoration: none;
+  .breadcrumb-sep {
+    color: var(--text-tertiary);
+    display: flex;
+    align-items: center;
   }
 
-  .separator {
-    color: var(--ds-text-subtlest);
-    user-select: none;
+  .breadcrumb-current {
+    color: var(--text-tertiary);
+    font-weight: 400;
   }
 
-  /* Main Category Layout */
+  /* Main layout */
   .category-main {
-    padding-top: var(--ds-space-600);
-    padding-bottom: var(--ds-space-1000);
+    padding-top: var(--space-10);
+    padding-bottom: var(--space-20);
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: var(--ds-space-600);
+    gap: var(--space-10);
   }
 
   .category-header {
     display: flex;
     flex-direction: column;
-    gap: var(--ds-space-100);
-    max-width: 800px;
+    gap: var(--space-3);
+    max-width: 720px;
   }
 
   .category-icon-title {
     display: flex;
     align-items: center;
-    gap: var(--ds-space-150);
+    gap: var(--space-4);
   }
 
   .category-icon-wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 52px;
-    height: 52px;
-    background-color: rgba(0, 113, 227, 0.08);
-    color: var(--ds-text-selected);
-    border: 1px solid rgba(0, 113, 227, 0.15);
-    border-radius: var(--ds-radius-medium);
-  }
-
-  html[data-theme="dark"] .category-icon-wrapper {
-    background-color: rgba(41, 151, 255, 0.12);
-    border-color: rgba(41, 151, 255, 0.25);
+    width: 48px;
+    height: 48px;
+    background-color: var(--accent-subtle);
+    color: var(--accent);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
   }
 
   .category-title {
-    font-family: var(--font-display);
-    font-size: 2.25rem;
-    font-weight: 800;
-    letter-spacing: -0.035em;
-    color: var(--ds-text);
+    font-family: var(--font-heading);
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
   }
 
   .category-description {
-    color: var(--ds-text-subtle);
-    font-size: 0.9375rem;
-    line-height: 1.5;
+    color: var(--text-secondary);
+    font-size: 15px;
+    line-height: 1.7;
   }
 
-  /* Grid Layout */
+  /* Grid */
   .tools-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: var(--ds-space-300);
+    grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+    gap: var(--space-5);
   }
 
   /* Empty state */
@@ -175,27 +169,36 @@ const tools = getToolsByCategory(category.slug);
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: var(--ds-space-800) var(--ds-space-400);
-    gap: var(--ds-space-200);
-    max-width: 500px;
+    padding: var(--space-16) var(--space-8);
+    gap: var(--space-5);
+    max-width: 460px;
     margin: 0 auto;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
   }
 
-  .empty-icon {
-    color: var(--ds-icon-subtle);
+  .empty-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background-color: var(--accent-subtle);
+    color: var(--accent);
+    border-radius: var(--radius-md);
   }
 
   .empty-state h3 {
-    font-family: var(--font-display);
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: var(--ds-text);
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
   }
 
   .empty-state p {
-    color: var(--ds-text-subtle);
-    font-size: 0.875rem;
-    line-height: 1.6;
-    margin-bottom: var(--ds-space-100);
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.7;
   }
 </style>

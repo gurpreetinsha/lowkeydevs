@@ -5,13 +5,13 @@ import Footer from '../components/Footer.astro';
 import Icon from '../components/base/Icon.astro';
 ---
 
-<Layout 
+<Layout
   title="Privacy policy - LowKeyDevs"
   description="Read our plain-English Privacy Policy: why you can trust LowKeyDevs to process your developer data client-side with absolute security."
 >
   <Header />
 
-  <main class="privacy-main container">
+  <main id="main-content" class="privacy-main container">
     <article class="privacy-content">
       <header class="privacy-header">
         <div class="lock-icon-title">
@@ -25,9 +25,11 @@ import Icon from '../components/base/Icon.astro';
 
       <section class="privacy-body">
         <h2>Plain English summary</h2>
-        <p class="highlight-text">
-          <strong>Your data is yours alone.</strong> We do not collect, send, save, or store any of the input values, files, text, keys, or passwords you process on our website. All processing happens entirely inside your browser via JavaScript.
-        </p>
+        <div class="highlight-text">
+          <p>
+            <strong>Your data is yours alone.</strong> We do not collect, send, save, or store any of the input values, files, text, keys, or passwords you process on our website. All processing happens entirely inside your browser via JavaScript.
+          </p>
+        </div>
 
         <h2>1. Personal data collection</h2>
         <p>
@@ -41,7 +43,7 @@ import Icon from '../components/base/Icon.astro';
 
         <h2>3. Cookies and localStorage</h2>
         <p>
-          We do not use tracking cookies or advertising pixels. We use standard browser `localStorage` solely to save your design preference (light mode vs. dark mode) so that it persists when you return to the site. This preference data is saved locally on your device and is never sent to us.
+          We do not use tracking cookies or advertising pixels. We use standard browser <code>localStorage</code> solely to save your design preference (light mode vs. dark mode) so that it persists when you return to the site. This preference data is saved locally on your device and is never sent to us.
         </p>
 
         <h2>4. Third-party analytics</h2>
@@ -55,7 +57,7 @@ import Icon from '../components/base/Icon.astro';
         </p>
       </section>
 
-      <div class="privacy-footer text-center">
+      <div class="privacy-footer">
         <a href="/" class="btn btn-primary">Return to homepage</a>
       </div>
     </article>
@@ -66,63 +68,56 @@ import Icon from '../components/base/Icon.astro';
 
 <style>
   .privacy-main {
-    padding-top: var(--ds-space-600);
-    padding-bottom: var(--ds-space-1000);
+    padding-top: var(--space-16);
+    padding-bottom: var(--space-20);
     flex: 1;
     display: flex;
     justify-content: center;
   }
 
   .privacy-content {
-    max-width: 800px;
-    padding: var(--ds-space-400) var(--ds-space-300);
+    max-width: 720px;
     display: flex;
     flex-direction: column;
-    gap: var(--ds-space-400);
-  }
-
-  @media (max-width: 640px) {
-    .privacy-content {
-      padding: var(--ds-space-200) var(--ds-space-100);
-    }
+    gap: var(--space-10);
   }
 
   .privacy-header {
     display: flex;
     flex-direction: column;
-    gap: var(--ds-space-100);
-    border-bottom: 1px solid var(--border-default);
-    padding-bottom: var(--ds-space-300);
+    gap: var(--space-3);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--space-8);
   }
 
   .lock-icon-title {
     display: flex;
     align-items: center;
-    gap: var(--ds-space-150);
+    gap: var(--space-4);
   }
 
   .lock-wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    background-color: rgba(48, 209, 88, 0.08);
-    color: #30d158;
-    border: 1px solid var(--border-default);
-    border-radius: var(--ds-radius-medium);
+    width: 44px;
+    height: 44px;
+    background-color: var(--success-subtle);
+    color: var(--success);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
   }
 
   .privacy-title {
-    font-size: 66px;
+    font-family: var(--font-heading);
+    font-size: clamp(30px, 4vw, 48px);
     font-weight: 700;
-    letter-spacing: -0.03em;
-    color: #FEFEFE;
-    text-balance: overflow;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
   }
 
   .privacy-date {
-    color: #838285;
+    color: var(--text-tertiary);
     font-size: 13px;
     font-weight: 500;
   }
@@ -130,39 +125,47 @@ import Icon from '../components/base/Icon.astro';
   .privacy-body {
     display: flex;
     flex-direction: column;
-    gap: var(--ds-space-250);
-    line-height: 1.6;
-    color: #838285;
-    font-size: 15px;
+    gap: var(--space-6);
+    line-height: 1.7;
   }
 
   .privacy-body h2 {
-    font-size: 19px;
-    font-weight: 500;
-    color: #FEFEFE;
-    margin-top: var(--ds-space-150);
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: var(--space-2);
+  }
+
+  .privacy-body p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .privacy-body code {
+    background-color: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    font-size: 0.875em;
   }
 
   .highlight-text {
-    background-color: rgba(48, 209, 88, 0.08);
-    border: 1px solid var(--border-default);
-    color: #30d158;
-    padding: var(--ds-space-250);
-    border-radius: var(--ds-radius-medium);
+    background-color: var(--success-subtle);
+    border: 1px solid var(--border);
+    padding: var(--space-6);
+    border-radius: var(--radius-lg);
+  }
+
+  .highlight-text p {
+    color: var(--success);
+    font-size: 15px;
+    line-height: 1.7;
   }
 
   .privacy-footer {
-    border-top: 1px solid var(--border-default);
-    padding-top: var(--ds-space-300);
-  }
-
-  .text-center {
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-8);
     text-align: center;
-  }
-
-  @media (max-width: 640px) {
-    .privacy-title {
-      font-size: 40px; /* Neatly scale down for mobile viewports */
-    }
   }
 </style>
