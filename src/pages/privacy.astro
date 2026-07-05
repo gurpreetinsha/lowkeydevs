@@ -68,8 +68,8 @@ import Icon from '../components/base/Icon.astro';
 
 <style>
   .privacy-main {
-    padding-top: clamp(32px, 8vw, 64px);
-    padding-bottom: clamp(40px, 10vw, 80px);
+    padding-top: var(--spacing-xl); /* 32px */
+    padding-bottom: var(--spacing-section); /* 96px */
     flex: 1;
     display: flex;
     justify-content: center;
@@ -79,15 +79,15 @@ import Icon from '../components/base/Icon.astro';
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: clamp(20px, 5vw, 40px);
+    gap: var(--spacing-xxl); /* 48px */
   }
 
   .privacy-header {
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
-    border-bottom: 1px solid var(--border);
-    padding-bottom: clamp(16px, 4vw, 32px);
+    border-bottom: 1px solid var(--color-hairline);
+    padding-bottom: var(--spacing-lg); /* 24px */
   }
 
   .lock-icon-title {
@@ -102,70 +102,72 @@ import Icon from '../components/base/Icon.astro';
     justify-content: center;
     width: 44px;
     height: 44px;
-    background-color: var(--success-subtle);
-    color: var(--success);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
+    background-color: var(--color-surface-card); /* #f5f0e0 */
+    color: var(--color-ink);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-md); /* 12px */
   }
 
   .privacy-title {
     font-family: var(--font-heading);
-    font-size: clamp(28px, 4vw, 44px);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--text-primary);
+    font-size: 40px; /* display-md */
+    font-weight: 500;
+    letter-spacing: -1px;
+    color: var(--color-ink);
+    line-height: 1.1;
   }
 
   .privacy-date {
-    color: var(--text-tertiary);
-    font-size: 13px;
-    font-weight: 500;
+    color: var(--color-muted);
+    font-size: 14px; /* body-sm */
+    font-weight: 400;
   }
 
   .privacy-body {
     display: flex;
     flex-direction: column;
-    gap: clamp(16px, 3vw, 24px);
-    line-height: 1.7;
+    gap: var(--spacing-lg);
+    line-height: 1.55;
   }
 
   .privacy-body h2 {
-    font-family: var(--font-heading);
-    font-size: 20px;
+    font-family: var(--font-sans);
+    font-size: 24px; /* title-lg */
     font-weight: 600;
-    color: var(--text-primary);
-    margin-top: var(--space-2);
+    color: var(--color-ink);
+    margin-top: var(--space-4);
   }
 
   .privacy-body p {
-    color: var(--text-secondary);
-    font-size: 15px;
-    line-height: 1.7;
+    color: var(--color-body);
+    font-size: 16px; /* body-md */
+    line-height: 1.55;
   }
 
   .privacy-body code {
-    background-color: var(--code-bg);
+    background-color: var(--color-surface-soft);
+    color: var(--color-ink);
     padding: 2px 6px;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-xs);
     font-size: 0.875em;
   }
 
   .highlight-text {
-    background-color: var(--success-subtle);
-    border: 1px solid var(--border);
-    padding: clamp(16px, 4vw, 24px);
-    border-radius: var(--radius-lg);
+    background-color: var(--color-surface-card); /* #f5f0e0 */
+    border: 1px solid var(--color-hairline);
+    padding: var(--spacing-lg); /* 24px */
+    border-radius: var(--radius-lg); /* 16px */
   }
 
   .highlight-text p {
-    color: var(--success);
-    font-size: 15px;
-    line-height: 1.7;
+    color: var(--color-body-strong);
+    font-size: 16px;
+    line-height: 1.55;
   }
 
   .privacy-footer {
-    border-top: 1px solid var(--border);
-    padding-top: clamp(16px, 4vw, 32px);
+    border-top: 1px solid var(--color-hairline);
+    padding-top: var(--spacing-lg);
     text-align: center;
   }
 </style>

@@ -11,10 +11,55 @@
    ============================================================ */
 
 :root {
-  /* --- Typography --- */
-  --font-heading: 'Agrandir', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  /* --- Colors from design.md --- */
+  --color-primary: #0a0a0a;
+  --color-primary-active: #1f1f1f;
+  --color-primary-disabled: #e5e5e5;
+  --color-ink: #0a0a0a;
+  --color-body: #3a3a3a;
+  --color-body-strong: #1a1a1a;
+  --color-muted: #6a6a6a;
+  --color-muted-soft: #9a9a9a;
+  --color-hairline: #e5e5e5;
+  --color-hairline-soft: #f0f0f0;
+  --color-canvas: #fffaf0;
+  --color-surface-soft: #faf5e8;
+  --color-surface-card: #f5f0e0;
+  --color-surface-strong: #ebe6d6;
+  --color-surface-dark: #0a1a1a;
+  --color-surface-dark-elevated: #1a2a2a;
+  --color-on-primary: #ffffff;
+  --color-on-dark: #ffffff;
+  --color-on-dark-soft: #a0a0a0;
+  --color-brand-pink: #ff4d8b;
+  --color-brand-teal: #1a3a3a;
+  --color-brand-lavender: #b8a4ed;
+  --color-brand-peach: #ffb084;
+  --color-brand-ochre: #e8b94a;
+  --color-brand-mint: #a4d4c5;
+  --color-brand-coral: #ff6b5a;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+
+  /* --- Spacing --- */
+  --spacing-xxs: 4px;
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 48px;
+  --spacing-section: 96px;
+
+  /* --- Border Radius --- */
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 9999px;
+  --radius-full: 9999px;
 
   /* --- Spacing (8-point grid) --- */
   --space-0: 0px;
@@ -34,19 +79,29 @@
   --space-24: 96px;
   --space-32: 128px;
 
-  /* --- Borders & Corner Radii --- */
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-full: 9999px;
+  /* --- Core theme mapping variables --- */
+  --bg: var(--color-canvas);
+  --surface: var(--color-canvas);
+  --surface-elevated: var(--color-surface-card);
+  --surface-hover: var(--color-surface-soft);
+  --border: var(--color-hairline);
+  --border-hover: var(--color-primary);
+  --text-primary: var(--color-ink);
+  --text-secondary: var(--color-body);
+  --text-tertiary: var(--color-muted);
+  --accent: var(--color-primary);
+  --accent-hover: var(--color-primary-active);
+  --accent-subtle: var(--color-surface-soft);
+  --accent-on: var(--color-on-primary);
+  --success: var(--color-success);
+  --success-subtle: var(--color-surface-soft);
+  --error: var(--color-error);
+  --error-subtle: #fde8e8;
 
-  /* --- Shadows (Flat aesthetic, shadows removed in favor of 1px borders) --- */
-  --shadow-xs: none;
-  --shadow-sm: none;
-  --shadow-md: none;
-  --shadow-lg: none;
-  --shadow-xl: none;
+  /* --- Typography --- */
+  --font-heading: 'Plain Black', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   /* --- Motion --- */
   --duration-fast: 150ms;
@@ -66,69 +121,34 @@
   --container-max-width-narrow: 720px;
 }
 
-/* ============================================================
-   COLOR THEMES (Monochrome & Premium)
-   ============================================================ */
-
-/* Light Theme */
+/* Force light cream canvas theme globally (overrides user/system dark settings) */
 html[data-theme="light"],
-html:not([data-theme]) {
-  --bg: #FFFFFF;
-  --surface: #FFFFFF;
-  --surface-elevated: #FFFFFF;
-  --surface-hover: #F7F7F8;
-  --border: #E5E5E5;
-  --border-hover: #D4D4D4;
-  --text-primary: #050010;
-  --text-secondary: #6B6678;
-  --text-tertiary: #A19DB0;
-  --accent: #8C52FF;
-  --accent-hover: #6F33EB;
-  --accent-subtle: rgba(140, 82, 255, 0.1);
-  --accent-on: #FFFFFF;
-  --success: #8C52FF;
-  --success-subtle: rgba(140, 82, 255, 0.1);
-  --error: #C53030;
-  --error-subtle: #FDE8E8;
+html:not([data-theme]),
+html[data-theme="dark"] {
+  --bg: var(--color-canvas);
+  --surface: var(--color-canvas);
+  --surface-elevated: var(--color-surface-card);
+  --surface-hover: var(--color-surface-soft);
+  --border: var(--color-hairline);
+  --border-hover: var(--color-primary);
+  --text-primary: var(--color-ink);
+  --text-secondary: var(--color-body);
+  --text-tertiary: var(--color-muted);
+  --accent: var(--color-primary);
+  --accent-hover: var(--color-primary-active);
+  --accent-subtle: var(--color-surface-soft);
+  --accent-on: var(--color-on-primary);
+  --success: var(--color-success);
+  --success-subtle: var(--color-surface-soft);
+  --error: var(--color-error);
+  --error-subtle: #fde8e8;
 
-  --header-bg: rgba(255, 255, 255, 0.85);
-  --header-bg-solid: #FFFFFF;
-  --overlay-bg: rgba(5, 0, 16, 0.4);
-  --code-bg: #F7F7F8;
-
-  --matrix-pattern: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'><path d='M 80 0 L 0 0 0 80' fill='none' stroke='%238c52ff' stroke-width='0.5' opacity='0.08'/><text x='10' y='22' font-family='monospace' font-size='7' fill='%238c52ff' opacity='0.15'>01</text><text x='50' y='62' font-family='monospace' font-size='7' fill='%238c52ff' opacity='0.10'>10</text><text x='15' y='50' font-family='monospace' font-size='6' fill='%238c52ff' opacity='0.08'>[ ]</text><text x='45' y='20' font-family='monospace' font-size='6' fill='%238c52ff' opacity='0.08'>0x</text></svg>");
+  --header-bg: var(--color-canvas);
+  --header-bg-solid: var(--color-canvas);
+  --overlay-bg: rgba(10, 10, 10, 0.4);
+  --code-bg: var(--color-surface-soft);
 
   color-scheme: light;
-}
-
-/* Dark Theme */
-html[data-theme="dark"] {
-  --bg: #050010;
-  --surface: #130D24;
-  --surface-elevated: #1B1333;
-  --surface-hover: #21173D;
-  --border: #2D2342;
-  --border-hover: #413559;
-  --text-primary: #FFFFFF;
-  --text-secondary: #A19DB0;
-  --text-tertiary: #6B6678;
-  --accent: #8C52FF;
-  --accent-hover: #AB7DF9;
-  --accent-subtle: rgba(140, 82, 255, 0.15);
-  --accent-on: #FFFFFF;
-  --success: #AB7DF9;
-  --success-subtle: rgba(171, 125, 249, 0.1);
-  --error: #FF453A;
-  --error-subtle: rgba(255, 69, 58, 0.15);
-
-  --header-bg: rgba(5, 0, 16, 0.85);
-  --header-bg-solid: #050010;
-  --overlay-bg: rgba(5, 0, 16, 0.7);
-  --code-bg: #130D24;
-
-  --matrix-pattern: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'><path d='M 80 0 L 0 0 0 80' fill='none' stroke='%238c52ff' stroke-width='0.5' opacity='0.08'/><text x='10' y='22' font-family='monospace' font-size='7' fill='%238c52ff' opacity='0.15'>01</text><text x='50' y='62' font-family='monospace' font-size='7' fill='%238c52ff' opacity='0.10'>10</text><text x='15' y='50' font-family='monospace' font-size='6' fill='%238c52ff' opacity='0.08'>[ ]</text><text x='45' y='20' font-family='monospace' font-size='6' fill='%238c52ff' opacity='0.08'>0x</text></svg>");
-
-  color-scheme: dark;
 }
 
 /* ============================================================
@@ -190,13 +210,13 @@ html[data-theme="dark"] {
   --ds-space-1000: 96px;
 
   /* Radius aliases */
-  --ds-radius-xsmall: var(--radius-sm);
-  --ds-radius-small: var(--radius-sm);
-  --ds-radius-medium: var(--radius-md);
-  --ds-radius-large: var(--radius-lg);
-  --ds-radius-xlarge: var(--radius-xl);
+  --ds-radius-xsmall: var(--radius-xs);
+  --ds-radius-small: var(--radius-xs);
+  --ds-radius-medium: var(--radius-sm);
+  --ds-radius-large: var(--radius-md);
+  --ds-radius-xlarge: var(--radius-lg);
   --ds-radius-xxlarge: var(--radius-xl);
-  --ds-radius-full: var(--radius-sm);
+  --ds-radius-full: var(--radius-pill);
 
   /* Color aliases for tools */
   --color-canvas: var(--bg);
@@ -222,12 +242,12 @@ html[data-theme="dark"] {
   --focus-ring: 0 0 0 1px var(--accent);
 
   /* Radius aliases (alternative names) */
-  --radius-xs: var(--ds-radius-small);
-  --radius-sm: var(--ds-radius-medium);
-  --radius-md: var(--ds-radius-large);
-  --radius-lg: var(--ds-radius-xlarge);
-  --radius-xl: var(--ds-radius-xxlarge);
-  --radius-pill: var(--ds-radius-full);
+  --radius-xs: var(--radius-xs);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-pill: var(--radius-pill);
 
   /* Spacing aliases (alternative names) */
   --spacing-xxs: var(--ds-space-050);

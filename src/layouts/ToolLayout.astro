@@ -199,18 +199,18 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 <style>
   /* Breadcrumbs */
   .breadcrumbs-nav {
-    border-bottom: 1px solid var(--border);
-    padding: var(--space-3) 0;
-    font-size: 14px;
+    border-bottom: 1px solid var(--color-hairline);
+    padding: var(--spacing-sm) 0;
+    font-size: 14px; /* body-sm */
+    background-color: var(--color-canvas);
   }
 
   .breadcrumbs-container {
     display: flex;
     align-items: center;
-    gap: var(--space-1-5);
+    gap: var(--space-2);
     flex-wrap: nowrap;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
@@ -221,46 +221,47 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
   .breadcrumb-link, .breadcrumb-current {
     white-space: nowrap;
+    font-family: var(--font-sans);
   }
 
   .breadcrumb-link {
-    color: var(--text-secondary);
+    color: var(--color-muted);
     text-decoration: none;
     font-weight: 500;
     transition: color var(--duration-fast) var(--ease-out);
   }
 
   .breadcrumb-link:hover {
-    color: var(--accent);
+    color: var(--color-ink);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
 
   .breadcrumb-sep {
-    color: var(--text-tertiary);
+    color: var(--color-muted-soft);
     display: flex;
     align-items: center;
   }
 
   .breadcrumb-current {
-    color: var(--text-tertiary);
+    color: var(--color-muted-soft);
     font-weight: 400;
   }
 
   /* Layout */
   .tool-main {
-    padding-top: var(--space-8);
-    padding-bottom: var(--space-20);
+    padding-top: var(--spacing-xl); /* 32px */
+    padding-bottom: var(--spacing-section); /* 96px */
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: var(--space-12);
+    gap: var(--spacing-xxl); /* 48px */
   }
 
   .tool-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 320px;
-    gap: clamp(16px, 4vw, 32px);
+    gap: var(--spacing-lg);
     align-items: start;
   }
 
@@ -272,43 +273,43 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
   /* Tool header */
   .tool-header {
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--spacing-lg);
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
+    gap: var(--spacing-sm);
   }
 
   .category-badge {
     align-self: flex-start;
     display: inline-flex;
     align-items: center;
-    gap: var(--space-1-5);
-    background-color: var(--accent-subtle);
-    color: var(--accent);
-    border: 1px solid var(--border);
-    padding: var(--space-1) var(--space-3);
-    border-radius: var(--radius-sm);
-    font-size: 11px;
+    gap: var(--space-2);
+    background-color: var(--color-surface-card); /* #f5f0e0 */
+    color: var(--color-ink); /* #0a0a0a */
+    border: 1px solid var(--color-hairline);
+    padding: 4px 12px; /* badge-pill */
+    border-radius: var(--radius-pill); /* rounded.pill */
+    font-size: 13px; /* typography.caption */
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.5px;
   }
 
   .tool-title {
     font-family: var(--font-heading);
-    font-size: clamp(30px, 4vw, 48px);
-    font-weight: 700;
-    color: var(--text-primary);
-    letter-spacing: -0.02em;
+    font-size: 40px; /* display-md */
+    font-weight: 500;
+    color: var(--color-ink);
+    letter-spacing: -1px;
     line-height: 1.1;
   }
 
   .tool-description {
-    color: var(--text-secondary);
-    font-size: clamp(16px, 1.5vw, 18px);
+    color: var(--color-body);
+    font-size: 16px; /* body-md */
     font-weight: 400;
     max-width: 600px;
-    line-height: 1.7;
+    line-height: 1.55;
   }
 
   /* Tool workspace */
@@ -320,19 +321,23 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   .tool-sidebar {
     display: flex;
     flex-direction: column;
-    gap: var(--space-5);
+    gap: var(--spacing-lg);
   }
 
   .sidebar-widget {
-    padding: var(--space-5);
+    background-color: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-lg); /* 16px */
+    padding: var(--spacing-lg); /* 24px */
+    color: var(--color-ink);
   }
 
   .widget-title {
-    font-family: var(--font-heading);
-    font-size: 16px;
+    font-family: var(--font-sans);
+    font-size: 16px; /* title-sm */
     font-weight: 600;
-    margin-bottom: var(--space-4);
-    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-ink);
   }
 
   .related-list {
@@ -346,13 +351,13 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
     align-items: flex-start;
     gap: var(--space-3);
     padding: var(--space-2);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-md); /* 12px */
     text-decoration: none;
     transition: background-color var(--duration-fast) var(--ease-out);
   }
 
   .related-item:hover {
-    background-color: var(--surface-hover);
+    background-color: var(--color-surface-soft);
     text-decoration: none;
   }
 
@@ -362,9 +367,9 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
     justify-content: center;
     width: 32px;
     height: 32px;
-    background-color: var(--accent-subtle);
-    color: var(--accent);
-    border-radius: var(--radius-sm);
+    background-color: var(--color-surface-card);
+    color: var(--color-ink);
+    border-radius: var(--radius-sm); /* 8px */
     flex-shrink: 0;
   }
 
@@ -378,12 +383,12 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   .related-title {
     font-weight: 600;
     font-size: 14px;
-    color: var(--text-primary);
+    color: var(--color-ink);
   }
 
   .related-desc {
     font-size: 13px;
-    color: var(--text-secondary);
+    color: var(--color-body);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -391,35 +396,38 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
   /* Privacy widget */
   .privacy-widget {
-    border-color: var(--border);
+    background-color: var(--color-surface-card); /* #f5f0e0 */
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-lg); /* 16px */
+    padding: var(--spacing-lg); /* 24px */
   }
 
   .privacy-header {
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    color: var(--success);
+    color: var(--color-success);
     margin-bottom: var(--space-3);
   }
 
   .privacy-header .privacy-widget-title {
     margin-bottom: 0;
-    color: var(--success);
+    color: var(--color-success);
     font-weight: 700;
     font-size: 14px;
   }
 
   .privacy-text {
     font-size: 14px;
-    color: var(--text-secondary);
-    line-height: 1.7;
+    color: var(--color-body);
+    line-height: 1.55;
   }
 
   /* Educational content */
   .edu-grid {
     display: grid;
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
-    gap: clamp(16px, 4vw, 32px);
+    gap: var(--spacing-lg);
     align-items: start;
   }
 
@@ -430,25 +438,30 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   }
 
   .edu-guide, .faq-accordion {
-    padding: clamp(16px, 4vw, 24px);
+    background-color: var(--color-surface-card); /* #f5f0e0 */
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-lg); /* 16px */
+    padding: var(--spacing-lg); /* 24px */
   }
 
   .edu-title {
     font-family: var(--font-heading);
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: var(--space-3);
-    color: var(--text-primary);
+    font-size: 32px; /* display-sm */
+    font-weight: 500;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-ink);
+    letter-spacing: -0.5px;
+    line-height: 1.15;
   }
 
   .edu-title:not(:first-child) {
-    margin-top: var(--space-8);
+    margin-top: var(--spacing-lg);
   }
 
   .edu-para {
-    color: var(--text-secondary);
-    font-size: 15px;
-    line-height: 1.7;
+    color: var(--color-body);
+    font-size: 16px; /* body-md */
+    line-height: 1.55;
     margin-bottom: var(--space-2);
   }
 
@@ -459,16 +472,19 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   }
 
   .step-item {
-    font-size: 15px;
-    color: var(--text-secondary);
-    line-height: 1.7;
+    font-size: 16px;
+    color: var(--color-body);
+    line-height: 1.55;
   }
 
   .pro-tips-title {
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
-    color: var(--accent);
+    color: var(--color-ink) !important;
+    font-size: 18px !important; /* title-md */
+    font-weight: 600 !important;
+    font-family: var(--font-sans) !important;
   }
 
   .pro-tips-list {
@@ -479,32 +495,32 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   }
 
   .pro-tips-list li {
-    font-size: 15px;
-    color: var(--text-secondary);
+    font-size: 16px;
+    color: var(--color-body);
     position: relative;
     padding-left: var(--space-5);
-    line-height: 1.7;
+    line-height: 1.55;
   }
 
   .pro-tips-list li::before {
     content: "✦";
     position: absolute;
     left: 0;
-    color: var(--accent);
+    color: var(--color-primary);
   }
 
   /* FAQ Accordion */
   .accordion-wrapper {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: var(--space-3);
     margin-top: var(--space-4);
   }
 
   .faq-item {
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    background-color: var(--bg);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-md); /* 12px */
+    background-color: var(--color-canvas); /* #fffaf0 */
     overflow: hidden;
   }
 
@@ -518,12 +534,12 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
     font-size: 14px;
     user-select: none;
     list-style: none;
-    color: var(--text-primary);
+    color: var(--color-ink);
     transition: background-color var(--duration-fast) var(--ease-out);
   }
 
   .faq-question:hover {
-    background-color: var(--surface-hover);
+    background-color: var(--color-surface-soft);
   }
 
   .faq-question::-webkit-details-marker {
@@ -531,7 +547,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   }
 
   .faq-question .chevron {
-    color: var(--text-tertiary);
+    color: var(--color-muted);
     transition: transform var(--duration-fast) var(--ease-out);
     flex-shrink: 0;
   }
@@ -542,13 +558,13 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
   .faq-answer {
     padding: 0 var(--space-4) var(--space-4) var(--space-4);
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--color-hairline);
   }
 
   .faq-answer p {
     font-size: 14px;
-    color: var(--text-secondary);
-    line-height: 1.7;
+    color: var(--color-body);
+    line-height: 1.55;
     margin-top: var(--space-3);
   }
 </style>

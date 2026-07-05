@@ -4,7 +4,8 @@ import Icon from './base/Icon.astro';
 
 <footer class="site-footer">
   <div class="container footer-container">
-    <div class="footer-brand">
+    <!-- Column 1: Brand -->
+    <div class="footer-column footer-brand">
       <a href="/" class="logo" aria-label="LowKeyDevs Homepage">
         <span class="logo-text">LowKey<span class="logo-accent">Devs</span></span>
       </a>
@@ -13,7 +14,8 @@ import Icon from './base/Icon.astro';
       </p>
     </div>
 
-    <div class="footer-links">
+    <!-- Column 2: Platform -->
+    <div class="footer-column footer-links">
       <h3 class="footer-heading">Platform</h3>
       <ul>
         <li><a href="/">Home</a></li>
@@ -22,7 +24,18 @@ import Icon from './base/Icon.astro';
       </ul>
     </div>
 
-    <div class="footer-newsletter">
+    <!-- Column 3: Popular Utilities -->
+    <div class="footer-column footer-links">
+      <h3 class="footer-heading">Popular Tools</h3>
+      <ul>
+        <li><a href="/tools/json-formatter">JSON Formatter</a></li>
+        <li><a href="/tools/password-generator">Password Generator</a></li>
+        <li><a href="/tools/base64-converter">Base64 Converter</a></li>
+      </ul>
+    </div>
+
+    <!-- Column 4: Newsletter -->
+    <div class="footer-column footer-newsletter">
       <h3 class="footer-heading">
         <span class="new-tools-badge">New tools</span>
         Stay updated
@@ -49,29 +62,54 @@ import Icon from './base/Icon.astro';
       <p class="footer-heart">Made for developers worldwide</p>
     </div>
   </div>
+
+  <!-- Layered Claymation Horizon Mountain SVG -->
+  <div class="footer-mountain-wrapper" aria-hidden="true">
+    <svg class="footer-mountain" viewBox="0 0 1440 200" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0 200 L0 100 Q 300 20 600 110 Q 900 200 1200 90 Q 1320 30 1440 60 L 1440 200 Z" fill="var(--color-brand-lavender)" opacity="0.6"/>
+      <path d="M0 200 L0 130 Q 200 60 450 120 Q 700 180 950 80 Q 1200 10 1440 70 L 1440 200 Z" fill="var(--color-brand-peach)" opacity="0.7"/>
+      <path d="M0 200 L0 150 Q 400 100 800 140 Q 1120 50 1440 110 L 1440 200 Z" fill="var(--color-brand-ochre)" opacity="0.8"/>
+      <path d="M0 200 L0 175 Q 500 135 1000 170 Q 1220 140 1440 160 L 1440 200 Z" fill="var(--color-canvas)"/>
+    </svg>
+  </div>
 </footer>
 
 <style>
   .site-footer {
-    background-color: var(--surface);
-    color: var(--text-primary);
-    border-top: 1px solid var(--border);
-    padding: var(--space-16) 0 var(--space-10) 0;
+    background-color: var(--color-surface-soft);
+    color: var(--color-body);
+    border-top: 1px solid var(--color-hairline);
+    padding: 80px 0 0 0;
     margin-top: auto;
+    position: relative;
+    overflow: hidden;
   }
 
   .footer-container {
     display: grid;
-    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1.5fr);
-    gap: var(--space-12);
-    margin-bottom: var(--space-10);
+    grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+    gap: var(--space-8);
+    margin-bottom: 60px;
+  }
+
+  @media (max-width: 1024px) {
+    .footer-container {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+    }
   }
 
   @media (max-width: 768px) {
     .footer-container {
       grid-template-columns: 1fr;
-      gap: var(--space-10);
+      gap: var(--space-6);
     }
+  }
+
+  .footer-column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
   }
 
   .footer-brand {
@@ -86,7 +124,7 @@ import Icon from './base/Icon.astro';
   }
 
   .brand-tagline {
-    color: var(--text-secondary);
+    color: var(--color-body);
     font-size: 14px;
     line-height: 1.7;
     max-width: 320px;
@@ -94,12 +132,12 @@ import Icon from './base/Icon.astro';
 
   .footer-heading {
     font-family: var(--font-sans);
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
-    color: var(--text-tertiary);
+    color: var(--color-muted);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: var(--space-5);
+    letter-spacing: 1.5px;
+    margin-bottom: var(--space-3);
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
@@ -107,15 +145,15 @@ import Icon from './base/Icon.astro';
   }
 
   .new-tools-badge {
-    background-color: var(--success-subtle);
-    color: var(--success);
+    background-color: var(--color-surface-card);
+    color: var(--color-ink);
     font-size: 11px;
-    padding: var(--space-0-5) var(--space-2);
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border);
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-hairline);
     font-weight: 600;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
+    letter-spacing: 0;
+    text-transform: none;
   }
 
   .footer-links ul {
@@ -126,7 +164,7 @@ import Icon from './base/Icon.astro';
   }
 
   .footer-links a {
-    color: var(--text-secondary);
+    color: var(--color-body);
     font-size: 14px;
     text-decoration: none;
     transition: color var(--duration-fast) var(--ease-out);
@@ -134,7 +172,7 @@ import Icon from './base/Icon.astro';
   }
 
   .footer-links a:hover {
-    color: var(--accent);
+    color: var(--color-ink);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
@@ -147,7 +185,7 @@ import Icon from './base/Icon.astro';
   }
 
   .newsletter-text {
-    color: var(--text-secondary);
+    color: var(--color-body);
     font-size: 14px;
     line-height: 1.6;
   }
@@ -160,23 +198,21 @@ import Icon from './base/Icon.astro';
 
   .newsletter-input {
     width: 100%;
-    background-color: var(--bg);
-    border: 1px solid var(--border);
-    color: var(--text-primary);
+    background-color: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    color: var(--color-ink);
     border-radius: var(--radius-md);
     padding: 12px 60px 12px 16px;
     outline: none;
     font-family: var(--font-sans);
     font-size: 14px;
     font-weight: 400;
-    transition: border-color var(--duration-fast) var(--ease-out),
-                box-shadow var(--duration-fast) var(--ease-out);
-    min-height: 52px;
+    transition: border-color var(--duration-fast) var(--ease-out);
+    min-height: 44px;
   }
 
   .newsletter-input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 1px var(--accent);
+    border-color: var(--color-ink);
   }
 
   .newsletter-submit {
@@ -184,11 +220,11 @@ import Icon from './base/Icon.astro';
     right: 4px;
     top: 50%;
     transform: translateY(-50%);
-    width: 44px;
-    height: 44px;
+    width: 36px;
+    height: 36px;
     background: transparent;
     border: none;
-    color: var(--text-secondary);
+    color: var(--color-muted);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -198,15 +234,16 @@ import Icon from './base/Icon.astro';
   }
 
   .newsletter-submit:hover {
-    color: var(--accent);
-    background-color: var(--accent-subtle);
+    color: var(--color-ink);
+    background-color: var(--color-surface-card);
   }
 
   .footer-bottom {
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--color-hairline);
     padding-top: var(--space-6);
+    padding-bottom: var(--space-6);
     font-size: 13px;
-    color: var(--text-tertiary);
+    color: var(--color-muted);
   }
 
   .footer-bottom-container {
@@ -222,5 +259,18 @@ import Icon from './base/Icon.astro';
       flex-direction: column;
       text-align: center;
     }
+  }
+
+  .footer-mountain-wrapper {
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    margin-top: 20px;
+  }
+
+  .footer-mountain {
+    width: 100%;
+    height: 120px;
+    display: block;
   }
 </style>

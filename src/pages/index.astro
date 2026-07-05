@@ -24,26 +24,32 @@ const activeCategories = categories.filter(cat =>
 
   <main id="main-content" class="home-main">
     <!-- Hero Section -->
-    <section class="hero-section" aria-labelledby="hero-title">
-      <div class="container container-narrow hero-container">
-        <div class="hero-content">
-          <div class="hero-badge">
+    <section class="hero-band" aria-labelledby="hero-title">
+      <div class="container hero-container-grid">
+        <div class="hero-left">
+          <span class="badge-pill hero-pill">
             <Icon name="Lock" size={12} />
             100% client-side privacy
-          </div>
-          <h1 id="hero-title" class="hero-title">
-            The internet's default <span class="accent-text">toolbox</span>
+          </span>
+          <h1 id="hero-title" class="display-xl">
+            The internet's default <span class="accent-text">toolbox.</span>
           </h1>
-          <p class="hero-subtitle">
+          <p class="hero-subtitle body-md">
             Instant, beautiful developer tools that run entirely in your browser. No forced logins, no intrusive popups, and no tracking.
           </p>
-
-          <!-- Search trigger -->
-          <button class="hero-search-trigger" id="hero-search-trigger" aria-label="Search tools">
-            <Icon name="Search" size={16} />
-            <span>Search tools...</span>
-            <kbd class="kbd-helper">/</kbd>
-          </button>
+          <div class="hero-buttons">
+            <button class="btn btn-primary" id="hero-search-trigger" aria-label="Search tools">
+              <Icon name="Search" size={14} />
+              <span>Search tools...</span>
+              <kbd class="kbd-helper">/</kbd>
+            </button>
+            <a href="/about" class="btn btn-secondary">Learn more</a>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div class="hero-illustration-card">
+            <img src="/hero-claymation.png" alt="Playful 3D claymation landscape with character mascots" class="hero-img" />
+          </div>
         </div>
       </div>
     </section>
@@ -105,37 +111,81 @@ const activeCategories = categories.filter(cat =>
     <!-- Features Section -->
     <section class="features-section" aria-labelledby="features-title">
       <div class="container">
-        <h2 id="features-title" class="features-heading">Built for speed and security</h2>
+        <h2 id="features-title" class="display-lg features-heading">Built for speed and security</h2>
         <div class="features-grid">
-          <div class="feature-item">
-            <div class="feature-icon-wrapper">
-              <Icon name="Lock" size={24} />
+          <!-- Card 1: Pink (Zero server logs) -->
+          <div class="feature-card-pink">
+            <div class="card-feature-header">
+              <div class="feature-icon-wrapper">
+                <Icon name="Lock" size={24} />
+              </div>
+              <h3 class="title-md">Zero server logs</h3>
             </div>
-            <h3>Zero server logs</h3>
-            <p>
+            <p class="body-md">
               Your data never touches our servers. All calculations, parsing, and formatting happen locally in your browser.
             </p>
+            <div class="product-ui-fragment">
+              <div class="ui-log-line"><span class="log-tag tag-green">Client</span> Local sandboxed run...</div>
+              <div class="ui-log-line"><span class="log-tag tag-gray">Network</span> 0 bytes transmitted</div>
+              <div class="ui-log-line"><span class="log-tag tag-blue">Privacy</span> 100% Offline Secured</div>
+            </div>
           </div>
 
-          <div class="feature-item">
-            <div class="feature-icon-wrapper">
-              <Icon name="RefreshCw" size={24} />
+          <!-- Card 2: Teal (Lightning fast) -->
+          <div class="feature-card-teal">
+            <div class="card-feature-header">
+              <div class="feature-icon-wrapper">
+                <Icon name="RefreshCw" size={24} />
+              </div>
+              <h3 class="title-md">Lightning fast</h3>
             </div>
-            <h3>Lightning fast</h3>
-            <p>
+            <p class="body-md">
               Statically pre-rendered pages load in milliseconds. Standard actions parse and update instantly as you type.
             </p>
+            <div class="product-ui-fragment">
+              <div class="ui-perf-metric">🚀 Parse duration: <strong>1.4ms</strong></div>
+              <div class="ui-perf-bar"><div class="ui-perf-fill" style="width: 95%;"></div></div>
+            </div>
           </div>
 
-          <div class="feature-item">
-            <div class="feature-icon-wrapper">
-              <Icon name="Braces" size={24} />
+          <!-- Card 3: Lavender (Minimal & clean) -->
+          <div class="feature-card-lavender">
+            <div class="card-feature-header">
+              <div class="feature-icon-wrapper">
+                <Icon name="Braces" size={24} />
+              </div>
+              <h3 class="title-md">Minimal & clean</h3>
             </div>
-            <h3>Minimal & clean</h3>
-            <p>
+            <p class="body-md">
               No annoying popups, cookie walls, or bloated advertisements. Just the tools you need, ready when you are.
             </p>
+            <div class="product-ui-fragment">
+              <div class="ui-toggle-row">
+                <span>Ad-free UI</span>
+                <span class="ui-toggle active"></span>
+              </div>
+              <div class="ui-toggle-row">
+                <span>Private Local Storage</span>
+                <span class="ui-toggle active"></span>
+              </div>
+            </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pre-footer CTA Section -->
+    <section class="cta-section container" aria-labelledby="cta-title">
+      <div class="cta-band-illustrated">
+        <div class="cta-left">
+          <h2 id="cta-title" class="display-md">Work with absolute privacy and speed today</h2>
+          <p class="cta-subtitle body-md">
+            Save time, secure your tokens and keys, and enjoy ad-free developer tools built exclusively for high performance.
+          </p>
+          <a href="/about" class="btn btn-primary">About our mission</a>
+        </div>
+        <div class="cta-right">
+          <img src="/mascot-claymation.png" alt="Waving claymation character mascot" class="cta-mascot-img" />
         </div>
       </div>
     </section>
@@ -151,120 +201,111 @@ const activeCategories = categories.filter(cat =>
     gap: 0;
   }
 
-  /* === Hero Section === */
-  .hero-section {
-    position: relative;
-    overflow: hidden;
-    padding: var(--space-24) 0 var(--space-16) 0;
-    background: transparent;
+  /* === Hero Band (hero-band) === */
+  .hero-band {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    padding: var(--spacing-section) 0;
   }
 
-  :global(html[data-theme="dark"]) .hero-section {
-    background: transparent;
+  .hero-container-grid {
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: var(--spacing-xxl);
+    align-items: center;
   }
 
   @media (max-width: 768px) {
-    .hero-section {
-      padding: var(--space-12) 0 var(--space-10) 0;
+    .hero-band {
+      padding: var(--spacing-xl) 0;
+    }
+    .hero-container-grid {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-lg);
     }
   }
 
-  .hero-container {
-    display: flex;
-    justify-content: center;
-  }
-
-  .hero-content {
+  .hero-left {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    width: 100%;
-    gap: var(--space-5);
+    gap: var(--spacing-lg);
+    align-items: flex-start;
   }
 
-  .hero-badge {
+  .hero-pill {
+    background-color: var(--color-surface-card);
+    color: var(--color-ink);
+    border: 1px solid var(--color-hairline);
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    font-size: 13px;
+    font-weight: 500;
     display: inline-flex;
     align-items: center;
-    gap: var(--space-1-5);
-    background-color: var(--accent-subtle);
-    color: var(--accent);
-    border: 1px solid var(--border);
-    padding: var(--space-1) var(--space-3);
-    border-radius: var(--radius-full);
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-
-  .hero-title {
-    font-family: var(--font-heading);
-    font-size: clamp(28px, 6vw, 64px);
-    font-weight: 700;
-    line-height: 1.08;
-    letter-spacing: -0.03em;
-    color: var(--text-primary);
-  }
-
-  .accent-text {
-    color: var(--accent);
+    gap: var(--space-2);
   }
 
   .hero-subtitle {
-    color: var(--text-secondary);
-    font-size: clamp(16px, 1.5vw, 18px);
-    font-weight: 400;
+    color: var(--color-body);
+    font-size: 16px;
+    line-height: 1.55;
     max-width: 560px;
-    line-height: 1.7;
   }
 
-  /* Search trigger */
-  .hero-search-trigger {
+  .hero-buttons {
     display: flex;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+  }
+
+  #hero-search-trigger {
+    display: inline-flex;
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 420px;
-    background-color: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--text-tertiary);
-    border-radius: var(--radius-md);
-    padding: var(--space-3) var(--space-4);
-    font-family: var(--font-sans);
-    font-size: 14px;
-    font-weight: 400;
+    gap: var(--space-2);
+    min-height: 44px;
+    height: 44px;
     cursor: pointer;
-    margin-top: var(--space-3);
-    transition: all var(--duration-fast) var(--ease-out);
-    box-shadow: var(--shadow-xs);
-  }
-
-  .hero-search-trigger:hover {
-    border-color: var(--accent);
-    color: var(--text-secondary);
-    box-shadow: 0 0 0 3px var(--accent-subtle);
-  }
-
-  .hero-search-trigger:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
   }
 
   .kbd-helper {
-    background-color: var(--surface-hover);
-    border: 1px solid var(--border);
-    color: var(--text-tertiary);
+    background-color: var(--color-primary-active);
+    color: var(--color-on-primary);
     padding: 2px 8px;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-xs);
     font-size: 12px;
     font-weight: 600;
     font-family: var(--font-mono);
+    margin-left: var(--space-2);
+  }
+
+  .hero-right {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .hero-illustration-card {
+    background-color: var(--color-surface-soft);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-hairline);
+  }
+
+  .hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   /* === Tools Directory === */
   .tools-directory {
-    padding: var(--space-10) 0 var(--space-16) 0;
+    padding: var(--spacing-section) 0;
+    border-top: 1px solid var(--color-hairline);
   }
 
   .directory-header {
@@ -272,32 +313,31 @@ const activeCategories = categories.filter(cat =>
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: var(--space-4);
-    margin-bottom: var(--space-8);
-    border-bottom: 1px solid var(--border);
-    padding-bottom: var(--space-5);
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+    border-bottom: 1px solid var(--color-hairline);
+    padding-bottom: var(--spacing-md);
   }
 
   .section-title {
+    color: var(--color-ink);
     font-family: var(--font-heading);
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--text-primary);
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
   }
 
   .category-tabs-wrapper {
     position: relative;
-    width: 100%;
     overflow: hidden;
   }
 
   .category-tabs {
     display: flex;
-    gap: var(--space-2);
+    gap: var(--spacing-xs);
     overflow-x: auto;
     padding-bottom: 4px;
-    padding-right: 48px;
-    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
@@ -307,103 +347,116 @@ const activeCategories = categories.filter(cat =>
   }
 
   .tab-btn {
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text-secondary);
-    padding: var(--space-2) var(--space-4);
-    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--color-muted);
+    padding: 8px 16px;
+    border-radius: var(--radius-pill);
     font-family: var(--font-sans);
     font-weight: 500;
-    font-size: 13px;
+    font-size: 14px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: var(--space-1-5);
+    gap: var(--space-2);
     white-space: nowrap;
     transition: all var(--duration-fast) var(--ease-out);
-    min-height: 44px;
+    min-height: 38px;
   }
 
   .tab-btn:hover {
-    background-color: var(--surface-hover);
-    border-color: var(--border-hover);
-    color: var(--text-primary);
+    color: var(--color-ink);
+    background-color: var(--color-surface-soft);
   }
 
   .tab-btn.active {
-    background-color: var(--accent);
-    color: var(--accent-on);
-    border-color: var(--accent);
+    background-color: var(--color-surface-card);
+    color: var(--color-ink);
+    border-color: transparent;
   }
 
-  .tab-btn:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-
-  /* Cards Grid */
   .tools-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
-    gap: var(--space-5);
-  }
-
-  .tool-card-container {
-    display: flex;
+    gap: var(--spacing-lg);
   }
 
   .filtered-empty {
-    padding: var(--space-12);
+    padding: var(--spacing-xl);
     text-align: center;
-    color: var(--text-tertiary);
+    color: var(--color-muted);
     font-size: 14px;
-    border: 1px dashed var(--border);
+    border: 1px dashed var(--color-hairline);
     border-radius: var(--radius-lg);
-    margin-top: var(--space-8);
+    margin-top: var(--spacing-xl);
   }
 
   /* === Features Section === */
   .features-section {
-    padding: var(--space-16) 0 var(--space-20) 0;
-    background-color: var(--surface);
-    border-top: 1px solid var(--border);
+    padding: var(--spacing-section) 0;
+    background-color: var(--color-canvas);
+    border-top: 1px solid var(--color-hairline);
   }
 
   .features-heading {
-    font-family: var(--font-heading);
-    font-size: clamp(24px, 3vw, 36px);
-    font-weight: 700;
     text-align: center;
-    color: var(--text-primary);
-    margin-bottom: var(--space-12);
+    color: var(--color-ink);
+    margin-bottom: var(--spacing-xxl);
   }
 
   .features-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
-    gap: clamp(16px, 3vw, 32px);
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
   }
 
-  .feature-item {
+  @media (max-width: 1024px) {
+    .features-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Saturated Feature Cards */
+  .feature-card-pink {
+    background-color: var(--color-brand-pink);
+    color: var(--color-on-primary);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: var(--space-8);
-    gap: var(--space-4);
-    background-color: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-xs);
-    transition: transform var(--duration-normal) var(--ease-out),
-                border-color var(--duration-normal) var(--ease-out),
-                box-shadow var(--duration-normal) var(--ease-out);
+    gap: var(--spacing-md);
   }
 
-  .feature-item:hover {
-    transform: translateY(-2px);
-    border-color: var(--accent);
-    box-shadow: var(--shadow-md);
+  .feature-card-teal {
+    background-color: var(--color-brand-teal);
+    color: var(--color-on-dark);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .feature-card-lavender {
+    background-color: var(--color-brand-lavender);
+    color: var(--color-ink);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .card-feature-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
   }
 
   .feature-icon-wrapper {
@@ -412,26 +465,187 @@ const activeCategories = categories.filter(cat =>
     justify-content: center;
     width: 48px;
     height: 48px;
-    color: var(--accent);
-    background-color: var(--accent-subtle);
     border-radius: var(--radius-md);
+    background-color: rgba(255, 255, 255, 0.15);
   }
 
-  .feature-item h3 {
-    font-family: var(--font-heading);
-    font-size: 18px;
+  .feature-card-lavender .feature-icon-wrapper {
+    background-color: rgba(10, 10, 10, 0.08);
+  }
+
+  .feature-card-pink p,
+  .feature-card-teal p {
+    color: var(--color-on-primary);
+    opacity: 0.9;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  .feature-card-lavender p {
+    color: var(--color-body);
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  /* Product UI Fragment inside cards */
+  .product-ui-fragment {
+    margin-top: auto;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .feature-card-lavender .product-ui-fragment {
+    background-color: rgba(255, 255, 255, 0.6);
+    border: 1px solid var(--color-hairline);
+  }
+
+  .ui-log-line {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    color: #ffffff;
+  }
+
+  .feature-card-lavender .ui-log-line {
+    color: var(--color-ink);
+  }
+
+  .log-tag {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: var(--radius-xs);
     font-weight: 600;
-    color: var(--text-primary);
+    text-transform: uppercase;
   }
 
-  .feature-item p {
-    font-size: 14px;
-    color: var(--text-secondary);
-    line-height: 1.7;
-    max-width: 280px;
+  .tag-green { background-color: #22c55e; color: #ffffff; }
+  .tag-gray { background-color: #555555; color: #ffffff; }
+  .tag-blue { background-color: #3b82f6; color: #ffffff; }
+
+  .ui-perf-metric {
+    font-weight: 600;
+    color: #ffffff;
   }
 
-  /* Responsive adjustments */
+  .feature-card-lavender .ui-perf-metric {
+    color: var(--color-ink);
+  }
+
+  .ui-perf-bar {
+    width: 100%;
+    height: 6px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+  }
+
+  .feature-card-lavender .ui-perf-bar {
+    background-color: rgba(10, 10, 10, 0.08);
+  }
+
+  .ui-perf-fill {
+    height: 100%;
+    background-color: #a4d4c5;
+    border-radius: var(--radius-pill);
+  }
+
+  .feature-card-pink .ui-perf-fill {
+    background-color: #ffffff;
+  }
+
+  .ui-toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--color-ink);
+    font-weight: 500;
+  }
+
+  .ui-toggle {
+    width: 32px;
+    height: 18px;
+    background-color: var(--color-primary-disabled);
+    border-radius: var(--radius-pill);
+    position: relative;
+    cursor: pointer;
+  }
+
+  .ui-toggle.active {
+    background-color: var(--color-success);
+  }
+
+  .ui-toggle::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 14px;
+    height: 14px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    transition: transform var(--duration-fast);
+  }
+
+  .ui-toggle.active::after {
+    transform: translateX(14px);
+  }
+
+  /* === Pre-footer CTA Section === */
+  .cta-section {
+    padding: var(--spacing-section) 0;
+  }
+
+  .cta-band-illustrated {
+    background-color: var(--color-surface-soft);
+    border-radius: var(--radius-xl);
+    padding: 80px;
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: var(--spacing-xxl);
+    align-items: center;
+    border: 1px solid var(--color-hairline);
+  }
+
+  @media (max-width: 768px) {
+    .cta-band-illustrated {
+      grid-template-columns: 1fr;
+      padding: var(--spacing-xl);
+      gap: var(--spacing-lg);
+    }
+  }
+
+  .cta-left {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    align-items: flex-start;
+  }
+
+  .cta-subtitle {
+    color: var(--color-body);
+    font-size: 16px;
+    line-height: 1.55;
+    max-width: 480px;
+  }
+
+  .cta-right {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .cta-mascot-img {
+    max-width: 200px;
+    height: auto;
+    object-fit: contain;
+  }
+
   @media (max-width: 960px) {
     .directory-header {
       flex-direction: column;
@@ -441,12 +655,6 @@ const activeCategories = categories.filter(cat =>
 
     .category-tabs {
       width: 100%;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .hero-search-trigger {
-      max-width: 100%;
     }
   }
 </style>
