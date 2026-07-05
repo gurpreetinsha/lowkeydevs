@@ -1,0 +1,551 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<tiktok-font-tool class="tool-workspace">
+  <div class="editor-grid">
+    <!-- Input Pane -->
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Input Text</span>
+        <button data-action="load-sample" class="btn-text">Load Sample</button>
+      </div>
+      <textarea 
+        id="tt-input" 
+        placeholder="Type or paste your text for TikTok here..." 
+        aria-label="TikTok Text Input"
+      ></textarea>
+      <div class="control-actions">
+        <button data-action="clear" class="btn btn-danger btn-sm">
+          <Icon name="Trash2" size={14} />
+          Clear
+        </button>
+      </div>
+    </div>
+
+    <!-- TikTok Profile Simulator -->
+    <div class="editor-pane glass-panel simulator-pane">
+      <div class="pane-header">
+        <span class="pane-title">TikTok Profile Preview</span>
+      </div>
+      
+      <div class="tt-mock-phone">
+        <div class="tt-mock-header">
+          <Icon name="ArrowRight" class="tt-back" size={18} style="transform: rotate(180deg);" />
+          <span class="tt-profile-name">aesthetic_toker</span>
+          <span class="tt-share-icon">↗️</span>
+        </div>
+        
+        <div class="tt-profile-top">
+          <div class="tt-avatar-box">
+            <div class="tt-avatar"></div>
+            <div class="tt-add-badge">+</div>
+          </div>
+          <span class="tt-username">@aesthetic_toker</span>
+        </div>
+
+        <div class="tt-stats">
+          <div class="tt-stat-item"><span class="tt-stat-num">142</span><span class="tt-stat-label">Following</span></div>
+          <div class="tt-stat-item"><span class="tt-stat-num">84.2k</span><span class="tt-stat-label">Followers</span></div>
+          <div class="tt-stat-item"><span class="tt-stat-num">1.2M</span><span class="tt-stat-label">Likes</span></div>
+        </div>
+
+        <div class="tt-profile-actions">
+          <button class="tt-btn tt-btn-follow">Follow</button>
+          <button class="tt-btn tt-btn-msg">Message</button>
+          <button class="tt-btn-small">▼</button>
+        </div>
+
+        <div class="tt-bio-section">
+          <div class="tt-bio-text" id="tt-preview-bio">Your bio will appear here. Tap a font below to copy and test!</div>
+          <div class="tt-bio-link">🔗 <span class="link-text">youtube.com/mychannel</span></div>
+        </div>
+
+        <div class="tt-tabs-bar">
+          <span class="tt-tab active">■</span>
+          <span class="tt-tab">🔒</span>
+          <span class="tt-tab">❤️</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Section -->
+  <div class="results-section glass-panel">
+    <h3 class="section-title">Copy TikTok Fonts</h3>
+    
+    <div class="results-list" id="tt-results">
+      <div class="empty-state">
+        Type some text above to see stylish TikTok fonts...
+      </div>
+    </div>
+  </div>
+</tiktok-font-tool>
+
+<style>
+  .tool-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .editor-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .editor-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .editor-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem;
+    min-height: 400px;
+  }
+
+  .pane-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+  }
+
+  .pane-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .btn-text {
+    background: none;
+    border: none;
+    color: var(--primary-accent);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: var(--font-display);
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn-text:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
+
+  #tt-input {
+    flex: 1;
+    width: 100%;
+    min-height: 250px;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    resize: none;
+    outline: none;
+  }
+
+  .control-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+  }
+
+  /* TikTok Mock */
+  .simulator-pane {
+    background: var(--card-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .tt-mock-phone {
+    width: 100%;
+    max-width: 320px;
+    background: #0f0f0f; /* TikTok Dark Mode */
+    border: 6px solid #1a1a1a;
+    border-radius: 24px;
+    color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0.8rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  .tt-mock-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.25rem 0.5rem 0.5rem 0.5rem;
+    border-bottom: 0.5px solid #202020;
+  }
+
+  .tt-back {
+    color: #ffffff;
+    cursor: pointer;
+  }
+
+  .tt-profile-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .tt-share-icon {
+    font-size: 0.95rem;
+    cursor: pointer;
+  }
+
+  .tt-profile-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .tt-avatar-box {
+    position: relative;
+  }
+
+  .tt-avatar {
+    width: 76px;
+    height: 76px;
+    background: #333333;
+    border-radius: 50%;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23666666"><circle cx="12" cy="8" r="4"/><path d="M12 14c-4.42 0-8 2-8 5v1h16v-1c0-3-3.58-5-8-5z"/></svg>');
+    background-size: 60%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .tt-add-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: #ff0050; /* TikTok brand color */
+    color: #ffffff;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 800;
+    border: 2px solid #0f0f0f;
+  }
+
+  .tt-username {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #a3a3a3;
+  }
+
+  .tt-stats {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 0.6rem;
+  }
+
+  .tt-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+  }
+
+  .tt-stat-num {
+    font-weight: 600;
+  }
+
+  .tt-stat-label {
+    color: #a3a3a3;
+    font-size: 0.7rem;
+  }
+
+  .tt-profile-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.35rem;
+    margin-top: 0.75rem;
+    padding: 0 1rem;
+  }
+
+  .tt-btn {
+    border: none;
+    border-radius: 4px;
+    padding: 0.45rem 1.25rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .tt-btn-follow {
+    background: #ef2f56; /* TikTok red-pink action button */
+    color: #ffffff;
+    flex: 1.2;
+  }
+
+  .tt-btn-msg {
+    background: #2f2f2f;
+    color: #ffffff;
+    flex: 1;
+  }
+
+  .tt-btn-small {
+    background: #2f2f2f;
+    border: none;
+    border-radius: 4px;
+    color: #ffffff;
+    width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .tt-bio-section {
+    font-size: 0.8rem;
+    text-align: center;
+    padding: 0 1rem;
+    margin-top: 0.8rem;
+    line-height: 1.4;
+  }
+
+  .tt-bio-text {
+    color: #ffffff;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .tt-bio-link {
+    color: #55aaff;
+    margin-top: 0.25rem;
+    font-weight: 500;
+  }
+
+  .tt-tabs-bar {
+    display: flex;
+    justify-content: space-around;
+    border-top: 0.5px solid #202020;
+    margin-top: auto;
+    padding-top: 0.5rem;
+    color: #a3a3a3;
+    font-size: 0.95rem;
+  }
+
+  .tt-tab {
+    cursor: pointer;
+    padding-bottom: 0.25rem;
+  }
+
+  .tt-tab.active {
+    color: #ffffff;
+    border-bottom: 1.5px solid #ffffff;
+  }
+
+  /* Results List */
+  .results-section {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .results-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 768px) {
+    .results-list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .result-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    transition: all 0.2s ease;
+  }
+
+  .result-card:hover {
+    border-color: var(--primary-accent);
+    background-color: var(--surface-hover);
+  }
+
+  .result-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .result-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .result-text {
+    font-size: 1.05rem;
+    color: var(--text-primary);
+    word-break: break-all;
+    user-select: all;
+  }
+
+  .empty-state {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.85rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .copied-btn {
+    border-color: var(--success-color) !important;
+    color: var(--success-color) !important;
+  }
+</style>
+
+<script>
+  import { generateTikTokFonts } from './logic';
+
+  class TikTokFontTool extends HTMLElement {
+    private inputEl!: HTMLTextAreaElement;
+    private resultsEl!: HTMLDivElement;
+    private previewBioEl!: HTMLDivElement;
+
+    connectedCallback() {
+      this.inputEl = this.querySelector('#tt-input') as HTMLTextAreaElement;
+      this.resultsEl = this.querySelector('#tt-results') as HTMLDivElement;
+      this.previewBioEl = this.querySelector('#tt-preview-bio') as HTMLDivElement;
+
+      this.inputEl.addEventListener('input', () => this.handleUpdate());
+
+      this.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const button = target.closest('button');
+        if (!button) return;
+
+        const action = button.getAttribute('data-action');
+        if (action === 'clear') this.handleClear();
+        if (action === 'load-sample') this.handleLoadSample();
+        if (button.classList.contains('btn-copy')) {
+          const index = parseInt(button.getAttribute('data-index') || '0');
+          this.handleCopy(button, index);
+        }
+      });
+
+      this.handleLoadSample();
+    }
+
+    private handleUpdate() {
+      const text = this.inputEl.value;
+
+      if (!text) {
+        this.previewBioEl.textContent = 'Your bio will appear here. Tap a font below to copy and test!';
+        this.resultsEl.innerHTML = `
+          <div class="empty-state">
+            Type some text above to see stylish TikTok fonts...
+          </div>
+        `;
+        return;
+      }
+
+      const fonts = generateTikTokFonts(text);
+      this.previewBioEl.textContent = text;
+
+      this.resultsEl.innerHTML = fonts.map((res, index) => `
+        <div class="result-card">
+          <div class="result-info">
+            <span class="result-label">${res.name}</span>
+            <div class="result-text" id="tt-text-${index}">${this.escapeHtml(res.text)}</div>
+          </div>
+          <button class="btn btn-secondary btn-sm btn-copy" data-index="${index}" aria-label="Copy ${res.name}">
+            Copy
+          </button>
+        </div>
+      `).join('');
+    }
+
+    private handleClear() {
+      this.inputEl.value = '';
+      this.handleUpdate();
+      this.inputEl.focus();
+    }
+
+    private handleLoadSample() {
+      this.inputEl.value = '✨ Stay positive ✨';
+      this.handleUpdate();
+    }
+
+    private async handleCopy(button: HTMLButtonElement, index: number) {
+      const textEl = this.querySelector(`#tt-text-${index}`) as HTMLDivElement;
+      if (!textEl) return;
+
+      const text = textEl.textContent || '';
+      
+      try {
+        await navigator.clipboard.writeText(text);
+        
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        button.classList.add('copied-btn');
+
+        this.previewBioEl.textContent = text;
+
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.classList.remove('copied-btn');
+        }, 1500);
+      } catch (err) {
+        console.error('Failed to copy', err);
+      }
+    }
+
+    private escapeHtml(str: string): string {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  }
+
+  if (!customElements.get('tiktok-font-tool')) {
+    customElements.define('tiktok-font-tool', TikTokFontTool);
+  }
+</script>
