@@ -64,6 +64,28 @@ import SvgToPngUI from '../../tools/list/svg-to-png/ui.astro';
 import ImageToAsciiUI from '../../tools/list/image-to-ascii/ui.astro';
 import OnlineVideoConverterUI from '../../tools/list/online-video-converter/ui.astro';
 
+// New utilities imports
+import CamelCaseConverterUI from '../../tools/list/camelcase-converter/ui.astro';
+import KebabCaseConverterUI from '../../tools/list/kebab-case-converter/ui.astro';
+import DotCaseConverterUI from '../../tools/list/dot-case-converter/ui.astro';
+import CaesarCipherToolUI from '../../tools/list/caesar-cipher-tool/ui.astro';
+import NatoPhoneticAlphabetTranslatorUI from '../../tools/list/nato-phonetic-alphabet-translator/ui.astro';
+import PigLatinTranslatorUI from '../../tools/list/pig-latin-translator/ui.astro';
+import RomanNumeralDatesUI from '../../tools/list/roman-numeral-dates/ui.astro';
+import UnicodeConverterUI from '../../tools/list/unicode-converter/ui.astro';
+import RemoveUnderscoresUI from '../../tools/list/remove-underscores/ui.astro';
+import RemoveEmDashUI from '../../tools/list/remove-em-dash/ui.astro';
+import RandomNumberGeneratorUI from '../../tools/list/random-number-generator/ui.astro';
+import RandomPasswordGeneratorUI from '../../tools/list/random-password-generator/ui.astro';
+import RandomChoiceGeneratorUI from '../../tools/list/random-choice-generator/ui.astro';
+import RandomDateGeneratorUI from '../../tools/list/random-date-generator/ui.astro';
+import RandomLetterGeneratorUI from '../../tools/list/random-letter-generator/ui.astro';
+import RandomMonthGeneratorUI from '../../tools/list/random-month-generator/ui.astro';
+import RandomIpAddressGeneratorUI from '../../tools/list/random-ip-address-generator/ui.astro';
+import NanoidGeneratorUI from '../../tools/list/nanoid-generator/ui.astro';
+import StrongPasswordGeneratorUI from '../../tools/list/strong-password-generator/ui.astro';
+import ApaCitationGeneratorUI from '../../tools/list/apa-citation-generator/ui.astro';
+
 // Map slugs to UI components
 const uiComponents: Record<string, any> = {
   'json-formatter': JSONFormatterUI,
@@ -125,7 +147,29 @@ const uiComponents: Record<string, any> = {
   'webp-to-png': WebpToPngUI,
   'svg-to-png': SvgToPngUI,
   'image-to-ascii': ImageToAsciiUI,
-  'online-video-converter': OnlineVideoConverterUI
+  'online-video-converter': OnlineVideoConverterUI,
+
+  // New utilities mappings
+  'camelcase-converter': CamelCaseConverterUI,
+  'kebab-case-converter': KebabCaseConverterUI,
+  'dot-case-converter': DotCaseConverterUI,
+  'caesar-cipher-tool': CaesarCipherToolUI,
+  'nato-phonetic-alphabet-translator': NatoPhoneticAlphabetTranslatorUI,
+  'pig-latin-translator': PigLatinTranslatorUI,
+  'roman-numeral-dates': RomanNumeralDatesUI,
+  'unicode-converter': UnicodeConverterUI,
+  'remove-underscores': RemoveUnderscoresUI,
+  'remove-em-dash': RemoveEmDashUI,
+  'random-number-generator': RandomNumberGeneratorUI,
+  'random-password-generator': RandomPasswordGeneratorUI,
+  'random-choice-generator': RandomChoiceGeneratorUI,
+  'random-date-generator': RandomDateGeneratorUI,
+  'random-letter-generator': RandomLetterGeneratorUI,
+  'random-month-generator': RandomMonthGeneratorUI,
+  'random-ip-address-generator': RandomIpAddressGeneratorUI,
+  'nanoid-generator': NanoidGeneratorUI,
+  'strong-password-generator': StrongPasswordGeneratorUI,
+  'apa-citation-generator': ApaCitationGeneratorUI
 };
 
 export async function getStaticPaths() {

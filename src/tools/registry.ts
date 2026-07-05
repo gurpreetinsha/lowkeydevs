@@ -60,6 +60,28 @@ import { meta as svgToPngMeta } from './list/svg-to-png/meta';
 import { meta as imageToAsciiMeta } from './list/image-to-ascii/meta';
 import { meta as onlineVideoConverterMeta } from './list/online-video-converter/meta';
 
+// New utilities imports
+import { meta as camelCaseConverterMeta } from './list/camelcase-converter/meta';
+import { meta as kebabCaseConverterMeta } from './list/kebab-case-converter/meta';
+import { meta as dotCaseConverterMeta } from './list/dot-case-converter/meta';
+import { meta as caesarCipherToolMeta } from './list/caesar-cipher-tool/meta';
+import { meta as natoPhoneticAlphabetTranslatorMeta } from './list/nato-phonetic-alphabet-translator/meta';
+import { meta as pigLatinTranslatorMeta } from './list/pig-latin-translator/meta';
+import { meta as romanNumeralDatesMeta } from './list/roman-numeral-dates/meta';
+import { meta as unicodeConverterMeta } from './list/unicode-converter/meta';
+import { meta as removeUnderscoresMeta } from './list/remove-underscores/meta';
+import { meta as removeEmDashMeta } from './list/remove-em-dash/meta';
+import { meta as randomNumberGeneratorMeta } from './list/random-number-generator/meta';
+import { meta as randomPasswordGeneratorMeta } from './list/random-password-generator/meta';
+import { meta as randomChoiceGeneratorMeta } from './list/random-choice-generator/meta';
+import { meta as randomDateGeneratorMeta } from './list/random-date-generator/meta';
+import { meta as randomLetterGeneratorMeta } from './list/random-letter-generator/meta';
+import { meta as randomMonthGeneratorMeta } from './list/random-month-generator/meta';
+import { meta as randomIpAddressGeneratorMeta } from './list/random-ip-address-generator/meta';
+import { meta as nanoidGeneratorMeta } from './list/nanoid-generator/meta';
+import { meta as strongPasswordGeneratorMeta } from './list/strong-password-generator/meta';
+import { meta as apaCitationGeneratorMeta } from './list/apa-citation-generator/meta';
+
 // Central Registry of all tools
 export const registry: ToolMeta[] = [
   jsonFormatterMeta,
@@ -121,7 +143,29 @@ export const registry: ToolMeta[] = [
   webpToPngMeta,
   svgToPngMeta,
   imageToAsciiMeta,
-  onlineVideoConverterMeta
+  onlineVideoConverterMeta,
+
+  // New utilities entries
+  camelCaseConverterMeta,
+  kebabCaseConverterMeta,
+  dotCaseConverterMeta,
+  caesarCipherToolMeta,
+  natoPhoneticAlphabetTranslatorMeta,
+  pigLatinTranslatorMeta,
+  romanNumeralDatesMeta,
+  unicodeConverterMeta,
+  removeUnderscoresMeta,
+  removeEmDashMeta,
+  randomNumberGeneratorMeta,
+  randomPasswordGeneratorMeta,
+  randomChoiceGeneratorMeta,
+  randomDateGeneratorMeta,
+  randomLetterGeneratorMeta,
+  randomMonthGeneratorMeta,
+  randomIpAddressGeneratorMeta,
+  nanoidGeneratorMeta,
+  strongPasswordGeneratorMeta,
+  apaCitationGeneratorMeta
 ];
 
 // Helper to find a tool by its slug

@@ -1,0 +1,331 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<caesar-cipher-tool class="tool-workspace">
+  <!-- Controls Panel -->
+  <div class="tool-controls glass-panel">
+    <div class="control-actions">
+      <!-- Mode Toggle -->
+      <div class="toggle-group">
+        <button class="toggle-btn active" data-mode="encrypt">Encrypt</button>
+        <button class="toggle-btn" data-mode="decrypt">Decrypt</button>
+      </div>
+
+      <!-- Shift Key Input -->
+      <div class="slider-container">
+        <label for="shift-input" class="label">Shift: <span id="shift-val">3</span></label>
+        <input type="range" id="shift-input" min="1" max="25" value="3" class="slider" />
+      </div>
+    </div>
+    <div class="control-danger">
+      <button data-action="clear" class="btn btn-danger btn-sm">
+        <Icon name="Trash2" size={14} />
+        Clear
+      </button>
+    </div>
+  </div>
+
+  <!-- Dual Pane Grid -->
+  <div class="editor-grid">
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Input Text</span>
+        <button data-action="load-sample" class="btn-text">Load Sample</button>
+      </div>
+      <textarea
+        id="text-input"
+        placeholder="Type or paste text to encrypt/decrypt here..."
+        aria-label="Text Input"
+      ></textarea>
+    </div>
+
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Cipher Output</span>
+        <button data-action="copy" class="btn btn-secondary btn-sm" id="btn-copy">
+          <Icon name="Clipboard" size={14} class="copy-icon" />
+          <Icon name="Check" size={14} class="check-icon" />
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <textarea
+        id="text-output"
+        readonly
+        placeholder="Cipher output will appear here..."
+        aria-label="Cipher Output"
+      ></textarea>
+    </div>
+  </div>
+</caesar-cipher-tool>
+
+<style>
+  .tool-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .tool-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 1rem 1.5rem;
+  }
+
+  .control-actions {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .slider-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 200px;
+  }
+
+  .slider-container label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--border);
+    outline: none;
+  }
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+  }
+
+  .slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border: none;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+  }
+
+  .editor-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .editor-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .editor-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 380px;
+    padding: 1.25rem;
+  }
+
+  .pane-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.75rem;
+  }
+
+  .pane-title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .btn-text {
+    background: none;
+    border: none;
+    color: var(--accent);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn-text:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
+
+  #text-input, #text-output {
+    flex: 1;
+    width: 100%;
+    min-height: 260px;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    resize: vertical;
+    outline: none;
+  }
+
+  /* Toggle Group */
+  .toggle-group {
+    display: inline-flex;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .toggle-btn {
+    padding: var(--space-2) var(--space-4);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: var(--surface);
+    border: none;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+    white-space: nowrap;
+  }
+
+  .toggle-btn:hover {
+    color: var(--text-primary);
+    background: var(--surface-hover);
+  }
+
+  .toggle-btn.active {
+    background: var(--accent);
+    color: var(--accent-on);
+  }
+
+  #btn-copy .check-icon {
+    display: none;
+  }
+
+  #btn-copy.copied .copy-icon {
+    display: none;
+  }
+
+  #btn-copy.copied .check-icon {
+    display: inline-block;
+    color: var(--success);
+  }
+
+  #btn-copy.copied {
+    border-color: var(--success);
+  }
+</style>
+
+<script>
+  import { caesarCipher } from './logic';
+
+  class CaesarCipherTool extends HTMLElement {
+    private textInput!: HTMLTextAreaElement;
+    private textOutput!: HTMLTextAreaElement;
+    private shiftInput!: HTMLInputElement;
+    private shiftVal!: HTMLElement;
+    private btnCopy!: HTMLButtonElement;
+    private isDecrypt = false;
+
+    connectedCallback() {
+      this.textInput = this.querySelector('#text-input') as HTMLTextAreaElement;
+      this.textOutput = this.querySelector('#text-output') as HTMLTextAreaElement;
+      this.shiftInput = this.querySelector('#shift-input') as HTMLInputElement;
+      this.shiftVal = this.querySelector('#shift-val') as HTMLElement;
+      this.btnCopy = this.querySelector('#btn-copy') as HTMLButtonElement;
+
+      this.textInput.addEventListener('input', () => this.handleCipher());
+      this.shiftInput.addEventListener('input', () => {
+        this.shiftVal.textContent = this.shiftInput.value;
+        this.handleCipher();
+      });
+
+      // Toggle buttons logic
+      const toggleBtns = this.querySelectorAll('.toggle-btn');
+      toggleBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          toggleBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const mode = btn.getAttribute('data-mode');
+          this.isDecrypt = (mode === 'decrypt');
+          this.handleCipher();
+        });
+      });
+
+      this.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const button = target.closest('button');
+        if (!button) return;
+
+        const action = button.getAttribute('data-action');
+        if (action === 'clear') this.handleClear();
+        if (action === 'load-sample') this.handleLoadSample();
+        if (action === 'copy') this.handleCopy();
+      });
+    }
+
+    private handleCipher() {
+      const text = this.textInput.value;
+      const shift = parseInt(this.shiftInput.value, 10);
+      this.textOutput.value = caesarCipher(text, shift, this.isDecrypt);
+    }
+
+    private handleClear() {
+      this.textInput.value = '';
+      this.handleCipher();
+      this.textInput.focus();
+    }
+
+    private handleLoadSample() {
+      this.textInput.value = this.isDecrypt 
+        ? 'Khoor Zruog! Wklv lv a fdhvdu flskhu vkdsh.'
+        : 'Hello World! This is a caesar cipher shape.';
+      this.handleCipher();
+    }
+
+    private async handleCopy() {
+      const text = this.textOutput.value;
+      if (!text) return;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        const copyText = this.btnCopy.querySelector('.copy-text') as HTMLSpanElement;
+
+        this.btnCopy.classList.add('copied');
+        copyText.textContent = 'Copied!';
+
+        setTimeout(() => {
+          this.btnCopy.classList.remove('copied');
+          copyText.textContent = 'Copy';
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy text', err);
+      }
+    }
+  }
+
+  if (!customElements.get('caesar-cipher-tool')) {
+    customElements.define('caesar-cipher-tool', CaesarCipherTool);
+  }
+</script>

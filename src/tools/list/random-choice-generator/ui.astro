@@ -1,0 +1,306 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<rand-choice-tool class="tool-workspace">
+  <div class="editor-grid">
+    <!-- Choices Input Pane -->
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Your Options (one per line)</span>
+        <button data-action="load-sample" class="btn-text">Load Sample</button>
+      </div>
+      <textarea
+        id="choices-input"
+        placeholder="Apple&#10;Banana&#10;Cherry&#10;Date&#10;Elderberry"
+        aria-label="Choices Input"
+      ></textarea>
+    </div>
+
+    <!-- Controls & Results Pane -->
+    <div class="editor-pane glass-panel results-pane">
+      <div class="pane-header">
+        <span class="pane-title">Controls &amp; Winners</span>
+      </div>
+      
+      <!-- Choices Controls -->
+      <div class="choices-controls">
+        <div class="form-group">
+          <label for="choice-qty" class="label">Number to Pick</label>
+          <input type="number" id="choice-qty" min="1" max="100" value="1" class="input input-compact" />
+        </div>
+        
+        <label class="checkbox-container">
+          <input type="checkbox" id="opt-dup" />
+          <span class="checkmark"></span>
+          Allow Duplicates
+        </label>
+
+        <button data-action="pick" class="btn btn-primary btn-generate" id="btn-pick">
+          <Icon name="Shuffle" size={18} />
+          Pick Randomly
+        </button>
+      </div>
+
+      <!-- Live Winner Output -->
+      <div class="winner-display-container">
+        <span class="winner-label">Winner(s):</span>
+        <div id="winner-output" class="winner-text">Click "Pick Randomly" to start</div>
+      </div>
+    </div>
+  </div>
+</rand-choice-tool>
+
+<style>
+  .tool-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .editor-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .editor-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .editor-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 400px;
+    padding: 1.25rem;
+  }
+
+  .results-pane {
+    justify-content: space-between;
+  }
+
+  .pane-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.75rem;
+  }
+
+  .pane-title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .btn-text {
+    background: none;
+    border: none;
+    color: var(--accent);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn-text:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
+
+  #choices-input {
+    flex: 1;
+    width: 100%;
+    min-height: 280px;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    resize: vertical;
+    outline: none;
+  }
+
+  .choices-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .input-compact {
+    padding: 6px 10px;
+    font-size: 13px;
+    min-height: auto;
+  }
+
+  .checkbox-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-left: 2rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    user-select: none;
+  }
+
+  .checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  .checkmark {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 18px;
+    width: 18px;
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: all 0.2s ease;
+  }
+
+  .checkbox-container:hover input ~ .checkmark {
+    border-color: var(--accent);
+  }
+
+  .checkbox-container input:checked ~ .checkmark {
+    background: var(--accent);
+    border-color: transparent;
+  }
+
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  .checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+  }
+
+  .checkbox-container .checkmark:after {
+    left: 6px;
+    top: 2px;
+    width: 4px;
+    height: 8px;
+    border: solid var(--bg);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  .btn-generate {
+    width: 100%;
+  }
+
+  .winner-display-container {
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    margin-top: 1rem;
+    flex-grow: 1;
+    justify-content: center;
+  }
+
+  .winner-label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  .winner-text {
+    font-family: var(--font-sans);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.4;
+    transition: transform 0.15s ease-out;
+  }
+
+  .winner-text.pop {
+    transform: scale(1.1);
+  }
+</style>
+
+<script>
+  import { pickRandomChoices } from './logic';
+
+  class RandChoiceTool extends HTMLElement {
+    private choicesInput!: HTMLTextAreaElement;
+    private qtyInput!: HTMLInputElement;
+    private dupCheckbox!: HTMLInputElement;
+    private winnerOutput!: HTMLElement;
+    private btnPick!: HTMLButtonElement;
+
+    connectedCallback() {
+      this.choicesInput = this.querySelector('#choices-input') as HTMLTextAreaElement;
+      this.qtyInput = this.querySelector('#choice-qty') as HTMLInputElement;
+      this.dupCheckbox = this.querySelector('#opt-dup') as HTMLInputElement;
+      this.winnerOutput = this.querySelector('#winner-output') as HTMLElement;
+      this.btnPick = this.querySelector('#btn-pick') as HTMLButtonElement;
+
+      this.btnPick.addEventListener('click', () => this.handlePick());
+
+      this.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const button = target.closest('button');
+        if (!button) return;
+
+        const action = button.getAttribute('data-action');
+        if (action === 'load-sample') this.handleLoadSample();
+      });
+    }
+
+    private handlePick() {
+      const text = this.choicesInput.value;
+      const choices = text.split('\n').map(c => c.trim()).filter(c => c.length > 0);
+      const quantity = parseInt(this.qtyInput.value, 10);
+      const allowDuplicates = this.dupCheckbox.checked;
+
+      if (choices.length === 0) {
+        this.winnerOutput.textContent = 'Please enter options first.';
+        return;
+      }
+
+      this.winnerOutput.textContent = 'Selecting...';
+      this.winnerOutput.classList.add('pop');
+
+      setTimeout(() => {
+        const winners = pickRandomChoices({ choices, quantity, allowDuplicates });
+        this.winnerOutput.innerHTML = winners.map(w => `<div>${this.escapeHtml(w)}</div>`).join('');
+        this.winnerOutput.classList.remove('pop');
+      }, 300);
+    }
+
+    private escapeHtml(str: string): string {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    private handleLoadSample() {
+      this.choicesInput.value = 'Pizza🍕\nSushi🍣\nTacos🌮\nBurgers🍔\nSalad🥗';
+    }
+  }
+
+  if (!customElements.get('rand-choice-tool')) {
+    customElements.define('rand-choice-tool', RandChoiceTool);
+  }
+</script>

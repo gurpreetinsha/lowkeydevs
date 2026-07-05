@@ -1,0 +1,23 @@
+import type { ToolMeta } from '../../definitions';
+
+export const meta: ToolMeta = {
+  slug: 'random-letter-generator',
+  title: 'Random Letter Generator',
+  description: 'Generate sequences of random letters online. Choose casing, unique alphabet outputs, quantities, and separators.',
+  category: 'generators',
+  keywords: ['random letter generator', 'pick random letters', 'alphabet picker', 'random letter selector', 'random character generator'],
+  faqs: [
+    {
+      question: 'Can I generate unique letters without duplicates?',
+      answer: 'Yes, just check the "Unique Letters" option to prevent any repeats. Note that the output quantity will be capped at the character pool size (26 for single casing, 52 for mixed casing).'
+    },
+    {
+      question: 'Is it possible to customize the separators?',
+      answer: 'Yes, you can choose to separate letters with spaces, commas, new lines, or have no separator at all.'
+    }
+  ],
+  educationalContent: {
+    whatIsIt: 'A Random Letter Generator creates sequences of characters from the English alphabet, useful for games (like Scattergories or Wordle styling), education, and statistical sampling.',
+    howToUse: '1. Select upper, lower, or both letter sets.\n2. Choose the quantity of letters to generate.\n3. Enable uniqueness or sorting if desired.\n4. Click "Generate" and copy the sequence.'
+  }
+};

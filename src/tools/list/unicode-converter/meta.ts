@@ -1,0 +1,23 @@
+import type { ToolMeta } from '../../definitions';
+
+export const meta: ToolMeta = {
+  slug: 'unicode-converter',
+  title: 'Unicode Character Converter & Analyzer',
+  description: 'Convert text to Unicode code points, HTML entities, binary, hex, and decimal. Analyze character properties and detailed Unicode mappings instantly.',
+  category: 'converters',
+  keywords: ['unicode converter', 'unicode character analyzer', 'text to code points', 'html entity converter', 'binary character viewer'],
+  faqs: [
+    {
+      question: 'What does this Unicode Converter do?',
+      answer: 'It breaks down your text into individual characters (including emojis and surrogate pairs) and details their numeric mappings: Unicode Code Point (U+XXXX), Hexadecimal, Decimal, Binary, and HTML entity representations.'
+    },
+    {
+      question: 'Does it support multi-byte characters and emojis?',
+      answer: 'Yes! The tool uses modern JavaScript code point iteration to correctly inspect complex characters, surrogate pairs, and emojis without splitting them.'
+    }
+  ],
+  educationalContent: {
+    whatIsIt: 'A Unicode Converter and Analyzer is an essential utility for developers to inspect character encoding, find escape representations, and resolve formatting issues.',
+    howToUse: '1. Paste your text in the input box.\n2. Instantly view the character-by-character detailed table.\n3. Choose from various output formats (Hex, Code Point, Entities, Binary) and copy the result.'
+  }
+};
