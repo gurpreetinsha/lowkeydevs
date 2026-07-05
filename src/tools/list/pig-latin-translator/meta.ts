@@ -5,6 +5,7 @@ export const meta: ToolMeta = {
   title: 'Pig Latin Translator',
   description: 'Translate English text to Pig Latin and vice-versa online instantly. Perfect for games, wordplay, and linguistic fun.',
   category: 'text',
+  icon: 'Languages',
   keywords: ['pig latin translator', 'english to pig latin', 'pig latin decoder', 'pig latin generator', 'word game translator'],
   faqs: [
     {

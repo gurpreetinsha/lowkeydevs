@@ -5,6 +5,7 @@ export const meta: ToolMeta = {
   title: 'Random Date Generator',
   description: 'Generate secure random dates within a custom date range online. Choose output formats and quantity easily.',
   category: 'generators',
+  icon: 'Clock',
   keywords: ['random date generator', 'generate random dates', 'date picker tool', 'random birthdays generator', 'mock date generator'],
   faqs: [
     {

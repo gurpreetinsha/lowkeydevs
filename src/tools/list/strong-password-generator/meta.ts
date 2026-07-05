@@ -5,6 +5,7 @@ export const meta: ToolMeta = {
   title: 'Strong Password Generator',
   description: 'Generate high-entropy secure random passwords or memorable word-based passphrases. Check strength score and cracking times instantly.',
   category: 'generators',
+  icon: 'Lock',
   keywords: ['strong password generator', 'secure password generator', 'diceware passphrase generator', 'password entropy tool', 'random passcode generator'],
   faqs: [
     {

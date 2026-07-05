@@ -5,6 +5,7 @@ export const meta: ToolMeta = {
   title: 'Remove Em Dash / En Dash Tool',
   description: 'Remove em dashes (—) and en dashes (–) from text online instantly. Replace dashes with standard hyphens, double hyphens, spaces, or strip them.',
   category: 'text',
+  icon: 'Eraser',
   keywords: ['remove em dash', 'replace en dash', 'dash remover', 'clean typography', 'em dash replacement'],
   faqs: [
     {

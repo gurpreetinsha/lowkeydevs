@@ -5,6 +5,7 @@ export const meta: ToolMeta = {
   title: 'kebab-case Converter',
   description: 'Convert any text or lists of words into kebab-case (spinal-case) online instantly. Perfect for generating clean URLs and CSS class names.',
   category: 'text',
+  icon: 'Type',
   keywords: ['kebabcase converter', 'convert to kebabcase', 'spinal case generator', 'url slug generator', 'css class naming tool'],
   faqs: [
     {

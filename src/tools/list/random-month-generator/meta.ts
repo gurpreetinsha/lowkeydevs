@@ -5,6 +5,7 @@ export const meta: ToolMeta = {
   title: 'Random Month Generator',
   description: 'Generate sequences of random months online. Choose between full names, abbreviated names, or numeric representations.',
   category: 'generators',
+  icon: 'Clock',
   keywords: ['random month generator', 'generate random months', 'month picker', 'month selector', 'mock month generator'],
   faqs: [
     {

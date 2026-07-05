@@ -5,6 +5,7 @@ export const meta: ToolMeta = {
   title: 'APA 7th Edition Citation Generator',
   description: 'Generate APA 7th Edition citations for books, websites, and journal articles online instantly. Copy formatted HTML references.',
   category: 'dev-utils',
+  icon: 'FileText',
   keywords: ['apa citation generator', 'apa reference maker', 'apa 7 bibliography creator', 'citation generator online', 'academic reference tool'],
   faqs: [
     {

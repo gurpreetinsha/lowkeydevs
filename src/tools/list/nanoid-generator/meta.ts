@@ -5,6 +5,7 @@ export const meta: ToolMeta = {
   title: 'Nano ID Generator',
   description: 'Generate secure, URL-friendly unique identifiers (Nano IDs) in bulk online. Customize length, alphabets, and quantity.',
   category: 'generators',
+  icon: 'Fingerprint',
   keywords: ['nanoid generator', 'secure id generator', 'url friendly unique id', 'generate nanoid', 'nano id creator'],
   faqs: [
     {

@@ -5,6 +5,7 @@ export const meta: ToolMeta = {
   title: 'Random Letter Generator',
   description: 'Generate sequences of random letters online. Choose casing, unique alphabet outputs, quantities, and separators.',
   category: 'generators',
+  icon: 'Type',
   keywords: ['random letter generator', 'pick random letters', 'alphabet picker', 'random letter selector', 'random character generator'],
   faqs: [
     {

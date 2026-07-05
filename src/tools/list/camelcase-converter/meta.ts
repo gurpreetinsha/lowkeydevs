@@ -5,6 +5,7 @@ export const meta: ToolMeta = {
   title: 'camelCase Converter',
   description: 'Convert any text, phrase, or lists of variable names to camelCase format online instantly. Ideal for developers and programmers.',
   category: 'text',
+  icon: 'Type',
   keywords: ['camelcase converter', 'convert to camelcase', 'camel case text generator', 'casing converter', 'variable naming tool'],
   faqs: [
     {

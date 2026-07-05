@@ -5,6 +5,7 @@ export const meta: ToolMeta = {
   title: 'Random IP Address Generator',
   description: 'Generate lists of secure random IPv4 and IPv6 addresses online. Configure quantity and copy results instantly.',
   category: 'generators',
+  icon: 'Sliders',
   keywords: ['random ip generator', 'generate random ip', 'ipv4 generator', 'ipv6 generator', 'mock ip address'],
   faqs: [
     {

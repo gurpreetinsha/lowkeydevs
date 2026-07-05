@@ -5,6 +5,7 @@ export const meta: ToolMeta = {
   title: 'Random Number Generator',
   description: 'Generate lists of secure random numbers online. Set range limits, quantities, uniqueness constraints, and sort order.',
   category: 'generators',
+  icon: 'Hash',
   keywords: ['random number generator', 'rng tool', 'random integer generator', 'pick random numbers', 'secure rng'],
   faqs: [
     {

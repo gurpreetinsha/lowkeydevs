@@ -5,6 +5,7 @@ export const meta: ToolMeta = {
   title: 'Caesar Cipher Tool',
   description: 'Encrypt or decrypt text online using the classic Caesar Cipher algorithm. Customize shift values and encoding instantly.',
   category: 'security',
+  icon: 'Shield',
   keywords: ['caesar cipher', 'caesar shift converter', 'rot13 tool', 'classic cryptography', 'text encryptor'],
   faqs: [
     {

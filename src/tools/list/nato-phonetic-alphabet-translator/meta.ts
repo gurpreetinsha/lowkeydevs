@@ -5,6 +5,7 @@ export const meta: ToolMeta = {
   title: 'NATO Phonetic Alphabet Translator',
   description: 'Convert words, names, or letters into the NATO Phonetic Alphabet online. Customize separators and casing for clear voice spelling.',
   category: 'text',
+  icon: 'Languages',
   keywords: ['nato phonetic alphabet', 'nato spelling translator', 'phonetic alphabet converter', 'spelling alphabet decoder', 'voice spelling tool'],
   faqs: [
     {

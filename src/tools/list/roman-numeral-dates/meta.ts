@@ -5,6 +5,7 @@ export const meta: ToolMeta = {
   title: 'Roman Numeral Dates Converter',
   description: 'Convert standard dates to Roman numerals and vice-versa online instantly. Customize formatting and separators.',
   category: 'converters',
+  icon: 'Clock',
   keywords: ['roman numeral dates', 'date to roman numerals', 'roman date converter', 'roman numeral date generator', 'convert date to roman'],
   faqs: [
     {

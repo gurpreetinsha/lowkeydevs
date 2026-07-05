@@ -5,6 +5,7 @@ export const meta: ToolMeta = {
   title: 'Unicode Character Converter & Analyzer',
   description: 'Convert text to Unicode code points, HTML entities, binary, hex, and decimal. Analyze character properties and detailed Unicode mappings instantly.',
   category: 'converters',
+  icon: 'Binary',
   keywords: ['unicode converter', 'unicode character analyzer', 'text to code points', 'html entity converter', 'binary character viewer'],
   faqs: [
     {

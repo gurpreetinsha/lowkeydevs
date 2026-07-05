@@ -207,7 +207,7 @@ const icons: Record<string, { viewBox: string; paths: string }> = {
   }
 };
 
-const key = name.toLowerCase().replace(/[^a-z0-9]/g, "");
+const key = (name || "info").toLowerCase().replace(/[^a-z0-9]/g, "");
 const icon = icons[key] || icons.info;
 ---
 

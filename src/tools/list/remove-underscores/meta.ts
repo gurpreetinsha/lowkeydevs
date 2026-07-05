@@ -5,6 +5,7 @@ export const meta: ToolMeta = {
   title: 'Remove Underscores Tool',
   description: 'Remove underscores from text or code online instantly. Replace underscores with spaces, hyphens, or custom text characters.',
   category: 'text',
+  icon: 'Eraser',
   keywords: ['remove underscores', 'replace underscore with space', 'underscore remover', 'strip underscores', 'text cleaner'],
   faqs: [
     {

@@ -5,6 +5,7 @@ export const meta: ToolMeta = {
   title: 'dot.case Converter',
   description: 'Convert any text, variables, or lists into dot.case format online instantly. Ideal for configuration files, properties, and metric keys.',
   category: 'text',
+  icon: 'Type',
   keywords: ['dot case converter', 'convert to dot case', 'dot case generator', 'dot notation tool', 'property key generator'],
   faqs: [
     {

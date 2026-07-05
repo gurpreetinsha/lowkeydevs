@@ -5,6 +5,7 @@ export const meta: ToolMeta = {
   title: 'Random Choice Picker',
   description: 'Pick random items, names, or winners from a list of choices online instantly. Set pick quantity and duplicates toggle.',
   category: 'generators',
+  icon: 'Shuffle',
   keywords: ['random choice picker', 'name picker', 'random selector', 'raffle picker', 'pick from list'],
   faqs: [
     {

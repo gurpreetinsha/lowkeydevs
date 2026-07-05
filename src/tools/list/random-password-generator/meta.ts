@@ -5,6 +5,7 @@ export const meta: ToolMeta = {
   title: 'Random Password Generator (Bulk)',
   description: 'Generate secure random passwords in bulk online. Customize password lengths, quantity, character sets, and exclusion options.',
   category: 'generators',
+  icon: 'Key',
   keywords: ['random password generator', 'bulk password generator', 'secure password lists', 'generate random passwords', 'mass password generator'],
   faqs: [
     {
