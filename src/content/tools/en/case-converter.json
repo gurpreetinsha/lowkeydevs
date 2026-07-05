@@ -1,0 +1,30 @@
+{
+  "title": "Case Converter",
+  "description": "Convert text casing between UPPERCASE, lowercase, camelCase, PascalCase, snake_case, kebab-case, title case, and sentence case instantly.",
+  "keywords": [
+    "case converter",
+    "text case converter",
+    "change case",
+    "camelcase",
+    "snakecase",
+    "lowercase to uppercase"
+  ],
+  "faqs": [
+    {
+      "question": "What cases are supported?",
+      "answer": "We support UPPERCASE, lowercase, camelCase, PascalCase, snake_case, kebab-case, Title Case, and Sentence case."
+    },
+    {
+      "question": "Does this tool support bulk text?",
+      "answer": "Yes, you can paste large blocks of text, and convert their casing instantly. All conversions run locally in your browser."
+    }
+  ],
+  "educationalContent": {
+    "whatIsIt": "A Case Converter transforms the capitalization patterns of words in a string. This is useful when formatting variables for code, writing headers, or cleaning up unstructured text.",
+    "howToUse": "Paste your text in the input area. Click any of the casing buttons (e.g., camelCase, UPPERCASE) to apply that transformation. Character, word, and line statistics will be displayed in real time.",
+    "proTips": [
+      "Use camelCase or snake_case to convert descriptive names into programming variable styles.",
+      "Use Title Case to quickly prepare blog post headlines or document titles."
+    ]
+  }
+}

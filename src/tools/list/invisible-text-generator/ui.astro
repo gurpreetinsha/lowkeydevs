@@ -1,4 +1,8 @@
 ---
+import { useTranslations } from '../../../utils/i18n';
+const { lang = 'en' } = Astro.props;
+const t = useTranslations(lang);
+
 import Icon from '../../../components/base/Icon.astro';
 ---
 
@@ -107,7 +111,7 @@ import Icon from '../../../components/base/Icon.astro';
       </button>
       <button data-action="clear-decode" class="btn btn-danger">
         <Icon name="Trash2" size={16} />
-        Clear
+        {t('common.Clear')}
       </button>
     </div>
 

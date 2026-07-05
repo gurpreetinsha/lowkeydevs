@@ -1,0 +1,33 @@
+{
+  "title": "HTML to Markdown Converter",
+  "description": "Convert HTML code into clean, standard Markdown syntax instantly. All processing is completed safely inside your browser.",
+  "keywords": [
+    "html to markdown",
+    "convert html to md",
+    "html tag stripper",
+    "clean html markup",
+    "rich text to markdown"
+  ],
+  "faqs": [
+    {
+      "question": "Which HTML elements are supported?",
+      "answer": "The converter supports headings (h1-h6), paragraphs, links (a), images (img), lists (ul, ol, li), blocks (pre, code, blockquote), horizontal lines (hr), line breaks (br), and bold/italic formatting."
+    },
+    {
+      "question": "How does it handle nested HTML lists?",
+      "answer": "It recursively parses lists and applies appropriate indentation (dashes for unordered lists and incrementing numbers for ordered lists)."
+    },
+    {
+      "question": "What happens to unsupported HTML tags?",
+      "answer": "Any unsupported tags (like divs, spans, sections, tables) are stripped, and their internal text or children are rendered directly as plaintext."
+    }
+  ],
+  "educationalContent": {
+    "whatIsIt": "HTML (HyperText Markup Language) is the standard markup language for creating web documents, while Markdown is a lightweight markup language designed for easy writing and reading of rich text using plain text editors. Converting HTML to Markdown cleans up verbose tags into readable formatting.",
+    "howToUse": "1. Paste your HTML source code into the Input field.\n2. The tool parses and converts the elements to Markdown in real-time.\n3. Verify the Markdown structure in the Output editor.\n4. Click \"Copy\" to save the Markdown content.",
+    "proTips": [
+      "Use this converter to extract article content from web pages, write documentation, or prepare text for static site generators like Astro.",
+      "Inline style tags and script blocks are automatically ignored to keep the Markdown output clean."
+    ]
+  }
+}

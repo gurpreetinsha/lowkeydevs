@@ -1,4 +1,8 @@
 ---
+import { useTranslations } from '../../../utils/i18n';
+const { lang = 'en' } = Astro.props;
+const t = useTranslations(lang);
+
 import Icon from '../../../components/base/Icon.astro';
 ---
 
@@ -130,7 +134,7 @@ import Icon from '../../../components/base/Icon.astro';
               <canvas id="sig-pad-canvas"></canvas>
             </div>
             <div class="tab-pane-actions">
-              <button class="btn btn-secondary btn-sm" id="btn-clear-pad">Clear</button>
+              <button class="btn btn-secondary btn-sm" id="btn-clear-pad">{t('common.Clear')}</button>
             </div>
           </div>
 

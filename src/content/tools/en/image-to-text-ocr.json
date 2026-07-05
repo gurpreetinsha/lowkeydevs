@@ -1,0 +1,34 @@
+{
+  "title": "Image to Text Converter (OCR)",
+  "description": "Extract text from images, photos, scans, and screenshots instantly. Fully client-side OCR tool protecting your privacy.",
+  "keywords": [
+    "image to text converter",
+    "ocr online",
+    "extract text from image",
+    "scan image to text",
+    "picture to text reader",
+    "privacy first ocr"
+  ],
+  "faqs": [
+    {
+      "question": "Is my uploaded image secure and private?",
+      "answer": "Yes! The OCR extraction runs entirely inside your browser using Tesseract.js. No images or text are uploaded to any server, keeping your sensitive documents completely private."
+    },
+    {
+      "question": "What image formats are supported?",
+      "answer": "We support all standard web formats, including PNG, JPEG, WebP, BMP, and GIF."
+    },
+    {
+      "question": "How accurate is the text extraction?",
+      "answer": "The accuracy depends on the quality, contrast, and alignment of the text within the image. Clear black-on-white printed text yields near 100% accuracy, while handwriting or low-contrast text might require manual edits."
+    }
+  ],
+  "educationalContent": {
+    "whatIsIt": "Image to Text Converter (OCR) utilizes optical character recognition algorithms running locally in your browser to detect alphanumeric shapes in pixels and translate them into selectable, editable text strings.",
+    "howToUse": "1. Drag and drop or browse to select your image file.\n2. Adjust the language settings (defaults to English).\n3. Click \"Extract Text\" and watch the progress bar.\n4. Edit or copy the retrieved text to your clipboard.",
+    "proTips": [
+      "For best results, crop out unnecessary margins or background elements before running OCR.",
+      "Ensure the text is rotated upright for the optical character recognition model to align correctly."
+    ]
+  }
+}

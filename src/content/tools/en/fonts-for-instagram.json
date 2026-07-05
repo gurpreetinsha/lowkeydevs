@@ -1,0 +1,35 @@
+{
+  "title": "Fonts for Instagram",
+  "description": "Generate stylish and cool fonts for your Instagram bio, captions, and comments. Instantly convert plain text into cursive, bold, gothic, and bubble fonts to copy & paste.",
+  "keywords": [
+    "instagram fonts",
+    "instagram bio fonts",
+    "ig font generator",
+    "fancy text instagram",
+    "cool text for instagram",
+    "font changer for instagram",
+    "instagram caption generator"
+  ],
+  "faqs": [
+    {
+      "question": "How do I change the font on my Instagram Bio?",
+      "answer": "Simply type your text into this generator, choose a style you like, click \"Copy\", then open Instagram, go to \"Edit Profile\", and paste the text into the Bio field. Click save and your bio will now show the new styled font!"
+    },
+    {
+      "question": "Are these fonts safe to use on Instagram?",
+      "answer": "Yes! These fonts use standard Unicode characters rather than custom web fonts or external stylesheets. Since Instagram natively supports Unicode symbols, these fonts will show up correctly for everyone visiting your profile."
+    },
+    {
+      "question": "Why do some fonts look like blank boxes in my Bio?",
+      "answer": "This happens if a user is viewing your profile from a very old device that doesn't support the specific Unicode characters. However, 99% of modern smartphones (iOS and Android) support all these characters fully."
+    }
+  ],
+  "educationalContent": {
+    "whatIsIt": "Fonts for Instagram is a tool that allows you to convert plain ASCII text into stylish, decorative symbols that can be copied and pasted directly into your Instagram Bio, captions, comments, and direct messages. It makes your profile stand out and look aesthetic without requiring any special app installations.",
+    "howToUse": "1. Enter the text or bio content you want to convert in the input box.\n2. See the live preview in the simulated Instagram Profile Bio card to check how it looks on mobile.\n3. Scroll down and click the \"Copy\" button next to any font style you like.\n4. Paste the copied text directly into your Instagram app.",
+    "proTips": [
+      "Mix and match different font styles for your name and your bio description to create a clean hierarchy.",
+      "Use bold serif or sans-serif for headings, cursive/script for details, and add aesthetic symbols or emojis to separate lines."
+    ]
+  }
+}

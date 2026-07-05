@@ -1,4 +1,8 @@
 ---
+import { useTranslations } from '../../../utils/i18n';
+const { lang = 'en' } = Astro.props;
+const t = useTranslations(lang);
+
 import Icon from '../../../components/base/Icon.astro';
 ---
 
@@ -18,7 +22,7 @@ import Icon from '../../../components/base/Icon.astro';
       <div class="control-actions">
         <button data-action="clear" class="btn btn-danger btn-sm">
           <Icon name="Trash2" size={14} />
-          Clear
+          {t('common.Clear')}
         </button>
       </div>
     </div>
@@ -319,7 +323,7 @@ import Icon from '../../../components/base/Icon.astro';
       try {
         await navigator.clipboard.writeText(text);
         const originalText = btn.innerHTML;
-        btn.textContent = 'Copied!';
+        btn.textContent = (window.__i18n?.t('common.Copied!') || 'Copied!');
         btn.classList.add('copied-btn');
         setTimeout(() => {
           btn.innerHTML = originalText;

@@ -1,4 +1,8 @@
 ---
+import { useTranslations } from '../../../utils/i18n';
+const { lang = 'en' } = Astro.props;
+const t = useTranslations(lang);
+
 import Icon from '../../../components/base/Icon.astro';
 ---
 
@@ -17,7 +21,7 @@ import Icon from '../../../components/base/Icon.astro';
       <button data-action="copy-clock" class="btn btn-secondary btn-sm" id="btn-copy-clock" aria-label="Copy live timestamp">
         <Icon name="Clipboard" size={14} class="copy-icon" />
         <Icon name="Check" size={14} class="check-icon" />
-        <span class="copy-text">Copy</span>
+        <span class="copy-text">{t('common.Copy')}</span>
       </button>
     </div>
   </div>
@@ -591,11 +595,11 @@ import Icon from '../../../components/base/Icon.astro';
 
       const copyText = this.btnCopyClock.querySelector('.copy-text') as HTMLSpanElement;
       this.btnCopyClock.classList.add('copied');
-      copyText.textContent = 'Copied!';
+      copyText.textContent = (window.__i18n?.t('common.Copied!') || 'Copied!');
 
       setTimeout(() => {
         this.btnCopyClock.classList.remove('copied');
-        copyText.textContent = 'Copy';
+        copyText.textContent = (window.__i18n?.t('common.Copy') || 'Copy');
       }, 2000);
     }
 

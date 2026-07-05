@@ -1,4 +1,8 @@
 ---
+import { useTranslations } from '../../../utils/i18n';
+const { lang = 'en' } = Astro.props;
+const t = useTranslations(lang);
+
 import Icon from '../../../components/base/Icon.astro';
 ---
 
@@ -19,7 +23,7 @@ import Icon from '../../../components/base/Icon.astro';
       <div class="action-row">
         <button data-action="clear" class="btn btn-danger btn-sm">
           <Icon name="Trash2" size={14} />
-          Clear
+          {t('common.Clear')}
         </button>
       </div>
     </div>
@@ -36,7 +40,7 @@ import Icon from '../../../components/base/Icon.astro';
             <button data-copy-id="hash-md5" class="btn btn-secondary btn-sm btn-copy-hash" aria-label="Copy MD5 hash">
               <Icon name="Clipboard" size={12} class="copy-icon" />
               <Icon name="Check" size={12} class="check-icon" />
-              <span class="copy-text">Copy</span>
+              <span class="copy-text">{t('common.Copy')}</span>
             </button>
           </div>
           <div class="hash-value-container">
@@ -51,7 +55,7 @@ import Icon from '../../../components/base/Icon.astro';
             <button data-copy-id="hash-sha1" class="btn btn-secondary btn-sm btn-copy-hash" aria-label="Copy SHA-1 hash">
               <Icon name="Clipboard" size={12} class="copy-icon" />
               <Icon name="Check" size={12} class="check-icon" />
-              <span class="copy-text">Copy</span>
+              <span class="copy-text">{t('common.Copy')}</span>
             </button>
           </div>
           <div class="hash-value-container">
@@ -66,7 +70,7 @@ import Icon from '../../../components/base/Icon.astro';
             <button data-copy-id="hash-sha256" class="btn btn-secondary btn-sm btn-copy-hash" aria-label="Copy SHA-256 hash">
               <Icon name="Clipboard" size={12} class="copy-icon" />
               <Icon name="Check" size={12} class="check-icon" />
-              <span class="copy-text">Copy</span>
+              <span class="copy-text">{t('common.Copy')}</span>
             </button>
           </div>
           <div class="hash-value-container">
@@ -81,7 +85,7 @@ import Icon from '../../../components/base/Icon.astro';
             <button data-copy-id="hash-sha512" class="btn btn-secondary btn-sm btn-copy-hash" aria-label="Copy SHA-512 hash">
               <Icon name="Clipboard" size={12} class="copy-icon" />
               <Icon name="Check" size={12} class="check-icon" />
-              <span class="copy-text">Copy</span>
+              <span class="copy-text">{t('common.Copy')}</span>
             </button>
           </div>
           <div class="hash-value-container">
@@ -352,11 +356,11 @@ import Icon from '../../../components/base/Icon.astro';
         const copyText = btn.querySelector('.copy-text') as HTMLSpanElement;
 
         btn.classList.add('copied');
-        if (copyText) copyText.textContent = 'Copied!';
+        if (copyText) copyText.textContent = (window.__i18n?.t('common.Copied!') || 'Copied!');
 
         setTimeout(() => {
           btn.classList.remove('copied');
-          if (copyText) copyText.textContent = 'Copy';
+          if (copyText) copyText.textContent = (window.__i18n?.t('common.Copy') || 'Copy');
         }, 2000);
       } catch (err) {
         console.error('Failed to copy hash value', err);

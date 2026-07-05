@@ -1,24 +1,32 @@
 ---
 import Icon from './base/Icon.astro';
+import { useTranslations, getLocalizedPath, type Language } from '../utils/i18n';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
 ---
 
 <footer class="site-footer">
   <div class="container footer-container">
     <div class="footer-brand">
-      <a href="/" class="logo" aria-label="LowKeyDevs Homepage">
+      <a href={getLocalizedPath('/', lang)} class="logo" aria-label="LowKeyDevs Homepage">
         <span class="logo-text">LowKey<span class="logo-accent">Devs</span></span>
       </a>
       <p class="brand-tagline">
-        The fastest, cleanest collection of 100% private client-side utilities. Zero trackers, zero server logs.
+        {t('footer.aboutText')}
       </p>
     </div>
 
     <div class="footer-links">
-      <h3 class="footer-heading">Platform</h3>
+      <h3 class="footer-heading">{t('footer.tools')}</h3>
       <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/about">About us</a></li>
-        <li><a href="/privacy">Privacy policy</a></li>
+        <li><a href={getLocalizedPath('/', lang)}>{t('nav.home')}</a></li>
+        <li><a href={getLocalizedPath('/about', lang)}>{t('nav.about')}</a></li>
+        <li><a href={getLocalizedPath('/privacy', lang)}>{t('nav.privacy')}</a></li>
       </ul>
     </div>
 
@@ -45,7 +53,7 @@ import Icon from './base/Icon.astro';
 
   <div class="footer-bottom">
     <div class="container footer-bottom-container">
-      <p>&copy; {new Date().getFullYear()} LowKeyDevs. All rights reserved.</p>
+      <p>{t('footer.copyright', { year: new Date().getFullYear().toString() })}</p>
       <p class="footer-heart">Made for developers worldwide</p>
     </div>
   </div>

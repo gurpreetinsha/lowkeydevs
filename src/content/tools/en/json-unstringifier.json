@@ -1,0 +1,34 @@
+{
+  "title": "JSON Unstringifier & Unescaper",
+  "description": "Unescape stringified JSON objects back into readable, formatted JSON structures or plain text automatically.",
+  "keywords": [
+    "json unstringify",
+    "unescape json",
+    "parse escaped string",
+    "json unescaper",
+    "remove backslashes json",
+    "unquote json string"
+  ],
+  "faqs": [
+    {
+      "question": "How does the JSON Unstringifier work?",
+      "answer": "It parses string literals that contain escaped sequences (like \\\", \\n, \\\\). If the unescaped result itself is a valid JSON string (representing an object or array), the tool formats it as beautiful, indented JSON. Otherwise, it shows the plain text."
+    },
+    {
+      "question": "Can it handle multiple layers of stringification?",
+      "answer": "Yes! It recursively unescapes and parses nested stringified objects until they are fully unrolled into formatted JSON structure."
+    },
+    {
+      "question": "Is my data secure?",
+      "answer": "Yes. All parsing and formatting occur client-side in your web browser. No data is sent to external web servers."
+    }
+  ],
+  "educationalContent": {
+    "whatIsIt": "In logs, databases, or API responses, you frequently find JSON objects wrapped as single strings with backslash escapes (e.g. \"{\\\"id\\\":1,\\\"name\\\":\\\"John\\\"}\"). The JSON Unstringifier reverses this escaping process, removing backslashes and quotes, and formats the result into a clean, readable JSON tree structure.",
+    "howToUse": "1. Paste your escaped, stringified JSON string into the Input field.\n2. The tool detects formatting and unescapes the content in real-time.\n3. The result is beautified with proper indentation.\n4. Click \"Copy\" to save the unescaped code.",
+    "proTips": [
+      "This tool is highly useful for reading stringified JSON payloads from database fields or AWS CloudWatch log lines.",
+      "Check the counterpart tool, JSON Stringify Text, if you want to encode objects into escaped string formats."
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "title": "Hex to Text Converter",
+  "description": "Convert plain text into Hexadecimal (base 16) and decode Hex back to readable ASCII or UTF-8 text with customizable separators.",
+  "keywords": [
+    "hex to text",
+    "text to hex",
+    "hexadecimal converter",
+    "hex decoder",
+    "hex encoder",
+    "string to hex",
+    "hex string converter"
+  ],
+  "faqs": [
+    {
+      "question": "What formatting options does the Hex encoder support?",
+      "answer": "You can choose between space-separated hex bytes, no separators, comma-separated, C-style prefixes (0x41), or escape-style prefixes (\\x41)."
+    },
+    {
+      "question": "Is it case sensitive for decoding?",
+      "answer": "No. The Hex decoder parses both uppercase (e.g. A1, FF) and lowercase (e.g. a1, ff) hexadecimal characters automatically."
+    },
+    {
+      "question": "How does it handle non-ASCII text?",
+      "answer": "It translates the characters to UTF-8 byte sequences first, then encodes them to hex. Decoding converts those hex bytes back to UTF-8, supporting emojis and non-English scripts."
+    }
+  ],
+  "educationalContent": {
+    "whatIsIt": "Hexadecimal (Hex) is a base-16 numbering system commonly used in computer science to represent binary data in a more human-friendly form. One hex digit represents 4 bits (a nibble), and two digits represent 8 bits (a byte). The Hex to Text Converter allows you to encode strings into hex values and decode hex representations back into readable text.",
+    "howToUse": "1. Select the conversion mode (Text to Hex or Hex to Text).\n2. Choose a separator format if encoding.\n3. Paste the content into the Input field.\n4. The converted output is immediately displayed. Click \"Copy\" to save it.",
+    "proTips": [
+      "The Hex decoder automatically removes common separators and prefixes (0x, \\x, spaces, commas, colons) before translating.",
+      "Hex values are useful for analyzing binary structures, encoding URLs, or debugging raw packet structures."
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "title": "Binary Code Translator",
+  "description": "Convert plain text into binary numbers (0s and 1s) and decode binary sequences back into human-readable text instantly.",
+  "keywords": [
+    "binary translator",
+    "text to binary",
+    "binary to text",
+    "binary decoder",
+    "binary encoder",
+    "ascii to binary",
+    "0101 converter"
+  ],
+  "faqs": [
+    {
+      "question": "How does text to binary conversion work?",
+      "answer": "Each character in your text is converted into its UTF-8 byte value. That byte value is then translated into its 8-bit binary representation (zeros and ones)."
+    },
+    {
+      "question": "Can I translate binary back to readable text?",
+      "answer": "Yes! Toggle the mode to \"Decode Binary\" or paste binary digits (separated by spaces or all run together) to get the original text back."
+    },
+    {
+      "question": "Does this tool support Unicode and Emojis?",
+      "answer": "Yes. By using the standard TextEncoder and TextDecoder APIs, it supports full UTF-8 character encoding, including emojis and international characters."
+    }
+  ],
+  "educationalContent": {
+    "whatIsIt": "Binary code is the fundamental language used by computers to store and process information. It consists entirely of binary digits: 0 and 1. A Binary Code Translator helps users convert human languages into binary sequences and decode binary bytes back into legible text.",
+    "howToUse": "1. Select the conversion mode (Encode Text to Binary or Decode Binary to Text).\n2. Paste your text/binary into the input field.\n3. The result is calculated in real-time on the right.\n4. Click \"Copy\" to save your result.",
+    "proTips": [
+      "The decoder is resilient and automatically removes non-binary characters before parsing.",
+      "Check the binary output length: each UTF-8 character typically corresponds to an 8-bit byte block (separated by space)."
+    ]
+  }
+}

@@ -1,4 +1,8 @@
 ---
+import { useTranslations } from '../../../utils/i18n';
+const { lang = 'en' } = Astro.props;
+const t = useTranslations(lang);
+
 import { SUPPORTED_LANGUAGES } from './logic';
 import Icon from '../../../components/base/Icon.astro';
 ---
@@ -45,7 +49,7 @@ import Icon from '../../../components/base/Icon.astro';
         <div class="pane-actions">
           <button id="btn-copy-ocr" class="btn btn-secondary btn-sm" disabled>
             <Icon name="Copy" size={14} />
-            Copy
+            {t('common.Copy')}
           </button>
           <button id="btn-download-ocr" class="btn btn-secondary btn-sm" disabled>
             <Icon name="Download" size={14} />
@@ -367,7 +371,7 @@ import Icon from '../../../components/base/Icon.astro';
       this.copyBtn.addEventListener('click', () => {
         navigator.clipboard.writeText(this.outputEl.value);
         const originalText = this.copyBtn.innerHTML;
-        this.copyBtn.textContent = 'Copied!';
+        this.copyBtn.textContent = (window.__i18n?.t('common.Copied!') || 'Copied!');
         this.copyBtn.classList.add('copied-btn');
         setTimeout(() => {
           this.copyBtn.innerHTML = originalText;

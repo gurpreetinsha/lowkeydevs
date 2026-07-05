@@ -1,4 +1,8 @@
 ---
+import { useTranslations } from '../../../utils/i18n';
+const { lang = 'en' } = Astro.props;
+const t = useTranslations(lang);
+
 import Icon from '../../../components/base/Icon.astro';
 ---
 
@@ -377,7 +381,7 @@ import Icon from '../../../components/base/Icon.astro';
         const btnTextSpan = button.querySelector('.copy-text') as HTMLSpanElement;
 
         button.classList.add('copied');
-        btnTextSpan.textContent = 'Copied!';
+        btnTextSpan.textContent = (window.__i18n?.t('common.Copied!') || 'Copied!');
 
         setTimeout(() => {
           button.classList.remove('copied');

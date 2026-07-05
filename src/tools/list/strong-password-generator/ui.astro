@@ -1,4 +1,8 @@
 ---
+import { useTranslations } from '../../../utils/i18n';
+const { lang = 'en' } = Astro.props;
+const t = useTranslations(lang);
+
 import Icon from '../../../components/base/Icon.astro';
 ---
 
@@ -14,7 +18,7 @@ import Icon from '../../../components/base/Icon.astro';
         <button data-action="copy" class="btn btn-primary" id="btn-copy">
           <Icon name="Clipboard" size={16} class="copy-icon" />
           <Icon name="Check" size={16} class="check-icon" />
-          <span class="copy-text">Copy</span>
+          <span class="copy-text">{t('common.Copy')}</span>
         </button>
       </div>
     </div>
@@ -47,7 +51,7 @@ import Icon from '../../../components/base/Icon.astro';
         <!-- Length Slider (Adjustable dynamically) -->
         <div class="control-row">
           <div class="control-header">
-            <label for="pwd-len-input" class="label" id="len-slider-label">Length</label>
+            <label for="pwd-len-input" class="label" id="len-slider-label">{t('common.Length')}</label>
             <span id="len-val" class="qty-display">20</span>
           </div>
           <input type="range" id="pwd-len-input" min="8" max="64" value="20" class="slider" />
@@ -507,11 +511,11 @@ import Icon from '../../../components/base/Icon.astro';
         const copyText = this.btnCopy.querySelector('.copy-text') as HTMLSpanElement;
 
         this.btnCopy.classList.add('copied');
-        copyText.textContent = 'Copied!';
+        copyText.textContent = (window.__i18n?.t('common.Copied!') || 'Copied!');
 
         setTimeout(() => {
           this.btnCopy.classList.remove('copied');
-          copyText.textContent = 'Copy';
+          copyText.textContent = (window.__i18n?.t('common.Copy') || 'Copy');
         }, 2000);
       } catch (err) {
         console.error('Failed to copy password', err);

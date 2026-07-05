@@ -1,4 +1,8 @@
 ---
+import { useTranslations } from '../../../utils/i18n';
+const { lang = 'en' } = Astro.props;
+const t = useTranslations(lang);
+
 import Icon from '../../../components/base/Icon.astro';
 ---
 
@@ -8,7 +12,7 @@ import Icon from '../../../components/base/Icon.astro';
     <div class="generator-controls">
       <div class="inputs-grid">
         <div class="form-group">
-          <label for="letter-qty" class="label">Quantity</label>
+          <label for="letter-qty" class="label">{t('common.Quantity')}</label>
           <input type="number" id="letter-qty" value="10" min="1" max="1000" class="input" />
         </div>
         <div class="form-group">
@@ -55,7 +59,7 @@ import Icon from '../../../components/base/Icon.astro';
         <button data-action="copy" class="btn btn-secondary btn-sm" id="btn-copy">
           <Icon name="Clipboard" size={14} class="copy-icon" />
           <Icon name="Check" size={14} class="check-icon" />
-          <span class="copy-text">Copy All</span>
+          <span class="copy-text">{t('common.Copy All')}</span>
         </button>
       </div>
       <textarea
@@ -294,11 +298,11 @@ import Icon from '../../../components/base/Icon.astro';
         const copyText = this.btnCopy.querySelector('.copy-text') as HTMLSpanElement;
 
         this.btnCopy.classList.add('copied');
-        copyText.textContent = 'Copied!';
+        copyText.textContent = (window.__i18n?.t('common.Copied!') || 'Copied!');
 
         setTimeout(() => {
           this.btnCopy.classList.remove('copied');
-          copyText.textContent = 'Copy All';
+          copyText.textContent = (window.__i18n?.t('common.Copy All') || 'Copy All');
         }, 2000);
       } catch (err) {
         console.error('Failed to copy letters', err);

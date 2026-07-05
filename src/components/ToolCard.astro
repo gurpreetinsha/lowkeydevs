@@ -1,35 +1,43 @@
 ---
 import Icon from './base/Icon.astro';
-import type { ToolMeta } from '../tools/definitions';
 import { getCategoryDetail } from '../tools/registry';
+import { useTranslations, getLocalizedPath, type Language } from '../utils/i18n';
 
 interface Props {
-  tool: ToolMeta;
+  tool: {
+    slug: string;
+    title: string;
+    description: string;
+    category: string;
+    icon: string;
+  };
+  lang: Language;
 }
 
-const { tool } = Astro.props;
-const categoryDetail = getCategoryDetail(tool.category);
+const { tool, lang } = Astro.props;
+const t = useTranslations(lang);
+const categoryDetail = getCategoryDetail(tool.category as any);
 ---
 
-<a href={`/tools/${tool.slug}`} class="tool-card" aria-labelledby={`card-title-${tool.slug}`}>
+<a href={getLocalizedPath(`/tools/${tool.slug}`, lang)} class="tool-card" aria-labelledby={`card-title-${tool.slug}`}>
   <div class="card-top">
     <div class="card-icon-wrapper">
       <Icon name={tool.icon} size={20} class="card-icon" />
     </div>
     {categoryDetail && (
-      <span class="card-category" data-i18n={`categories.${tool.category}`}>
-        {categoryDetail.title}
+      <span class="card-category">
+        {t(categoryDetail.titleKey)}
       </span>
     )}
   </div>
 
   <div class="card-content">
-    <h3 id={`card-title-${tool.slug}`} class="card-title" data-i18n={`tools.${tool.slug}.title`}>{tool.title}</h3>
-    <p class="card-description" data-i18n={`tools.${tool.slug}.description`}>{tool.description}</p>
+    <h3 id={`card-title-${tool.slug}`} class="card-title">{tool.title}</h3>
+    <p class="card-description">{tool.description}</p>
   </div>
 
   <div class="card-bottom">
-    <span class="card-action-text" data-i18n="tools.openTool">Open tool</span>
+    <span class="card-action-text">{t('tools.openTool')}</span>
     <Icon name="ArrowRight" size={14} class="card-arrow" />
   </div>
 </a>

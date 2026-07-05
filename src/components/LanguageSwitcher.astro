@@ -1,18 +1,28 @@
 ---
 import Icon from './base/Icon.astro';
+import { getAlternateUrl, type Language } from '../utils/i18n';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang: currentLang } = Astro.props;
+const canonicalUrl = Astro.url.href;
 
 const languages = [
-  { code: 'en', name: 'English', nativeName: 'English' },
-  { code: 'hi', name: 'Hindi', nativeName: 'हिंदी' },
-  { code: 'es', name: 'Spanish', nativeName: 'Español' },
-  { code: 'fr', name: 'French', nativeName: 'Français' },
-  { code: 'de', name: 'German', nativeName: 'Deutsch' },
-  { code: 'ar', name: 'Arabic', nativeName: 'العربية', dir: 'rtl' },
-  { code: 'zh', name: 'Chinese', nativeName: '中文' },
-  { code: 'ja', name: 'Japanese', nativeName: '日本語' },
-  { code: 'ru', name: 'Russian', nativeName: 'Русский' },
-  { code: 'pt', name: 'Portuguese', nativeName: 'Português' }
+  { code: 'en' as Language, name: 'English', nativeName: 'English' },
+  { code: 'hi' as Language, name: 'Hindi', nativeName: 'हिंदी' },
+  { code: 'es' as Language, name: 'Spanish', nativeName: 'Español' },
+  { code: 'fr' as Language, name: 'French', nativeName: 'Français' },
+  { code: 'de' as Language, name: 'German', nativeName: 'Deutsch' },
+  { code: 'ar' as Language, name: 'Arabic', nativeName: 'العربية', dir: 'rtl' },
+  { code: 'zh' as Language, name: 'Chinese', nativeName: '中文' },
+  { code: 'ja' as Language, name: 'Japanese', nativeName: '日本語' },
+  { code: 'ru' as Language, name: 'Russian', nativeName: 'Русский' },
+  { code: 'pt' as Language, name: 'Portuguese', nativeName: 'Português' }
 ];
+
+const currentLanguageObj = languages.find(l => l.code === currentLang) || languages[0];
 ---
 
 <div class="lang-switcher-container" id="lang-switcher">
@@ -25,7 +35,7 @@ const languages = [
     title="Select Language"
   >
     <Icon name="Languages" size={16} class="globe-icon" />
-    <span class="current-lang-label" id="current-lang-label">English</span>
+    <span class="current-lang-label" id="current-lang-label">{currentLanguageObj.nativeName}</span>
     <Icon name="ChevronDown" size={12} class="arrow-icon" />
   </button>
 
@@ -39,10 +49,11 @@ const languages = [
     <div class="dropdown-arrow"></div>
     <div class="dropdown-list-container">
       {languages.map(lang => (
-        <button
-          class="lang-option"
+        <a
+          href={getAlternateUrl(canonicalUrl, lang.code, currentLang)}
+          class={`lang-option ${lang.code === currentLang ? 'active' : ''}`}
           role="option"
-          aria-selected="false"
+          aria-selected={lang.code === currentLang ? 'true' : 'false'}
           data-lang={lang.code}
           data-native={lang.nativeName}
           dir={lang.dir || 'ltr'}
@@ -52,7 +63,7 @@ const languages = [
           <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="20 6 9 17 5 12"></polyline>
           </svg>
-        </button>
+        </a>
       ))}
     </div>
   </div>
@@ -195,6 +206,7 @@ const languages = [
     outline: none;
     position: relative;
     gap: var(--space-2);
+    text-decoration: none;
   }
 
   /* Support RTL text alignment inside Arabic button option */
@@ -206,6 +218,7 @@ const languages = [
   .lang-option:hover, .lang-option.focused {
     background-color: var(--surface-hover);
     color: var(--text-primary);
+    text-decoration: none;
   }
 
   .lang-option.active {
@@ -264,68 +277,37 @@ const languages = [
     private container: HTMLElement;
     private btn: HTMLButtonElement;
     private menu: HTMLElement;
-    private label: HTMLElement;
-    private options: HTMLButtonElement[];
+    private options: HTMLAnchorElement[];
     private activeIndex: number = -1;
 
     constructor(el: HTMLElement) {
       this.container = el;
       this.btn = el.querySelector('#lang-switcher-btn') as HTMLButtonElement;
       this.menu = el.querySelector('#lang-dropdown-menu') as HTMLElement;
-      this.label = el.querySelector('#current-lang-label') as HTMLElement;
-      this.options = Array.from(el.querySelectorAll('.lang-option')) as HTMLButtonElement[];
+      this.options = Array.from(el.querySelectorAll('.lang-option')) as HTMLAnchorElement[];
 
       this.init();
     }
 
     private init() {
-      // Toggle dropdown on button click
       this.btn.addEventListener('click', (e) => {
         e.stopPropagation();
         this.toggleMenu();
       });
 
-      // Handle item click
       this.options.forEach((opt, index) => {
-        opt.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const lang = opt.getAttribute('data-lang');
-          if (lang) {
-            this.selectLanguage(lang);
-          }
-          this.closeMenu();
-        });
-
         opt.addEventListener('mouseenter', () => {
           this.setFocusedIndex(index);
         });
       });
 
-      // Handle click outside to close
       document.addEventListener('click', (e) => {
         if (!this.container.contains(e.target as Node)) {
           this.closeMenu();
         }
       });
 
-      // Keyboard navigation
       this.container.addEventListener('keydown', (e) => this.handleKeyDown(e));
-
-      // Synchronize initial state
-      window.addEventListener('language-initialized', ((e: CustomEvent) => {
-        this.updateUI(e.detail.lang);
-      }) as EventListener);
-
-      window.addEventListener('language-changed', ((e: CustomEvent) => {
-        this.updateUI(e.detail.lang);
-      }) as EventListener);
-
-      // Check if global language manager has already run
-      // @ts-ignore
-      if (window.__i18n && window.__i18n.currentLang) {
-        // @ts-ignore
-        this.updateUI(window.__i18n.currentLang);
-      }
     }
 
     private toggleMenu() {
@@ -342,8 +324,7 @@ const languages = [
       this.menu.classList.add('active');
       this.menu.focus();
       
-      // Find current active option index
-      const activeOpt = this.menu.querySelector('.lang-option.active') as HTMLButtonElement;
+      const activeOpt = this.menu.querySelector('.lang-option.active') as HTMLAnchorElement;
       if (activeOpt) {
         const index = this.options.indexOf(activeOpt);
         this.setFocusedIndex(index);
@@ -411,46 +392,9 @@ const languages = [
           break;
       }
     }
-
-    private selectLanguage(lang: string) {
-      // Trigger global change logic
-      // @ts-ignore
-      if (window.__i18n && typeof window.__i18n.changeLang === 'function') {
-        // @ts-ignore
-        window.__i18n.changeLang(lang);
-      } else {
-        // Fallback custom event
-        const event = new CustomEvent('language-change-request', { detail: { lang } });
-        window.dispatchEvent(event);
-      }
-    }
-
-    private updateUI(lang: string) {
-      const option = this.options.find(opt => opt.getAttribute('data-lang') === lang);
-      if (option) {
-        this.options.forEach(opt => {
-          opt.classList.remove('active');
-          opt.setAttribute('aria-selected', 'false');
-        });
-        option.classList.add('active');
-        option.setAttribute('aria-selected', 'true');
-
-        const nativeName = option.getAttribute('data-native');
-        if (this.label && nativeName) {
-          this.label.textContent = nativeName;
-        }
-      }
-    }
   }
 
-  // Initialize switcher instances on the page
   function initSwitchers() {
-    const switcherEl = document.getElementById('lang-switcher');
-    if (switcherEl && !switcherEl.classList.contains('js-instantiated')) {
-      switcherEl.classList.add('js-instantiated');
-      new LanguageSwitcher(switcherEl);
-    }
-
     const sws = document.querySelectorAll('.lang-switcher-container');
     sws.forEach(s => {
       if (!s.classList.contains('js-instantiated')) {

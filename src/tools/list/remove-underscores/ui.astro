@@ -1,4 +1,8 @@
 ---
+import { useTranslations } from '../../../utils/i18n';
+const { lang = 'en' } = Astro.props;
+const t = useTranslations(lang);
+
 import Icon from '../../../components/base/Icon.astro';
 ---
 
@@ -26,7 +30,7 @@ import Icon from '../../../components/base/Icon.astro';
     <div class="control-danger">
       <button data-action="clear" class="btn btn-danger btn-sm">
         <Icon name="Trash2" size={14} />
-        Clear
+        {t('common.Clear')}
       </button>
     </div>
   </div>
@@ -52,11 +56,11 @@ import Icon from '../../../components/base/Icon.astro';
 
     <div class="editor-pane glass-panel">
       <div class="pane-header">
-        <span class="pane-title">Result</span>
+        <span class="pane-title">{t('common.Result')}</span>
         <button data-action="copy" class="btn btn-secondary btn-sm" id="btn-copy">
           <Icon name="Clipboard" size={14} class="copy-icon" />
           <Icon name="Check" size={14} class="check-icon" />
-          <span class="copy-text">Copy</span>
+          <span class="copy-text">{t('common.Copy')}</span>
         </button>
       </div>
       <textarea
@@ -276,11 +280,11 @@ import Icon from '../../../components/base/Icon.astro';
         const copyText = this.btnCopy.querySelector('.copy-text') as HTMLSpanElement;
 
         this.btnCopy.classList.add('copied');
-        copyText.textContent = 'Copied!';
+        copyText.textContent = (window.__i18n?.t('common.Copied!') || 'Copied!');
 
         setTimeout(() => {
           this.btnCopy.classList.remove('copied');
-          copyText.textContent = 'Copy';
+          copyText.textContent = (window.__i18n?.t('common.Copy') || 'Copy');
         }, 2000);
       } catch (err) {
         console.error('Failed to copy text', err);

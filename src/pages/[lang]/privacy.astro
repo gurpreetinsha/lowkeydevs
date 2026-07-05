@@ -1,0 +1,170 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Icon from '../../components/base/Icon.astro';
+import { useTranslations, SUPPORTED_LANGUAGES, type Language, getLocalizedPath } from '../../utils/i18n';
+
+export async function getStaticPaths() {
+  return SUPPORTED_LANGUAGES.map(lang => ({
+    params: { lang }
+  }));
+}
+
+const { lang } = Astro.params as { lang: Language };
+const t = useTranslations(lang);
+---
+
+<Layout
+  title={`${t('nav.privacy')} - LowKeyDevs`}
+  description={t('privacy.summaryText').replace(/<[^>]*>/g, '').substring(0, 160)}
+  lang={lang}
+>
+  <Header lang={lang} />
+
+  <main id="main-content" class="privacy-main container container-narrow">
+    <article class="privacy-content">
+      <header class="privacy-header">
+        <div class="lock-icon-title">
+          <div class="lock-wrapper">
+            <Icon name="Lock" size={20} />
+          </div>
+          <h1 class="privacy-title">{t('privacy.title')}</h1>
+        </div>
+        <p class="privacy-date">{t('privacy.date')}</p>
+      </header>
+
+      <section class="privacy-body">
+        <h2>{t('privacy.summaryTitle')}</h2>
+        <div class="highlight-text">
+          <p set:html={t('privacy.summaryText')} />
+        </div>
+
+        <h2>{t('privacy.sec1Title')}</h2>
+        <p>{t('privacy.sec1Text')}</p>
+
+        <h2>{t('privacy.sec2Title')}</h2>
+        <p>{t('privacy.sec2Text')}</p>
+
+        <h2>{t('privacy.sec3Title')}</h2>
+        <p set:html={t('privacy.sec3Text')} />
+
+        <h2>{t('privacy.sec4Title')}</h2>
+        <p>{t('privacy.sec4Text')}</p>
+
+        <h2>{t('privacy.sec5Title')}</h2>
+        <p>{t('privacy.sec5Text')}</p>
+      </section>
+
+      <div class="privacy-footer">
+        <a href={getLocalizedPath('/', lang)} class="btn btn-primary">{t('privacy.returnBtn')}</a>
+      </div>
+    </article>
+  </main>
+
+  <Footer lang={lang} />
+</Layout>
+
+<style>
+  .privacy-main {
+    padding-top: clamp(32px, 8vw, 64px);
+    padding-bottom: clamp(40px, 10vw, 80px);
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+
+  .privacy-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(20px, 5vw, 40px);
+  }
+
+  .privacy-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: clamp(16px, 4vw, 32px);
+  }
+
+  .lock-icon-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .lock-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background-color: var(--success-subtle);
+    color: var(--success);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+  }
+
+  .privacy-title {
+    font-family: var(--font-heading);
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+  }
+
+  .privacy-date {
+    color: var(--text-tertiary);
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .privacy-body {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(16px, 3vw, 24px);
+    line-height: 1.7;
+  }
+
+  .privacy-body h2 {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: var(--space-2);
+  }
+
+  .privacy-body p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .privacy-body :global(code) {
+    background-color: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    font-size: 0.875em;
+  }
+
+  .highlight-text {
+    background-color: var(--success-subtle);
+    border: 1px solid var(--border);
+    padding: clamp(16px, 4vw, 24px);
+    border-radius: var(--radius-lg);
+  }
+
+  .highlight-text p {
+    color: var(--success);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .privacy-footer {
+    border-top: 1px solid var(--border);
+    padding-top: clamp(16px, 4vw, 32px);
+    text-align: center;
+  }
+</style>

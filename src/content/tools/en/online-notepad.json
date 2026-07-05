@@ -1,0 +1,35 @@
+{
+  "title": "Online Notepad",
+  "description": "A client-side note-taking application and scratchpad featuring multi-note sidebar listing, character counts, and automatic local saving.",
+  "keywords": [
+    "online notepad",
+    "scratchpad",
+    "client-side notepad",
+    "local notes",
+    "text editor online",
+    "notes word counter",
+    "offline notes"
+  ],
+  "faqs": [
+    {
+      "question": "Where are my notes saved?",
+      "answer": "Your notes are saved directly in your web browser's LocalStorage. This means your notes persist even if you refresh or close the tab, but they remain entirely private to your device."
+    },
+    {
+      "question": "Can I download my notes?",
+      "answer": "Yes! You can click \"Download\" to export the active note as a standard .txt file, or click \"Export All\" to backup all your notes in a single JSON file."
+    },
+    {
+      "question": "Is there a limit to how many notes I can create?",
+      "answer": "There is no strict quantity limit, though standard browser LocalStorage has a total storage limit of about 5MB, which is equivalent to millions of characters of plain text."
+    }
+  ],
+  "educationalContent": {
+    "whatIsIt": "Online Notepad is a sleek, simple, client-side note-taking application designed for writing quick text drafts, code snippets, or checklist dumps. It has a sidebar to manage multiple notes, auto-saves text as you type, and displays real-time statistics (words, characters, reading time).",
+    "howToUse": "1. Click \"+ New Note\" in the sidebar to start a new document.\n2. Enter a title and begin typing your notes in the editor area.\n3. The notepad will save your changes automatically.\n4. Use the sidebar to switch between or delete notes, and click \"Download\" to save notes to your desktop.",
+    "proTips": [
+      "Pin important notes to keep them visible at the top of your notes list.",
+      "Import a previously exported JSON backup file to restore notes across browsers or devices."
+    ]
+  }
+}

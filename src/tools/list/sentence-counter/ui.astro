@@ -1,4 +1,8 @@
 ---
+import { useTranslations } from '../../../utils/i18n';
+const { lang = 'en' } = Astro.props;
+const t = useTranslations(lang);
+
 import Icon from '../../../components/base/Icon.astro';
 ---
 
@@ -47,7 +51,7 @@ import Icon from '../../../components/base/Icon.astro';
             <Icon name="FileText" size={20} />
           </div>
           <div class="stat-info">
-            <span class="stat-label">Words</span>
+            <span class="stat-label">{t('common.Words')}</span>
             <span class="stat-val" id="stat-words">0</span>
           </div>
         </div>

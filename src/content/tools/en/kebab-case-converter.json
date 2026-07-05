@@ -1,0 +1,25 @@
+{
+  "title": "kebab-case Converter",
+  "description": "Convert any text or lists of words into kebab-case (spinal-case) online instantly. Perfect for generating clean URLs and CSS class names.",
+  "keywords": [
+    "kebabcase converter",
+    "convert to kebabcase",
+    "spinal case generator",
+    "url slug generator",
+    "css class naming tool"
+  ],
+  "faqs": [
+    {
+      "question": "What is kebab-case?",
+      "answer": "kebab-case (sometimes called spinal-case) is a naming convention where all letters are lowercased and spaces or underscores are replaced with hyphens (e.g. \"kebab-case-example\")."
+    },
+    {
+      "question": "Why is it called kebab-case?",
+      "answer": "It gets its name because the words resemble chunks of meat skewered on a skewer (the hyphens)."
+    }
+  ],
+  "educationalContent": {
+    "whatIsIt": "A kebab-case Converter transforms ordinary text into lowercased words joined by hyphens. This format is widely used in CSS class naming, URL slug creation, and command-line interface arguments.",
+    "howToUse": "Paste your input text, check the line-by-line option if you want to process multiple lines separately, and copy the kebab-case output."
+  }
+}

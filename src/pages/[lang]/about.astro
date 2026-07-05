@@ -1,0 +1,194 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { useTranslations, SUPPORTED_LANGUAGES, type Language, getLocalizedPath } from '../../utils/i18n';
+
+export async function getStaticPaths() {
+  return SUPPORTED_LANGUAGES.map(lang => ({
+    params: { lang }
+  }));
+}
+
+const { lang } = Astro.params as { lang: Language };
+const t = useTranslations(lang);
+---
+
+<Layout
+  title={`${t('nav.about')} - LowKeyDevs`}
+  description={t('about.subtitle')}
+  lang={lang}
+>
+  <Header lang={lang} />
+
+  <main id="main-content" class="about-main container">
+    <header class="about-header max-w-narrow mx-auto w-full">
+      <h1 class="about-title" set:html={t('about.title')} />
+      <p class="about-subtitle">{t('about.subtitle')}</p>
+    </header>
+
+    <section class="about-content">
+      <div class="about-grid">
+        <article class="about-card">
+          <h2>{t('about.missionTitle')}</h2>
+          <p>{t('about.missionText1')}</p>
+          <p set:html={t('about.missionText2')} />
+        </article>
+
+        <article class="about-card">
+          <h2>{t('about.principlesTitle')}</h2>
+          <ul class="principles-list">
+            <li>
+              <strong>{t('about.principleInstantTitle')}</strong>: <span>{t('about.principleInstantText')}</span>
+            </li>
+            <li>
+              <strong>{t('about.principleClientTitle')}</strong>: <span>{t('about.principleClientText')}</span>
+            </li>
+            <li>
+              <strong>{t('about.principleCleanTitle')}</strong>: <span>{t('about.principleCleanText')}</span>
+            </li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="about-cta max-w-narrow mx-auto w-full">
+        <h2>{t('about.ctaTitle')}</h2>
+        <p>{t('about.ctaText')}</p>
+        <a href={getLocalizedPath('/', lang)} class="btn btn-primary">{t('about.ctaButton')}</a>
+      </div>
+    </section>
+  </main>
+
+  <Footer lang={lang} />
+</Layout>
+
+<style>
+  .about-main {
+    padding-top: clamp(32px, 8vw, 64px);
+    padding-bottom: clamp(40px, 10vw, 80px);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(24px, 6vw, 48px);
+  }
+
+  .about-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    text-align: center;
+  }
+
+  .about-title {
+    font-family: var(--font-heading);
+    font-size: clamp(28px, 5vw, 54px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+  }
+
+  :global(.accent-text) {
+    color: var(--accent);
+  }
+
+  .about-subtitle {
+    color: var(--text-secondary);
+    font-size: clamp(15px, 1.5vw, 18px);
+    font-weight: 400;
+    line-height: 1.7;
+  }
+
+  .about-content {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(24px, 6vw, 48px);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(16px, 4vw, 24px);
+  }
+
+  @media (max-width: 768px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .about-card {
+    padding: clamp(16px, 5vw, 32px);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .about-card h2 {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .about-card p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .principles-list {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .principles-list li {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    position: relative;
+    padding-left: var(--space-6);
+  }
+
+  .principles-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--success);
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  .about-cta {
+    padding: clamp(24px, 6vw, 40px) clamp(16px, 5vw, 32px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-5);
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .about-cta h2 {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .about-cta p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    max-width: 460px;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 480px) {
+    .about-cta {
+      padding: var(--space-8) var(--space-4);
+    }
+  }
+</style>

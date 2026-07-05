@@ -1,4 +1,8 @@
 ---
+import { useTranslations } from '../../../utils/i18n';
+const { lang = 'en' } = Astro.props;
+const t = useTranslations(lang);
+
 import { DENSITY_RAMPS } from './logic';
 import Icon from '../../../components/base/Icon.astro';
 ---
@@ -400,7 +404,7 @@ import Icon from '../../../components/base/Icon.astro';
       this.copyBtn.addEventListener('click', () => {
         navigator.clipboard.writeText(this.rawPlainTextArt);
         const originalText = this.copyBtn.innerHTML;
-        this.copyBtn.textContent = 'Copied!';
+        this.copyBtn.textContent = (window.__i18n?.t('common.Copied!') || 'Copied!');
         this.copyBtn.classList.add('copied-btn');
         setTimeout(() => {
           this.copyBtn.innerHTML = originalText;

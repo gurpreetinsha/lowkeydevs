@@ -1,0 +1,34 @@
+{
+  "title": "TikTok Font Generator",
+  "description": "Generate cool and stylish fonts for your TikTok bio, captions, and comments. Instantly copy and paste aesthetic unicode text to style your TikTok profile.",
+  "keywords": [
+    "tiktok font generator",
+    "tiktok bio fonts",
+    "tiktok captions font",
+    "cool fonts for tiktok",
+    "tiktok nickname fonts",
+    "font changer for tiktok"
+  ],
+  "faqs": [
+    {
+      "question": "How do I change my TikTok font styling?",
+      "answer": "Write your text in this generator, select and copy the styled font you want, open TikTok, go to \"Edit Profile\" -> \"Bio\" (or \"Name\"), and paste the styled text. Save it to update your profile!"
+    },
+    {
+      "question": "Do these fonts work in TikTok video captions?",
+      "answer": "Yes! They work in video captions, text overlays (by copy-pasting), and comments, helping your content get noticed by viewers."
+    },
+    {
+      "question": "Are there characters TikTok does not support?",
+      "answer": "TikTok supports the vast majority of Unicode block characters. However, very complex diacritics or combining symbols can sometimes trigger automatic moderation filters or appear broken. Clean bold, cursive, and simple bubble/gothic fonts work flawlessly."
+    }
+  ],
+  "educationalContent": {
+    "whatIsIt": "TikTok Font Generator is a client-side utility to convert plain text into bold, script, gothic, circled, and decorated text symbols specifically tuned to work on TikTok. It helps make your username, bio, and captions visually stand out.",
+    "howToUse": "1. Enter the text you want to use on TikTok.\n2. Review the simulated mobile TikTok Profile Bio preview to see how it renders.\n3. Scroll down and copy your preferred font style.\n4. Open TikTok and paste the text.",
+    "proTips": [
+      "Use small caps or bold sans-serif for your TikTok profile Name to make it prominent.",
+      "In captions, use fancy fonts on keywords to catch attention in the first three seconds of a user scrolling their FYP."
+    ]
+  }
+}
