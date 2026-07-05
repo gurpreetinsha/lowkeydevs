@@ -17,19 +17,19 @@ const categoryDetail = getCategoryDetail(tool.category);
       <Icon name={tool.icon} size={20} class="card-icon" />
     </div>
     {categoryDetail && (
-      <span class="card-category">
+      <span class="card-category" data-i18n={`categories.${tool.category}`}>
         {categoryDetail.title}
       </span>
     )}
   </div>
 
   <div class="card-content">
-    <h3 id={`card-title-${tool.slug}`} class="card-title">{tool.title}</h3>
-    <p class="card-description">{tool.description}</p>
+    <h3 id={`card-title-${tool.slug}`} class="card-title" data-i18n={`tools.${tool.slug}.title`}>{tool.title}</h3>
+    <p class="card-description" data-i18n={`tools.${tool.slug}.description`}>{tool.description}</p>
   </div>
 
   <div class="card-bottom">
-    <span class="card-action-text">Open tool</span>
+    <span class="card-action-text" data-i18n="tools.openTool">Open tool</span>
     <Icon name="ArrowRight" size={14} class="card-arrow" />
   </div>
 </a>

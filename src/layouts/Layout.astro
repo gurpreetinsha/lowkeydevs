@@ -14,6 +14,22 @@ const {
   canonicalUrl = Astro.url.href,
   ogImage = '/og-default.png'
 } = Astro.props;
+
+const supportedLanguages = ['en', 'hi', 'es', 'fr', 'de', 'ar', 'zh', 'ja', 'ru', 'pt'];
+
+const getAlternateUrl = (lang: string) => {
+  try {
+    const url = new URL(canonicalUrl);
+    if (lang === 'en') {
+      url.searchParams.delete('lang');
+    } else {
+      url.searchParams.set('lang', lang);
+    }
+    return url.toString();
+  } catch (e) {
+    return canonicalUrl;
+  }
+};
 ---
 
 <!doctype html>
@@ -30,6 +46,12 @@ const {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Multilingual SEO Alternate links -->
+    <link rel="alternate" hreflang="x-default" href={getAlternateUrl('en')} />
+    {supportedLanguages.map(lang => (
+      <link rel="alternate" hreflang={lang} href={getAlternateUrl(lang)} />
+    ))}
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -65,9 +87,266 @@ const {
         }
       })();
     </script>
+
+    <!-- Language detection (runs before paint to prevent FOUC) -->
+    <script is:inline>
+      (function() {
+        const supportedLangs = ['en', 'hi', 'es', 'fr', 'de', 'ar', 'zh', 'ja', 'ru', 'pt'];
+        
+        // 1. Check URL query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        let lang = urlParams.get('lang');
+        
+        // 2. Check localStorage
+        if (!lang || !supportedLangs.includes(lang)) {
+          lang = localStorage.getItem('lowkeydevs-lang');
+        }
+        
+        // 3. Detect browser language on first visit
+        if (!lang || !supportedLangs.includes(lang)) {
+          const browserLang = (navigator.language || navigator.userLanguage || '').split('-')[0];
+          if (supportedLangs.includes(browserLang)) {
+            lang = browserLang;
+          }
+        }
+        
+        // 4. Default to English
+        if (!lang || !supportedLangs.includes(lang)) {
+          lang = 'en';
+        }
+        
+        // Save back to localStorage
+        localStorage.setItem('lowkeydevs-lang', lang);
+        
+        // Apply attributes to HTML element
+        document.documentElement.setAttribute('lang', lang);
+        if (lang === 'ar') {
+          document.documentElement.setAttribute('dir', 'rtl');
+        } else {
+          document.documentElement.setAttribute('dir', 'ltr');
+        }
+
+        // Expose language configuration to page scripts
+        window.__i18n = {
+          currentLang: lang,
+          supportedLangs: supportedLangs
+        };
+
+        // If not default language (English), inject styles to hide body until translations load
+        if (lang !== 'en') {
+          const style = document.createElement('style');
+          style.id = 'i18n-fouc-blocker';
+          style.innerHTML = 'body { opacity: 0 !important; }';
+          document.head.appendChild(style);
+        }
+      })();
+    </script>
   </head>
   <body>
     <a href="#main-content" class="skip-link">Skip to content</a>
     <slot />
+
+    <!-- Client-Side Translation Manager Script -->
+    <script>
+      const TRANSLATIONS_PATH = '/translations.json';
+      let translationsCache: any = null;
+
+      async function fetchTranslations() {
+        if (translationsCache) return translationsCache;
+        try {
+          const response = await fetch(TRANSLATIONS_PATH);
+          if (!response.ok) throw new Error('Failed to load translations');
+          translationsCache = await response.json();
+          return translationsCache;
+        } catch (err) {
+          console.error('[i18n] Error loading translations:', err);
+          return null;
+        }
+      }
+
+      function getNestedValue(obj: any, path: string): string | any {
+        if (!obj) return null;
+        const parts = path.split('.');
+        let current = obj;
+        for (const part of parts) {
+          if (current[part] === undefined) return null;
+          current = current[part];
+        }
+        return current;
+      }
+
+      async function translatePage(lang: string) {
+        const dict = await fetchTranslations();
+        if (!dict || !dict[lang]) {
+          removeFoucBlocker();
+          return;
+        }
+
+        const langDict = dict[lang];
+
+        // Update html lang and dir attributes
+        document.documentElement.setAttribute('lang', lang);
+        if (lang === 'ar') {
+          document.documentElement.setAttribute('dir', 'rtl');
+        } else {
+          document.documentElement.setAttribute('dir', 'ltr');
+        }
+
+        // 1. Text elements: data-i18n
+        const textEls = document.querySelectorAll('[data-i18n]');
+        textEls.forEach(el => {
+          const key = el.getAttribute('data-i18n');
+          if (!key) return;
+
+          const translation = getNestedValue(langDict, key);
+          if (translation !== null && typeof translation === 'string') {
+            let finalTranslation = translation;
+            // Replace dynamic copyright year if present
+            if (finalTranslation.includes('{year}')) {
+              finalTranslation = finalTranslation.replace('{year}', new Date().getFullYear().toString());
+            }
+
+            // Treat as HTML if it contains tags
+            if (finalTranslation.includes('<') && finalTranslation.includes('>')) {
+              el.innerHTML = finalTranslation;
+            } else {
+              el.textContent = finalTranslation;
+            }
+          }
+        });
+
+        // 2. Attributes: placeholder, title, aria-label
+        const placeholderEls = document.querySelectorAll('[data-i18n-placeholder]');
+        placeholderEls.forEach(el => {
+          const key = el.getAttribute('data-i18n-placeholder');
+          if (key) {
+            const trans = getNestedValue(langDict, key);
+            if (trans !== null && typeof trans === 'string') {
+              el.setAttribute('placeholder', trans);
+            }
+          }
+        });
+
+        const titleEls = document.querySelectorAll('[data-i18n-title]');
+        titleEls.forEach(el => {
+          const key = el.getAttribute('data-i18n-title');
+          if (key) {
+            const trans = getNestedValue(langDict, key);
+            if (trans !== null && typeof trans === 'string') {
+              el.setAttribute('title', trans);
+            }
+          }
+        });
+
+        const ariaLabelEls = document.querySelectorAll('[data-i18n-aria-label]');
+        ariaLabelEls.forEach(el => {
+          const key = el.getAttribute('data-i18n-aria-label');
+          if (key) {
+            const trans = getNestedValue(langDict, key);
+            if (trans !== null && typeof trans === 'string') {
+              el.setAttribute('aria-label', trans);
+            }
+          }
+        });
+
+        // 3. Dynamic Lists: steps (how-to-use) and tips (pro-tips)
+        const stepsListEls = document.querySelectorAll('[data-i18n-steps]');
+        stepsListEls.forEach(el => {
+          const key = el.getAttribute('data-i18n-steps');
+          if (!key) return;
+          const stepsText = getNestedValue(langDict, key);
+          if (stepsText && typeof stepsText === 'string') {
+            el.innerHTML = '';
+            stepsText.split('\n').forEach(step => {
+              const p = document.createElement('p');
+              p.className = 'step-item';
+              p.textContent = step;
+              el.appendChild(p);
+            });
+          }
+        });
+
+        const tipsListEls = document.querySelectorAll('[data-i18n-tips]');
+        tipsListEls.forEach(el => {
+          const key = el.getAttribute('data-i18n-tips');
+          if (!key) return;
+          const tipsData = getNestedValue(langDict, key);
+          if (tipsData) {
+            el.innerHTML = '';
+            const tipsArray = Array.isArray(tipsData) ? tipsData : (typeof tipsData === 'string' ? (tipsData as string).split('\n') : []);
+            tipsArray.forEach(tip => {
+              const li = document.createElement('li');
+              li.textContent = tip;
+              el.appendChild(li);
+            });
+          }
+        });
+
+        // 4. Accordions: FAQs
+        const faqsEls = document.querySelectorAll('[data-i18n-faqs]');
+        faqsEls.forEach(el => {
+          const key = el.getAttribute('data-i18n-faqs');
+          if (!key) return;
+          const faqsData = getNestedValue(langDict, key);
+          if (Array.isArray(faqsData)) {
+            const items = el.querySelectorAll('.faq-item');
+            faqsData.forEach((faq, idx) => {
+              if (items[idx]) {
+                const questionSpan = items[idx].querySelector('.faq-question span');
+                const answerP = items[idx].querySelector('.faq-answer p');
+                if (questionSpan && faq.question) questionSpan.textContent = faq.question;
+                if (answerP && faq.answer) answerP.textContent = faq.answer;
+              }
+            });
+          }
+        });
+
+        // Remove the blocking style to render the translated page
+        removeFoucBlocker();
+      }
+
+      function removeFoucBlocker() {
+        const blocker = document.getElementById('i18n-fouc-blocker');
+        if (blocker) {
+          blocker.remove();
+        }
+      }
+
+      async function changeLang(lang: string) {
+        localStorage.setItem('lowkeydevs-lang', lang);
+        // @ts-ignore
+        if (window.__i18n) window.__i18n.currentLang = lang;
+        
+        await translatePage(lang);
+
+        // Notify switcher component instances
+        const event = new CustomEvent('language-changed', { detail: { lang } });
+        window.dispatchEvent(event);
+      }
+
+      // Expose globally
+      // @ts-ignore
+      if (window.__i18n) {
+        // @ts-ignore
+        window.__i18n.changeLang = changeLang;
+      }
+
+      // Listen for custom change events
+      window.addEventListener('language-change-request', ((e: CustomEvent) => {
+        changeLang(e.detail.lang);
+      }) as EventListener);
+
+      // Perform initial translation on page load
+      document.addEventListener('DOMContentLoaded', () => {
+        // @ts-ignore
+        const currentLang = window.__i18n ? window.__i18n.currentLang : 'en';
+        
+        translatePage(currentLang).then(() => {
+          const event = new CustomEvent('language-initialized', { detail: { lang: currentLang } });
+          window.dispatchEvent(event);
+        });
+      });
+    </script>
   </body>
 </html>
+

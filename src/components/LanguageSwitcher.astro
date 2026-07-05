@@ -1,0 +1,468 @@
+---
+import Icon from './base/Icon.astro';
+
+const languages = [
+  { code: 'en', name: 'English', nativeName: 'English' },
+  { code: 'hi', name: 'Hindi', nativeName: 'हिंदी' },
+  { code: 'es', name: 'Spanish', nativeName: 'Español' },
+  { code: 'fr', name: 'French', nativeName: 'Français' },
+  { code: 'de', name: 'German', nativeName: 'Deutsch' },
+  { code: 'ar', name: 'Arabic', nativeName: 'العربية', dir: 'rtl' },
+  { code: 'zh', name: 'Chinese', nativeName: '中文' },
+  { code: 'ja', name: 'Japanese', nativeName: '日本語' },
+  { code: 'ru', name: 'Russian', nativeName: 'Русский' },
+  { code: 'pt', name: 'Portuguese', nativeName: 'Português' }
+];
+---
+
+<div class="lang-switcher-container" id="lang-switcher">
+  <button
+    class="lang-switcher-btn"
+    id="lang-switcher-btn"
+    aria-haspopup="listbox"
+    aria-expanded="false"
+    aria-label="Select Language"
+    title="Select Language"
+  >
+    <Icon name="Languages" size={16} class="globe-icon" />
+    <span class="current-lang-label" id="current-lang-label">English</span>
+    <Icon name="ChevronDown" size={12} class="arrow-icon" />
+  </button>
+
+  <div
+    class="lang-dropdown-menu"
+    id="lang-dropdown-menu"
+    role="listbox"
+    aria-labelledby="lang-switcher-btn"
+    tabindex="-1"
+  >
+    <div class="dropdown-arrow"></div>
+    <div class="dropdown-list-container">
+      {languages.map(lang => (
+        <button
+          class="lang-option"
+          role="option"
+          aria-selected="false"
+          data-lang={lang.code}
+          data-native={lang.nativeName}
+          dir={lang.dir || 'ltr'}
+        >
+          <span class="lang-native">{lang.nativeName}</span>
+          <span class="lang-english">{lang.name}</span>
+          <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 5 12"></polyline>
+          </svg>
+        </button>
+      ))}
+    </div>
+  </div>
+</div>
+
+<style>
+  .lang-switcher-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  .lang-switcher-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0 var(--space-3);
+    height: 38px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+    user-select: none;
+    outline: none;
+  }
+
+  .lang-switcher-btn:hover {
+    border-color: var(--border-hover);
+    background-color: var(--surface-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .lang-switcher-btn:focus-visible {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-subtle);
+  }
+
+  .globe-icon {
+    color: var(--text-secondary);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .lang-switcher-btn:hover .globe-icon {
+    color: var(--accent);
+  }
+
+  .current-lang-label {
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .arrow-icon {
+    color: var(--text-tertiary);
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .lang-switcher-btn[aria-expanded="true"] .arrow-icon {
+    transform: rotate(180deg);
+  }
+
+  /* Dropdown Menu styling */
+  .lang-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 220px;
+    background: var(--header-bg-solid, var(--surface));
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+    pointer-events: none;
+    visibility: hidden;
+    transition: opacity var(--duration-fast) var(--ease-out),
+                transform var(--duration-fast) var(--ease-out),
+                visibility var(--duration-fast) var(--ease-out);
+    z-index: var(--z-modal);
+    backdrop-filter: blur(12px);
+    padding: var(--space-1-5);
+  }
+
+  :global(html[data-theme="dark"]) .lang-dropdown-menu {
+    background: rgba(24, 24, 27, 0.95);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .lang-dropdown-menu.active {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: auto;
+    visibility: visible;
+  }
+
+  .dropdown-list-container {
+    max-height: 280px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-right: var(--space-1);
+  }
+
+  /* Custom Scrollbar for Dropdown list */
+  .dropdown-list-container::-webkit-scrollbar {
+    width: 4px;
+  }
+  .dropdown-list-container::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .dropdown-list-container::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: var(--radius-full);
+  }
+  .dropdown-list-container::-webkit-scrollbar-thumb:hover {
+    background: var(--text-tertiary);
+  }
+
+  .lang-option {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 13.5px;
+    text-align: left;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+    outline: none;
+    position: relative;
+    gap: var(--space-2);
+  }
+
+  /* Support RTL text alignment inside Arabic button option */
+  .lang-option[dir="rtl"] {
+    text-align: right;
+    flex-direction: row-reverse;
+  }
+
+  .lang-option:hover, .lang-option.focused {
+    background-color: var(--surface-hover);
+    color: var(--text-primary);
+  }
+
+  .lang-option.active {
+    background-color: var(--accent-subtle);
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .lang-native {
+    font-weight: 500;
+  }
+
+  .lang-english {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-left: auto;
+  }
+
+  .lang-option[dir="rtl"] .lang-english {
+    margin-left: 0;
+    margin-right: auto;
+  }
+
+  .check-icon {
+    color: var(--accent);
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all var(--duration-fast) var(--ease-out);
+    flex-shrink: 0;
+    margin-left: var(--space-1);
+  }
+
+  .lang-option[dir="rtl"] .check-icon {
+    margin-left: 0;
+    margin-right: var(--space-1);
+  }
+
+  .lang-option.active .check-icon {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Adapt dropdown orientation on mobile */
+  @media (max-width: 768px) {
+    .lang-dropdown-menu {
+      right: auto;
+      left: 0;
+      width: calc(100vw - 32px);
+      max-width: 300px;
+    }
+  }
+</style>
+
+<script>
+  class LanguageSwitcher {
+    private container: HTMLElement;
+    private btn: HTMLButtonElement;
+    private menu: HTMLElement;
+    private label: HTMLElement;
+    private options: HTMLButtonElement[];
+    private activeIndex: number = -1;
+
+    constructor(el: HTMLElement) {
+      this.container = el;
+      this.btn = el.querySelector('#lang-switcher-btn') as HTMLButtonElement;
+      this.menu = el.querySelector('#lang-dropdown-menu') as HTMLElement;
+      this.label = el.querySelector('#current-lang-label') as HTMLElement;
+      this.options = Array.from(el.querySelectorAll('.lang-option')) as HTMLButtonElement[];
+
+      this.init();
+    }
+
+    private init() {
+      // Toggle dropdown on button click
+      this.btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.toggleMenu();
+      });
+
+      // Handle item click
+      this.options.forEach((opt, index) => {
+        opt.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const lang = opt.getAttribute('data-lang');
+          if (lang) {
+            this.selectLanguage(lang);
+          }
+          this.closeMenu();
+        });
+
+        opt.addEventListener('mouseenter', () => {
+          this.setFocusedIndex(index);
+        });
+      });
+
+      // Handle click outside to close
+      document.addEventListener('click', (e) => {
+        if (!this.container.contains(e.target as Node)) {
+          this.closeMenu();
+        }
+      });
+
+      // Keyboard navigation
+      this.container.addEventListener('keydown', (e) => this.handleKeyDown(e));
+
+      // Synchronize initial state
+      window.addEventListener('language-initialized', ((e: CustomEvent) => {
+        this.updateUI(e.detail.lang);
+      }) as EventListener);
+
+      window.addEventListener('language-changed', ((e: CustomEvent) => {
+        this.updateUI(e.detail.lang);
+      }) as EventListener);
+
+      // Check if global language manager has already run
+      // @ts-ignore
+      if (window.__i18n && window.__i18n.currentLang) {
+        // @ts-ignore
+        this.updateUI(window.__i18n.currentLang);
+      }
+    }
+
+    private toggleMenu() {
+      const isExpanded = this.btn.getAttribute('aria-expanded') === 'true';
+      if (isExpanded) {
+        this.closeMenu();
+      } else {
+        this.openMenu();
+      }
+    }
+
+    private openMenu() {
+      this.btn.setAttribute('aria-expanded', 'true');
+      this.menu.classList.add('active');
+      this.menu.focus();
+      
+      // Find current active option index
+      const activeOpt = this.menu.querySelector('.lang-option.active') as HTMLButtonElement;
+      if (activeOpt) {
+        const index = this.options.indexOf(activeOpt);
+        this.setFocusedIndex(index);
+      } else {
+        this.setFocusedIndex(0);
+      }
+    }
+
+    private closeMenu() {
+      this.btn.setAttribute('aria-expanded', 'false');
+      this.menu.classList.remove('active');
+      this.btn.focus();
+      this.clearOptionFocus();
+      this.activeIndex = -1;
+    }
+
+    private setFocusedIndex(index: number) {
+      this.clearOptionFocus();
+      if (index >= 0 && index < this.options.length) {
+        this.activeIndex = index;
+        this.options[index].classList.add('focused');
+        this.options[index].scrollIntoView({ block: 'nearest' });
+      }
+    }
+
+    private clearOptionFocus() {
+      this.options.forEach(opt => opt.classList.remove('focused'));
+    }
+
+    private handleKeyDown(e: KeyboardEvent) {
+      const isExpanded = this.btn.getAttribute('aria-expanded') === 'true';
+
+      if (!isExpanded) {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.openMenu();
+        }
+        return;
+      }
+
+      switch (e.key) {
+        case 'Escape':
+          e.preventDefault();
+          this.closeMenu();
+          break;
+        case 'ArrowDown':
+          e.preventDefault();
+          const nextIndex = (this.activeIndex + 1) % this.options.length;
+          this.setFocusedIndex(nextIndex);
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          const prevIndex = (this.activeIndex - 1 + this.options.length) % this.options.length;
+          this.setFocusedIndex(prevIndex);
+          break;
+        case 'Enter':
+        case ' ':
+          e.preventDefault();
+          if (this.activeIndex >= 0 && this.activeIndex < this.options.length) {
+            this.options[this.activeIndex].click();
+          }
+          break;
+        case 'Tab':
+          this.closeMenu();
+          break;
+      }
+    }
+
+    private selectLanguage(lang: string) {
+      // Trigger global change logic
+      // @ts-ignore
+      if (window.__i18n && typeof window.__i18n.changeLang === 'function') {
+        // @ts-ignore
+        window.__i18n.changeLang(lang);
+      } else {
+        // Fallback custom event
+        const event = new CustomEvent('language-change-request', { detail: { lang } });
+        window.dispatchEvent(event);
+      }
+    }
+
+    private updateUI(lang: string) {
+      const option = this.options.find(opt => opt.getAttribute('data-lang') === lang);
+      if (option) {
+        this.options.forEach(opt => {
+          opt.classList.remove('active');
+          opt.setAttribute('aria-selected', 'false');
+        });
+        option.classList.add('active');
+        option.setAttribute('aria-selected', 'true');
+
+        const nativeName = option.getAttribute('data-native');
+        if (this.label && nativeName) {
+          this.label.textContent = nativeName;
+        }
+      }
+    }
+  }
+
+  // Initialize all switcher instances on the page
+  const switcherEl = document.getElementById('lang-switcher');
+  if (switcherEl) {
+    new LanguageSwitcher(switcherEl);
+  }
+  
+  // drawer-level language switcher in mobile (if exists)
+  document.addEventListener('DOMContentLoaded', () => {
+    const sws = document.querySelectorAll('.lang-switcher-container');
+    sws.forEach(s => {
+      // Check if it's already instantiated or instantiate it
+      // To prevent double execution we check a class
+      if (!s.classList.contains('js-instantiated')) {
+        s.classList.add('js-instantiated');
+        // If not the main one, we can instantiate it
+        if (s.id !== 'lang-switcher') {
+          // Instantiate as a separate switcher object
+          new LanguageSwitcher(s as HTMLElement);
+        }
+      }
+    });
+  });
+</script>

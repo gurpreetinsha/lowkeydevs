@@ -65,13 +65,13 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   <!-- Breadcrumbs -->
   <nav class="breadcrumbs-nav" aria-label="Breadcrumb">
     <div class="container breadcrumbs-container">
-      <a href="/" class="breadcrumb-link">Home</a>
+      <a href="/" class="breadcrumb-link" data-i18n="nav.home">Home</a>
       <span class="breadcrumb-sep" aria-hidden="true">
         <Icon name="ChevronRight" size={14} />
       </span>
       {categoryDetail && (
         <>
-          <a href={`/tools/category/${tool.category}`} class="breadcrumb-link">
+          <a href={`/tools/category/${tool.category}`} class="breadcrumb-link" data-i18n={`categories.${tool.category}`}>
             {categoryDetail.title}
           </a>
           <span class="breadcrumb-sep" aria-hidden="true">
@@ -79,7 +79,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
           </span>
         </>
       )}
-      <span class="breadcrumb-current" aria-current="page">{tool.title}</span>
+      <span class="breadcrumb-current" aria-current="page" data-i18n={`tools.${tool.slug}.title`}>{tool.title}</span>
     </div>
   </nav>
 
@@ -90,10 +90,10 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
         <header class="tool-header">
           <span class="category-badge">
             <Icon name={categoryDetail?.icon || 'Info'} size={12} />
-            {categoryDetail?.title}
+            <span data-i18n={`categories.${tool.category}`}>{categoryDetail?.title}</span>
           </span>
-          <h1 id="tool-title-heading" class="tool-title">{tool.title}</h1>
-          <p class="tool-description">{tool.description}</p>
+          <h1 id="tool-title-heading" class="tool-title" data-i18n={`tools.${tool.slug}.title`}>{tool.title}</h1>
+          <p class="tool-description" data-i18n={`tools.${tool.slug}.description`}>{tool.description}</p>
         </header>
 
         <div class="tool-workspace-wrapper">
@@ -106,7 +106,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
         <SponsorCard />
 
         <div class="sidebar-widget">
-          <h2 class="widget-title">Related tools</h2>
+          <h2 class="widget-title" data-i18n="tools.relatedTitle">Related tools</h2>
           <div class="related-list">
             {relatedTools.map(t => (
               <a href={`/tools/${t.slug}`} class="related-item">
@@ -114,8 +114,8 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
                   <Icon name={t.icon} size={14} />
                 </div>
                 <div class="related-info">
-                  <span class="related-title">{t.title}</span>
-                  <span class="related-desc">{t.description}</span>
+                  <span class="related-title" data-i18n={`tools.${t.slug}.title`}>{t.title}</span>
+                  <span class="related-desc" data-i18n={`tools.${t.slug}.description`}>{t.description}</span>
                 </div>
               </a>
             ))}
@@ -125,9 +125,9 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
         <div class="sidebar-widget privacy-widget">
           <div class="privacy-header">
             <Icon name="Lock" size={16} />
-            <h2 class="widget-title privacy-widget-title">100% client-side</h2>
+            <h2 class="widget-title privacy-widget-title" data-i18n="tools.privacyTitle">100% client-side</h2>
           </div>
-          <p class="privacy-text">
+          <p class="privacy-text" data-i18n="tools.privacyText">
             All conversions and formatting happen strictly in your browser. We never save, upload, or transmit any of your text, JSON, or input data to servers.
           </p>
         </div>
@@ -139,11 +139,11 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
       <div class="edu-grid">
         <!-- Educational Guide -->
         <article class="edu-guide">
-          <h2 class="edu-title">What is this tool?</h2>
-          <p class="edu-para">{tool.educationalContent.whatIsIt}</p>
+          <h2 class="edu-title" data-i18n="tools.whatIsIt">What is this tool?</h2>
+          <p class="edu-para" data-i18n={`tools.${tool.slug}.whatIsIt`}>{tool.educationalContent.whatIsIt}</p>
 
-          <h2 class="edu-title">How to use it</h2>
-          <div class="steps-list">
+          <h2 class="edu-title" data-i18n="tools.howToUse">How to use it</h2>
+          <div class="steps-list" data-i18n-steps={`tools.${tool.slug}.howToUse`}>
             {tool.educationalContent.howToUse.split('\n').map(step => (
               <p class="step-item">{step}</p>
             ))}
@@ -151,11 +151,11 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
           {tool.educationalContent.proTips && (
             <>
-              <h2 class="edu-title pro-tips-title">
+              <h2 class="edu-title pro-tips-title" data-i18n="tools.proTips">
                 <Icon name="Info" size={14} />
                 Pro tips
               </h2>
-              <ul class="pro-tips-list">
+              <ul class="pro-tips-list" data-i18n-tips={`tools.${tool.slug}.proTips`}>
                 {tool.educationalContent.proTips.map(tip => (
                   <li>{tip}</li>
                 ))}
@@ -167,8 +167,8 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
         <!-- FAQs Accordion -->
         {tool.faqs && tool.faqs.length > 0 && (
           <div class="faq-accordion">
-            <h2 class="edu-title">Frequently asked questions</h2>
-            <div class="accordion-wrapper">
+            <h2 class="edu-title" data-i18n="tools.faqs">Frequently asked questions</h2>
+            <div class="accordion-wrapper" data-i18n-faqs={`tools.${tool.slug}.faqs`}>
               {tool.faqs.map((faq, idx) => (
                 <details class="faq-item" open={idx === 0}>
                   <summary class="faq-question">

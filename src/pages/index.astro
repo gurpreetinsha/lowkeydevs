@@ -29,19 +29,19 @@ const activeCategories = categories.filter(cat =>
         <div class="hero-content">
           <div class="hero-badge">
             <Icon name="Lock" size={12} />
-            100% client-side privacy
+            <span data-i18n="home.heroBadge">100% client-side privacy</span>
           </div>
-          <h1 id="hero-title" class="hero-title">
+          <h1 id="hero-title" class="hero-title" data-i18n="home.heroTitle" data-i18n-html="true">
             The internet's default <span class="accent-text">toolbox</span>
           </h1>
-          <p class="hero-subtitle">
+          <p class="hero-subtitle" data-i18n="home.heroSubtitle">
             Instant, beautiful developer tools that run entirely in your browser. No forced logins, no intrusive popups, and no tracking.
           </p>
 
           <!-- Search trigger -->
-          <button class="hero-search-trigger" id="hero-search-trigger" aria-label="Search tools">
+          <button class="hero-search-trigger" id="hero-search-trigger" aria-label="Search tools" data-i18n-aria-label="home.searchTriggerText">
             <Icon name="Search" size={16} />
-            <span>Search tools...</span>
+            <span data-i18n="home.searchTriggerText">Search tools...</span>
             <kbd class="kbd-helper">/</kbd>
           </button>
         </div>
@@ -52,7 +52,7 @@ const activeCategories = categories.filter(cat =>
     <section class="tools-directory" aria-label="Tools Directory">
       <div class="container">
         <div class="directory-header">
-          <h2 class="section-title">All utilities</h2>
+          <h2 class="section-title" data-i18n="categories.all">All tools</h2>
 
           <!-- Category Filter Tabs -->
           <div class="category-tabs-wrapper">
@@ -63,6 +63,7 @@ const activeCategories = categories.filter(cat =>
                 aria-selected="true"
                 data-category="all"
                 id="tab-all"
+                data-i18n="categories.all"
               >
                 All tools
               </button>
@@ -75,7 +76,7 @@ const activeCategories = categories.filter(cat =>
                   id={`tab-${cat.slug}`}
                 >
                   <Icon name={cat.icon} size={14} />
-                  <span>{cat.title}</span>
+                  <span data-i18n={`categories.${cat.slug}`}>{cat.title}</span>
                 </button>
               ))}
             </div>
@@ -96,7 +97,7 @@ const activeCategories = categories.filter(cat =>
         </div>
 
         <!-- Empty state -->
-        <div class="filtered-empty" id="filtered-empty" hidden>
+        <div class="filtered-empty" id="filtered-empty" data-i18n="home.emptyState" hidden>
           No tools found in this category.
         </div>
       </div>
@@ -105,14 +106,14 @@ const activeCategories = categories.filter(cat =>
     <!-- Features Section -->
     <section class="features-section" aria-labelledby="features-title">
       <div class="container">
-        <h2 id="features-title" class="features-heading">Built for speed and security</h2>
+        <h2 id="features-title" class="features-heading" data-i18n="home.featuresHeading">Built for speed and security</h2>
         <div class="features-grid">
           <div class="feature-item">
             <div class="feature-icon-wrapper">
               <Icon name="Lock" size={24} />
             </div>
-            <h3>Zero server logs</h3>
-            <p>
+            <h3 data-i18n="home.feature1Title">Zero server logs</h3>
+            <p data-i18n="home.feature1Desc">
               Your data never touches our servers. All calculations, parsing, and formatting happen locally in your browser.
             </p>
           </div>
@@ -121,8 +122,8 @@ const activeCategories = categories.filter(cat =>
             <div class="feature-icon-wrapper">
               <Icon name="RefreshCw" size={24} />
             </div>
-            <h3>Lightning fast</h3>
-            <p>
+            <h3 data-i18n="home.feature2Title">Lightning fast</h3>
+            <p data-i18n="home.feature2Desc">
               Statically pre-rendered pages load in milliseconds. Standard actions parse and update instantly as you type.
             </p>
           </div>
@@ -131,8 +132,8 @@ const activeCategories = categories.filter(cat =>
             <div class="feature-icon-wrapper">
               <Icon name="Braces" size={24} />
             </div>
-            <h3>Minimal & clean</h3>
-            <p>
+            <h3 data-i18n="home.feature3Title">Minimal & clean</h3>
+            <p data-i18n="home.feature3Desc">
               No annoying popups, cookie walls, or bloated advertisements. Just the tools you need, ready when you are.
             </p>
           </div>
