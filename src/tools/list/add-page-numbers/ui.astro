@@ -1,0 +1,670 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<!-- Load pdf-lib from CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js" is:inline></script>
+
+<add-page-numbers-tool class="tool-workspace">
+  <div class="converter-container glass-panel">
+    <div class="converter-header">
+      <h3 class="converter-title">Add Page Numbers to PDF</h3>
+      <p class="converter-subtitle">Number your PDF pages with custom numbering formats, alignments, and sizes locally.</p>
+    </div>
+
+    <!-- Upload Box -->
+    <div class="dropzone" id="number-dropzone">
+      <input type="file" id="number-file-input" accept=".pdf" class="hidden-input" aria-label="Upload PDF file to number" />
+      
+      <div class="dropzone-content">
+        <Icon name="FileText" size={48} />
+        <p class="dropzone-text">Drag & drop your PDF file here or <span>browse</span></p>
+        <p class="dropzone-subtext">Supports single PDF files (up to 75MB)</p>
+      </div>
+    </div>
+
+    <!-- Config Panel -->
+    <div class="config-panel hidden" id="config-panel">
+      <!-- File Metadata Details -->
+      <div class="file-details-card">
+        <div class="detail-row">
+          <span class="detail-label">File Name:</span>
+          <span class="detail-value" id="doc-name">document.pdf</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">File Size:</span>
+          <span class="detail-value" id="doc-size">0 KB</span>
+        </div>
+      </div>
+
+      <!-- Settings Layout -->
+      <div class="settings-group">
+        <h4 class="section-subtitle">Numbering Settings</h4>
+        
+        <div class="settings-grid">
+          <!-- Format option -->
+          <div class="setting-item">
+            <label for="number-format" class="field-label">Numbering Format</label>
+            <select id="number-format" class="field-input">
+              <option value="simple" selected>Simple (1, 2, 3...)</option>
+              <option value="label">Label (Page 1, Page 2...)</option>
+              <option value="total">Count (Page 1 of 12, Page 2 of 12...)</option>
+            </select>
+          </div>
+
+          <!-- Vertical Align -->
+          <div class="setting-item">
+            <label for="valign" class="field-label">Vertical Position</label>
+            <select id="valign" class="field-input">
+              <option value="bottom" selected>Bottom (Footer)</option>
+              <option value="top">Top (Header)</option>
+            </select>
+          </div>
+
+          <!-- Horizontal Align -->
+          <div class="setting-item">
+            <label for="halign" class="field-label">Horizontal Position</label>
+            <select id="halign" class="field-input">
+              <option value="left">Left</option>
+              <option value="center" selected>Center</option>
+              <option value="right">Right</option>
+            </select>
+          </div>
+
+          <!-- Size option -->
+          <div class="setting-item">
+            <label for="font-size" class="field-label">Font Size (px)</label>
+            <input type="number" id="font-size" class="field-input" value="10" min="6" max="24" />
+          </div>
+
+          <!-- Margin option -->
+          <div class="setting-item">
+            <label for="margin-pt" class="field-label">Margin Distance (pt)</label>
+            <input type="number" id="margin-pt" class="field-input" value="20" min="5" max="100" />
+          </div>
+
+          <!-- Color option -->
+          <div class="setting-item">
+            <label for="font-color" class="field-label">Font Color</label>
+            <input type="color" id="font-color" class="field-input" value="#333333" />
+          </div>
+        </div>
+
+        <!-- Checkbox skip -->
+        <label class="checkbox-label">
+          <input type="checkbox" id="skip-first" />
+          <span>Skip first page (Do not number title page)</span>
+        </label>
+      </div>
+
+      <!-- Actions -->
+      <div class="panel-actions">
+        <button id="btn-cancel" class="btn btn-secondary">
+          Select Another File
+        </button>
+        <button id="btn-apply" class="btn btn-primary btn-lg">
+          Add Page Numbers
+        </button>
+      </div>
+    </div>
+
+    <!-- Progress / Loading Section -->
+    <div class="converter-loading hidden" id="loading-panel">
+      <div class="spinner"></div>
+      <p id="loading-text">Overlaying page numbers, please wait...</p>
+    </div>
+
+    <!-- Status & Results Section -->
+    <div class="converter-results hidden" id="results-panel">
+      <div class="divider"></div>
+      <div class="success-badge">
+        <span class="badge-icon">✓</span>
+        Page Numbers Added Successfully!
+      </div>
+      
+      <div class="download-box">
+        <a id="btn-download" class="btn btn-success btn-lg download-link">
+          <Icon name="Download" size={18} />
+          Download Numbered PDF
+        </a>
+      </div>
+    </div>
+  </div>
+</add-page-numbers-tool>
+
+<style>
+  .tool-workspace {
+    width: 100%;
+  }
+
+  .converter-container {
+    width: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .converter-header {
+    text-align: center;
+  }
+
+  .converter-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+
+  .converter-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  /* Dropzone Styling */
+  .dropzone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-lg);
+    min-height: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.01);
+    transition: all 0.2s ease;
+  }
+
+  .dropzone:hover, .dropzone.dragover {
+    border-color: var(--accent);
+    background: var(--accent-subtle);
+  }
+
+  .hidden-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    pointer-events: none;
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .dropzone-text {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .dropzone-text span {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  .dropzone-subtext {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  /* Config Panel */
+  .config-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .file-details-card {
+    background: var(--surface-elevated);
+    border: 1px solid var(--border);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+  }
+
+  .detail-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .detail-value {
+    color: var(--text-primary);
+    font-weight: 600;
+    word-break: break-all;
+    text-align: right;
+  }
+
+  .section-subtitle {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+  }
+
+  /* Settings Grid */
+  .settings-group {
+    background: var(--surface-elevated);
+    border: 1px solid var(--border);
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .setting-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .field-label {
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+  }
+
+  .field-input {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 0.5rem 0.6rem;
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color var(--duration-fast);
+  }
+
+  .field-input:focus {
+    border-color: var(--accent);
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    cursor: pointer;
+  }
+
+  .checkbox-label input[type="checkbox"] {
+    accent-color: var(--accent);
+  }
+
+  .panel-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .btn-secondary {
+    background: var(--surface-hover);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border-radius: var(--radius-md);
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .btn-secondary:hover {
+    background: var(--surface-elevated);
+    border-color: var(--border-hover);
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--accent-on);
+    border: none;
+    font-weight: 600;
+  }
+
+  .btn-primary:hover {
+    background: var(--accent-hover);
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  .btn-lg {
+    padding: 0.75rem 2.5rem;
+    font-size: 1rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  /* Success & Stats */
+  .converter-results {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    align-items: center;
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background-color: var(--border);
+  }
+
+  .success-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--success);
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+
+  .badge-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: var(--success-subtle);
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: bold;
+  }
+
+  .download-box {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .btn-success {
+    background: var(--success);
+    color: white;
+    border: none;
+  }
+
+  .btn-success:hover {
+    opacity: 0.9;
+  }
+
+  .download-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+  }
+
+  /* Spinner */
+  .converter-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
+
+<script>
+  function hexToRgb(hex: string) {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16) / 255,
+      g: parseInt(result[2], 16) / 255,
+      b: parseInt(result[3], 16) / 255
+    } : { r: 0.2, g: 0.2, b: 0.2 };
+  }
+
+  function formatBytes(bytes: number, decimals: number = 2): string {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
+
+  class AddPageNumbersTool extends HTMLElement {
+    private fileInputEl!: HTMLInputElement;
+    private dropzoneEl!: HTMLDivElement;
+    private configPanelEl!: HTMLDivElement;
+    private docNameEl!: HTMLSpanElement;
+    private docSizeEl!: HTMLSpanElement;
+    private formatSelectEl!: HTMLSelectElement;
+    private valignSelectEl!: HTMLSelectElement;
+    private halignSelectEl!: HTMLSelectElement;
+    private fontSizeInputEl!: HTMLInputElement;
+    private marginInputEl!: HTMLInputElement;
+    private colorInputEl!: HTMLInputElement;
+    private skipFirstCheckboxEl!: HTMLInputElement;
+    private btnCancelEl!: HTMLButtonElement;
+    private btnApplyEl!: HTMLButtonElement;
+    private loadingPanelEl!: HTMLDivElement;
+    private resultsPanelEl!: HTMLDivElement;
+    private downloadBtnEl!: HTMLAnchorElement;
+
+    private selectedFile: File | null = null;
+    private arrayBuffer: ArrayBuffer | null = null;
+
+    connectedCallback() {
+      this.fileInputEl = this.querySelector('#number-file-input') as HTMLInputElement;
+      this.dropzoneEl = this.querySelector('#number-dropzone') as HTMLDivElement;
+      this.configPanelEl = this.querySelector('#config-panel') as HTMLDivElement;
+      this.docNameEl = this.querySelector('#doc-name') as HTMLSpanElement;
+      this.docSizeEl = this.querySelector('#doc-size') as HTMLSpanElement;
+      this.formatSelectEl = this.querySelector('#number-format') as HTMLSelectElement;
+      this.valignSelectEl = this.querySelector('#valign') as HTMLSelectElement;
+      this.halignSelectEl = this.querySelector('#halign') as HTMLSelectElement;
+      this.fontSizeInputEl = this.querySelector('#font-size') as HTMLInputElement;
+      this.marginInputEl = this.querySelector('#margin-pt') as HTMLInputElement;
+      this.colorInputEl = this.querySelector('#font-color') as HTMLInputElement;
+      this.skipFirstCheckboxEl = this.querySelector('#skip-first') as HTMLInputElement;
+      this.btnCancelEl = this.querySelector('#btn-cancel') as HTMLButtonElement;
+      this.btnApplyEl = this.querySelector('#btn-apply') as HTMLButtonElement;
+      this.loadingPanelEl = this.querySelector('#loading-panel') as HTMLDivElement;
+      this.resultsPanelEl = this.querySelector('#results-panel') as HTMLDivElement;
+      this.downloadBtnEl = this.querySelector('#btn-download') as HTMLAnchorElement;
+
+      // Dropzone events
+      this.dropzoneEl.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        this.dropzoneEl.classList.add('dragover');
+      });
+
+      this.dropzoneEl.addEventListener('dragleave', () => {
+        this.dropzoneEl.classList.remove('dragover');
+      });
+
+      this.dropzoneEl.addEventListener('drop', (e) => {
+        e.preventDefault();
+        this.dropzoneEl.classList.remove('dragover');
+        if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
+          this.handleFile(e.dataTransfer.files[0]);
+        }
+      });
+
+      this.fileInputEl.addEventListener('change', () => {
+        if (this.fileInputEl.files && this.fileInputEl.files.length > 0) {
+          this.handleFile(this.fileInputEl.files[0]);
+        }
+      });
+
+      this.btnCancelEl.addEventListener('click', () => {
+        this.reset();
+      });
+
+      this.btnApplyEl.addEventListener('click', () => this.runNumbering());
+    }
+
+    private async handleFile(file: File) {
+      if (file.type !== 'application/pdf' && !file.name.endsWith('.pdf')) {
+        alert('Please upload a valid PDF file.');
+        return;
+      }
+
+      if (typeof window.PDFLib === 'undefined') {
+        alert('Libraries are still loading. Please wait.');
+        return;
+      }
+
+      this.selectedFile = file;
+      this.docNameEl.textContent = file.name;
+      this.docSizeEl.textContent = formatBytes(file.size);
+
+      this.dropzoneEl.classList.add('hidden');
+      this.configPanelEl.classList.remove('hidden');
+      this.resultsPanelEl.classList.add('hidden');
+
+      try {
+        this.arrayBuffer = await file.arrayBuffer();
+      } catch (err) {
+        console.error(err);
+        alert('Error reading PDF file.');
+        this.reset();
+      }
+    }
+
+    private reset() {
+      this.selectedFile = null;
+      this.arrayBuffer = null;
+      this.fileInputEl.value = '';
+      
+      this.dropzoneEl.classList.remove('hidden');
+      this.configPanelEl.classList.add('hidden');
+      this.resultsPanelEl.classList.add('hidden');
+      this.loadingPanelEl.classList.add('hidden');
+    }
+
+    private async runNumbering() {
+      if (!this.selectedFile || !this.arrayBuffer) return;
+
+      this.loadingPanelEl.classList.remove('hidden');
+      this.configPanelEl.classList.add('hidden');
+      this.resultsPanelEl.classList.add('hidden');
+
+      try {
+        const { PDFDocument, StandardFonts, rgb } = window.PDFLib;
+        const pdfDoc = await PDFDocument.load(this.arrayBuffer);
+        const pages = pdfDoc.getPages();
+        const totalPages = pages.length;
+
+        const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+        const format = this.formatSelectEl.value;
+        const valign = this.valignSelectEl.value;
+        const halign = this.halignSelectEl.value;
+        const fontSize = parseInt(this.fontSizeInputEl.value, 10) || 10;
+        const margin = parseInt(this.marginInputEl.value, 10) || 20;
+        const skipFirst = this.skipFirstCheckboxEl.checked;
+
+        const { r, g, b } = hexToRgb(this.colorInputEl.value);
+        const textColor = rgb(r, g, b);
+
+        for (let i = 0; i < totalPages; i++) {
+          if (skipFirst && i === 0) continue;
+
+          const page = pages[i];
+          const { width, height } = page.getSize();
+
+          // Build string
+          let textStr = '';
+          if (format === 'simple') {
+            textStr = `${i + 1}`;
+          } else if (format === 'label') {
+            textStr = `Page ${i + 1}`;
+          } else {
+            textStr = `Page ${i + 1} of ${totalPages}`;
+          }
+
+          const textWidth = font.widthOfTextAtSize(textStr, fontSize);
+          const textHeight = font.heightAtSize(fontSize);
+
+          // Horizontal alignment
+          let posX = margin;
+          if (halign === 'center') {
+            posX = (width - textWidth) / 2;
+          } else if (halign === 'right') {
+            posX = width - margin - textWidth;
+          }
+
+          // Vertical alignment
+          let posY = margin;
+          if (valign === 'top') {
+            posY = height - margin - textHeight;
+          }
+
+          // Draw the text
+          page.drawText(textStr, {
+            x: posX,
+            y: posY,
+            size: fontSize,
+            font: font,
+            color: textColor
+          });
+        }
+
+        const pdfBytes = await pdfDoc.save();
+        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+
+        this.downloadBtnEl.href = url;
+        const baseName = this.selectedFile.name.replace(/\.[^/.]+$/, "");
+        this.downloadBtnEl.download = `${baseName}_numbered.pdf`;
+
+        this.loadingPanelEl.classList.add('hidden');
+        this.configPanelEl.classList.remove('hidden');
+        this.resultsPanelEl.classList.remove('hidden');
+        this.resultsPanelEl.scrollIntoView({ behavior: 'smooth' });
+      } catch (err) {
+        console.error(err);
+        alert(`Error adding page numbers: ${err instanceof Error ? err.message : 'Unknown error'}`);
+        this.loadingPanelEl.classList.add('hidden');
+        this.configPanelEl.classList.remove('hidden');
+      }
+    }
+  }
+
+  if (!customElements.get('add-page-numbers-tool')) {
+    customElements.define('add-page-numbers-tool', AddPageNumbersTool);
+  }
+</script>

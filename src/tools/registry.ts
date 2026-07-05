@@ -94,6 +94,18 @@ import { meta as editPdfMeta } from './list/edit-pdf/meta';
 import { meta as signPdfMeta } from './list/sign-pdf/meta';
 import { meta as unlockPdfMeta } from './list/unlock-pdf/meta';
 
+// PDF tools Set 2 imports
+import { meta as protectPdfMeta } from './list/protect-pdf/meta';
+import { meta as pdfToExcelMeta } from './list/pdf-to-excel/meta';
+import { meta as excelToPdfMeta } from './list/excel-to-pdf/meta';
+import { meta as pdfToPowerpointMeta } from './list/pdf-to-powerpoint/meta';
+import { meta as powerpointToPdfMeta } from './list/powerpoint-to-pdf/meta';
+import { meta as organizePdfMeta } from './list/organize-pdf/meta';
+import { meta as addPageNumbersMeta } from './list/add-page-numbers/meta';
+import { meta as addWatermarkMeta } from './list/add-watermark/meta';
+import { meta as rotatePdfMeta } from './list/rotate-pdf/meta';
+import { meta as scanToPdfMeta } from './list/scan-to-pdf/meta';
+
 // Central Registry of all tools
 export const registry: ToolMeta[] = [
   jsonFormatterMeta,
@@ -189,7 +201,19 @@ export const registry: ToolMeta[] = [
   pdfToJpgMeta,
   editPdfMeta,
   signPdfMeta,
-  unlockPdfMeta
+  unlockPdfMeta,
+
+  // PDF tools Set 2
+  protectPdfMeta,
+  pdfToExcelMeta,
+  excelToPdfMeta,
+  pdfToPowerpointMeta,
+  powerpointToPdfMeta,
+  organizePdfMeta,
+  addPageNumbersMeta,
+  addWatermarkMeta,
+  rotatePdfMeta,
+  scanToPdfMeta
 ];
 
 // Helper to find a tool by its slug
