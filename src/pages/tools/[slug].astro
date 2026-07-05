@@ -42,6 +42,28 @@ import BigTextGeneratorUI from '../../tools/list/big-text-generator/ui.astro';
 import GothicTextGeneratorUI from '../../tools/list/gothic-text-generator/ui.astro';
 import MirrorTextGeneratorUI from '../../tools/list/mirror-text-generator/ui.astro';
 
+// Import newly added tools
+import FontsForInstagramUI from '../../tools/list/fonts-for-instagram/ui.astro';
+import WhatsappFontUI from '../../tools/list/whatsapp-font-generator/ui.astro';
+import TiktokFontUI from '../../tools/list/tiktok-font-generator/ui.astro';
+import DiscordFontUI from '../../tools/list/discord-font-generator/ui.astro';
+import FacebookFontUI from '../../tools/list/facebook-font-generator/ui.astro';
+import TwitterFontUI from '../../tools/list/twitter-font-generator/ui.astro';
+import CuteFontUI from '../../tools/list/cute-font-generator/ui.astro';
+import UnicodeTextConverterUI from '../../tools/list/unicode-text-converter/ui.astro';
+import DoubleStruckTextUI from '../../tools/list/double-struck-text/ui.astro';
+import WideTextGeneratorUI from '../../tools/list/wide-text-generator/ui.astro';
+import ImageToTextOcrUI from '../../tools/list/image-to-text-ocr/ui.astro';
+import JpgToPngUI from '../../tools/list/jpg-to-png/ui.astro';
+import PngToJpgUI from '../../tools/list/png-to-jpg/ui.astro';
+import JpgToWebpUI from '../../tools/list/jpg-to-webp/ui.astro';
+import WebpToJpgUI from '../../tools/list/webp-to-jpg/ui.astro';
+import PngToWebpUI from '../../tools/list/png-to-webp/ui.astro';
+import WebpToPngUI from '../../tools/list/webp-to-png/ui.astro';
+import SvgToPngUI from '../../tools/list/svg-to-png/ui.astro';
+import ImageToAsciiUI from '../../tools/list/image-to-ascii/ui.astro';
+import OnlineVideoConverterUI from '../../tools/list/online-video-converter/ui.astro';
+
 // Map slugs to UI components
 const uiComponents: Record<string, any> = {
   'json-formatter': JSONFormatterUI,
@@ -81,7 +103,29 @@ const uiComponents: Record<string, any> = {
   'small-text-generator': SmallTextGeneratorUI,
   'big-text-generator': BigTextGeneratorUI,
   'gothic-text-generator': GothicTextGeneratorUI,
-  'mirror-text-generator': MirrorTextGeneratorUI
+  'mirror-text-generator': MirrorTextGeneratorUI,
+
+  // New tools
+  'fonts-for-instagram': FontsForInstagramUI,
+  'whatsapp-font-generator': WhatsappFontUI,
+  'tiktok-font-generator': TiktokFontUI,
+  'discord-font-generator': DiscordFontUI,
+  'facebook-font-generator': FacebookFontUI,
+  'twitter-font-generator': TwitterFontUI,
+  'cute-font-generator': CuteFontUI,
+  'unicode-text-converter': UnicodeTextConverterUI,
+  'double-struck-text': DoubleStruckTextUI,
+  'wide-text-generator': WideTextGeneratorUI,
+  'image-to-text-ocr': ImageToTextOcrUI,
+  'jpg-to-png': JpgToPngUI,
+  'png-to-jpg': PngToJpgUI,
+  'jpg-to-webp': JpgToWebpUI,
+  'webp-to-jpg': WebpToJpgUI,
+  'png-to-webp': PngToWebpUI,
+  'webp-to-png': WebpToPngUI,
+  'svg-to-png': SvgToPngUI,
+  'image-to-ascii': ImageToAsciiUI,
+  'online-video-converter': OnlineVideoConverterUI
 };
 
 export async function getStaticPaths() {

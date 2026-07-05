@@ -1,0 +1,465 @@
+---
+import { SUPPORTED_LANGUAGES } from './logic';
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<image-ocr-tool class="tool-workspace">
+  <div class="editor-grid">
+    <!-- Upload Pane -->
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Upload Image</span>
+        <div class="lang-selector">
+          <label for="ocr-lang">Language:</label>
+          <select id="ocr-lang" aria-label="OCR Language Selection">
+            {SUPPORTED_LANGUAGES.map(lang => (
+              <option value={lang.code}>{lang.name}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div class="dropzone" id="ocr-dropzone">
+        <input type="file" id="ocr-file-input" accept="image/*" class="hidden-input" aria-label="Upload Image File" />
+        <div class="dropzone-content">
+          <Icon name="Image" size={48} />
+          <p class="dropzone-text">Drag & drop your image here or <span>browse</span></p>
+          <p class="dropzone-subtext">Supports PNG, JPG, WebP, BMP (Max 10MB)</p>
+        </div>
+        <div class="image-preview-wrapper hidden" id="preview-wrapper">
+          <img id="ocr-image-preview" src="" alt="OCR Target Preview" />
+          <button class="btn-remove-preview" id="btn-remove-img" aria-label="Remove uploaded image">✕</button>
+        </div>
+      </div>
+
+      <button id="btn-extract" class="btn btn-primary w-full" disabled>
+        <Icon name="Sparkles" size={16} />
+        Extract Text
+      </button>
+    </div>
+
+    <!-- Output Pane -->
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Extracted Text</span>
+        <div class="pane-actions">
+          <button id="btn-copy-ocr" class="btn btn-secondary btn-sm" disabled>
+            <Icon name="Copy" size={14} />
+            Copy
+          </button>
+          <button id="btn-download-ocr" class="btn btn-secondary btn-sm" disabled>
+            <Icon name="Download" size={14} />
+            Download
+          </button>
+        </div>
+      </div>
+
+      <div class="progress-container hidden" id="ocr-progress-container">
+        <div class="progress-bar-wrapper">
+          <div class="progress-bar-fill" id="ocr-progress-bar"></div>
+        </div>
+        <span class="progress-status" id="ocr-progress-status">Initializing Tesseract OCR...</span>
+      </div>
+
+      <textarea 
+        id="ocr-output" 
+        placeholder="Extracted text will appear here..." 
+        readonly
+        aria-label="OCR Output"
+      ></textarea>
+    </div>
+  </div>
+</image-ocr-tool>
+
+<!-- Dynamically load Tesseract.js from CDN -->
+<script is:inline src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+<style>
+  .tool-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .editor-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .editor-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .editor-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.25rem;
+    min-height: 450px;
+  }
+
+  .pane-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+  }
+
+  .pane-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .lang-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .lang-selector select {
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: var(--radius-sm);
+    padding: 0.2rem 0.5rem;
+    outline: none;
+  }
+
+  .pane-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  /* Dropzone Styling */
+  .dropzone {
+    flex: 1;
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.01);
+    transition: all 0.2s ease;
+    min-height: 250px;
+  }
+
+  .dropzone:hover, .dropzone.dragover {
+    border-color: var(--primary-accent);
+    background: rgba(var(--primary-accent-rgb), 0.02);
+  }
+
+  .hidden-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: center;
+    padding: 2rem;
+    pointer-events: none;
+  }
+
+  .dropzone-text {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .dropzone-text span {
+    color: var(--primary-accent);
+    text-decoration: underline;
+  }
+
+  .dropzone-subtext {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  /* Image Preview */
+  .image-preview-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card-bg);
+    z-index: 3;
+  }
+
+  #ocr-image-preview {
+    max-width: 95%;
+    max-height: 95%;
+    object-fit: contain;
+    border-radius: var(--radius-md);
+  }
+
+  .btn-remove-preview {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    border: none;
+    color: #fff;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.8rem;
+    transition: background 0.2s;
+  }
+
+  .btn-remove-preview:hover {
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  .w-full {
+    width: 100%;
+  }
+
+  /* OCR Progress Bar */
+  .progress-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .progress-bar-wrapper {
+    height: 6px;
+    background: var(--border-color);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--primary-accent);
+    transition: width 0.1s linear;
+  }
+
+  .progress-status {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  #ocr-output {
+    flex: 1;
+    width: 100%;
+    min-height: 250px;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    padding: 0.75rem;
+    resize: none;
+    outline: none;
+  }
+
+  .copied-btn {
+    border-color: var(--success-color) !important;
+    color: var(--success-color) !important;
+  }
+</style>
+
+<script>
+  // Ensure TypeScript knows Tesseract is a global library loaded via CDN
+  declare const Tesseract: any;
+
+  class ImageOCRTool extends HTMLElement {
+    private fileInputEl!: HTMLInputElement;
+    private dropzoneEl!: HTMLDivElement;
+    private previewWrapperEl!: HTMLDivElement;
+    private previewImgEl!: HTMLImageElement;
+    private removeImgBtn!: HTMLButtonElement;
+    private extractBtn!: HTMLButtonElement;
+    private outputEl!: HTMLTextAreaElement;
+    private progressContainerEl!: HTMLDivElement;
+    private progressBarEl!: HTMLDivElement;
+    private progressStatusEl!: HTMLSpanElement;
+    private copyBtn!: HTMLButtonElement;
+    private downloadBtn!: HTMLButtonElement;
+    private langSelectEl!: HTMLSelectElement;
+
+    private selectedFile: File | null = null;
+
+    connectedCallback() {
+      this.fileInputEl = this.querySelector('#ocr-file-input') as HTMLInputElement;
+      this.dropzoneEl = this.querySelector('#ocr-dropzone') as HTMLDivElement;
+      this.previewWrapperEl = this.querySelector('#preview-wrapper') as HTMLDivElement;
+      this.previewImgEl = this.querySelector('#ocr-image-preview') as HTMLImageElement;
+      this.removeImgBtn = this.querySelector('#btn-remove-img') as HTMLButtonElement;
+      this.extractBtn = this.querySelector('#btn-extract') as HTMLButtonElement;
+      this.outputEl = this.querySelector('#ocr-output') as HTMLTextAreaElement;
+      this.progressContainerEl = this.querySelector('#ocr-progress-container') as HTMLDivElement;
+      this.progressBarEl = this.querySelector('#ocr-progress-bar') as HTMLDivElement;
+      this.progressStatusEl = this.querySelector('#ocr-progress-status') as HTMLSpanElement;
+      this.copyBtn = this.querySelector('#btn-copy-ocr') as HTMLButtonElement;
+      this.downloadBtn = this.querySelector('#btn-download-ocr') as HTMLButtonElement;
+      this.langSelectEl = this.querySelector('#ocr-lang') as HTMLSelectElement;
+
+      // Handle dropzone drag/drop
+      this.dropzoneEl.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        this.dropzoneEl.classList.add('dragover');
+      });
+
+      this.dropzoneEl.addEventListener('dragleave', () => {
+        this.dropzoneEl.classList.remove('dragover');
+      });
+
+      this.dropzoneEl.addEventListener('drop', (e) => {
+        e.preventDefault();
+        this.dropzoneEl.classList.remove('dragover');
+        if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
+          this.handleFileSelect(e.dataTransfer.files[0]);
+        }
+      });
+
+      this.fileInputEl.addEventListener('change', () => {
+        if (this.fileInputEl.files && this.fileInputEl.files.length > 0) {
+          this.handleFileSelect(this.fileInputEl.files[0]);
+        }
+      });
+
+      this.removeImgBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.resetImage();
+      });
+
+      this.extractBtn.addEventListener('click', () => this.runOCR());
+
+      this.copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(this.outputEl.value);
+        const originalText = this.copyBtn.innerHTML;
+        this.copyBtn.textContent = 'Copied!';
+        this.copyBtn.classList.add('copied-btn');
+        setTimeout(() => {
+          this.copyBtn.innerHTML = originalText;
+          this.copyBtn.classList.remove('copied-btn');
+        }, 1500);
+      });
+
+      this.downloadBtn.addEventListener('click', () => {
+        const text = this.outputEl.value;
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `extracted-text-${Date.now()}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      });
+    }
+
+    private handleFileSelect(file: File) {
+      if (!file.type.startsWith('image/')) {
+        alert('Please drop or select a valid image file.');
+        return;
+      }
+
+      this.selectedFile = file;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.previewImgEl.src = e.target?.result as string;
+        this.previewWrapperEl.classList.remove('hidden');
+        this.extractBtn.disabled = false;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    private resetImage() {
+      this.selectedFile = null;
+      this.fileInputEl.value = '';
+      this.previewImgEl.src = '';
+      this.previewWrapperEl.classList.add('hidden');
+      this.extractBtn.disabled = true;
+      this.outputEl.value = '';
+      this.copyBtn.disabled = true;
+      this.downloadBtn.disabled = true;
+      this.progressContainerEl.classList.add('hidden');
+    }
+
+    private async runOCR() {
+      if (!this.selectedFile) return;
+
+      this.outputEl.value = '';
+      this.copyBtn.disabled = true;
+      this.downloadBtn.disabled = true;
+      this.progressContainerEl.classList.remove('hidden');
+      this.extractBtn.disabled = true;
+
+      const language = this.langSelectEl.value;
+
+      try {
+        const worker = await Tesseract.createWorker({
+          logger: (m: any) => {
+            if (m.status === 'recognizing text') {
+              const progress = Math.round(m.progress * 100);
+              this.progressBarEl.style.width = `${progress}%`;
+              this.progressStatusEl.textContent = `Extracting Text: ${progress}%`;
+            } else {
+              this.progressStatusEl.textContent = m.status;
+            }
+          }
+        });
+
+        const ret = await worker.recognize(this.selectedFile);
+        await worker.terminate();
+
+        const text = ret.data.text.trim();
+        this.outputEl.value = text || 'No text found in the image.';
+        this.copyBtn.disabled = !text;
+        this.downloadBtn.disabled = !text;
+        this.progressStatusEl.textContent = 'Extraction complete!';
+        this.progressBarEl.style.width = '100%';
+      } catch (err) {
+        console.error('OCR Error', err);
+        this.progressStatusEl.textContent = 'OCR Error. Please try again.';
+      } finally {
+        this.extractBtn.disabled = false;
+      }
+    }
+  }
+
+  if (!customElements.get('image-ocr-tool')) {
+    customElements.define('image-ocr-tool', ImageOCRTool);
+  }
+</script>

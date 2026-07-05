@@ -1,0 +1,336 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<unicode-converter-tool class="tool-workspace">
+  <div class="editor-pane glass-panel">
+    <div class="pane-header">
+      <span class="pane-title">Input Text</span>
+      <div class="header-actions">
+        <button data-action="load-sample" class="btn-text">Load Sample</button>
+      </div>
+    </div>
+    <textarea 
+      id="unicode-input" 
+      placeholder="Type or paste your text here to convert it to Unicode styles..." 
+      aria-label="Unicode Text Input"
+    ></textarea>
+    <div class="control-actions">
+      <div class="search-box">
+        <input 
+          type="text" 
+          id="style-search" 
+          placeholder="Filter styles (e.g., Bold, Script, Circled)..." 
+          aria-label="Filter Styles"
+        />
+      </div>
+      <button data-action="clear" class="btn btn-danger btn-sm">
+        <Icon name="Trash2" size={14} />
+        Clear
+      </button>
+    </div>
+  </div>
+
+  <!-- Results Section -->
+  <div class="results-section glass-panel">
+    <h3 class="section-title">Converted Unicode Styles</h3>
+    
+    <div class="results-list" id="unicode-results">
+      <div class="empty-state">
+        Type some text above to see converted unicode styles...
+      </div>
+    </div>
+  </div>
+</unicode-converter-tool>
+
+<style>
+  .tool-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .editor-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem;
+  }
+
+  .pane-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+  }
+
+  .pane-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .btn-text {
+    background: none;
+    border: none;
+    color: var(--primary-accent);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: var(--font-display);
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn-text:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
+
+  #unicode-input {
+    width: 100%;
+    min-height: 120px;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    resize: vertical;
+    outline: none;
+  }
+
+  .control-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: center;
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .search-box {
+    flex: 1;
+    min-width: 250px;
+  }
+
+  #style-search {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border-color);
+    background: var(--input-bg);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  #style-search:focus {
+    border-color: var(--primary-accent);
+  }
+
+  /* Results List */
+  .results-section {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .results-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 768px) {
+    .results-list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .result-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    transition: all 0.2s ease;
+  }
+
+  .result-card:hover {
+    border-color: var(--primary-accent);
+    background-color: var(--surface-hover);
+  }
+
+  .result-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .result-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .result-text {
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    word-break: break-all;
+    user-select: all;
+  }
+
+  .empty-state {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.85rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .copied-btn {
+    border-color: var(--success-color) !important;
+    color: var(--success-color) !important;
+  }
+</style>
+
+<script>
+  import { generateUnicodeStyles } from './logic';
+
+  class UnicodeConverterTool extends HTMLElement {
+    private inputEl!: HTMLTextAreaElement;
+    private searchEl!: HTMLInputElement;
+    private resultsEl!: HTMLDivElement;
+
+    connectedCallback() {
+      this.inputEl = this.querySelector('#unicode-input') as HTMLTextAreaElement;
+      this.searchEl = this.querySelector('#style-search') as HTMLInputElement;
+      this.resultsEl = this.querySelector('#unicode-results') as HTMLDivElement;
+
+      this.inputEl.addEventListener('input', () => this.handleUpdate());
+      this.searchEl.addEventListener('input', () => this.handleUpdate());
+
+      this.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const button = target.closest('button');
+        if (!button) return;
+
+        const action = button.getAttribute('data-action');
+        if (action === 'clear') this.handleClear();
+        if (action === 'load-sample') this.handleLoadSample();
+        if (button.classList.contains('btn-copy')) {
+          const index = parseInt(button.getAttribute('data-index') || '0');
+          this.handleCopy(button, index);
+        }
+      });
+
+      this.handleLoadSample();
+    }
+
+    private handleUpdate() {
+      const text = this.inputEl.value;
+      const searchVal = this.searchEl.value.toLowerCase().trim();
+
+      if (!text) {
+        this.resultsEl.innerHTML = `
+          <div class="empty-state">
+            Type some text above to see converted unicode styles...
+          </div>
+        `;
+        return;
+      }
+
+      let fonts = generateUnicodeStyles(text);
+
+      if (searchVal) {
+        fonts = fonts.filter(font => font.name.toLowerCase().includes(searchVal));
+      }
+
+      if (fonts.length === 0) {
+        this.resultsEl.innerHTML = `
+          <div class="empty-state">
+            No matching styles found for "${searchVal}".
+          </div>
+        `;
+        return;
+      }
+
+      this.resultsEl.innerHTML = fonts.map((res, index) => `
+        <div class="result-card">
+          <div class="result-info">
+            <span class="result-label">${res.name}</span>
+            <div class="result-text" id="unicode-text-${index}">${this.escapeHtml(res.text)}</div>
+          </div>
+          <button class="btn btn-secondary btn-sm btn-copy" data-index="${index}" aria-label="Copy ${res.name}">
+            Copy
+          </button>
+        </div>
+      `).join('');
+    }
+
+    private handleClear() {
+      this.inputEl.value = '';
+      this.handleUpdate();
+      this.inputEl.focus();
+    }
+
+    private handleLoadSample() {
+      this.inputEl.value = 'Unicode Math';
+      this.handleUpdate();
+    }
+
+    private async handleCopy(button: HTMLButtonElement, index: number) {
+      const textEl = this.querySelector(`#unicode-text-${index}`) as HTMLDivElement;
+      if (!textEl) return;
+
+      const text = textEl.textContent || '';
+      
+      try {
+        await navigator.clipboard.writeText(text);
+        
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        button.classList.add('copied-btn');
+
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.classList.remove('copied-btn');
+        }, 1500);
+      } catch (err) {
+        console.error('Failed to copy', err);
+      }
+    }
+
+    private escapeHtml(str: string): string {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  }
+
+  if (!customElements.get('unicode-converter-tool')) {
+    customElements.define('unicode-converter-tool', UnicodeConverterTool);
+  }
+</script>

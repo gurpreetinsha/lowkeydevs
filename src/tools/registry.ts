@@ -38,6 +38,28 @@ import { meta as bigTextGeneratorMeta } from './list/big-text-generator/meta';
 import { meta as gothicTextGeneratorMeta } from './list/gothic-text-generator/meta';
 import { meta as mirrorTextGeneratorMeta } from './list/mirror-text-generator/meta';
 
+// Import newly added tools
+import { meta as fontsForInstagramMeta } from './list/fonts-for-instagram/meta';
+import { meta as whatsappFontMeta } from './list/whatsapp-font-generator/meta';
+import { meta as tiktokFontMeta } from './list/tiktok-font-generator/meta';
+import { meta as discordFontMeta } from './list/discord-font-generator/meta';
+import { meta as facebookFontMeta } from './list/facebook-font-generator/meta';
+import { meta as twitterFontMeta } from './list/twitter-font-generator/meta';
+import { meta as cuteFontMeta } from './list/cute-font-generator/meta';
+import { meta as unicodeTextConverterMeta } from './list/unicode-text-converter/meta';
+import { meta as doubleStruckTextMeta } from './list/double-struck-text/meta';
+import { meta as wideTextGeneratorMeta } from './list/wide-text-generator/meta';
+import { meta as imageToTextOcrMeta } from './list/image-to-text-ocr/meta';
+import { meta as jpgToPngMeta } from './list/jpg-to-png/meta';
+import { meta as pngToJpgMeta } from './list/png-to-jpg/meta';
+import { meta as jpgToWebpMeta } from './list/jpg-to-webp/meta';
+import { meta as webpToJpgMeta } from './list/webp-to-jpg/meta';
+import { meta as pngToWebpMeta } from './list/png-to-webp/meta';
+import { meta as webpToPngMeta } from './list/webp-to-png/meta';
+import { meta as svgToPngMeta } from './list/svg-to-png/meta';
+import { meta as imageToAsciiMeta } from './list/image-to-ascii/meta';
+import { meta as onlineVideoConverterMeta } from './list/online-video-converter/meta';
+
 // Central Registry of all tools
 export const registry: ToolMeta[] = [
   jsonFormatterMeta,
@@ -77,7 +99,29 @@ export const registry: ToolMeta[] = [
   smallTextGeneratorMeta,
   bigTextGeneratorMeta,
   gothicTextGeneratorMeta,
-  mirrorTextGeneratorMeta
+  mirrorTextGeneratorMeta,
+
+  // Newly added tools
+  fontsForInstagramMeta,
+  whatsappFontMeta,
+  tiktokFontMeta,
+  discordFontMeta,
+  facebookFontMeta,
+  twitterFontMeta,
+  cuteFontMeta,
+  unicodeTextConverterMeta,
+  doubleStruckTextMeta,
+  wideTextGeneratorMeta,
+  imageToTextOcrMeta,
+  jpgToPngMeta,
+  pngToJpgMeta,
+  jpgToWebpMeta,
+  webpToJpgMeta,
+  pngToWebpMeta,
+  webpToPngMeta,
+  svgToPngMeta,
+  imageToAsciiMeta,
+  onlineVideoConverterMeta
 ];
 
 // Helper to find a tool by its slug
@@ -124,6 +168,18 @@ export const categories: CategoryDetail[] = [
     icon: 'Info'
   },
   {
+    slug: 'image',
+    title: 'Image Tools',
+    description: 'Perform local OCR conversions, image format translations, and render ASCII art.',
+    icon: 'Image'
+  },
+  {
+    slug: 'video',
+    title: 'Video & Audio Tools',
+    description: 'Convert video structures and extract audio tracks completely locally.',
+    icon: 'Video'
+  },
+  {
     slug: 'dev-utils',
     title: 'Developer Utilities',
     description: 'Useful utilities like Epoch converters, crontab editors, and regex checkers.',
@@ -141,3 +197,4 @@ export const categories: CategoryDetail[] = [
 export function getCategoryDetail(slug: ToolCategory): CategoryDetail | undefined {
   return categories.find(cat => cat.slug === slug);
 }
+

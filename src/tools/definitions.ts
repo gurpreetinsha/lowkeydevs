@@ -5,6 +5,8 @@ export type ToolCategory =
   | 'converters'    // Base64, Hex, Unit converters, URL encoding
   | 'dev-utils'     // Crontab generator, RegEx tester, epoch time
   | 'design'        // Color pickers, contrast checkers, image resizing
+  | 'image'         // OCR, format converters, art generators
+  | 'video'         // Format conversion, audio extraction
   | 'security';     // Hashing (MD5, SHA), cryptography, password checkers
 
 export interface ToolFAQ {
