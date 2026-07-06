@@ -106,6 +106,19 @@ import { meta as addWatermarkMeta } from './list/add-watermark/meta';
 import { meta as rotatePdfMeta } from './list/rotate-pdf/meta';
 import { meta as scanToPdfMeta } from './list/scan-to-pdf/meta';
 
+// PDF tools Set 3 imports
+import { meta as ocrPdfMeta } from './list/ocr-pdf/meta';
+import { meta as repairPdfMeta } from './list/repair-pdf/meta';
+import { meta as pdfToPdfaMeta } from './list/pdf-to-pdfa/meta';
+import { meta as htmlToPdfMeta } from './list/html-to-pdf/meta';
+import { meta as removePdfPagesMeta } from './list/remove-pdf-pages/meta';
+import { meta as extractPdfPagesMeta } from './list/extract-pdf-pages/meta';
+import { meta as pdfFormsMeta } from './list/pdf-forms/meta';
+import { meta as redactPdfMeta } from './list/redact-pdf/meta';
+import { meta as comparePdfMeta } from './list/compare-pdf/meta';
+import { meta as aiPdfSummarizerMeta } from './list/ai-pdf-summarizer/meta';
+
+
 // Central Registry of all tools
 export const registry: ToolMeta[] = [
   jsonFormatterMeta,
@@ -213,7 +226,19 @@ export const registry: ToolMeta[] = [
   addPageNumbersMeta,
   addWatermarkMeta,
   rotatePdfMeta,
-  scanToPdfMeta
+  scanToPdfMeta,
+
+  // PDF tools Set 3
+  ocrPdfMeta,
+  repairPdfMeta,
+  pdfToPdfaMeta,
+  htmlToPdfMeta,
+  removePdfPagesMeta,
+  extractPdfPagesMeta,
+  pdfFormsMeta,
+  redactPdfMeta,
+  comparePdfMeta,
+  aiPdfSummarizerMeta
 ];
 
 // Helper to find a tool by its slug

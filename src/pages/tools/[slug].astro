@@ -110,6 +110,19 @@ import AddWatermarkUI from '../../tools/list/add-watermark/ui.astro';
 import RotatePdfUI from '../../tools/list/rotate-pdf/ui.astro';
 import ScanToPdfUI from '../../tools/list/scan-to-pdf/ui.astro';
 
+// PDF tools Set 3 UI imports
+import OcrPdfUI from '../../tools/list/ocr-pdf/ui.astro';
+import RepairPdfUI from '../../tools/list/repair-pdf/ui.astro';
+import PdfToPdfaUI from '../../tools/list/pdf-to-pdfa/ui.astro';
+import HtmlToPdfUI from '../../tools/list/html-to-pdf/ui.astro';
+import RemovePdfPagesUI from '../../tools/list/remove-pdf-pages/ui.astro';
+import ExtractPdfPagesUI from '../../tools/list/extract-pdf-pages/ui.astro';
+import PdfFormsUI from '../../tools/list/pdf-forms/ui.astro';
+import RedactPdfUI from '../../tools/list/redact-pdf/ui.astro';
+import ComparePdfUI from '../../tools/list/compare-pdf/ui.astro';
+import AiPdfSummarizerUI from '../../tools/list/ai-pdf-summarizer/ui.astro';
+
+
 // Map slugs to UI components
 const uiComponents: Record<string, any> = {
   'json-formatter': JSONFormatterUI,
@@ -213,7 +226,17 @@ const uiComponents: Record<string, any> = {
   'add-page-numbers': AddPageNumbersUI,
   'add-watermark': AddWatermarkUI,
   'rotate-pdf': RotatePdfUI,
-  'scan-to-pdf': ScanToPdfUI
+  'scan-to-pdf': ScanToPdfUI,
+  'ocr-pdf': OcrPdfUI,
+  'repair-pdf': RepairPdfUI,
+  'pdf-to-pdfa': PdfToPdfaUI,
+  'html-to-pdf': HtmlToPdfUI,
+  'remove-pdf-pages': RemovePdfPagesUI,
+  'extract-pdf-pages': ExtractPdfPagesUI,
+  'pdf-forms': PdfFormsUI,
+  'redact-pdf': RedactPdfUI,
+  'compare-pdf': ComparePdfUI,
+  'ai-pdf-summarizer': AiPdfSummarizerUI
 };
 
 export async function getStaticPaths() {

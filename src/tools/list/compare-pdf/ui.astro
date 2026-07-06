@@ -1,0 +1,652 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<!-- Load PDF.js and jsdiff from CDNs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js" is:inline></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsdiff/5.1.0/diff.min.js" is:inline></script>
+
+<compare-pdf-tool class="tool-workspace">
+  <div class="converter-container glass-panel">
+    <div class="converter-header">
+      <h3 class="converter-title">Compare PDF Files</h3>
+      <p class="converter-subtitle">Compare two PDF documents side-by-side to track changes and text edits completely locally in your browser.</p>
+    </div>
+
+    <!-- Upload Panel (Double Dropzones) -->
+    <div class="upload-comparison-grid" id="upload-panel">
+      <!-- File A -->
+      <div class="dropzone comparison-dropzone" id="dropzone-a">
+        <input type="file" id="file-input-a" accept=".pdf" class="hidden-input" aria-label="Upload PDF Document A" />
+        <div class="dropzone-content">
+          <Icon name="FileText" size={32} />
+          <p class="dropzone-text">Document A (Original)</p>
+          <p class="dropzone-subtext" id="name-a">Click or drag PDF here</p>
+        </div>
+      </div>
+
+      <!-- File B -->
+      <div class="dropzone comparison-dropzone" id="dropzone-b">
+        <input type="file" id="file-input-b" accept=".pdf" class="hidden-input" aria-label="Upload PDF Document B" />
+        <div class="dropzone-content">
+          <Icon name="FileText" size={32} />
+          <p class="dropzone-text">Document B (Revised)</p>
+          <p class="dropzone-subtext" id="name-b">Click or drag PDF here</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="compare-actions-row hidden" id="initial-compare-row">
+      <button id="btn-start-compare" class="btn btn-primary btn-lg">Compare Documents</button>
+      <button id="btn-reset-upload" class="btn btn-secondary">Reset</button>
+    </div>
+
+    <!-- Interface -->
+    <div class="config-panel comparison-interface hidden" id="comparison-interface">
+      <div class="comparison-tabs">
+        <button class="tab-btn active" id="tab-visual">Visual Side-by-Side</button>
+        <button class="tab-btn" id="tab-text">Text Difference (Diff)</button>
+        <button id="btn-cancel" class="btn btn-secondary btn-sm ml-auto">Upload New</button>
+      </div>
+
+      <!-- 1. Visual side-by-side view -->
+      <div class="tab-content" id="content-visual">
+        <div class="visual-panes">
+          <!-- Pane A -->
+          <div class="pane-column">
+            <span class="pane-title">Document A</span>
+            <div class="compare-canvas-wrapper">
+              <canvas id="canvas-a"></canvas>
+            </div>
+            <div class="pane-nav">
+              <button id="btn-prev-a" class="btn-icon">▲</button>
+              <span id="page-num-a">1 / 1</span>
+              <button id="btn-next-a" class="btn-icon">▼</button>
+            </div>
+          </div>
+
+          <!-- Pane B -->
+          <div class="pane-column">
+            <span class="pane-title">Document B</span>
+            <div class="compare-canvas-wrapper">
+              <canvas id="canvas-b"></canvas>
+            </div>
+            <div class="pane-nav">
+              <button id="btn-prev-b" class="btn-icon">▲</button>
+              <span id="page-num-b">1 / 1</span>
+              <button id="btn-next-b" class="btn-icon">▼</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Textual diff view -->
+      <div class="tab-content hidden" id="content-text">
+        <div class="diff-container" id="diff-output-box"></div>
+      </div>
+    </div>
+
+    <!-- Loading / Status -->
+    <div class="converter-loading hidden" id="compare-loading-panel">
+      <div class="spinner"></div>
+      <p id="loading-status">Analyzing and comparing document structures...</p>
+    </div>
+  </div>
+</compare-pdf-tool>
+
+<style>
+  .tool-workspace {
+    width: 100%;
+  }
+
+  .converter-container {
+    width: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .converter-header {
+    text-align: center;
+  }
+
+  .converter-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+
+  .converter-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  .upload-comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .comparison-dropzone {
+    min-height: 140px;
+    border-radius: var(--radius-lg);
+  }
+
+  .compare-actions-row {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .config-panel {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .comparison-tabs {
+    display: flex;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.75rem;
+    align-items: center;
+  }
+
+  .tab-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-secondary);
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+
+  .tab-btn:hover {
+    color: var(--text-primary);
+    background: var(--surface-hover);
+  }
+
+  .tab-btn.active {
+    color: var(--accent-on);
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .tab-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .visual-panes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .pane-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .pane-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .compare-canvas-wrapper {
+    width: 100%;
+    max-width: 450px;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    aspect-ratio: 3/4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .compare-canvas-wrapper canvas {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .pane-nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .btn-icon {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+  }
+
+  .btn-icon:hover {
+    border-color: var(--accent);
+    background: var(--accent-subtle);
+  }
+
+  .btn-icon:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    border-color: var(--border);
+    background: var(--surface);
+  }
+
+  .diff-container {
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    max-height: 450px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+  }
+
+  /* Diff classes */
+  ins {
+    background-color: var(--success-subtle);
+    color: var(--success);
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 2px;
+    padding: 1px 3px;
+  }
+
+  del {
+    background-color: var(--error-subtle);
+    color: var(--error);
+    text-decoration: line-through;
+    font-weight: bold;
+    border-radius: 2px;
+    padding: 1px 3px;
+  }
+
+  .converter-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  .ml-auto {
+    margin-left: auto;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+</style>
+
+<script>
+  class ComparePdfTool extends HTMLElement {
+    private fileInputA!: HTMLInputElement;
+    private fileInputB!: HTMLInputElement;
+    private dropzoneA!: HTMLDivElement;
+    private dropzoneB!: HTMLDivElement;
+    
+    private nameAEl!: HTMLParagraphElement;
+    private nameBEl!: HTMLParagraphElement;
+
+    private uploadPanelEl!: HTMLDivElement;
+    private initialCompareRowEl!: HTMLDivElement;
+    private btnStartCompareEl!: HTMLButtonElement;
+    private btnResetUploadEl!: HTMLButtonElement;
+
+    private interfaceEl!: HTMLDivElement;
+    private tabVisualEl!: HTMLButtonElement;
+    private tabTextEl!: HTMLButtonElement;
+    private contentVisualEl!: HTMLDivElement;
+    private contentTextEl!: HTMLDivElement;
+    private diffOutputBoxEl!: HTMLDivElement;
+    private btnCancelEl!: HTMLButtonElement;
+
+    private canvasAEl!: HTMLCanvasElement;
+    private canvasBEl!: HTMLCanvasElement;
+
+    private btnPrevAEl!: HTMLButtonElement;
+    private btnNextAEl!: HTMLButtonElement;
+    private pageNumAEl!: HTMLSpanElement;
+
+    private btnPrevBEl!: HTMLButtonElement;
+    private btnNextBEl!: HTMLButtonElement;
+    private pageNumBEl!: HTMLSpanElement;
+
+    private loadingPanelEl!: HTMLDivElement;
+
+    // Files and Documents data
+    private fileA: File | null = null;
+    private fileB: File | null = null;
+    private pdfDocA: any = null;
+    private pdfDocB: any = null;
+
+    private currentPageA = 1;
+    private totalPagesA = 0;
+    private currentPageB = 1;
+    private totalPagesB = 0;
+
+    private textContentA = '';
+    private textContentB = '';
+
+    connectedCallback() {
+      this.fileInputA = this.querySelector('#file-input-a')!;
+      this.fileInputB = this.querySelector('#file-input-b')!;
+      this.dropzoneA = this.querySelector('#dropzone-a')!;
+      this.dropzoneB = this.querySelector('#dropzone-b')!;
+      this.nameAEl = this.querySelector('#name-a')!;
+      this.nameBEl = this.querySelector('#name-b')!;
+
+      this.uploadPanelEl = this.querySelector('#upload-panel')!;
+      this.initialCompareRowEl = this.querySelector('#initial-compare-row')!;
+      this.btnStartCompareEl = this.querySelector('#btn-start-compare')!;
+      this.btnResetUploadEl = this.querySelector('#btn-reset-upload')!;
+
+      this.interfaceEl = this.querySelector('#comparison-interface')!;
+      this.tabVisualEl = this.querySelector('#tab-visual')!;
+      this.tabTextEl = this.querySelector('#tab-text')!;
+      this.contentVisualEl = this.querySelector('#content-visual')!;
+      this.contentTextEl = this.querySelector('#content-text')!;
+      this.diffOutputBoxEl = this.querySelector('#diff-output-box')!;
+      this.btnCancelEl = this.querySelector('#btn-cancel')!;
+
+      this.canvasAEl = this.querySelector('#canvas-a')!;
+      this.canvasBEl = this.querySelector('#canvas-b')!;
+
+      this.btnPrevAEl = this.querySelector('#btn-prev-a')!;
+      this.btnNextAEl = this.querySelector('#btn-next-a')!;
+      this.pageNumAEl = this.querySelector('#page-num-a')!;
+
+      this.btnPrevBEl = this.querySelector('#btn-prev-b')!;
+      this.btnNextBEl = this.querySelector('#btn-next-b')!;
+      this.pageNumBEl = this.querySelector('#page-num-b')!;
+
+      this.loadingPanelEl = this.querySelector('#compare-loading-panel')!;
+
+      // Dropzone input binds
+      this.fileInputA.addEventListener('change', () => this.handleFileSelect('a'));
+      this.fileInputB.addEventListener('change', () => this.handleFileSelect('b'));
+
+      this.dropzoneA.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        this.dropzoneA.classList.add('dragover');
+      });
+      this.dropzoneA.addEventListener('dragleave', () => this.dropzoneA.classList.remove('dragover'));
+      this.dropzoneA.addEventListener('drop', (e) => {
+        e.preventDefault();
+        this.dropzoneA.classList.remove('dragover');
+        if (e.dataTransfer?.files.length) {
+          this.processFile('a', e.dataTransfer.files[0]);
+        }
+      });
+
+      this.dropzoneB.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        this.dropzoneB.classList.add('dragover');
+      });
+      this.dropzoneB.addEventListener('dragleave', () => this.dropzoneB.classList.remove('dragover'));
+      this.dropzoneB.addEventListener('drop', (e) => {
+        e.preventDefault();
+        this.dropzoneB.classList.remove('dragover');
+        if (e.dataTransfer?.files.length) {
+          this.processFile('b', e.dataTransfer.files[0]);
+        }
+      });
+
+      // Actions
+      this.btnStartCompareEl.addEventListener('click', () => this.startComparison());
+      this.btnResetUploadEl.addEventListener('click', () => this.reset());
+      this.btnCancelEl.addEventListener('click', () => this.reset());
+
+      // Navigation binds
+      this.btnPrevAEl.addEventListener('click', () => this.changePage('a', -1));
+      this.btnNextAEl.addEventListener('click', () => this.changePage('a', 1));
+      this.btnPrevBEl.addEventListener('click', () => this.changePage('b', -1));
+      this.btnNextBEl.addEventListener('click', () => this.changePage('b', 1));
+
+      // Tabs
+      this.tabVisualEl.addEventListener('click', () => this.selectTab('visual'));
+      this.tabTextEl.addEventListener('click', () => this.selectTab('text'));
+    }
+
+    private handleFileSelect(pane: 'a' | 'b') {
+      const input = pane === 'a' ? this.fileInputA : this.fileInputB;
+      if (input.files?.length) {
+        this.processFile(pane, input.files[0]);
+      }
+    }
+
+    private processFile(pane: 'a' | 'b', file: File) {
+      if (file.type !== 'application/pdf' && !file.name.endsWith('.pdf')) {
+        alert('Please upload a valid PDF document.');
+        return;
+      }
+
+      if (pane === 'a') {
+        this.fileA = file;
+        this.nameAEl.textContent = file.name;
+        this.dropzoneA.style.borderColor = 'var(--success)';
+      } else {
+        this.fileB = file;
+        this.nameBEl.textContent = file.name;
+        this.dropzoneB.style.borderColor = 'var(--success)';
+      }
+
+      if (this.fileA && this.fileB) {
+        this.initialCompareRowEl.classList.remove('hidden');
+      }
+    }
+
+    private async startComparison() {
+      if (!this.fileA || !this.fileB) return;
+
+      if (typeof window.pdfjsLib === 'undefined' || typeof window.Diff === 'undefined') {
+        alert('Libraries are loading. Please try again.');
+        return;
+      }
+
+      this.uploadPanelEl.classList.add('hidden');
+      this.initialCompareRowEl.classList.add('hidden');
+      this.loadingPanelEl.classList.remove('hidden');
+
+      try {
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        
+        // Load PDF A
+        const arrayBufferA = await this.fileA.arrayBuffer();
+        this.pdfDocA = await window.pdfjsLib.getDocument({ data: new Uint8Array(arrayBufferA) }).promise;
+        this.totalPagesA = this.pdfDocA.numPages;
+        this.currentPageA = 1;
+
+        // Load PDF B
+        const arrayBufferB = await this.fileB.arrayBuffer();
+        this.pdfDocB = await window.pdfjsLib.getDocument({ data: new Uint8Array(arrayBufferB) }).promise;
+        this.totalPagesB = this.pdfDocB.numPages;
+        this.currentPageB = 1;
+
+        // Extract Text content for Diff
+        this.textContentA = await this.extractTextContent(this.pdfDocA);
+        this.textContentB = await this.extractTextContent(this.pdfDocB);
+
+        // Run textual diff
+        this.renderTextDiff();
+
+        // Render page 1 of both side-by-side
+        await this.renderPage('a');
+        await this.renderPage('b');
+
+        this.loadingPanelEl.classList.add('hidden');
+        this.interfaceEl.classList.remove('hidden');
+        this.selectTab('visual');
+      } catch (err) {
+        console.error(err);
+        alert('Error parsing PDF content comparison.');
+        this.reset();
+      }
+    }
+
+    private async extractTextContent(pdfjsDoc: any): Promise<string> {
+      let fullText = '';
+      for (let i = 1; i <= pdfjsDoc.numPages; i++) {
+        const page = await pdfjsDoc.getPage(i);
+        const textContent = await page.getTextContent();
+        const pageText = textContent.items.map((item: any) => item.str).join(' ');
+        fullText += `--- PAGE ${i} ---\n${pageText}\n\n`;
+      }
+      return fullText;
+    }
+
+    private renderTextDiff() {
+      // Run jsdiff diffChars or diffWords
+      const diff = window.Diff.diffWords(this.textContentA, this.textContentB);
+      
+      this.diffOutputBoxEl.innerHTML = '';
+      
+      diff.forEach((part: any) => {
+        let span;
+        if (part.added) {
+          span = document.createElement('ins');
+          span.textContent = part.value;
+        } else if (part.removed) {
+          span = document.createElement('del');
+          span.textContent = part.value;
+        } else {
+          span = document.createTextNode(part.value);
+        }
+        this.diffOutputBoxEl.appendChild(span);
+      });
+    }
+
+    private async renderPage(pane: 'a' | 'b') {
+      const pdf = pane === 'a' ? this.pdfDocA : this.pdfDocB;
+      const pageNum = pane === 'a' ? this.currentPageA : this.currentPageB;
+      const canvas = pane === 'a' ? this.canvasAEl : this.canvasBEl;
+      const navIndicator = pane === 'a' ? this.pageNumAEl : this.pageNumBEl;
+      const btnPrev = pane === 'a' ? this.btnPrevAEl : this.btnPrevBEl;
+      const btnNext = pane === 'a' ? this.btnNextAEl : this.btnNextBEl;
+      const totalPages = pane === 'a' ? this.totalPagesA : this.totalPagesB;
+
+      if (!pdf) return;
+
+      navIndicator.textContent = `${pageNum} / ${totalPages}`;
+      btnPrev.disabled = pageNum === 1;
+      btnNext.disabled = pageNum === totalPages;
+
+      const page = await pdf.getPage(pageNum);
+      const viewport = page.getViewport({ scale: 1.0 });
+
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+      const ctx = canvas.getContext('2d')!;
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      await page.render({ canvasContext: ctx, viewport }).promise;
+    }
+
+    private async changePage(pane: 'a' | 'b', dir: number) {
+      if (pane === 'a') {
+        const target = this.currentPageA + dir;
+        if (target >= 1 && target <= this.totalPagesA) {
+          this.currentPageA = target;
+          await this.renderPage('a');
+        }
+      } else {
+        const target = this.currentPageB + dir;
+        if (target >= 1 && target <= this.totalPagesB) {
+          this.currentPageB = target;
+          await this.renderPage('b');
+        }
+      }
+    }
+
+    private selectTab(tab: 'visual' | 'text') {
+      if (tab === 'visual') {
+        this.tabVisualEl.classList.add('active');
+        this.tabTextEl.classList.remove('active');
+        this.contentVisualEl.classList.remove('hidden');
+        this.contentTextEl.classList.add('hidden');
+      } else {
+        this.tabTextEl.classList.add('active');
+        this.tabVisualEl.classList.remove('active');
+        this.contentVisualEl.classList.add('hidden');
+        this.contentTextEl.classList.remove('hidden');
+      }
+    }
+
+    private reset() {
+      this.fileA = null;
+      this.fileB = null;
+      this.pdfDocA = null;
+      this.pdfDocB = null;
+      this.currentPageA = 1;
+      this.currentPageB = 1;
+      this.totalPagesA = 0;
+      this.totalPagesB = 0;
+      this.textContentA = '';
+      this.textContentB = '';
+
+      this.fileInputA.value = '';
+      this.fileInputB.value = '';
+      this.nameAEl.textContent = 'Click or drag PDF here';
+      this.nameBEl.textContent = 'Click or drag PDF here';
+      this.dropzoneA.removeAttribute('style');
+      this.dropzoneB.removeAttribute('style');
+
+      this.uploadPanelEl.classList.remove('hidden');
+      this.initialCompareRowEl.classList.add('hidden');
+      this.interfaceEl.classList.add('hidden');
+      this.loadingPanelEl.classList.add('hidden');
+    }
+  }
+
+  if (!customElements.get('compare-pdf-tool')) {
+    customElements.define('compare-pdf-tool', ComparePdfTool);
+  }
+</script>
