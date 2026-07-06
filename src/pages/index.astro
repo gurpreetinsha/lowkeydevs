@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ToolCard from '../components/ToolCard.astro';
 import SponsorCard from '../components/SponsorCard.astro';
+import AdPlaceholder from '../components/AdPlaceholder.astro';
 import Icon from '../components/base/Icon.astro';
 import { registry, categories } from '../tools/registry';
 
@@ -128,6 +129,11 @@ const activeCategories = categories.filter(cat =>
         </div>
       </div>
     </section>
+
+    <!-- Natural ad layout between content sections -->
+    <div class="container">
+      <AdPlaceholder format="horizontal" adSlot="home-horizontal" />
+    </div>
 
     <!-- Features Section -->
     <section class="features-section" aria-labelledby="features-title">
