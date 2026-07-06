@@ -1552,14 +1552,12 @@ input::placeholder, textarea::placeholder {
    ============================================================ */
 
 /* Force all editor grids (including scoped tool instances) to allow horizontal shrinking */
-.editor-grid,
-:global(.editor-grid) {
+.editor-grid {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
 }
 
 @media (max-width: 768px) {
-  .editor-grid,
-  :global(.editor-grid) {
+  .editor-grid {
     grid-template-columns: minmax(0, 1fr) !important;
   }
 }
