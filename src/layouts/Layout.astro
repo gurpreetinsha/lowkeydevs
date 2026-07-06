@@ -1,18 +1,23 @@
 ---
 import '../styles/index.css';
+import SuggestFeatureButton from '../components/SuggestFeatureButton.astro';
 
 interface Props {
   title?: string;
   description?: string;
   canonicalUrl?: string;
   ogImage?: string;
+  toolSlug?: string;
+  toolCategory?: string;
 }
 
 const {
   title = 'Lowkeydevs - Fast, Private Online Tools',
   description = 'The internet\'s default toolbox. Free, client-side, privacy-respecting online developer tools and utilities with zero registration required.',
   canonicalUrl = Astro.url.href,
-  ogImage = '/og-default.png'
+  ogImage = '/og-default.png',
+  toolSlug,
+  toolCategory
 } = Astro.props;
 ---
 
@@ -68,9 +73,10 @@ const {
       })();
     </script>
   </head>
-  <body>
+  <body data-tool-slug={toolSlug} data-tool-category={toolCategory}>
     <a href="#main-content" class="skip-link">Skip to content</a>
     <slot />
+    <SuggestFeatureButton />
   </body>
 </html>
 

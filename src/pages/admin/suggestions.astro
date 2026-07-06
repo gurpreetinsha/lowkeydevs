@@ -1,0 +1,850 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Icon from '../../components/base/Icon.astro';
+import { supabase } from '../../lib/supabase';
+
+export const prerender = false;
+
+// Fetch suggestions from Supabase
+let suggestions = [];
+let fetchError = null;
+
+try {
+  const { data, error } = await supabase
+    .from('suggestions')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    fetchError = error.message;
+  } else {
+    suggestions = data || [];
+  }
+} catch (err: any) {
+  fetchError = err.message || 'Unknown error occurred.';
+}
+
+// Generate dynamic filter lists from actual data to populate dropdowns
+const uniqueTools = Array.from(new Set(suggestions.map(s => s.tool_slug).filter(Boolean))).sort();
+const uniqueBrowsers = Array.from(new Set(suggestions.map(s => s.browser).filter(Boolean))).sort();
+const uniqueOS = Array.from(new Set(suggestions.map(s => s.os).filter(Boolean))).sort();
+const uniqueDevices = Array.from(new Set(suggestions.map(s => s.device_type).filter(Boolean))).sort();
+
+// Calculate simple overview stats
+const totalCount = suggestions.length;
+const emailCount = suggestions.filter(s => s.email).length;
+const emailRate = totalCount ? Math.round((emailCount / totalCount) * 100) : 0;
+const avgScroll = totalCount ? Math.round(suggestions.reduce((acc, s) => acc + (s.scroll_percent || 0), 0) / totalCount) : 0;
+const avgTime = totalCount ? Math.round(suggestions.reduce((acc, s) => acc + (s.time_on_page || 0), 0) / totalCount) : 0;
+---
+
+<Layout title="Suggestions Admin Dashboard - Lowkeydevs">
+  <Header />
+
+  <main id="main-content" class="container admin-container">
+    <div class="admin-header">
+      <div>
+        <h1 class="admin-title">Suggestions Dashboard</h1>
+        <p class="admin-subtitle">Monitor and analyze feature suggestions and user feedback.</p>
+      </div>
+      <button id="export-csv-btn" class="btn btn-primary" title="Export current filtered data to CSV">
+        <Icon name="Download" size={16} />
+        Export to CSV
+      </button>
+    </div>
+
+    {fetchError ? (
+      <div class="error-banner">
+        <Icon name="AlertCircle" size={20} />
+        <div>
+          <strong>Failed to load suggestions:</strong> {fetchError}
+          <p style="margin-top: 4px; font-size: 13px;">Please make sure your Supabase environment variables are set and the suggestions table exists.</p>
+        </div>
+      </div>
+    ) : (
+      <>
+      {/* Overview Cards */}
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon-wrapper purple">
+            <Icon name="MessageSquare" size={20} />
+          </div>
+          <div>
+            <div class="stat-label">Total Suggestions</div>
+            <div class="stat-value" id="stat-total">{totalCount}</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrapper green">
+            <Icon name="Mail" size={20} />
+          </div>
+          <div>
+            <div class="stat-label">Contact Rate</div>
+            <div class="stat-value" id="stat-email-rate">{emailRate}%</div>
+            <div class="stat-desc">{emailCount} suggestions with email</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrapper orange">
+            <Icon name="TrendingUp" size={20} />
+          </div>
+          <div>
+            <div class="stat-label">Avg. Scroll Depth</div>
+            <div class="stat-value" id="stat-scroll">{avgScroll}%</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrapper blue">
+            <Icon name="Clock" size={20} />
+          </div>
+          <div>
+            <div class="stat-label">Avg. Time on Page</div>
+            <div class="stat-value" id="stat-time">{avgTime}s</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Filters Panel */}
+      <div class="filters-card">
+        <div class="filters-header">
+          <h2 class="filters-title">
+            <Icon name="Filter" size={16} />
+            Filters & Search
+          </h2>
+          <button id="clear-filters-btn" class="btn-text">Clear Filters</button>
+        </div>
+
+        <div class="filters-grid">
+          {/* Search input */}
+          <div class="form-group search-group">
+            <label for="search-input" class="label">Search</label>
+            <div class="search-input-wrapper">
+              <Icon name="Search" class="search-icon" size={16} />
+              <input type="text" id="search-input" placeholder="Search suggestion, email, page, tool..." autocomplete="off" />
+            </div>
+          </div>
+
+          {/* Date Filter */}
+          <div class="form-group">
+            <label for="filter-date" class="label">Date Range</label>
+            <select id="filter-date">
+              <option value="all">All Time</option>
+              <option value="today">Today</option>
+              <option value="week">Last 7 Days</option>
+              <option value="month">Last 30 Days</option>
+            </select>
+          </div>
+
+          {/* Tool Filter */}
+          <div class="form-group">
+            <label for="filter-tool" class="label">Tool</label>
+            <select id="filter-tool">
+              <option value="all">All Tools</option>
+              <option value="none">No Tool (Generic)</option>
+              {uniqueTools.map(tool => (
+                <option value={tool}>{tool}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Browser Filter */}
+          <div class="form-group">
+            <label for="filter-browser" class="label">Browser</label>
+            <select id="filter-browser">
+              <option value="all">All Browsers</option>
+              {uniqueBrowsers.map(b => (
+                <option value={b}>{b}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* OS Filter */}
+          <div class="form-group">
+            <label for="filter-os" class="label">Operating System</label>
+            <select id="filter-os">
+              <option value="all">All OS</option>
+              {uniqueOS.map(os => (
+                <option value={os}>{os}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Device Filter */}
+          <div class="form-group">
+            <label for="filter-device" class="label">Device Type</label>
+            <select id="filter-device">
+              <option value="all">All Devices</option>
+              {uniqueDevices.map(d => (
+                <option value={d}>{d}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Theme Filter */}
+          <div class="form-group">
+            <label for="filter-theme" class="label">Theme</label>
+            <select id="filter-theme">
+              <option value="all">All Themes</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </div>
+
+          {/* Has Email Filter */}
+          <div class="form-group">
+            <label for="filter-email" class="label">Email Contact</label>
+            <select id="filter-email">
+              <option value="all">All Suggestions</option>
+              <option value="has_email">Has Email</option>
+              <option value="no_email">No Email</option>
+            </select>
+          </div>
+
+          {/* Sorting Filter */}
+          <div class="form-group">
+            <label for="sort-by" class="label">Sort By</label>
+            <select id="sort-by">
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+              <option value="time">Time on Page</option>
+              <option value="scroll">Scroll Depth</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Suggestions Table */}
+      <div class="table-container">
+        <table id="suggestions-table">
+          <thead>
+            <tr>
+              <th>Suggestion</th>
+              <th>Details</th>
+              <th>Context</th>
+              <th>Platform</th>
+              <th>Metrics</th>
+              <th>Timestamp / ID</th>
+            </tr>
+          </thead>
+          <tbody id="table-body">
+            {/* Rendered dynamically by script below */}
+          </tbody>
+        </table>
+
+        {/* Empty State */}
+        <div id="empty-state" class="empty-state" style="display: none;">
+          <span class="empty-icon">💡</span>
+          <h3>No suggestions match the filters</h3>
+          <p>Try clearing your search query or choosing different filters.</p>
+        </div>
+      </div>
+      </>
+    )}
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .admin-container {
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-16);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .admin-title {
+    font-family: var(--font-heading);
+    font-size: var(--fs-h3);
+    color: var(--text-primary);
+  }
+
+  .admin-subtitle {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-top: var(--space-1);
+  }
+
+  .error-banner {
+    display: flex;
+    gap: var(--space-3);
+    background-color: var(--error-subtle);
+    border: 1px solid var(--error-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+
+  /* Stats Grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-4);
+  }
+
+  .stat-card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .stat-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-md);
+  }
+
+  .stat-icon-wrapper.purple { background-color: var(--accent-subtle); color: var(--accent); }
+  .stat-icon-wrapper.green { background-color: var(--success-subtle); color: var(--success); }
+  .stat-icon-wrapper.orange { background-color: rgba(249, 115, 22, 0.15); color: #f97316; }
+  .stat-icon-wrapper.blue { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+    margin-top: 2px;
+  }
+
+  .stat-desc {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin-top: 2px;
+  }
+
+  /* Filters Card */
+  .filters-card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .filters-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--space-3);
+  }
+
+  .filters-title {
+    font-size: 15px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--text-primary);
+  }
+
+  .filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-4);
+  }
+
+  .search-group {
+    grid-column: span 1;
+  }
+  @media (min-width: 900px) {
+    .search-group {
+      grid-column: span 2;
+    }
+  }
+
+  .search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    color: var(--text-tertiary);
+  }
+
+  .search-input-wrapper input {
+    padding-left: 36px;
+    font-family: var(--font-sans);
+  }
+
+  /* Table styles */
+  .table-container {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    position: relative;
+    min-height: 200px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 14px;
+  }
+
+  th {
+    background-color: var(--surface-hover);
+    color: var(--text-primary);
+    font-weight: 600;
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: var(--space-4);
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  tr:hover td {
+    background-color: var(--surface-hover);
+  }
+
+  /* Custom cell content styling */
+  .cell-suggestion {
+    font-weight: 400;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+    min-width: 250px;
+    max-width: 450px;
+  }
+
+  .cell-email {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--accent);
+  }
+
+  .cell-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+    font-weight: 500;
+    background-color: var(--surface-elevated);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    margin-right: 4px;
+    margin-bottom: 4px;
+  }
+
+  .cell-badge.accent {
+    background-color: var(--accent-subtle);
+    color: var(--accent-hover);
+    border-color: rgba(140, 82, 255, 0.2);
+  }
+
+  .cell-badge.success {
+    background-color: var(--success-subtle);
+    color: var(--success);
+    border-color: rgba(34, 197, 94, 0.2);
+  }
+
+  .cell-meta-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+  }
+
+  .cell-meta-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1-5);
+  }
+
+  .cell-meta-label {
+    color: var(--text-tertiary);
+    font-size: 11px;
+    width: 80px;
+    flex-shrink: 0;
+  }
+
+  .cell-uuid {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    transition: color var(--duration-fast);
+  }
+
+  .cell-uuid:hover {
+    color: var(--accent);
+  }
+
+  .empty-state {
+    padding: var(--space-12) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: var(--space-2);
+  }
+
+  .empty-icon {
+    font-size: 48px;
+    margin-bottom: var(--space-2);
+  }
+
+  .empty-state h3 {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    color: var(--text-primary);
+  }
+
+  .empty-state p {
+    color: var(--text-secondary);
+    font-size: 14px;
+    max-width: 40ch;
+  }
+</style>
+
+<script is:inline define:vars={{ suggestions }}>
+  // Standard Client-Side Dashboard Controller (Runs completely in browser)
+  if (typeof window !== 'undefined') {
+    const tableBody = document.getElementById('table-body');
+    const emptyState = document.getElementById('empty-state');
+    
+    // Filters elements
+    const searchInput = document.getElementById('search-input');
+    const filterDate = document.getElementById('filter-date');
+    const filterTool = document.getElementById('filter-tool');
+    const filterBrowser = document.getElementById('filter-browser');
+    const filterOs = document.getElementById('filter-os');
+    const filterDevice = document.getElementById('filter-device');
+    const filterTheme = document.getElementById('filter-theme');
+    const filterEmail = document.getElementById('filter-email');
+    const sortBy = document.getElementById('sort-by');
+    const clearBtn = document.getElementById('clear-filters-btn');
+    const exportBtn = document.getElementById('export-csv-btn');
+
+    let currentFiltered = [...suggestions];
+
+    function renderTable() {
+      if (!tableBody) return;
+      tableBody.innerHTML = '';
+
+      if (currentFiltered.length === 0) {
+        emptyState.style.display = 'flex';
+        return;
+      }
+      emptyState.style.display = 'none';
+
+      currentFiltered.forEach(s => {
+        const tr = document.createElement('tr');
+        const formattedDate = new Date(s.created_at).toLocaleDateString(undefined, {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        const safeReferrer = s.referrer ? (s.referrer.length > 30 ? s.referrer.substring(0, 30) + '...' : s.referrer) : 'None';
+
+        tr.innerHTML = `
+          <td>
+            <div class="cell-suggestion">${escapeHtml(s.suggestion)}</div>
+          </td>
+          <td>
+            <div class="cell-meta-group">
+              <div class="cell-meta-item">
+                <span class="cell-meta-label">Email</span>
+                <span class="${s.email ? 'cell-email' : 'cell-uuid'}">${s.email ? escapeHtml(s.email) : 'None'}</span>
+              </div>
+              <div class="cell-meta-item">
+                <span class="cell-meta-label">Anon ID</span>
+                <span class="cell-uuid" onclick="navigator.clipboard.writeText('${s.anonymous_id}').then(() => alert('Copied ID!'))" title="Click to copy">${s.anonymous_id ? s.anonymous_id.substring(0, 8) + '...' : 'Unknown'}</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="cell-meta-group">
+              <div class="cell-meta-item">
+                <span class="cell-meta-label">Page URL</span>
+                <a href="${s.page_url || '#'}" target="_blank" class="btn-text" style="padding: 0; font-size: 13px;" title="${s.page_url || ''}">${s.route || '/'}</a>
+              </div>
+              <div class="cell-meta-item">
+                <span class="cell-meta-label">Referrer</span>
+                <span title="${s.referrer || 'None'}" style="font-size: 12px; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${safeReferrer}</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div>
+              <span class="cell-badge accent">${s.tool_slug || 'Generic Page'}</span>
+              ${s.tool_category ? `<span class="cell-badge">${s.tool_category}</span>` : ''}
+            </div>
+          </td>
+          <td>
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <div>
+                <span class="cell-badge">${s.device_type || 'Desktop'}</span>
+                <span class="cell-badge">${s.os || 'Unknown OS'}</span>
+              </div>
+              <div style="font-size: 11px; color: var(--text-tertiary);">
+                ${s.browser || 'Unknown'} (${s.browser_version ? s.browser_version.split('.')[0] : '?'})
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="cell-meta-group">
+              <div class="cell-meta-item">
+                <span class="cell-meta-label">Scroll Depth</span>
+                <span class="cell-badge ${s.scroll_percent >= 50 ? 'success' : ''}">${s.scroll_percent || 0}%</span>
+              </div>
+              <div class="cell-meta-item">
+                <span class="cell-meta-label">Time spent</span>
+                <span>${s.time_on_page || 0}s</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div style="font-size: 12px; font-weight: 500; color: var(--text-primary);">${formattedDate}</div>
+            <div style="font-size: 11px; color: var(--text-tertiary); margin-top: 2px; font-family: var(--font-mono);">${s.timezone || 'UTC'}</div>
+          </td>
+        `;
+        tableBody.appendChild(tr);
+      });
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;');
+    }
+
+    function applyFilters() {
+      const search = searchInput.value.toLowerCase().trim();
+      const dateVal = filterDate.value;
+      const toolVal = filterTool.value;
+      const browserVal = filterBrowser.value;
+      const osVal = filterOs.value;
+      const deviceVal = filterDevice.value;
+      const themeVal = filterTheme.value;
+      const emailVal = filterEmail.value;
+      const sortVal = sortBy.value;
+
+      currentFiltered = suggestions.filter(s => {
+        // Search Filter (Suggestion, Email, URL/Route, Tool Slug)
+        if (search) {
+          const contentMatch = s.suggestion && s.suggestion.toLowerCase().includes(search);
+          const emailMatch = s.email && s.email.toLowerCase().includes(search);
+          const pageMatch = s.page_url && s.page_url.toLowerCase().includes(search);
+          const toolMatch = s.tool_slug && s.tool_slug.toLowerCase().includes(search);
+          if (!contentMatch && !emailMatch && !pageMatch && !toolMatch) return false;
+        }
+
+        // Date Filter
+        if (dateVal !== 'all') {
+          const dateLimit = new Date();
+          if (dateVal === 'today') {
+            dateLimit.setHours(0, 0, 0, 0);
+          } else if (dateVal === 'week') {
+            dateLimit.setDate(dateLimit.getDate() - 7);
+          } else if (dateVal === 'month') {
+            dateLimit.setDate(dateLimit.getDate() - 30);
+          }
+          if (new Date(s.created_at) < dateLimit) return false;
+        }
+
+        // Tool Filter
+        if (toolVal !== 'all') {
+          if (toolVal === 'none') {
+            if (s.tool_slug) return false;
+          } else {
+            if (s.tool_slug !== toolVal) return false;
+          }
+        }
+
+        // Browser Filter
+        if (browserVal !== 'all' && s.browser !== browserVal) return false;
+
+        // OS Filter
+        if (osVal !== 'all' && s.os !== osVal) return false;
+
+        // Device Filter
+        if (deviceVal !== 'all' && s.device_type !== deviceVal) return false;
+
+        // Theme Filter
+        if (themeVal !== 'all' && s.theme !== themeVal) return false;
+
+        // Email Filter
+        if (emailVal !== 'all') {
+          if (emailVal === 'has_email' && !s.email) return false;
+          if (emailVal === 'no_email' && s.email) return false;
+        }
+
+        return true;
+      });
+
+      // Apply Sorting
+      currentFiltered.sort((a, b) => {
+        if (sortVal === 'newest') {
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        } else if (sortVal === 'oldest') {
+          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+        } else if (sortVal === 'time') {
+          return (b.time_on_page || 0) - (a.time_on_page || 0);
+        } else if (sortVal === 'scroll') {
+          return (b.scroll_percent || 0) - (a.scroll_percent || 0);
+        }
+        return 0;
+      });
+
+      // Update Summary metrics client-side based on filtered dataset
+      updateMetrics();
+
+      // Render
+      renderTable();
+    }
+
+    function updateMetrics() {
+      const countEl = document.getElementById('stat-total');
+      const rateEl = document.getElementById('stat-email-rate');
+      const scrollEl = document.getElementById('stat-scroll');
+      const timeEl = document.getElementById('stat-time');
+
+      if (!countEl) return;
+
+      const total = currentFiltered.length;
+      const hasEmail = currentFiltered.filter(s => s.email).length;
+      const rate = total ? Math.round((hasEmail / total) * 100) : 0;
+      const scroll = total ? Math.round(currentFiltered.reduce((acc, s) => acc + (s.scroll_percent || 0), 0) / total) : 0;
+      const time = total ? Math.round(currentFiltered.reduce((acc, s) => acc + (s.time_on_page || 0), 0) / total) : 0;
+
+      countEl.textContent = total;
+      rateEl.textContent = `${rate}%`;
+      scrollEl.textContent = `${scroll}%`;
+      timeEl.textContent = `${time}s`;
+    }
+
+    // CSV Exporter (Client-side)
+    function exportToCSV() {
+      if (currentFiltered.length === 0) {
+        alert('No suggestions to export.');
+        return;
+      }
+
+      const headers = [
+        'ID', 'Suggestion', 'Email', 'Page URL', 'Route', 'Tool Slug', 'Tool Category', 
+        'Browser', 'Browser Version', 'OS', 'Device Type', 'Screen Width', 'Screen Height', 
+        'Language', 'Timezone', 'Theme', 'Referrer', 'Time on Page (s)', 'Scroll Depth (%)', 
+        'Anonymous ID', 'Session ID', 'Created At'
+      ];
+
+      const rows = currentFiltered.map(s => [
+        s.id,
+        s.suggestion || '',
+        s.email || '',
+        s.page_url || '',
+        s.route || '',
+        s.tool_slug || '',
+        s.tool_category || '',
+        s.browser || '',
+        s.browser_version || '',
+        s.os || '',
+        s.device_type || '',
+        s.screen_width || '',
+        s.screen_height || '',
+        s.language || '',
+        s.timezone || '',
+        s.theme || '',
+        s.referrer || '',
+        s.time_on_page || '0',
+        s.scroll_percent || '0',
+        s.anonymous_id || '',
+        s.session_id || '',
+        s.created_at || ''
+      ]);
+
+      const csvContent = [
+        headers.join(','),
+        ...rows.map(row => row.map(val => `"${String(val).replace(/"/g, '""')}"`).join(','))
+      ].join('\n');
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', `suggestions_export_${new Date().toISOString().split('T')[0]}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function clearFilters() {
+      searchInput.value = '';
+      filterDate.value = 'all';
+      filterTool.value = 'all';
+      filterBrowser.value = 'all';
+      filterOs.value = 'all';
+      filterDevice.value = 'all';
+      filterTheme.value = 'all';
+      filterEmail.value = 'all';
+      sortBy.value = 'newest';
+      applyFilters();
+    }
+
+    // Attach Listeners
+    searchInput.addEventListener('input', applyFilters);
+    filterDate.addEventListener('change', applyFilters);
+    filterTool.addEventListener('change', applyFilters);
+    filterBrowser.addEventListener('change', applyFilters);
+    filterOs.addEventListener('change', applyFilters);
+    filterDevice.addEventListener('change', applyFilters);
+    filterTheme.addEventListener('change', applyFilters);
+    filterEmail.addEventListener('change', applyFilters);
+    sortBy.addEventListener('change', applyFilters);
+    clearBtn.addEventListener('click', clearFilters);
+    exportBtn.addEventListener('click', exportToCSV);
+
+    // Initial render
+    renderTable();
+  }
+</script>
