@@ -92,7 +92,12 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
             <Icon name={categoryDetail?.icon || 'Info'} size={12} />
             {categoryDetail?.title}
           </span>
-          <h1 id="tool-title-heading" class="tool-title">{tool.title}</h1>
+          <div class="tool-title-row">
+            <h1 id="tool-title-heading" class="tool-title">{tool.title}</h1>
+            <button class="favorite-btn tool-favorite-btn" data-slug={tool.slug} aria-label="Toggle favorite" title="Toggle favorite">
+              <Icon name="Star" size={18} />
+            </button>
+          </div>
           <p class="tool-description">{tool.description}</p>
         </header>
 
@@ -194,6 +199,66 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   {faqSchema && (
     <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   )}
+
+  <script define:vars={{ toolSlug: tool.slug }}>
+    try {
+      const slug = toolSlug;
+      if (slug) {
+        // 1. Log Recent Use
+        let recent = [];
+        try {
+          recent = JSON.parse(localStorage.getItem('recent_tools') || '[]');
+        } catch (e) {}
+        recent = [slug, ...recent.filter(s => s !== slug)].slice(0, 5);
+        localStorage.setItem('recent_tools', JSON.stringify(recent));
+
+        // 2. Log Frequency
+        let frequent = {};
+        try {
+          frequent = JSON.parse(localStorage.getItem('frequent_tools') || '{}');
+        } catch (e) {}
+        frequent[slug] = (frequent[slug] || 0) + 1;
+        localStorage.setItem('frequent_tools', JSON.stringify(frequent));
+
+        // 3. Initialize favorite button state
+        const favBtn = document.querySelector(`.tool-favorite-btn[data-slug="${slug}"]`);
+        if (favBtn) {
+          let favorites = [];
+          try {
+            favorites = JSON.parse(localStorage.getItem('favorite_tools') || '[]');
+          } catch (e) {}
+          
+          if (favorites.includes(slug)) {
+            favBtn.classList.add('active');
+            favBtn.setAttribute('aria-label', 'Remove from favorites');
+          }
+
+          favBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            let favs = [];
+            try {
+              favs = JSON.parse(localStorage.getItem('favorite_tools') || '[]');
+            } catch (err) {}
+
+            if (favs.includes(slug)) {
+              favs = favs.filter(s => s !== slug);
+              favBtn.classList.remove('active');
+              favBtn.setAttribute('aria-label', 'Add to favorites');
+            } else {
+              favs.push(slug);
+              favBtn.classList.add('active');
+              favBtn.setAttribute('aria-label', 'Remove from favorites');
+            }
+            localStorage.setItem('favorite_tools', JSON.stringify(favs));
+          });
+        }
+      }
+    } catch (err) {
+      console.error('Error in Lowkeydevs tracking:', err);
+    }
+  </script>
 </Layout>
 
 <style>
@@ -560,6 +625,44 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
     line-height: var(--lh-body);
     letter-spacing: var(--ls-body);
     margin-top: var(--space-3);
+  }
+
+  .tool-title-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .tool-favorite-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border);
+    background-color: var(--surface);
+    color: var(--text-tertiary);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+    flex-shrink: 0;
+  }
+
+  .tool-favorite-btn:hover {
+    color: #FBBF24;
+    border-color: #FBBF24;
+    background-color: rgba(251, 191, 36, 0.1);
+    transform: scale(1.05);
+  }
+
+  .tool-favorite-btn.active {
+    color: #FBBF24;
+    border-color: #FBBF24;
+    background-color: rgba(251, 191, 36, 0.15);
+  }
+
+  .tool-favorite-btn.active :global(polygon) {
+    fill: currentColor !important;
   }
 </style>
 

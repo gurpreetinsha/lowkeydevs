@@ -11,30 +11,41 @@ const { tool } = Astro.props;
 const categoryDetail = getCategoryDetail(tool.category);
 ---
 
-<a href={`/tools/${tool.slug}`} class="tool-card" aria-labelledby={`card-title-${tool.slug}`}>
-  <div class="card-top">
-    <div class="card-icon-wrapper">
-      <Icon name={tool.icon} size={20} class="card-icon" />
+<div class="tool-card-wrapper" style="position: relative; height: 100%;">
+  <a href={`/tools/${tool.slug}`} class="tool-card" aria-labelledby={`card-title-${tool.slug}`}>
+    <div class="card-top">
+      <div class="card-icon-wrapper">
+        <Icon name={tool.icon} size={20} class="card-icon" />
+      </div>
+      {categoryDetail && (
+        <span class="card-category">
+          {categoryDetail.title}
+        </span>
+      )}
     </div>
-    {categoryDetail && (
-      <span class="card-category">
-        {categoryDetail.title}
-      </span>
-    )}
-  </div>
 
-  <div class="card-content">
-    <h3 id={`card-title-${tool.slug}`} class="card-title">{tool.title}</h3>
-    <p class="card-description">{tool.description}</p>
-  </div>
+    <div class="card-content">
+      <h3 id={`card-title-${tool.slug}`} class="card-title">{tool.title}</h3>
+      <p class="card-description">{tool.description}</p>
+    </div>
 
-  <div class="card-bottom">
-    <span class="card-action-text">Open tool</span>
-    <Icon name="ArrowRight" size={14} class="card-arrow" />
-  </div>
-</a>
+    <div class="card-bottom">
+      <span class="card-action-text">Open tool</span>
+      <Icon name="ArrowRight" size={14} class="card-arrow" />
+    </div>
+  </a>
+  <button class="favorite-btn" data-slug={tool.slug} aria-label="Toggle favorite" title="Toggle favorite">
+    <Icon name="Star" size={15} />
+  </button>
+</div>
 
 <style>
+  .tool-card-wrapper {
+    transition: transform var(--duration-normal) var(--ease-out);
+  }
+  .tool-card-wrapper:hover {
+    transform: translateY(-2px);
+  }
   .tool-card {
     display: flex;
     flex-direction: column;
@@ -49,15 +60,13 @@ const categoryDetail = getCategoryDetail(tool.category);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-xs);
-    transition: transform var(--duration-normal) var(--ease-out),
-                border-color var(--duration-normal) var(--ease-out),
+    transition: border-color var(--duration-normal) var(--ease-out),
                 box-shadow var(--duration-normal) var(--ease-out);
   }
 
   .tool-card:hover {
     border-color: var(--accent);
     box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
     text-decoration: none;
   }
 
@@ -76,6 +85,7 @@ const categoryDetail = getCategoryDetail(tool.category);
     gap: var(--space-2);
     /* Prevent flex child overflow */
     min-width: 0;
+    padding-right: var(--space-8); /* Prevent overlap with favorite button */
   }
 
   .card-icon-wrapper {
@@ -183,5 +193,40 @@ const categoryDetail = getCategoryDetail(tool.category);
 
   .tool-card:hover .card-arrow {
     transform: translateX(4px);
+  }
+
+  .favorite-btn {
+    position: absolute;
+    top: clamp(var(--space-3), 2.5vw, var(--space-4));
+    right: clamp(var(--space-3), 2.5vw, var(--space-4));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border);
+    background-color: var(--surface-elevated);
+    color: var(--text-tertiary);
+    cursor: pointer;
+    z-index: 10;
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .favorite-btn:hover {
+    color: #FBBF24; /* beautiful gold color */
+    border-color: #FBBF24;
+    background-color: rgba(251, 191, 36, 0.1);
+    transform: scale(1.1);
+  }
+
+  .favorite-btn.active {
+    color: #FBBF24;
+    border-color: #FBBF24;
+    background-color: rgba(251, 191, 36, 0.15);
+  }
+
+  .favorite-btn.active :global(polygon) {
+    fill: currentColor !important;
   }
 </style>

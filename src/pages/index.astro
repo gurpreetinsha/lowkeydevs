@@ -48,6 +48,33 @@ const activeCategories = categories.filter(cat =>
       </div>
     </section>
 
+    <!-- Quick Access Section -->
+    <section class="quick-access-section" id="quick-access-section" hidden>
+      <div class="container">
+        <div class="quick-access-header">
+          <h2 class="section-title">My Toolbox</h2>
+          <div class="quick-access-tabs" role="tablist" aria-label="Quick Access Tabs">
+            <button class="quick-tab active" role="tab" aria-selected="true" data-tab="favorites">
+              <Icon name="Star" size={14} />
+              Favorites
+            </button>
+            <button class="quick-tab" role="tab" aria-selected="false" data-tab="recent">
+              <Icon name="Clock" size={14} />
+              Recent
+            </button>
+            <button class="quick-tab" role="tab" aria-selected="false" data-tab="frequent">
+              <Icon name="RefreshCw" size={14} />
+              Frequently Used
+            </button>
+          </div>
+        </div>
+
+        <div class="quick-access-grid" id="quick-access-grid">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+    </section>
+
     <!-- Tools Directory -->
     <section class="tools-directory" aria-label="Tools Directory">
       <div class="container">
@@ -361,6 +388,89 @@ const activeCategories = categories.filter(cat =>
     margin-top: var(--space-8);
   }
 
+  /* === Quick Access Section === */
+  .quick-access-section {
+    padding: var(--space-10) 0 var(--space-4) 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .quick-access-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+  }
+
+  .quick-access-tabs {
+    display: flex;
+    gap: var(--space-2);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .quick-access-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .quick-tab {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-md);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 13px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1-5);
+    white-space: nowrap;
+    transition: all var(--duration-fast) var(--ease-out);
+    min-height: 40px;
+  }
+
+  .quick-tab:hover {
+    background-color: var(--surface-hover);
+    border-color: var(--border-hover);
+    color: var(--text-primary);
+  }
+
+  .quick-tab.active {
+    background-color: var(--accent-subtle);
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .quick-access-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+    gap: var(--space-5);
+  }
+
+  .quick-empty-state-card {
+    grid-column: 1 / -1;
+    padding: var(--space-8);
+    text-align: center;
+    color: var(--text-tertiary);
+    font-size: 14px;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+    background-color: var(--surface);
+    width: 100%;
+  }
+
+  @media (max-width: 768px) {
+    .quick-access-header {
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--space-4);
+    }
+  }
+
   /* === Features Section === */
   .features-section {
     padding: var(--space-16) 0 var(--space-20) 0;
@@ -506,5 +616,176 @@ const activeCategories = categories.filter(cat =>
       }
     });
   });
+
+  // --- Quick Access (My Toolbox) Dashboard Logic ---
+  let favorites: string[] = [];
+  let recentSlugs: string[] = [];
+  let frequentMap: Record<string, number> = {};
+
+  function loadData() {
+    try {
+      favorites = JSON.parse(localStorage.getItem('favorite_tools') || '[]');
+      recentSlugs = JSON.parse(localStorage.getItem('recent_tools') || '[]');
+      frequentMap = JSON.parse(localStorage.getItem('frequent_tools') || '{}');
+    } catch (e) {
+      console.error('Error loading toolbox data', e);
+    }
+  }
+
+  const quickAccessSection = document.getElementById('quick-access-section');
+  const quickAccessGrid = document.getElementById('quick-access-grid');
+  const quickTabs = document.querySelectorAll('.quick-tab');
+
+  function syncAllFavoriteButtons() {
+    loadData();
+    const starBtns = document.querySelectorAll('.favorite-btn');
+    starBtns.forEach(btn => {
+      const slug = btn.getAttribute('data-slug');
+      if (slug) {
+        if (favorites.includes(slug)) {
+          btn.classList.add('active');
+          btn.setAttribute('aria-label', 'Remove from favorites');
+        } else {
+          btn.classList.remove('active');
+          btn.setAttribute('aria-label', 'Add to favorites');
+        }
+      }
+    });
+  }
+
+  function setupFavoriteClickListeners() {
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      
+      const btn = target.closest('.favorite-btn');
+      if (!btn) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      const slug = btn.getAttribute('data-slug');
+      if (!slug) return;
+
+      loadData();
+      if (favorites.includes(slug)) {
+        favorites = favorites.filter(s => s !== slug);
+      } else {
+        favorites.push(slug);
+      }
+      localStorage.setItem('favorite_tools', JSON.stringify(favorites));
+
+      syncAllFavoriteButtons();
+      renderQuickAccess();
+    });
+  }
+
+  let activeTab = 'favorites';
+
+  function renderQuickAccess() {
+    loadData();
+
+    const hasFavorites = favorites.length > 0;
+    const hasRecent = recentSlugs.length > 0;
+    const hasFrequent = Object.keys(frequentMap).length > 0;
+
+    if (!hasFavorites && !hasRecent && !hasFrequent) {
+      if (quickAccessSection) quickAccessSection.hidden = true;
+      return;
+    }
+
+    if (quickAccessSection) {
+      quickAccessSection.hidden = false;
+      quickAccessSection.removeAttribute('hidden');
+    }
+
+    let toolsToRender: string[] = [];
+
+    if (activeTab === 'favorites') {
+      toolsToRender = favorites;
+    } else if (activeTab === 'recent') {
+      toolsToRender = recentSlugs;
+    } else if (activeTab === 'frequent') {
+      toolsToRender = Object.keys(frequentMap)
+        .sort((a, b) => (frequentMap[b] || 0) - (frequentMap[a] || 0));
+    }
+
+    if (quickAccessGrid) {
+      quickAccessGrid.innerHTML = '';
+
+      if (toolsToRender.length === 0) {
+        let emptyMessage = '';
+        if (activeTab === 'favorites') {
+          emptyMessage = "You haven't favorited any tools yet. Click the star on any card to add it here!";
+        } else if (activeTab === 'recent') {
+          emptyMessage = "Your recently visited tools will appear here.";
+        } else if (activeTab === 'frequent') {
+          emptyMessage = "Your frequently used tools will appear here.";
+        }
+
+        quickAccessGrid.innerHTML = `
+          <div class="quick-empty-state-card">
+            <p>${emptyMessage}</p>
+          </div>
+        `;
+      } else {
+        toolsToRender.forEach(slug => {
+          const originalCard = document.querySelector(`.tools-grid a[href="/tools/${slug}"]`);
+          if (originalCard) {
+            const wrapper = originalCard.closest('.tool-card-wrapper');
+            if (wrapper) {
+              const clone = wrapper.cloneNode(true) as HTMLElement;
+              quickAccessGrid.appendChild(clone);
+            }
+          }
+        });
+      }
+    }
+
+    syncAllFavoriteButtons();
+  }
+
+  if (quickTabs) {
+    quickTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        quickTabs.forEach(t => {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+
+        activeTab = tab.getAttribute('data-tab') || 'favorites';
+        renderQuickAccess();
+      });
+    });
+  }
+
+  // Choose the default active tab on initial page load based on data availability
+  loadData();
+  if (favorites.length > 0) {
+    activeTab = 'favorites';
+  } else if (recentSlugs.length > 0) {
+    activeTab = 'recent';
+  } else if (Object.keys(frequentMap).length > 0) {
+    activeTab = 'frequent';
+  }
+
+  if (quickTabs) {
+    quickTabs.forEach(tab => {
+      const tabName = tab.getAttribute('data-tab');
+      if (tabName === activeTab) {
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+      } else {
+        tab.classList.remove('active');
+        tab.setAttribute('aria-selected', 'false');
+      }
+    });
+  }
+
+  syncAllFavoriteButtons();
+  setupFavoriteClickListeners();
+  renderQuickAccess();
 </script>
 
