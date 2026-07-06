@@ -116,7 +116,6 @@ import { meta as extractPdfPagesMeta } from './list/extract-pdf-pages/meta';
 import { meta as pdfFormsMeta } from './list/pdf-forms/meta';
 import { meta as redactPdfMeta } from './list/redact-pdf/meta';
 import { meta as comparePdfMeta } from './list/compare-pdf/meta';
-import { meta as aiPdfSummarizerMeta } from './list/ai-pdf-summarizer/meta';
 
 
 // Central Registry of all tools
@@ -237,8 +236,7 @@ export const registry: ToolMeta[] = [
   extractPdfPagesMeta,
   pdfFormsMeta,
   redactPdfMeta,
-  comparePdfMeta,
-  aiPdfSummarizerMeta
+  comparePdfMeta
 ];
 
 // Helper to find a tool by its slug

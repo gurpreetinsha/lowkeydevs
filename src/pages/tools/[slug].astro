@@ -120,7 +120,6 @@ import ExtractPdfPagesUI from '../../tools/list/extract-pdf-pages/ui.astro';
 import PdfFormsUI from '../../tools/list/pdf-forms/ui.astro';
 import RedactPdfUI from '../../tools/list/redact-pdf/ui.astro';
 import ComparePdfUI from '../../tools/list/compare-pdf/ui.astro';
-import AiPdfSummarizerUI from '../../tools/list/ai-pdf-summarizer/ui.astro';
 
 
 // Map slugs to UI components
@@ -235,8 +234,7 @@ const uiComponents: Record<string, any> = {
   'extract-pdf-pages': ExtractPdfPagesUI,
   'pdf-forms': PdfFormsUI,
   'redact-pdf': RedactPdfUI,
-  'compare-pdf': ComparePdfUI,
-  'ai-pdf-summarizer': AiPdfSummarizerUI
+  'compare-pdf': ComparePdfUI
 };
 
 export async function getStaticPaths() {
