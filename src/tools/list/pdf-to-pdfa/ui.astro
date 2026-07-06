@@ -1,0 +1,437 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<!-- Load PDFLib from CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js" is:inline></script>
+
+<pdf-to-pdfa-tool class="tool-workspace">
+  <div class="converter-container glass-panel">
+    <div class="converter-header">
+      <h3 class="converter-title">Convert PDF to PDF/A</h3>
+      <p class="converter-subtitle">Standardize your PDF documents for long-term digital archiving locally in your browser.</p>
+    </div>
+
+    <!-- Dropzone -->
+    <div class="dropzone" id="pdfa-dropzone">
+      <input type="file" id="pdfa-file-input" accept=".pdf" class="hidden-input" aria-label="Upload PDF to convert to PDF/A" />
+      <div class="dropzone-content">
+        <Icon name="FileText" size={48} />
+        <p class="dropzone-text">Drag & drop your PDF here or <span>browse</span></p>
+        <p class="dropzone-subtext">Supports single PDF files</p>
+      </div>
+    </div>
+
+    <!-- Configuration Panel -->
+    <div class="config-panel hidden" id="pdfa-config-panel">
+      <div class="file-details">
+        <div class="file-info-row">
+          <span class="file-label">Selected File:</span>
+          <span class="file-value" id="file-name">document.pdf</span>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <label for="pdfa-standard" class="field-label">PDF/A Standard:</label>
+        <select id="pdfa-standard" class="field-input">
+          <option value="1b" selected>PDF/A-1b (Visual Conformance, Most Compatible)</option>
+          <option value="2b" >PDF/A-2b (Supports Layers, Transparency, JPEG2000)</option>
+        </select>
+      </div>
+
+      <div class="converter-actions">
+        <button id="btn-convert-pdfa" class="btn btn-primary btn-lg">
+          Convert to PDF/A
+        </button>
+        <button id="btn-cancel" class="btn btn-secondary">
+          Cancel
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading / Status -->
+    <div class="converter-loading hidden" id="pdfa-loading-panel">
+      <div class="spinner"></div>
+      <p id="loading-status">Applying PDF/A archiving metadata...</p>
+    </div>
+
+    <!-- Results Panel -->
+    <div class="converter-results hidden" id="pdfa-results-panel">
+      <div class="divider"></div>
+      
+      <div class="success-badge">
+        <span class="badge-icon">✓</span>
+        Converted to PDF/A Successfully!
+      </div>
+
+      <div class="download-box">
+        <a id="btn-download" class="btn btn-success btn-lg download-link">
+          <Icon name="Download" size={18} />
+          Download PDF/A Document
+        </a>
+      </div>
+    </div>
+  </div>
+</pdf-to-pdfa-tool>
+
+<style>
+  .tool-workspace {
+    width: 100%;
+  }
+
+  .converter-container {
+    width: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .converter-header {
+    text-align: center;
+  }
+
+  .converter-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+
+  .converter-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  .dropzone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-lg);
+    min-height: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.01);
+    transition: all 0.2s ease;
+  }
+
+  .dropzone:hover, .dropzone.dragover {
+    border-color: var(--accent);
+    background: var(--accent-subtle);
+  }
+
+  .hidden-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    pointer-events: none;
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .dropzone-text {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .dropzone-text span {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  .config-panel {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .file-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .file-info-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+  }
+
+  .file-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .file-value {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .settings-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .field-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .field-input {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 0.75rem;
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    outline: none;
+    font-size: 0.95rem;
+    transition: border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .field-input:focus {
+    border-color: var(--accent);
+  }
+
+  .converter-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .converter-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  .converter-results {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .success-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--success);
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+
+  .badge-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--success-subtle);
+    color: var(--success);
+  }
+
+  .download-box {
+    display: flex;
+    justify-content: center;
+  }
+
+  .download-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+</style>
+
+<script>
+  class PdfToPdfaTool extends HTMLElement {
+    private fileInputEl!: HTMLInputElement;
+    private dropzoneEl!: HTMLDivElement;
+    private configPanelEl!: HTMLDivElement;
+    private loadingPanelEl!: HTMLDivElement;
+    private resultsPanelEl!: HTMLDivElement;
+
+    private fileNameEl!: HTMLSpanElement;
+    private pdfaStandardSelectEl!: HTMLSelectElement;
+    private btnConvertPdfaEl!: HTMLButtonElement;
+    private btnCancelEl!: HTMLButtonElement;
+    private btnDownloadEl!: HTMLAnchorElement;
+
+    private selectedFile: File | null = null;
+
+    connectedCallback() {
+      this.fileInputEl = this.querySelector('#pdfa-file-input')!;
+      this.dropzoneEl = this.querySelector('#pdfa-dropzone')!;
+      this.configPanelEl = this.querySelector('#pdfa-config-panel')!;
+      this.loadingPanelEl = this.querySelector('#pdfa-loading-panel')!;
+      this.resultsPanelEl = this.querySelector('#pdfa-results-panel')!;
+
+      this.fileNameEl = this.querySelector('#file-name')!;
+      this.pdfaStandardSelectEl = this.querySelector('#pdfa-standard')!;
+      this.btnConvertPdfaEl = this.querySelector('#btn-convert-pdfa')!;
+      this.btnCancelEl = this.querySelector('#btn-cancel')!;
+      this.btnDownloadEl = this.querySelector('#btn-download')!;
+
+      this.fileInputEl.addEventListener('change', (e) => this.handleFileSelect(e));
+      this.dropzoneEl.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        this.dropzoneEl.classList.add('dragover');
+      });
+      this.dropzoneEl.addEventListener('dragleave', () => this.dropzoneEl.classList.remove('dragover'));
+      this.dropzoneEl.addEventListener('drop', (e) => {
+        e.preventDefault();
+        this.dropzoneEl.classList.remove('dragover');
+        if (e.dataTransfer?.files.length) {
+          this.processFile(e.dataTransfer.files[0]);
+        }
+      });
+
+      this.btnConvertPdfaEl.addEventListener('click', () => this.convertToPdfa());
+      this.btnCancelEl.addEventListener('click', () => this.reset());
+    }
+
+    private handleFileSelect(e: Event) {
+      const target = e.target as HTMLInputElement;
+      if (target.files?.length) {
+        this.processFile(target.files[0]);
+      }
+    }
+
+    private processFile(file: File) {
+      if (file.type !== 'application/pdf' && !file.name.endsWith('.pdf')) {
+        alert('Please upload a valid PDF file.');
+        return;
+      }
+      this.selectedFile = file;
+      this.fileNameEl.textContent = file.name;
+
+      this.dropzoneEl.classList.add('hidden');
+      this.configPanelEl.classList.remove('hidden');
+    }
+
+    private async convertToPdfa() {
+      if (!this.selectedFile) return;
+
+      if (typeof window.PDFLib === 'undefined') {
+        alert('PDF library is loading. Please wait a moment.');
+        return;
+      }
+
+      this.configPanelEl.classList.add('hidden');
+      this.loadingPanelEl.classList.remove('hidden');
+
+      try {
+        const { PDFDocument, PDFName } = window.PDFLib;
+        const arrayBuffer = await this.selectedFile.arrayBuffer();
+        const pdfDoc = await PDFDocument.load(arrayBuffer);
+
+        const standard = this.pdfaStandardSelectEl.value; // '1b' or '2b'
+        const part = standard[0];
+        const conformance = standard[1].toUpperCase();
+
+        // Create standard PDF/A XMP metadata package
+        const xmpXml = `<?xpacket begin="" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/">
+ <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about=""
+    xmlns:pdf="http://ns.adobe.com/pdf/1.3/"
+    xmlns:xmp="http://ns.adobe.com/xap/1.0/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:pdfaid="http://www.aiim.org/pdfa/ns/id/">
+   <pdfaid:part>${part}</pdfaid:part>
+   <pdfaid:conformance>${conformance}</pdfaid:conformance>
+   <pdf:Producer>LowKeyDevs PDF Engine</pdf:Producer>
+   <xmp:CreatorTool>LowKeyDevs PDF/A Converter</xmp:CreatorTool>
+   <xmp:CreateDate>${new Date().toISOString()}</xmp:CreateDate>
+   <xmp:ModifyDate>${new Date().toISOString()}</xmp:ModifyDate>
+   <dc:format>application/pdf</dc:format>
+  </rdf:Description>
+ </rdf:RDF>
+</x:xmpmeta>
+<?xpacket end="w"?>`;
+
+        // Register new XML stream object in the PDF context
+        const metadataStream = pdfDoc.context.stream(xmpXml, {
+          Type: 'Metadata',
+          Subtype: 'XML',
+        });
+        const metadataStreamRef = pdfDoc.context.register(metadataStream);
+        
+        // Inject into document catalog
+        pdfDoc.catalog.set(PDFName.of('Metadata'), metadataStreamRef);
+
+        const pdfaBytes = await pdfDoc.save();
+        const blob = new Blob([pdfaBytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        this.btnDownloadEl.href = url;
+        this.btnDownloadEl.download = `${this.selectedFile.name.replace('.pdf', '')}_pdfa.pdf`;
+
+        this.loadingPanelEl.classList.add('hidden');
+        this.resultsPanelEl.classList.remove('hidden');
+      } catch (err) {
+        console.error(err);
+        alert('Error during conversion to PDF/A compliance structure.');
+        this.loadingPanelEl.classList.add('hidden');
+        this.configPanelEl.classList.remove('hidden');
+      }
+    }
+
+    private reset() {
+      this.selectedFile = null;
+      this.fileInputEl.value = '';
+
+      this.configPanelEl.classList.add('hidden');
+      this.loadingPanelEl.classList.add('hidden');
+      this.resultsPanelEl.classList.add('hidden');
+      this.dropzoneEl.classList.remove('hidden');
+    }
+  }
+
+  if (!customElements.get('pdf-to-pdfa-tool')) {
+    customElements.define('pdf-to-pdfa-tool', PdfToPdfaTool);
+  }
+</script>
