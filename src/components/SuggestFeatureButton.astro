@@ -6,45 +6,59 @@
 <button id="suggest-feature-btn" class="suggest-feature-btn" aria-label="Suggest a Feature" title="Suggest a Feature" style="display: none;">
   <span class="btn-icon" aria-hidden="true">💡</span>
   <span class="btn-text">Suggest a Feature</span>
+  <span class="btn-loader" aria-hidden="true"></span>
 </button>
 
 <style>
   .suggest-feature-btn {
     position: fixed;
-    bottom: var(--space-4);
-    right: var(--space-4);
+    bottom: var(--space-6);
+    right: var(--space-6);
     z-index: 150;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: var(--space-2);
-    background-color: var(--accent);
-    color: var(--accent-on);
-    border: 1px solid var(--accent);
-    border-radius: var(--radius-pill);
-    padding: 10px 16px;
+    background: linear-gradient(135deg, rgba(140, 82, 255, 0.85), rgba(122, 60, 255, 0.8));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-full);
+    padding: 12px 20px;
     font-family: var(--font-sans);
-    font-weight: 500;
+    font-weight: 600;
     font-size: 14px;
+    letter-spacing: -0.01em;
     line-height: 1.2;
-    box-shadow: var(--shadow-lg);
+    box-shadow: 
+      0 8px 32px 0 rgba(140, 82, 255, 0.25),
+      inset 0 1px 1px rgba(255, 255, 255, 0.2);
     cursor: pointer;
-    transition: transform var(--duration-fast) var(--ease-out),
-                background-color var(--duration-fast) var(--ease-out),
-                box-shadow var(--duration-fast) var(--ease-out);
+    transition: 
+      transform var(--duration-normal) var(--ease-out),
+      background var(--duration-normal) var(--ease-out),
+      border-color var(--duration-normal) var(--ease-out),
+      box-shadow var(--duration-normal) var(--ease-out);
     user-select: none;
     -webkit-tap-highlight-color: transparent;
   }
 
   .suggest-feature-btn:hover {
-    background-color: var(--accent-hover);
-    border-color: var(--accent-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(140, 82, 255, 0.3);
+    background: linear-gradient(135deg, rgba(150, 95, 255, 0.9), rgba(135, 75, 255, 0.85));
+    border-color: rgba(255, 255, 255, 0.35);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 
+      0 12px 40px 0 rgba(140, 82, 255, 0.4),
+      inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  }
+
+  .suggest-feature-btn:hover .btn-icon {
+    transform: rotate(15deg) scale(1.15);
   }
 
   .suggest-feature-btn:active {
-    transform: translateY(0);
+    transform: translateY(-1px) scale(0.98);
   }
 
   .suggest-feature-btn:focus-visible {
@@ -52,12 +66,41 @@
     outline-offset: 3px;
   }
 
+  .btn-icon {
+    font-size: 16px;
+    transition: transform var(--duration-normal) var(--ease-out);
+    display: inline-block;
+  }
+
+  /* Loader styling when loading the modal */
+  .btn-loader {
+    display: none;
+    width: 14px;
+    height: 14px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: btn-spin 0.75s linear infinite;
+  }
+
+  .suggest-feature-btn.loading .btn-icon {
+    display: none;
+  }
+
+  .suggest-feature-btn.loading .btn-loader {
+    display: inline-block;
+  }
+
+  @keyframes btn-spin {
+    to { transform: rotate(360deg); }
+  }
+
   @media (max-width: 640px) {
     .suggest-feature-btn {
       bottom: var(--space-4);
       right: var(--space-4);
-      width: 46px;
-      height: 46px;
+      width: 48px;
+      height: 48px;
       padding: 0;
       border-radius: 50%;
     }
@@ -65,7 +108,7 @@
       display: none;
     }
     .suggest-feature-btn .btn-icon {
-      font-size: 18px;
+      font-size: 20px;
     }
   }
 </style>
@@ -84,15 +127,23 @@
       if (btn) {
         btn.style.display = 'flex';
         
+        let isLoadingModal = false;
         btn.addEventListener('click', async () => {
+          if (isLoadingModal) return;
+          isLoadingModal = true;
+          btn.classList.add('loading');
+          
           try {
             // Lazy load the modal generator script
             const { initSuggestFeatureModal } = await import('./SuggestFeatureModal');
             initSuggestFeatureModal(tracker);
           } catch (err) {
             console.error('Failed to load Suggestion Modal:', err);
+          } finally {
+            isLoadingModal = false;
+            btn.classList.remove('loading');
           }
-        }, { once: true }); // We only need to load the modal scripts once
+        });
       }
 
       // Cleanup tracker on page unload

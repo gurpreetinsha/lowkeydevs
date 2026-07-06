@@ -240,15 +240,6 @@ function openModal() {
   if (!modalInstance) return;
   lastActiveElement = document.activeElement as HTMLElement;
 
-  // Add click listener back to button so subsequent clicks work (once is true on original)
-  const originalBtn = document.getElementById('suggest-feature-btn');
-  if (originalBtn) {
-    // Re-attach click listener just in case
-    originalBtn.onclick = () => {
-      if (activeTracker) initSuggestFeatureModal(activeTracker);
-    };
-  }
-
   modalInstance.style.display = 'flex';
   // Trigger transition reflow
   modalInstance.offsetHeight; 
