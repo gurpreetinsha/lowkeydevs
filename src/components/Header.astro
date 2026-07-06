@@ -1,6 +1,6 @@
 ---
 import Icon from './base/Icon.astro';
-import { registry } from '../tools/registry';
+import { registry, categories } from '../tools/registry';
 
 // Serialize tools metadata for client-side instant search
 const searchIndex = registry.map(tool => ({
@@ -65,10 +65,54 @@ const searchIndex = registry.map(tool => ({
         </svg>
       </button>
     </div>
-    <div class="mobile-nav-links">
-      <a href="/" class="mobile-nav-link">Home</a>
-      <a href="/about" class="mobile-nav-link">About</a>
-      <a href="/privacy" class="mobile-nav-link">Privacy</a>
+    
+    <div class="mobile-drawer-body">
+      <div class="mobile-nav-links">
+        <a href="/" class="mobile-nav-link">Home</a>
+        <a href="/about" class="mobile-nav-link">About</a>
+        <a href="/privacy" class="mobile-nav-link">Privacy</a>
+      </div>
+
+      <div class="drawer-divider"></div>
+
+      <div class="drawer-categories-section">
+        <div class="drawer-section-header">
+          <h3 class="drawer-section-title">Categories</h3>
+        </div>
+
+        <div class="drawer-search-wrapper">
+          <Icon name="Search" class="drawer-search-icon" size={14} />
+          <input
+            type="text"
+            id="drawer-search"
+            placeholder="Search categories..."
+            autocomplete="off"
+            aria-label="Search categories"
+          />
+        </div>
+
+        <div class="drawer-categories-list" id="drawer-categories-list">
+          {categories.map(cat => (
+            <a 
+              href={`/tools/category/${cat.slug}`} 
+              class="drawer-category-item" 
+              data-category-title={cat.title.toLowerCase()} 
+              data-category-desc={cat.description.toLowerCase()}
+            >
+              <span class="drawer-category-icon">
+                <Icon name={cat.icon} size={16} />
+              </span>
+              <span class="drawer-category-title">{cat.title}</span>
+              <span class="drawer-category-chevron">
+                <Icon name="ChevronRight" size={14} />
+              </span>
+            </a>
+          ))}
+        </div>
+        <div class="drawer-categories-empty" id="drawer-categories-empty" style="display: none;">
+          No categories found.
+        </div>
+      </div>
     </div>
   </nav>
 </div>
@@ -132,6 +176,10 @@ const searchIndex = registry.map(tool => ({
   const mobileMenuBtn = document.getElementById('mobile-menu-btn');
   const mobileDrawerOverlay = document.getElementById('mobile-drawer-overlay');
   const mobileDrawerClose = document.getElementById('mobile-drawer-close');
+  const drawerSearchInput = document.getElementById('drawer-search');
+  const drawerCategoriesList = document.getElementById('drawer-categories-list');
+  const drawerCategoriesEmpty = document.getElementById('drawer-categories-empty');
+  const drawerCategoryItems = drawerCategoriesList ? drawerCategoriesList.getElementsByClassName('drawer-category-item') : [];
 
   function openDrawer() {
     mobileDrawerOverlay?.classList.add('active');
@@ -143,6 +191,17 @@ const searchIndex = registry.map(tool => ({
     mobileDrawerOverlay?.classList.remove('active');
     mobileMenuBtn?.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
+    
+    // Reset search input and category visibility on close
+    if (drawerSearchInput) {
+      drawerSearchInput.value = '';
+    }
+    for (let i = 0; i < drawerCategoryItems.length; i++) {
+      drawerCategoryItems[i].style.display = '';
+    }
+    if (drawerCategoriesEmpty) {
+      drawerCategoriesEmpty.style.display = 'none';
+    }
   }
 
   mobileMenuBtn?.addEventListener('click', openDrawer);
@@ -150,6 +209,29 @@ const searchIndex = registry.map(tool => ({
 
   mobileDrawerOverlay?.addEventListener('click', (e) => {
     if (e.target === mobileDrawerOverlay) closeDrawer();
+  });
+
+  // Category filtering inside mobile drawer
+  drawerSearchInput?.addEventListener('input', (e) => {
+    const term = e.target.value.trim().toLowerCase();
+    let hasVisible = false;
+
+    for (let i = 0; i < drawerCategoryItems.length; i++) {
+      const item = drawerCategoryItems[i];
+      const title = item.getAttribute('data-category-title') || '';
+      const desc = item.getAttribute('data-category-desc') || '';
+      
+      if (title.includes(term) || desc.includes(term)) {
+        item.style.display = '';
+        hasVisible = true;
+      } else {
+        item.style.display = 'none';
+      }
+    }
+
+    if (drawerCategoriesEmpty) {
+      drawerCategoriesEmpty.style.display = hasVisible ? 'none' : 'block';
+    }
   });
 
   // --- Search Overlay ---
