@@ -1,4 +1,6 @@
 ---
+import Icon from './base/Icon.astro';
+
 interface Props {
   format?: 'horizontal' | 'sidebar' | 'in-feed';
   adSlot?: string;
@@ -18,14 +20,61 @@ const isDev = import.meta.env.DEV;
 
 <div class={`ad-container format-${format} ${className}`} data-ad-slot={adSlot}>
   {isDev ? (
-    <div class="ad-placeholder-dev">
-      <div class="ad-label">Advertisement</div>
-      <div class="ad-info">
-        <span class="ad-format-tag">{format}</span>
-        <span class="ad-spec-tag">AdSense Slot: {adSlot}</span>
+    /* Interactive high-fidelity mockup that matches the UI perfectly */
+    format === 'horizontal' ? (
+      <div class="ad-mockup ad-horizontal-mockup">
+        <div class="mockup-badge">Sponsored</div>
+        <div class="mockup-content">
+          <div class="mockup-icon-title">
+            <div class="mockup-icon">
+              <Icon name="Sparkles" size={16} />
+            </div>
+            <div class="mockup-text-group">
+              <h4 class="mockup-title">LowKeyDevs Cloud Engine</h4>
+              <p class="mockup-desc">Deploy static sites and client-side web tools in milliseconds. Zero server config.</p>
+            </div>
+          </div>
+          <a href="#" class="mockup-cta-btn" onclick="event.preventDefault()">
+            <span>Deploy free</span>
+            <Icon name="ArrowRight" size={12} />
+          </a>
+        </div>
       </div>
-    </div>
+    ) : format === 'sidebar' ? (
+      <div class="ad-mockup ad-sidebar-mockup">
+        <div class="mockup-badge">Sponsored</div>
+        <div class="mockup-image-slot">
+          <Icon name="Sparkles" size={32} class="mockup-image-icon" />
+        </div>
+        <div class="mockup-body">
+          <h3 class="mockup-title">Ultra-Secure Password Vault</h3>
+          <p class="mockup-desc">Generate, analyze, and secure your credentials offline. 100% private. Run locally on any device.</p>
+        </div>
+        <a href="#" class="mockup-cta-link" onclick="event.preventDefault()">
+          <span>Protect your keys</span>
+          <Icon name="ArrowRight" size={12} />
+        </a>
+      </div>
+    ) : (
+      <div class="ad-mockup ad-infeed-mockup">
+        <div class="mockup-top-row">
+          <div class="mockup-icon-wrapper">
+            <Icon name="Sparkles" size={20} class="mockup-card-icon" />
+          </div>
+          <span class="mockup-badge">Sponsored</span>
+        </div>
+        <div class="mockup-body">
+          <h3 class="mockup-title">High-Performance API Node</h3>
+          <p class="mockup-desc">Run backend cron jobs and request caching servers with 100% uptime. Zero maintenance.</p>
+        </div>
+        <div class="mockup-footer">
+          <span class="mockup-action-text">Try API free</span>
+          <Icon name="ArrowRight" size={14} class="mockup-arrow" />
+        </div>
+      </div>
+    )
   ) : (
+    /* Production Mode (Google AdSense fallback) */
     <ins class="adsbygoogle"
          style="display:block"
          data-ad-client={adClient}
@@ -39,100 +88,291 @@ const isDev = import.meta.env.DEV;
 </div>
 
 <style>
-  /* Base ad container with reserved height to prevent CLS */
+  /* Base ad container with reserved space to prevent layout shifts */
   .ad-container {
     display: block;
     width: 100%;
     margin: var(--space-6) auto;
     overflow: hidden;
+    position: relative;
+    border-radius: var(--radius-lg);
     background-color: var(--surface);
     border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    transition: background-color var(--duration-normal) var(--ease-out),
-                border-color var(--duration-normal) var(--ease-out);
+    transition: border-color var(--duration-normal) var(--ease-out),
+                box-shadow var(--duration-normal) var(--ease-out);
   }
 
-  /* Reserved spacing per format to prevent Cumulative Layout Shift */
+  .ad-container:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Specific sizing formats to prevent CLS */
   .ad-container.format-horizontal {
-    min-height: 100px;
-    max-height: 280px;
+    min-height: 90px;
   }
 
-  @media (min-width: 768px) {
+  @media (max-width: 768px) {
     .ad-container.format-horizontal {
-      min-height: 90px;
-      margin: var(--space-8) auto;
+      min-height: 120px;
     }
   }
 
   .ad-container.format-sidebar {
-    min-height: 250px;
-    max-height: 600px;
+    min-height: 320px;
     margin: 0;
   }
 
   .ad-container.format-in-feed {
-    min-height: 250px;
-    margin: var(--space-8) auto;
+    min-height: 200px;
   }
 
-  /* Development Mode Styling */
-  .ad-placeholder-dev {
+  /* Support for Grid containers (Homepage) */
+  .ad-container.grid-ad {
+    margin: 0;
+    height: 100%;
+  }
+
+  /* Mockup Visual styling */
+  .ad-mockup {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     width: 100%;
     height: 100%;
-    padding: var(--space-4);
     min-height: inherit;
-    border: 2px dashed var(--border-hover);
-    border-radius: calc(var(--radius-lg) - 1px);
-    background: repeating-linear-gradient(
-      45deg,
-      var(--bg),
-      var(--bg) 10px,
-      var(--surface-hover) 10px,
-      var(--surface-hover) 20px
-    );
-    color: var(--text-secondary);
-    text-align: center;
-    gap: var(--space-2);
+    padding: var(--space-5);
+    flex-direction: column;
+    box-sizing: border-box;
+    justify-content: space-between;
+    gap: var(--space-4);
   }
 
-  .ad-label {
-    font-family: var(--font-heading);
-    font-size: 12px;
+  .mockup-badge {
+    align-self: flex-start;
+    font-size: 10px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--text-tertiary);
-  }
-
-  .ad-info {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-size: 11px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .ad-format-tag, .ad-spec-tag {
-    padding: var(--space-0-5) var(--space-2);
     background-color: var(--accent-subtle);
     color: var(--accent);
+    padding: var(--space-0-5) var(--space-2);
     border-radius: var(--radius-full);
     border: 1px solid var(--border);
+  }
+
+  .mockup-title {
+    font-family: var(--font-heading);
+    font-size: var(--fs-sm);
     font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.3;
   }
 
-  .ad-spec-tag {
-    background-color: var(--surface-elevated);
+  .mockup-desc {
+    font-family: var(--font-sans);
+    font-size: 13px;
     color: var(--text-secondary);
+    line-height: 1.5;
   }
 
-  /* Production Mode styling (Google AdSense fallback) */
+  /* Horizontal layout customization */
+  .ad-horizontal-mockup {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    padding: var(--space-4) var(--space-6);
+  }
+
+  .ad-horizontal-mockup .mockup-content {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .mockup-icon-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    min-width: 250px;
+    flex: 1;
+  }
+
+  .mockup-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background-color: var(--accent-subtle);
+    color: var(--accent);
+    border-radius: var(--radius-md);
+    flex-shrink: 0;
+  }
+
+  .mockup-text-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .mockup-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1-5);
+    background-color: var(--accent);
+    color: var(--accent-on);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 600;
+    transition: background-color var(--duration-fast) var(--ease-out);
+    text-decoration: none;
+    white-space: nowrap;
+    min-height: 38px;
+  }
+
+  .mockup-cta-btn:hover {
+    background-color: var(--accent-hover);
+    color: var(--accent-on);
+    text-decoration: none;
+  }
+
+  /* Sidebar layout customization */
+  .ad-sidebar-mockup {
+    padding: var(--space-6);
+    justify-content: flex-start;
+    gap: var(--space-4);
+  }
+
+  .mockup-image-slot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(135deg, var(--accent-subtle) 0%, rgba(140, 82, 255, 0.05) 100%);
+    border-radius: var(--radius-md);
+    border: 1px dashed var(--border);
+    color: var(--accent);
+  }
+
+  .mockup-sidebar-mockup .mockup-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .ad-sidebar-mockup .mockup-title {
+    font-size: 16px;
+    margin-bottom: var(--space-1);
+  }
+
+  .mockup-cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    margin-top: auto;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .mockup-cta-link:hover {
+    color: var(--accent-hover);
+    text-decoration: none;
+  }
+
+  .mockup-cta-link :global(svg) {
+    transition: transform var(--duration-normal) var(--ease-out);
+  }
+
+  .mockup-cta-link:hover :global(svg) {
+    transform: translateX(4px);
+  }
+
+  /* In-feed card layout customization (Matches ToolCard) */
+  .ad-infeed-mockup {
+    padding: clamp(var(--space-4), 3.5vw, var(--space-6));
+    gap: clamp(var(--space-3), 2.5vw, var(--space-4));
+  }
+
+  .mockup-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+
+  .mockup-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: var(--accent-subtle);
+    color: var(--accent);
+    border-radius: var(--radius-md);
+    flex-shrink: 0;
+  }
+
+  .ad-infeed-mockup .mockup-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 1;
+  }
+
+  .ad-infeed-mockup .mockup-title {
+    font-size: clamp(16px, 4vw, 18px);
+    overflow-wrap: anywhere;
+  }
+
+  .ad-infeed-mockup .mockup-desc {
+    font-size: clamp(13px, 3.5vw, 14px);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+  }
+
+  .mockup-footer {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1-5);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-top: auto;
+    padding-top: clamp(var(--space-3), 2.5vw, var(--space-4));
+    border-top: 1px solid var(--border);
+    transition: color var(--duration-fast) var(--ease-out);
+    min-width: 0;
+    flex-wrap: wrap;
+  }
+
+  .mockup-arrow {
+    transition: transform var(--duration-normal) var(--ease-out);
+    flex-shrink: 0;
+    max-width: 100%;
+  }
+
+  .ad-container:hover .mockup-footer {
+    color: var(--accent-hover);
+  }
+
+  .ad-container:hover .mockup-arrow {
+    transform: translateX(4px);
+  }
+
+  /* AdSense container styling */
   .adsbygoogle {
     background: transparent;
   }

@@ -3,7 +3,6 @@ import Layout from './Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Icon from '../components/base/Icon.astro';
-import SponsorCard from '../components/SponsorCard.astro';
 import AdPlaceholder from '../components/AdPlaceholder.astro';
 import type { ToolMeta } from '../tools/definitions';
 import { registry, getCategoryDetail } from '../tools/registry';
@@ -127,7 +126,6 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
       <!-- Sidebar -->
       <aside class="tool-sidebar">
-        <SponsorCard />
         <AdPlaceholder format="sidebar" adSlot="tool-sidebar" />
 
         <div class="sidebar-widget">
