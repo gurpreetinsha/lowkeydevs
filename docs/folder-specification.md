@@ -1,13 +1,13 @@
-# Folder Layout Specification - LowKeyDevs
+# Folder Layout Specification - Lowkeydevs
 
-This document defines the folder structure and codebase organization for the **LowKeyDevs** project.
+This document defines the folder structure and codebase organization for the **Lowkeydevs** project.
 
 ---
 
 ## 1. Directory Structure Overview
 
 ```
-lowkeydevs/
+Lowkeydevs/
 ├── docs/                      # Architectural and design specification markdown files
 ├── public/                    # Raw static assets
 │   ├── favicon.svg            # Site favicon
@@ -63,3 +63,4 @@ Atomic components that provide visual and functional consistency. Every base com
 - Accessible (correct aria attributes, roles, and keyboard navigation support).
 - Theme-aware.
 - Flexible through props (e.g., passing class overrides, disabled states).
+

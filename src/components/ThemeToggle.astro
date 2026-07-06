@@ -65,14 +65,14 @@
   const btn = document.getElementById('theme-toggle');
 
   function getEffectiveTheme(): string {
-    const stored = localStorage.getItem('lowkeydevs-theme');
+    const stored = localStorage.getItem('Lowkeydevs-theme');
     if (stored === 'light' || stored === 'dark') return stored;
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }
 
   function setTheme(theme: string) {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('lowkeydevs-theme', theme);
+    localStorage.setItem('Lowkeydevs-theme', theme);
   }
 
   if (btn) {
@@ -84,9 +84,10 @@
 
   // Listen for system preference changes
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-    const stored = localStorage.getItem('lowkeydevs-theme');
+    const stored = localStorage.getItem('Lowkeydevs-theme');
     if (!stored) {
       document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
     }
   });
 </script>
+

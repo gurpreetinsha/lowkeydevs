@@ -1,6 +1,6 @@
-# Coding Standards & Guidelines - LowKeyDevs
+# Coding Standards & Guidelines - Lowkeydevs
 
-This document defines the coding standards, TypeScript conventions, accessibility rules, and testing requirements for the **LowKeyDevs** project.
+This document defines the coding standards, TypeScript conventions, accessibility rules, and testing requirements for the **Lowkeydevs** project.
 
 ---
 
@@ -78,3 +78,4 @@ All business logic inside `logic.ts` must be verified using unit tests.
     });
   });
   ```
+

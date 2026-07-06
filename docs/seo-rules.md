@@ -1,6 +1,6 @@
-# SEO Guidelines & Rules - LowKeyDevs
+# SEO Guidelines & Rules - Lowkeydevs
 
-This document defines the strict SEO rules and metadata standards required for every page on the **LowKeyDevs** platform to ensure top search engine rankings.
+This document defines the strict SEO rules and metadata standards required for every page on the **Lowkeydevs** platform to ensure top search engine rankings.
 
 ---
 
@@ -9,8 +9,8 @@ This document defines the strict SEO rules and metadata standards required for e
 Every page must contain unique, descriptive, and keyword-optimized `<title>` and `<meta name="description">` tags.
 
 ### Page Titles (`<title>`)
-- **Format for Tool Pages**: `{Tool Title} - LowKeyDevs` (e.g., *JSON Formatter & Validator - LowKeyDevs*).
-- **Format for Category Pages**: `Best {Category Name} Tools Online - LowKeyDevs`.
+- **Format for Tool Pages**: `{Tool Title} - Lowkeydevs` (e.g., *JSON Formatter & Validator - Lowkeydevs*).
+- **Format for Category Pages**: `Best {Category Name} Tools Online - Lowkeydevs`.
 - **Length**: Between 50 and 60 characters to prevent truncation in search result pages.
 - **Rule**: Capitalize appropriately. Title tags must match the primary `<h1>` text of the page.
 
@@ -74,7 +74,7 @@ If the tool defines FAQ questions, output the `FAQPage` schema:
 
 ## 4. Canonical URLs & Open Graph
 
-- **Canonical Tag**: Include a `<link rel="canonical" href="https://lowkeydevs.com/tools/slug" />` to resolve duplicate URL indexing issues (e.g., with search query parameters).
+- **Canonical Tag**: Include a `<link rel="canonical" href="https://Lowkeydevs.com/tools/slug" />` to resolve duplicate URL indexing issues (e.g., with search query parameters).
 - **Open Graph (OG) Tags**:
   - `og:title`: Match page title.
   - `og:description`: Match meta description.
@@ -91,3 +91,4 @@ If the tool defines FAQ questions, output the `FAQPage` schema:
 - **Categorical Breadcrumbs**: Always display navigation paths (`Home > JSON Tools > JSON Formatter`) to help search engines understand the site taxonomy.
 - **Related Tools Section**: Every tool page must display 3-4 links to related tools to optimize internal PageRank flow.
 - **Descriptive Anchors**: Avoid generic link text like "click here" or "learn more". Use descriptive text, e.g., "Use our [Base64 Decoder](/tools/base64-decoder) to inspect the data."
+

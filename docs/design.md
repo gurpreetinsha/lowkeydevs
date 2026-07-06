@@ -1,6 +1,6 @@
-# LowKeyDevs Design System & Specification
+# Lowkeydevs Design System & Specification
 
-This document defines the core visual design guidelines, design tokens, typography, and responsive layout specs for the LowKeyDevs online utility platform.
+This document defines the core visual design guidelines, design tokens, typography, and responsive layout specs for the Lowkeydevs online utility platform.
 
 ---
 
@@ -20,7 +20,7 @@ The platform utilizes three distinct Google Fonts loaded asynchronously to optim
 
 ## 2. Color System & Themes
 
-LowKeyDevs supports automatic system-preference theme detection and manual light/dark mode toggling, persisted in local storage.
+Lowkeydevs supports automatic system-preference theme detection and manual light/dark mode toggling, persisted in local storage.
 
 ### Light Theme
 *   **Background (`--bg`)**: `#FCFCFD` (Cool off-white page background)

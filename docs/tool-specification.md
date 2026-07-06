@@ -1,6 +1,6 @@
-# Tool Specification - LowKeyDevs
+# Tool Specification - Lowkeydevs
 
-This document defines the exact data structures, coding interfaces, and design patterns required for implementing a tool on the **LowKeyDevs** platform.
+This document defines the exact data structures, coding interfaces, and design patterns required for implementing a tool on the **Lowkeydevs** platform.
 
 ---
 
@@ -203,3 +203,4 @@ import { meta } from './meta';
     customElements.define('json-formatter-tool', JsonFormatterTool);
   }
 </script>
+

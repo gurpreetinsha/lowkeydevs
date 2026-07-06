@@ -336,7 +336,7 @@ import Icon from '../../../components/base/Icon.astro';
     }
 
     private handleLoadSample() {
-      this.inputEl.value = "Hey there! Welcome to the Sentence Counter. This is a very cool tool designed by LowKeyDevs. Feel free to replace this text with your own! " +
+      this.inputEl.value = "Hey there! Welcome to the Sentence Counter. This is a very cool tool designed by Lowkeydevs. Feel free to replace this text with your own! " +
         "How fast can you read this paragraph? An average reader takes about 5 seconds. Let us know if you find it helpful!\n\nHere is a second paragraph just to test the paragraph counter. It works perfectly.";
       this.updateStats();
     }
@@ -345,7 +345,7 @@ import Icon from '../../../components/base/Icon.astro';
       const text = this.inputEl.value;
       const stats = calculateTextStats(text);
       
-      const report = `LowKeyDevs Text Report:
+      const report = `Lowkeydevs Text Report:
 -------------------------
 Sentences: ${stats.sentences}
 Words: ${stats.words}
@@ -376,3 +376,4 @@ Estimated Reading Time: ${stats.readingTimeMin} minutes
     customElements.define('sentence-counter-tool', SentenceCounterTool);
   }
 </script>
+

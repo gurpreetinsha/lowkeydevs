@@ -1,4 +1,4 @@
-# Performance Budget & Speed Targets - LowKeyDevs
+# Performance Budget & Speed Targets - Lowkeydevs
 
 This document defines performance goals, page weight limits, and optimization rules to achieve sub-second load times and perfect Lighthouse scores.
 
@@ -53,3 +53,4 @@ To guarantee instant loads on mobile devices, we enforce strict resource limits:
 ### 3.3 Layout Shift Prevention (Zero CLS)
 - **Explicit Image Dimensions**: Every image (`<img>`) and SVG container must have explicit `width` and `height` attributes to preserve visual space before loading.
 - **Font Layout Shifts**: Match system fallback fonts as closely as possible to the custom display font (using adjusted ascent/descent overrides in `@font-face` if necessary) to avoid layout shifts when the font swaps in.
+

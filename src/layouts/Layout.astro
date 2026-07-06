@@ -9,7 +9,7 @@ interface Props {
 }
 
 const {
-  title = 'LowKeyDevs - Fast, Private Online Tools',
+  title = 'Lowkeydevs - Fast, Private Online Tools',
   description = 'The internet\'s default toolbox. Free, client-side, privacy-respecting online developer tools and utilities with zero registration required.',
   canonicalUrl = Astro.url.href,
   ogImage = '/og-default.png'
@@ -58,7 +58,7 @@ const {
     <!-- Theme detection (runs before paint to prevent flash) -->
     <script is:inline>
       (function() {
-        const stored = localStorage.getItem('lowkeydevs-theme');
+        const stored = localStorage.getItem('Lowkeydevs-theme');
         if (stored === 'light' || stored === 'dark') {
           document.documentElement.setAttribute('data-theme', stored);
         } else {
@@ -73,3 +73,4 @@ const {
     <slot />
   </body>
 </html>
+

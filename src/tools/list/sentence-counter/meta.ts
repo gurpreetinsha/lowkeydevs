@@ -14,7 +14,7 @@ export const meta: ToolMeta = {
     },
     {
       question: 'Is my text sent to any server for analysis?',
-      answer: 'No. Just like all tools on LowKeyDevs, the Sentence Counter processes your text entirely client-side. Your text never leaves your browser, ensuring complete privacy.'
+      answer: 'No. Just like all tools on Lowkeydevs, the Sentence Counter processes your text entirely client-side. Your text never leaves your browser, ensuring complete privacy.'
     },
     {
       question: 'How is the Reading Time calculated?',
@@ -30,3 +30,4 @@ export const meta: ToolMeta = {
     ]
   }
 };
+

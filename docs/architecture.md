@@ -1,6 +1,6 @@
-# Architecture Specification - LowKeyDevs
+# Architecture Specification - Lowkeydevs
 
-This document outlines the architectural patterns and design decisions for the **LowKeyDevs** platform. The architecture is optimized for speed, organic SEO, scale, and extremely low maintenance.
+This document outlines the architectural patterns and design decisions for the **Lowkeydevs** platform. The architecture is optimized for speed, organic SEO, scale, and extremely low maintenance.
 
 ---
 
@@ -69,3 +69,4 @@ Since all computations happen client-side:
 - **Zero Data Leakage**: User logs, raw JSON keys, API keys, passwords, and sensitive text never touch a server.
 - **Content Security Policy (CSP)**: Strict CSP settings disabling unsafe eval/inline scripts.
 - **No Third-Party Analytics Clutter**: Privacy-respecting, lightweight analytics (e.g., Plausible or Cloudflare Web Analytics) with zero tracking cookies.
+

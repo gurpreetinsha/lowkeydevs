@@ -1,4 +1,4 @@
-# LowKeyDevs
+# Lowkeydevs
 The internet's default toolbox. Free, client-side, privacy-respecting online developer tools and utilities with zero registration required.
 
 ## 🚀 Project Structure
@@ -29,3 +29,4 @@ All commands are run from the root of the project, from a terminal:
 | `npm run build` | Build the production site to `./dist/`            |
 | `npm run preview`| Preview your build locally, before deploying     |
 | `npm run test`  | Run test suite using Vitest                       |
+

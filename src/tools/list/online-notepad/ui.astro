@@ -470,7 +470,7 @@ import Icon from '../../../components/base/Icon.astro';
 
     private loadNotesFromStorage() {
       try {
-        const stored = localStorage.getItem('lowkeydevs_notepad_notes');
+        const stored = localStorage.getItem('Lowkeydevs_notepad_notes');
         if (stored) {
           this.notes = JSON.parse(stored);
         } else {
@@ -484,7 +484,7 @@ import Icon from '../../../components/base/Icon.astro';
 
     private saveNotesToStorage() {
       try {
-        localStorage.setItem('lowkeydevs_notepad_notes', JSON.stringify(this.notes));
+        localStorage.setItem('Lowkeydevs_notepad_notes', JSON.stringify(this.notes));
         this.autosaveEl.textContent = 'Auto-saved';
         this.autosaveEl.classList.remove('saving');
       } catch (err) {
@@ -653,7 +653,7 @@ import Icon from '../../../components/base/Icon.astro';
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `lowkeydevs-notepad-backup.json`;
+      link.download = `Lowkeydevs-notepad-backup.json`;
       link.click();
       URL.revokeObjectURL(url);
     }
@@ -711,3 +711,4 @@ import Icon from '../../../components/base/Icon.astro';
     customElements.define('online-notepad-tool', OnlineNotepadTool);
   }
 </script>
+

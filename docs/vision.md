@@ -1,10 +1,10 @@
-# LowKeyDevs.com
+# Lowkeydevs.com
 
 ## Vision & Product Documentation (Version 1.0)
 
 # Mission
 
-LowKeyDevs is building the fastest, cleanest, and most user-friendly collection of online tools on the internet.
+Lowkeydevs is building the fastest, cleanest, and most user-friendly collection of online tools on the internet.
 
 We are **not** trying to copy existing tools websites.
 
@@ -14,7 +14,7 @@ We want users to think:
 
 > "I need a tool."
 >
-> "Open LowKeyDevs."
+> "Open Lowkeydevs."
 
 ---
 
@@ -55,7 +55,7 @@ Instead of intrusive ads or paywalls, we may include a simple optional "Buy Me a
 
 # Product Vision
 
-LowKeyDevs is not just a tools website.
+Lowkeydevs is not just a tools website.
 
 It is a platform capable of hosting thousands of online utilities while maintaining a consistent experience.
 
@@ -108,7 +108,7 @@ When someone searches for:
 * Color picker
 * CSV tools
 
-LowKeyDevs should be among the top search results.
+Lowkeydevs should be among the top search results.
 
 ---
 
@@ -442,7 +442,7 @@ Not by:
 
 # Final Vision
 
-LowKeyDevs should become the internet's default toolbox.
+Lowkeydevs should become the internet's default toolbox.
 
 Fast enough that users never think about speed.
 
@@ -453,3 +453,4 @@ Powerful enough that professionals trust it.
 Every feature, every page, and every tool should exist for one reason:
 
 **Save the user's time while delivering the best possible experience.**
+
