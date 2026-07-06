@@ -110,37 +110,42 @@ import Icon from '../components/base/Icon.astro';
 
   .privacy-title {
     font-family: var(--font-heading);
-    font-size: clamp(28px, 4vw, 44px);
+    font-size: var(--fs-h1);
     font-weight: 500;
-    letter-spacing: -0.02em;
+    line-height: var(--lh-h1);
+    letter-spacing: var(--ls-h1);
     color: var(--text-primary);
   }
 
   .privacy-date {
     color: var(--text-tertiary);
-    font-size: 13px;
+    font-size: var(--fs-caption);
     font-weight: 500;
+    line-height: var(--lh-sm);
   }
 
   .privacy-body {
     display: flex;
     flex-direction: column;
     gap: clamp(16px, 3vw, 24px);
-    line-height: 1.7;
+    line-height: var(--lh-body);
   }
 
   .privacy-body h2 {
     font-family: var(--font-heading);
-    font-size: 20px;
+    font-size: var(--fs-h2);
     font-weight: 500;
+    line-height: var(--lh-h2);
+    letter-spacing: var(--ls-h2);
     color: var(--text-primary);
     margin-top: var(--space-2);
   }
 
   .privacy-body p {
     color: var(--text-secondary);
-    font-size: 15px;
-    line-height: 1.7;
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+    letter-spacing: var(--ls-body);
   }
 
   .privacy-body code {
@@ -159,8 +164,9 @@ import Icon from '../components/base/Icon.astro';
 
   .highlight-text p {
     color: var(--success);
-    font-size: 15px;
-    line-height: 1.7;
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+    letter-spacing: var(--ls-body);
   }
 
   .privacy-footer {

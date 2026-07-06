@@ -296,19 +296,20 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
   .tool-title {
     font-family: var(--font-heading);
-    font-size: clamp(30px, 4vw, 48px);
+    font-size: var(--fs-h1);
     font-weight: 500;
     color: var(--text-primary);
-    letter-spacing: -0.02em;
-    line-height: 1.1;
+    letter-spacing: var(--ls-h1);
+    line-height: var(--lh-h1);
   }
 
   .tool-description {
     color: var(--text-secondary);
-    font-size: clamp(16px, 1.5vw, 18px);
+    font-size: var(--fs-body-lg);
     font-weight: 400;
     max-width: 600px;
-    line-height: 1.7;
+    line-height: var(--lh-body);
+    letter-spacing: var(--ls-body);
   }
 
   /* Tool workspace */
@@ -329,10 +330,12 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
   .widget-title {
     font-family: var(--font-heading);
-    font-size: 16px;
+    font-size: var(--fs-h4);
     font-weight: 500;
     margin-bottom: var(--space-4);
     color: var(--text-primary);
+    line-height: var(--lh-h4);
+    letter-spacing: var(--ls-h4);
   }
 
   .related-list {
@@ -377,12 +380,12 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
   .related-title {
     font-weight: 500;
-    font-size: 14px;
+    font-size: var(--fs-sm);
     color: var(--text-primary);
   }
 
   .related-desc {
-    font-size: 13px;
+    font-size: var(--fs-caption);
     color: var(--text-secondary);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -406,13 +409,13 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
     margin-bottom: 0;
     color: var(--success);
     font-weight: 500;
-    font-size: 14px;
+    font-size: var(--fs-sm);
   }
 
   .privacy-text {
-    font-size: 14px;
+    font-size: var(--fs-sm);
     color: var(--text-secondary);
-    line-height: 1.7;
+    line-height: var(--lh-sm);
   }
 
   /* Educational content */
@@ -435,10 +438,12 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
   .edu-title {
     font-family: var(--font-heading);
-    font-size: 18px;
+    font-size: var(--fs-h2);
     font-weight: 500;
     margin-bottom: var(--space-3);
     color: var(--text-primary);
+    line-height: var(--lh-h2);
+    letter-spacing: var(--ls-h2);
   }
 
   .edu-title:not(:first-child) {
@@ -447,8 +452,9 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
   .edu-para {
     color: var(--text-secondary);
-    font-size: 15px;
-    line-height: 1.7;
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+    letter-spacing: var(--ls-body);
     margin-bottom: var(--space-2);
   }
 
@@ -459,9 +465,10 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   }
 
   .step-item {
-    font-size: 15px;
+    font-size: var(--fs-body);
     color: var(--text-secondary);
-    line-height: 1.7;
+    line-height: var(--lh-body);
+    letter-spacing: var(--ls-body);
   }
 
   .pro-tips-title {
@@ -479,11 +486,12 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   }
 
   .pro-tips-list li {
-    font-size: 15px;
+    font-size: var(--fs-body);
     color: var(--text-secondary);
     position: relative;
     padding-left: var(--space-5);
-    line-height: 1.7;
+    line-height: var(--lh-body);
+    letter-spacing: var(--ls-body);
   }
 
   .pro-tips-list li::before {
@@ -515,11 +523,12 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
     padding: var(--space-3) var(--space-4);
     cursor: pointer;
     font-weight: 500;
-    font-size: 14px;
+    font-size: var(--fs-sm);
     user-select: none;
     list-style: none;
     color: var(--text-primary);
     transition: background-color var(--duration-fast) var(--ease-out);
+    line-height: var(--lh-sm);
   }
 
   .faq-question:hover {
@@ -546,9 +555,10 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   }
 
   .faq-answer p {
-    font-size: 14px;
+    font-size: var(--fs-body);
     color: var(--text-secondary);
-    line-height: 1.7;
+    line-height: var(--lh-body);
+    letter-spacing: var(--ls-body);
     margin-top: var(--space-3);
   }
 </style>

@@ -195,10 +195,10 @@ const activeCategories = categories.filter(cat =>
 
   .hero-title {
     font-family: var(--font-heading);
-    font-size: clamp(28px, 6vw, 64px);
+    font-size: var(--fs-h1);
     font-weight: 500;
-    line-height: 1.08;
-    letter-spacing: -0.03em;
+    line-height: var(--lh-h1);
+    letter-spacing: var(--ls-h1);
     color: var(--text-primary);
   }
 
@@ -208,10 +208,11 @@ const activeCategories = categories.filter(cat =>
 
   .hero-subtitle {
     color: var(--text-secondary);
-    font-size: clamp(16px, 1.5vw, 18px);
+    font-size: var(--fs-body-lg);
     font-weight: 400;
     max-width: 560px;
-    line-height: 1.7;
+    line-height: var(--lh-body);
+    letter-spacing: var(--ls-body);
   }
 
   /* Search trigger */
@@ -275,8 +276,10 @@ const activeCategories = categories.filter(cat =>
 
   .section-title {
     font-family: var(--font-heading);
-    font-size: 20px;
+    font-size: var(--fs-h2);
     font-weight: 500;
+    line-height: var(--lh-h2);
+    letter-spacing: var(--ls-h2);
     color: var(--text-primary);
   }
 
@@ -367,8 +370,10 @@ const activeCategories = categories.filter(cat =>
 
   .features-heading {
     font-family: var(--font-heading);
-    font-size: clamp(24px, 3vw, 36px);
+    font-size: var(--fs-h2);
     font-weight: 500;
+    line-height: var(--lh-h2);
+    letter-spacing: var(--ls-h2);
     text-align: center;
     color: var(--text-primary);
     margin-bottom: var(--space-12);
@@ -415,15 +420,17 @@ const activeCategories = categories.filter(cat =>
 
   .feature-item h3 {
     font-family: var(--font-heading);
-    font-size: 18px;
+    font-size: var(--fs-h3);
     font-weight: 500;
+    line-height: var(--lh-h3);
+    letter-spacing: var(--ls-h3);
     color: var(--text-primary);
   }
 
   .feature-item p {
-    font-size: 14px;
+    font-size: var(--fs-sm);
     color: var(--text-secondary);
-    line-height: 1.7;
+    line-height: var(--lh-sm);
     max-width: 280px;
   }
 

@@ -76,9 +76,10 @@ import Footer from '../components/Footer.astro';
 
   .about-title {
     font-family: var(--font-heading);
-    font-size: clamp(28px, 5vw, 54px);
+    font-size: var(--fs-h1);
     font-weight: 500;
-    letter-spacing: -0.03em;
+    line-height: var(--lh-h1);
+    letter-spacing: var(--ls-h1);
     color: var(--text-primary);
   }
 
@@ -88,9 +89,10 @@ import Footer from '../components/Footer.astro';
 
   .about-subtitle {
     color: var(--text-secondary);
-    font-size: clamp(15px, 1.5vw, 18px);
+    font-size: var(--fs-body-lg);
     font-weight: 400;
-    line-height: 1.7;
+    line-height: var(--lh-body);
+    letter-spacing: var(--ls-body);
   }
 
   .about-content {
@@ -129,15 +131,18 @@ import Footer from '../components/Footer.astro';
 
   .about-card h2 {
     font-family: var(--font-heading);
-    font-size: 20px;
+    font-size: var(--fs-h2);
     font-weight: 500;
+    line-height: var(--lh-h2);
+    letter-spacing: var(--ls-h2);
     color: var(--text-primary);
   }
 
   .about-card p {
     color: var(--text-secondary);
-    font-size: 15px;
-    line-height: 1.7;
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+    letter-spacing: var(--ls-body);
   }
 
   .principles-list {
@@ -148,9 +153,10 @@ import Footer from '../components/Footer.astro';
   }
 
   .principles-list li {
-    font-size: 15px;
+    font-size: var(--fs-body);
     color: var(--text-secondary);
-    line-height: 1.7;
+    line-height: var(--lh-body);
+    letter-spacing: var(--ls-body);
     position: relative;
     padding-left: var(--space-6);
   }
@@ -178,16 +184,19 @@ import Footer from '../components/Footer.astro';
 
   .about-cta h2 {
     font-family: var(--font-heading);
-    font-size: 20px;
+    font-size: var(--fs-h2);
     font-weight: 500;
+    line-height: var(--lh-h2);
+    letter-spacing: var(--ls-h2);
     color: var(--text-primary);
   }
 
   .about-cta p {
     color: var(--text-secondary);
-    font-size: 15px;
+    font-size: var(--fs-body);
     max-width: 460px;
-    line-height: 1.7;
+    line-height: var(--lh-body);
+    letter-spacing: var(--ls-body);
   }
 
   @media (max-width: 480px) {
