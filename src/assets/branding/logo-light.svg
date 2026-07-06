@@ -1,6 +1,6 @@
-﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40" fill="none">
-  <g transform="translate(4, 4) scale(0.177)">
-    <path fill="#8C52FF" d="M25 20 L105 20 L135 95 L55 95 Z M135 95 L215 95 L245 170 L165 170 Z" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40" fill="none">
+  <g transform="translate(4, 4) scale(0.2133)">
+    <path fill="#8C52FF" d="M0 0 L80 0 L100 75 L20 75 Z M100 75 L180 75 L200 150 L120 150 Z" />
   </g>
   <text x="56" y="27" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="bold" fill="#111827">Lowkeydevs</text>
 </svg>
