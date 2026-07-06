@@ -10,6 +10,13 @@ function sanitizeHtml(str) {
 }
 var POST = async ({ request }) => {
 	try {
+		if (!supabase) return new Response(JSON.stringify({
+			success: false,
+			message: "Database client is not configured. Please ensure SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set in your environment variables."
+		}), {
+			status: 500,
+			headers: { "Content-Type": "application/json" }
+		});
 		const body = await request.json().catch(() => null);
 		if (!body) return new Response(JSON.stringify({
 			success: false,

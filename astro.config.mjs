@@ -6,3 +6,4 @@ import vercel from '@astrojs/vercel';
 export default defineConfig({
   adapter: vercel(),
 });
+

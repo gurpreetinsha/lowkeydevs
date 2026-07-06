@@ -4044,9 +4044,12 @@ var $$Suggestions = createComponent(async ($$result, $$props, $$slots) => {
 	let suggestions = [];
 	let fetchError = null;
 	try {
-		const { data, error } = await supabase.from("suggestions").select("*").order("created_at", { ascending: false });
-		if (error) fetchError = error.message;
-		else suggestions = data || [];
+		if (!supabase) fetchError = "Supabase environment variables (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY) are missing or not loaded. Please configure them in your .env file and restart your dev server.";
+		else {
+			const { data, error } = await supabase.from("suggestions").select("*").order("created_at", { ascending: false });
+			if (error) fetchError = error.message;
+			else suggestions = data || [];
+		}
 	} catch (err) {
 		fetchError = err.message || "Unknown error occurred.";
 	}
