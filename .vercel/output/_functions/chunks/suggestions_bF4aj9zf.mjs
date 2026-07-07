@@ -3408,6 +3408,12 @@ var categories = [
 		icon: "Image"
 	},
 	{
+		slug: "video",
+		title: "Video & Audio Tools",
+		description: "Convert video structures and extract audio tracks completely locally.",
+		icon: "Video"
+	},
+	{
 		slug: "dev-utils",
 		title: "Developer Utilities",
 		description: "Useful utilities like Epoch converters, crontab editors, and regex checkers.",
