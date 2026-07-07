@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { supabase } from '../../lib/supabase';
+import { getSupabaseClient } from '../../lib/supabase';
 
 export const prerender = false;
 
@@ -14,8 +14,9 @@ function sanitizeHtml(str: string): string {
     .replace(/\//g, '&#x2F;');
 }
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
+    const supabase = getSupabaseClient(locals);
     if (!supabase) {
       return new Response(
         JSON.stringify({ 

@@ -1,23 +1,42 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.SUPABASE_URL || process.env.SUPABASE_URL || '';
-const supabaseServiceRoleKey = import.meta.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+let cachedClient: SupabaseClient | null = null;
 
-if (!supabaseUrl || !supabaseServiceRoleKey) {
-  // We use warning instead of throwing an error immediately, allowing builds to pass in CI systems where env keys aren't set.
-  // API endpoints and admin queries will fail gracefully with informative logs.
-  console.warn(
-    'Supabase environment variables (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY) are missing.'
-  );
+export function getSupabaseClient(locals?: any): SupabaseClient | null {
+  if (cachedClient) {
+    return cachedClient;
+  }
+
+  const supabaseUrl =
+    locals?.runtime?.env?.SUPABASE_URL ||
+    import.meta.env.SUPABASE_URL ||
+    process.env.SUPABASE_URL ||
+    '';
+  const supabaseServiceRoleKey =
+    locals?.runtime?.env?.SUPABASE_SERVICE_ROLE_KEY ||
+    import.meta.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    '';
+
+  if (!supabaseUrl || !supabaseServiceRoleKey) {
+    console.warn(
+      'Supabase environment variables (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY) are missing.'
+    );
+    return null;
+  }
+
+  const client = createClient(supabaseUrl, supabaseServiceRoleKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
+    },
+  });
+
+  cachedClient = client;
+  return client;
 }
 
-export const supabase = supabaseUrl && supabaseServiceRoleKey
-  ? createClient(supabaseUrl, supabaseServiceRoleKey, {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false,
-        detectSessionInUrl: false,
-      },
-    })
-  : null;
+// Export for backward compatibility (e.g., in Node/tests where static env is available)
+export const supabase = getSupabaseClient();
 
