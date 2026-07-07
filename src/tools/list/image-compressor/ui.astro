@@ -1,0 +1,1087 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<image-compressor-tool class="tool-workspace">
+  <!-- Upload State -->
+  <div class="dropzone-container" id="dropzone-area">
+    <div class="dropzone" id="comp-dropzone">
+      <input type="file" id="comp-file-input" accept="image/png, image/jpeg, image/webp" class="hidden-input" aria-label="Upload image to compress" />
+      <div class="dropzone-content">
+        <Icon name="Image" size={48} />
+        <p class="dropzone-text">Drag & drop your image here or <span>browse</span></p>
+        <p class="dropzone-subtext">Supports PNG, JPEG, WebP (Max 50MB)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workspace State (Hidden initially) -->
+  <div class="workspace-grid hidden" id="workspace-area">
+    
+    <!-- Left Panel: Comparison Visualizer -->
+    <div class="visualizer-panel glass-panel">
+      <div class="panel-header">
+        <h4 class="panel-title">Visual Comparison</h4>
+        <span class="dimensions-indicator" id="stats-dimensions">1920 × 1080</span>
+      </div>
+
+      <div class="slider-wrapper" id="slider-wrapper">
+        <!-- Original Image -->
+        <div class="slide-pane original-pane">
+          <img id="comp-orig-img" class="slider-img" src="" alt="Original image preview" />
+          <span class="slide-badge left-badge">Original</span>
+        </div>
+        
+        <!-- Compressed Image -->
+        <div class="slide-pane compressed-pane" id="comp-pane">
+          <img id="comp-preview-img" class="slider-img" src="" alt="Compressed image preview" />
+          <span class="slide-badge right-badge">Compressed</span>
+        </div>
+        
+        <!-- Split line divider -->
+        <div class="slider-divider" id="slider-divider">
+          <div class="slider-handle">
+            <span class="handle-arrow">◀</span>
+            <span class="handle-line"></span>
+            <span class="handle-arrow">▶</span>
+          </div>
+        </div>
+        
+        <!-- Hidden overlay range input for perfect slide interactions -->
+        <input type="range" id="comparison-slider-input" min="0" max="100" value="50" class="comparison-slider-input" aria-label="Split slider" />
+      </div>
+
+      <!-- Stats Bar -->
+      <div class="stats-bar">
+        <div class="stat-item">
+          <span class="stat-label">Original Size</span>
+          <span class="stat-val" id="stats-orig-size">0 KB</span>
+        </div>
+        <div class="stat-separator">➔</div>
+        <div class="stat-item">
+          <span class="stat-label">Compressed Size</span>
+          <span class="stat-val" id="stats-comp-size">0 KB</span>
+        </div>
+        <div class="stat-badge-container">
+          <span class="stats-badge" id="stats-reduction">0% Saved</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Panel: Configurations & Settings -->
+    <div class="settings-panel glass-panel">
+      <div class="settings-header">
+        <h4 class="panel-title">Compression Settings</h4>
+        <button class="btn-clear" id="btn-reset" aria-label="Clear image">Clear</button>
+      </div>
+
+      <div class="settings-body">
+        <!-- Target Format Selector -->
+        <div class="setting-group">
+          <label for="comp-format" class="setting-label">Output Format</label>
+          <div class="select-wrapper">
+            <select id="comp-format" class="form-select">
+              <option value="original">Keep Original Format</option>
+              <option value="image/webp">WebP (Recommended)</option>
+              <option value="image/jpeg">JPEG</option>
+              <option value="image/png">PNG</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Quality Control Slider -->
+        <div class="setting-group" id="quality-group">
+          <div class="label-row">
+            <label for="comp-quality" class="setting-label">Quality</label>
+            <span class="value-display" id="quality-val">80%</span>
+          </div>
+          <input type="range" id="comp-quality" min="10" max="100" value="80" class="form-range" />
+          <p class="setting-help">Lower quality results in smaller files, but can cause artifacts.</p>
+        </div>
+
+        <!-- Divider line -->
+        <div class="setting-divider"></div>
+
+        <!-- Resize Options -->
+        <div class="setting-group">
+          <label class="setting-label">Resize Resolution</label>
+          
+          <div class="resize-tabs">
+            <button class="resize-tab active" id="tab-scale" data-mode="scale">Scale</button>
+            <button class="resize-tab" id="tab-dimensions" data-mode="custom">Custom Dimensions</button>
+          </div>
+
+          <!-- Scale Content -->
+          <div class="tab-content" id="content-scale">
+            <div class="label-row">
+              <label for="comp-scale" class="setting-label">Scale Factor</label>
+              <span class="value-display" id="scale-val">100%</span>
+            </div>
+            <input type="range" id="comp-scale" min="10" max="100" value="100" class="form-range" />
+          </div>
+
+          <!-- Custom dimensions Content -->
+          <div class="tab-content hidden" id="content-dimensions">
+            <div class="dimension-inputs">
+              <div class="dimension-field">
+                <label for="comp-width" class="field-label">Width (px)</label>
+                <input type="number" id="comp-width" class="form-input" placeholder="e.g. 1920" />
+              </div>
+              <div class="dimension-field">
+                <label for="comp-height" class="field-label">Height (px)</label>
+                <input type="number" id="comp-height" class="form-input" placeholder="e.g. 1080" />
+              </div>
+            </div>
+            <label class="checkbox-label">
+              <input type="checkbox" id="comp-maintain-ratio" checked />
+              <span>Maintain Aspect Ratio</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Download CTA -->
+        <div class="download-action">
+          <a id="btn-download-comp" class="btn btn-success btn-lg btn-block">
+            <Icon name="Download" size={18} />
+            Download Compressed Image
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</image-compressor-tool>
+
+<style>
+  .tool-workspace {
+    width: 100%;
+    display: block;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  /* Dropzone Styling */
+  .dropzone-container {
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+
+  .dropzone {
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-lg);
+    min-height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.01);
+    transition: all 0.2s ease;
+  }
+
+  .dropzone:hover, .dropzone.dragover {
+    border-color: var(--primary-accent);
+    background: rgba(var(--primary-accent-rgb), 0.02);
+  }
+
+  .hidden-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    pointer-events: none;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .dropzone-text {
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .dropzone-text span {
+    color: var(--primary-accent);
+    text-decoration: underline;
+  }
+
+  .dropzone-subtext {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+
+  /* Workspace Layout */
+  .workspace-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 1.5rem;
+    align-items: start;
+    width: 100%;
+  }
+
+  @media (max-width: 1024px) {
+    .workspace-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* glass panels */
+  .glass-panel {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+  }
+
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .panel-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .dimensions-indicator {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.2rem 0.6rem;
+    border-radius: 99px;
+    font-family: monospace;
+  }
+
+  /* Squoosh comparison visualizer */
+  .slider-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    max-height: 520px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    background-size: 16px 16px;
+    background-color: #0c0c0e;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    user-select: none;
+  }
+
+  .slide-pane {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .original-pane {
+    z-index: 1;
+  }
+
+  .compressed-pane {
+    z-index: 2;
+    width: 50%;
+    overflow: hidden;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .slider-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+  }
+
+  .compressed-pane .slider-img {
+    width: var(--wrapper-width, 100%);
+    max-width: none;
+  }
+
+  .slide-badge {
+    position: absolute;
+    bottom: 12px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    z-index: 4;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    pointer-events: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .left-badge {
+    left: 12px;
+  }
+
+  .right-badge {
+    right: 12px;
+  }
+
+  /* Visual splitter line & handle */
+  .slider-divider {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    background-color: var(--primary-accent);
+    z-index: 3;
+    pointer-events: none;
+    transform: translateX(-50%);
+  }
+
+  .slider-handle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 36px;
+    height: 36px;
+    background: var(--primary-accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+    border: 2px solid white;
+    font-size: 0.7rem;
+    gap: 2px;
+    pointer-events: none;
+  }
+
+  .handle-arrow {
+    font-size: 0.6rem;
+    font-weight: bold;
+  }
+
+  .handle-line {
+    width: 1px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  /* Range input overlaid over everything */
+  .comparison-slider-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: ew-resize;
+    z-index: 5;
+    margin: 0;
+  }
+
+  /* Stats footer in visualizer */
+  .stats-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .stat-val {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .stat-separator {
+    color: var(--text-secondary);
+    font-size: 1rem;
+  }
+
+  .stat-badge-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .stats-badge {
+    background: rgba(var(--primary-accent-rgb), 0.15);
+    color: var(--primary-accent);
+    padding: 0.35rem 0.75rem;
+    border-radius: 99px;
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+
+  .stats-badge.positive {
+    background: rgba(46, 204, 113, 0.15);
+    color: #2ecc71;
+  }
+
+  .stats-badge.negative {
+    background: rgba(231, 76, 60, 0.15);
+    color: #e74c3c;
+  }
+
+  /* Settings panel details */
+  .settings-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    background: var(--card-bg);
+  }
+
+  .settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+  }
+
+  .btn-clear {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .btn-clear:hover {
+    color: var(--primary-accent);
+  }
+
+  .settings-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .setting-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .setting-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .setting-help {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .setting-divider {
+    height: 1px;
+    background: var(--border-color);
+  }
+
+  /* Controls inputs styling */
+  .select-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  .form-select {
+    width: 100%;
+    padding: 0.6rem 2rem 0.6rem 0.8rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    cursor: pointer;
+    appearance: none;
+    transition: all 0.2s;
+  }
+
+  .form-select:focus {
+    border-color: var(--primary-accent);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(var(--primary-accent-rgb), 0.15);
+  }
+
+  .select-wrapper::after {
+    content: "▼";
+    font-size: 0.6rem;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    pointer-events: none;
+  }
+
+  .label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .value-display {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--primary-accent);
+    background: rgba(var(--primary-accent-rgb), 0.1);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+  }
+
+  /* Custom input range */
+  .form-range {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 99px;
+    outline: none;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .form-range::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--primary-accent);
+    border: 2px solid #fff;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s;
+  }
+
+  .form-range::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+  }
+
+  /* Resize layout tabs */
+  .resize-tabs {
+    display: flex;
+    border-radius: var(--radius-md);
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.2rem;
+    border: 1px solid var(--border-color);
+  }
+
+  .resize-tab {
+    flex: 1;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.4rem 0;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+  }
+
+  .resize-tab.active {
+    background: var(--primary-accent);
+    color: white;
+  }
+
+  .tab-content {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.50rem;
+  }
+
+  .dimension-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .dimension-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .field-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+  }
+
+  .form-input:focus {
+    border-color: var(--primary-accent);
+    outline: none;
+  }
+
+  .checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    user-select: none;
+    margin-top: 0.25rem;
+  }
+
+  .checkbox-label input {
+    accent-color: var(--primary-accent);
+  }
+
+  /* Download layout buttons */
+  .download-action {
+    margin-top: 1rem;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .btn-block {
+    display: flex;
+    width: 100%;
+  }
+
+  .btn-success {
+    background: #2ecc71;
+    color: white;
+  }
+
+  .btn-success:hover {
+    background: #27ae60;
+  }
+</style>
+
+<script>
+  // Utility to format size bytes
+  function formatBytes(bytes: number, decimals: number = 2): string {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
+
+  class ImageCompressorTool extends HTMLElement {
+    private dropzoneArea!: HTMLDivElement;
+    private workspaceArea!: HTMLDivElement;
+    private fileInputEl!: HTMLInputElement;
+    private dropzoneEl!: HTMLDivElement;
+    private resetBtn!: HTMLButtonElement;
+    private downloadBtn!: HTMLAnchorElement;
+
+    // Workspace preview elements
+    private origImgEl!: HTMLImageElement;
+    private compImgEl!: HTMLImageElement;
+    private compPaneEl!: HTMLDivElement;
+    private dividerEl!: HTMLDivElement;
+    private comparisonInput!: HTMLInputElement;
+    private sliderWrapper!: HTMLDivElement;
+
+    // Config Elements
+    private formatSelect!: HTMLSelectElement;
+    private qualityInput!: HTMLInputElement;
+    private qualityValEl!: HTMLSpanElement;
+    private qualityGroupEl!: HTMLDivElement;
+    
+    // Resize Tab Elements
+    private tabScale!: HTMLButtonElement;
+    private tabCustom!: HTMLButtonElement;
+    private contentScale!: HTMLDivElement;
+    private contentDimensions!: HTMLDivElement;
+    private scaleInput!: HTMLInputElement;
+    private scaleValEl!: HTMLSpanElement;
+    private widthInput!: HTMLInputElement;
+    private heightInput!: HTMLInputElement;
+    private maintainRatioCheck!: HTMLInputElement;
+
+    // Stats Elements
+    private statsOrigSizeEl!: HTMLSpanElement;
+    private statsCompSizeEl!: HTMLSpanElement;
+    private statsReductionEl!: HTMLSpanElement;
+    private statsDimensionsEl!: HTMLSpanElement;
+
+    // State Variables
+    private selectedFile: File | null = null;
+    private originalUrl: string = '';
+    private compressedUrl: string = '';
+    private compressedBlob: Blob | null = null;
+    private resizeMode: 'scale' | 'custom' = 'scale';
+    
+    // Cache natural dimensions
+    private originalWidth = 0;
+    private originalHeight = 0;
+    private originalAspectRatio = 1;
+
+    // Debounce state
+    private debounceTimer: any = null;
+
+    connectedCallback() {
+      // Find all DOM elements
+      this.dropzoneArea = this.querySelector('#dropzone-area') as HTMLDivElement;
+      this.workspaceArea = this.querySelector('#workspace-area') as HTMLDivElement;
+      this.fileInputEl = this.querySelector('#comp-file-input') as HTMLInputElement;
+      this.dropzoneEl = this.querySelector('#comp-dropzone') as HTMLDivElement;
+      this.resetBtn = this.querySelector('#btn-reset') as HTMLButtonElement;
+      this.downloadBtn = this.querySelector('#btn-download-comp') as HTMLAnchorElement;
+
+      this.origImgEl = this.querySelector('#comp-orig-img') as HTMLImageElement;
+      this.compImgEl = this.querySelector('#comp-preview-img') as HTMLImageElement;
+      this.compPaneEl = this.querySelector('#comp-pane') as HTMLDivElement;
+      this.dividerEl = this.querySelector('#slider-divider') as HTMLDivElement;
+      this.comparisonInput = this.querySelector('#comparison-slider-input') as HTMLInputElement;
+      this.sliderWrapper = this.querySelector('#slider-wrapper') as HTMLDivElement;
+
+      this.formatSelect = this.querySelector('#comp-format') as HTMLSelectElement;
+      this.qualityInput = this.querySelector('#comp-quality') as HTMLInputElement;
+      this.qualityValEl = this.querySelector('#quality-val') as HTMLSpanElement;
+      this.qualityGroupEl = this.querySelector('#quality-group') as HTMLDivElement;
+
+      this.tabScale = this.querySelector('#tab-scale') as HTMLButtonElement;
+      this.tabCustom = this.querySelector('#tab-dimensions') as HTMLButtonElement;
+      this.contentScale = this.querySelector('#content-scale') as HTMLDivElement;
+      this.contentDimensions = this.querySelector('#content-dimensions') as HTMLDivElement;
+      this.scaleInput = this.querySelector('#comp-scale') as HTMLInputElement;
+      this.scaleValEl = this.querySelector('#scale-val') as HTMLSpanElement;
+      this.widthInput = this.querySelector('#comp-width') as HTMLInputElement;
+      this.heightInput = this.querySelector('#comp-height') as HTMLInputElement;
+      this.maintainRatioCheck = this.querySelector('#comp-maintain-ratio') as HTMLInputElement;
+
+      this.statsOrigSizeEl = this.querySelector('#stats-orig-size') as HTMLSpanElement;
+      this.statsCompSizeEl = this.querySelector('#stats-comp-size') as HTMLSpanElement;
+      this.statsReductionEl = this.querySelector('#stats-reduction') as HTMLSpanElement;
+      this.statsDimensionsEl = this.querySelector('#stats-dimensions') as HTMLSpanElement;
+
+      // Register Upload Event Listeners
+      this.dropzoneEl.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        this.dropzoneEl.classList.add('dragover');
+      });
+
+      this.dropzoneEl.addEventListener('dragleave', () => {
+        this.dropzoneEl.classList.remove('dragover');
+      });
+
+      this.dropzoneEl.addEventListener('drop', (e) => {
+        e.preventDefault();
+        this.dropzoneEl.classList.remove('dragover');
+        if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
+          this.handleImageSelected(e.dataTransfer.files[0]);
+        }
+      });
+
+      this.dropzoneEl.addEventListener('click', () => {
+        this.fileInputEl.click();
+      });
+
+      this.fileInputEl.addEventListener('change', () => {
+        if (this.fileInputEl.files && this.fileInputEl.files.length > 0) {
+          this.handleImageSelected(this.fileInputEl.files[0]);
+        }
+      });
+
+      this.resetBtn.addEventListener('click', () => this.resetState());
+
+      // Register Slider Event Listener
+      this.comparisonInput.addEventListener('input', () => {
+        const val = this.comparisonInput.value;
+        this.compPaneEl.style.width = `${val}%`;
+        this.dividerEl.style.left = `${val}%`;
+      });
+
+      // Register Configuration Controls Listeners
+      this.formatSelect.addEventListener('change', () => {
+        this.toggleQualityVisibility();
+        this.queueCompression();
+      });
+
+      this.qualityInput.addEventListener('input', () => {
+        this.qualityValEl.textContent = `${this.qualityInput.value}%`;
+        this.queueCompression();
+      });
+
+      this.scaleInput.addEventListener('input', () => {
+        this.scaleValEl.textContent = `${this.scaleInput.value}%`;
+        this.queueCompression();
+      });
+
+      // Resize Dimension Change Handlers
+      this.widthInput.addEventListener('input', () => {
+        if (this.maintainRatioCheck.checked && this.originalWidth) {
+          const w = parseInt(this.widthInput.value) || 0;
+          this.heightInput.value = Math.round(w / this.originalAspectRatio).toString();
+        }
+        this.queueCompression();
+      });
+
+      this.heightInput.addEventListener('input', () => {
+        if (this.maintainRatioCheck.checked && this.originalHeight) {
+          const h = parseInt(this.heightInput.value) || 0;
+          this.widthInput.value = Math.round(h * this.originalAspectRatio).toString();
+        }
+        this.queueCompression();
+      });
+
+      // Resize Tab Handlers
+      this.tabScale.addEventListener('click', () => this.setResizeMode('scale'));
+      this.tabCustom.addEventListener('click', () => this.setResizeMode('custom'));
+
+      // Keep visual slider aligned on resize
+      window.addEventListener('resize', () => this.updateSliderWidth());
+    }
+
+    private updateSliderWidth() {
+      if (this.sliderWrapper) {
+        this.sliderWrapper.style.setProperty('--wrapper-width', `${this.sliderWrapper.clientWidth}px`);
+      }
+    }
+
+    private setResizeMode(mode: 'scale' | 'custom') {
+      this.resizeMode = mode;
+      if (mode === 'scale') {
+        this.tabScale.classList.add('active');
+        this.tabCustom.classList.remove('active');
+        this.contentScale.classList.remove('hidden');
+        this.contentDimensions.classList.add('hidden');
+      } else {
+        this.tabScale.classList.remove('active');
+        this.tabCustom.classList.add('active');
+        this.contentScale.classList.add('hidden');
+        this.contentDimensions.classList.remove('hidden');
+      }
+      this.queueCompression();
+    }
+
+    private toggleQualityVisibility() {
+      const format = this.formatSelect.value;
+      const targetMime = format === 'original' ? this.selectedFile?.type : format;
+      
+      // PNG does not support canvas quality lossy parameters
+      if (targetMime === 'image/png') {
+        this.qualityGroupEl.classList.add('hidden');
+      } else {
+        this.qualityGroupEl.classList.remove('hidden');
+      }
+    }
+
+    private handleImageSelected(file: File) {
+      if (!file.type.startsWith('image/')) {
+        alert('Please upload a valid image file (PNG, JPEG, WebP).');
+        return;
+      }
+
+      this.selectedFile = file;
+      this.originalUrl = URL.createObjectURL(file);
+      this.origImgEl.src = this.originalUrl;
+      
+      // Load image metadata
+      const img = new Image();
+      img.onload = () => {
+        this.originalWidth = img.naturalWidth;
+        this.originalHeight = img.naturalHeight;
+        this.originalAspectRatio = img.naturalWidth / img.naturalHeight;
+        
+        // Initialize custom dimension values
+        this.widthInput.value = img.naturalWidth.toString();
+        this.heightInput.value = img.naturalHeight.toString();
+        
+        // Set stats resolutions
+        this.statsDimensionsEl.textContent = `${img.naturalWidth} × ${img.naturalHeight}`;
+        
+        // Show Workspace
+        this.dropzoneArea.classList.add('hidden');
+        this.workspaceArea.classList.remove('hidden');
+        
+        // Setup slider widths
+        setTimeout(() => this.updateSliderWidth(), 50);
+
+        // Configure visibility parameters
+        this.toggleQualityVisibility();
+        
+        // Perform initial compression
+        this.runCompression();
+      };
+      img.src = this.originalUrl;
+    }
+
+    private resetState() {
+      this.selectedFile = null;
+      this.fileInputEl.value = '';
+      
+      if (this.originalUrl) URL.revokeObjectURL(this.originalUrl);
+      if (this.compressedUrl) URL.revokeObjectURL(this.compressedUrl);
+      
+      this.originalUrl = '';
+      this.compressedUrl = '';
+      this.compressedBlob = null;
+      
+      this.origImgEl.src = '';
+      this.compImgEl.src = '';
+      
+      // Reset sliders and selects
+      this.formatSelect.value = 'original';
+      this.qualityInput.value = '80';
+      this.qualityValEl.textContent = '80%';
+      this.scaleInput.value = '100';
+      this.scaleValEl.textContent = '100%';
+      this.comparisonInput.value = '50';
+      this.compPaneEl.style.width = '50%';
+      this.dividerEl.style.left = '50%';
+      
+      // Show Dropzone
+      this.dropzoneArea.classList.remove('hidden');
+      this.workspaceArea.classList.add('hidden');
+    }
+
+    private queueCompression() {
+      // Debounce to prevent performance lag when sliding quality / scale
+      clearTimeout(this.debounceTimer);
+      this.debounceTimer = setTimeout(() => this.runCompression(), 150);
+    }
+
+    private runCompression() {
+      if (!this.selectedFile) return;
+
+      const format = this.formatSelect.value;
+      const targetMime = format === 'original' ? this.selectedFile.type : format;
+      const quality = parseFloat(this.qualityInput.value) / 100;
+      
+      const img = new Image();
+      img.onload = () => {
+        let width = this.originalWidth;
+        let height = this.originalHeight;
+
+        if (this.resizeMode === 'scale') {
+          const scale = parseFloat(this.scaleInput.value) / 100;
+          width = Math.round(this.originalWidth * scale);
+          height = Math.round(this.originalHeight * scale);
+          this.widthInput.value = width.toString();
+          this.heightInput.value = height.toString();
+        } else {
+          width = parseInt(this.widthInput.value) || this.originalWidth;
+          height = parseInt(this.heightInput.value) || this.originalHeight;
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        // Draw white background for JPEG target to prevent transparent black outlines
+        if (targetMime === 'image/jpeg') {
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(0, 0, width, height);
+        }
+
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob((blob) => {
+          if (!blob) return;
+
+          this.compressedBlob = blob;
+
+          // Update stats
+          this.statsOrigSizeEl.textContent = formatBytes(this.selectedFile!.size);
+          this.statsCompSizeEl.textContent = formatBytes(blob.size);
+          this.statsDimensionsEl.textContent = `${width} × ${height}`;
+
+          const saved = this.selectedFile!.size - blob.size;
+          const percentage = Math.round((saved / this.selectedFile!.size) * 100);
+
+          if (percentage > 0) {
+            this.statsReductionEl.textContent = `${percentage}% Saved`;
+            this.statsReductionEl.className = 'stats-badge positive';
+          } else {
+            this.statsReductionEl.textContent = `${Math.abs(percentage)}% Larger`;
+            this.statsReductionEl.className = 'stats-badge negative';
+          }
+
+          // Revoke old object URL
+          if (this.compressedUrl) {
+            URL.revokeObjectURL(this.compressedUrl);
+          }
+          this.compressedUrl = URL.createObjectURL(blob);
+          this.compImgEl.src = this.compressedUrl;
+
+          // Set download values
+          this.downloadBtn.href = this.compressedUrl;
+          const baseName = this.selectedFile!.name.substring(0, this.selectedFile!.name.lastIndexOf('.'));
+          const ext = targetMime === 'image/png' ? 'png' : (targetMime === 'image/webp' ? 'webp' : 'jpg');
+          this.downloadBtn.download = `${baseName}-compressed.${ext}`;
+
+        }, targetMime, targetMime === 'image/png' ? undefined : quality);
+      };
+      img.src = this.originalUrl;
+    }
+  }
+
+  if (!customElements.get('image-compressor-tool')) {
+    customElements.define('image-compressor-tool', ImageCompressorTool);
+  }
+</script>

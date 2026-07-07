@@ -1,0 +1,1240 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<gif-generator-tool class="tool-workspace">
+  <!-- Upload State -->
+  <div class="dropzone-container" id="dropzone-area">
+    <div class="dropzone" id="gif-dropzone">
+      <input type="file" id="gif-file-input" accept="image/png, image/jpeg, image/webp" multiple class="hidden-input" aria-label="Upload frames to generate GIF" />
+      <div class="dropzone-content">
+        <Icon name="Image" size={48} />
+        <p class="dropzone-text">Drag & drop your frame images here or <span>browse</span></p>
+        <p class="dropzone-subtext">Supports PNG, JPEG, WebP (Upload multiple files at once)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workspace State (Hidden initially) -->
+  <div class="workspace-grid hidden" id="workspace-area">
+    
+    <!-- Left Panel: Frames List & Output Preview -->
+    <div class="visualizer-panel glass-panel">
+      <!-- Top Actions -->
+      <div class="panel-header border-b">
+        <h4 class="panel-title">Animation Frames (<span id="frame-count">0</span> frames)</h4>
+        <div class="panel-actions">
+          <button class="btn btn-secondary btn-sm" id="btn-add-frames">
+            <Icon name="RefreshCw" size={14} /> Add Frames
+          </button>
+          <input type="file" id="gif-add-input" accept="image/png, image/jpeg, image/webp" multiple class="hidden" aria-label="Add additional frames" />
+          <button class="btn-clear" id="btn-reset" aria-label="Reset tool">Clear All</button>
+        </div>
+      </div>
+
+      <!-- Frames List -->
+      <div class="frames-list-wrapper">
+        <div class="frames-list" id="frames-container">
+          <!-- Dynamically populated frame card thumbnails -->
+        </div>
+      </div>
+
+      <!-- Compiling Overlay -->
+      <div class="compiling-overlay hidden" id="loading-overlay">
+        <div class="spinner-loader"></div>
+        <div class="loader-text-group">
+          <p class="loader-title">Generating Animated GIF</p>
+          <p class="loader-subtitle">Rendering frames locally in your browser...</p>
+        </div>
+      </div>
+
+      <!-- Compilation Output -->
+      <div class="output-preview-container hidden" id="output-area">
+        <div class="output-header">
+          <h4 class="panel-title">Generated GIF Preview</h4>
+          <span class="dimensions-indicator" id="output-dimensions">480 × 360</span>
+        </div>
+        <div class="output-visualizer">
+          <img id="gif-result-img" src="" alt="Generated animated GIF" />
+        </div>
+        <div class="output-stats">
+          <div class="stat-badge">
+            <span class="badge-lbl">Size</span>
+            <span class="badge-val" id="output-size">0 KB</span>
+          </div>
+          <div class="stat-badge">
+            <span class="badge-lbl">Frames</span>
+            <span class="badge-val" id="output-frames-count">0</span>
+          </div>
+        </div>
+        <div class="output-action">
+          <a id="btn-download-gif" class="btn btn-success btn-lg">
+            <Icon name="Download" size={18} /> Download Animated GIF
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Panel: Configurations & Settings -->
+    <div class="settings-panel glass-panel">
+      <div class="settings-header">
+        <h4 class="panel-title">GIF Settings</h4>
+      </div>
+
+      <div class="settings-body">
+        <!-- Frame Speed Interval -->
+        <div class="setting-group">
+          <div class="label-row">
+            <label for="gif-speed" class="setting-label">Frame Delay (Interval)</label>
+            <span class="value-display" id="speed-val">0.20s</span>
+          </div>
+          <input type="range" id="gif-speed" min="0.05" max="2.00" step="0.05" value="0.20" class="form-range" />
+          <p class="setting-help" id="fps-val">Equivalent to ~5.0 frames per second.</p>
+        </div>
+
+        <!-- Loop Checkbox -->
+        <div class="setting-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="gif-loop" checked />
+            <span>Loop Animated GIF Infinitely</span>
+          </label>
+        </div>
+
+        <div class="setting-divider"></div>
+
+        <!-- GIF Dimensions preset & custom input -->
+        <div class="setting-group">
+          <label class="setting-label">Dimensions</label>
+          <div class="dimension-presets">
+            <button class="preset-btn active" data-w="480" data-h="360">480x360</button>
+            <button class="preset-btn" data-w="640" data-h="480">640x480</button>
+            <button class="preset-btn" data-w="320" data-h="240">320x240</button>
+            <button class="preset-btn" data-w="custom">Custom</button>
+          </div>
+          <div class="dimension-inputs hidden" id="custom-dims">
+            <div class="dimension-field">
+              <label for="gif-width" class="field-label">Width (px)</label>
+              <input type="number" id="gif-width" class="form-input" value="480" />
+            </div>
+            <div class="dimension-field">
+              <label for="gif-height" class="field-label">Height (px)</label>
+              <input type="number" id="gif-height" class="form-input" value="360" />
+            </div>
+          </div>
+        </div>
+
+        <div class="setting-divider"></div>
+
+        <!-- Quality Level -->
+        <div class="setting-group">
+          <div class="label-row">
+            <label for="gif-quality" class="setting-label">Quality Index (Sample Interval)</label>
+            <span class="value-display" id="quality-val">High (10)</span>
+          </div>
+          <input type="range" id="gif-quality" min="1" max="20" value="10" class="form-range" />
+          <p class="setting-help">Lower index = higher color accuracy but slower render times and larger file size.</p>
+        </div>
+
+        <div class="setting-divider"></div>
+
+        <!-- Text Overlay Options -->
+        <div class="setting-group">
+          <label class="setting-label">Text Overlay (Optional)</label>
+          <input type="text" id="gif-text" class="form-input" placeholder="e.g. Looping Meme!" />
+          
+          <div class="text-options">
+            <div class="text-field">
+              <label for="gif-text-size" class="field-label">Font Size (px)</label>
+              <input type="number" id="gif-text-size" class="form-input" value="30" />
+            </div>
+            <div class="text-field">
+              <label for="gif-text-color" class="field-label">Color</label>
+              <input type="color" id="gif-text-color" class="form-input color-input" value="#ffffff" />
+            </div>
+          </div>
+
+          <label for="gif-text-pos" class="field-label">Text Position</label>
+          <div class="select-wrapper">
+            <select id="gif-text-pos" class="form-select">
+              <option value="bottom">Bottom Center</option>
+              <option value="top">Top Center</option>
+              <option value="middle">Middle Center</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Generate Button -->
+        <div class="generate-action">
+          <button id="btn-generate-gif" class="btn btn-primary btn-lg btn-block">
+            Generate Animated GIF
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</gif-generator-tool>
+
+<style>
+  .tool-workspace {
+    width: 100%;
+    display: block;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  .border-b {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+  }
+
+  /* Dropzone Styling */
+  .dropzone-container {
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+
+  .dropzone {
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-lg);
+    min-height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.01);
+    transition: all 0.2s ease;
+  }
+
+  .dropzone:hover {
+    border-color: var(--primary-accent);
+    background: rgba(var(--primary-accent-rgb), 0.02);
+  }
+
+  .hidden-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    pointer-events: none;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .dropzone-text {
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .dropzone-text span {
+    color: var(--primary-accent);
+    text-decoration: underline;
+  }
+
+  .dropzone-subtext {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+
+  /* Workspace Layout */
+  .workspace-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 1.5rem;
+    align-items: start;
+    width: 100%;
+    position: relative;
+  }
+
+  @media (max-width: 1024px) {
+    .workspace-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Panels */
+  .glass-panel {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    position: relative;
+  }
+
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .panel-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .panel-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .btn-clear {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .btn-clear:hover {
+    color: var(--primary-accent);
+  }
+
+  /* Horizontal Scrollable Frame list */
+  .frames-list-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    min-height: 180px;
+  }
+
+  .frames-list {
+    display: flex;
+    gap: 1rem;
+    width: max-content;
+    padding-bottom: 0.25rem;
+  }
+
+  /* Frame thumbnail card */
+  .frame-card {
+    width: 110px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    position: relative;
+  }
+
+  .frame-thumb-container {
+    width: 100%;
+    height: 80px;
+    background: #0d0d0f;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .frame-thumb-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .frame-number {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .frame-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.2rem;
+  }
+
+  .frame-ctrl-btn {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .frame-ctrl-btn:hover:not(:disabled) {
+    background: var(--primary-accent);
+    color: white;
+  }
+
+  .frame-ctrl-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .btn-remove-frame {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #e74c3c;
+    border: none;
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.65rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  .btn-remove-frame:hover {
+    background: #c0392b;
+  }
+
+  /* Compiling status overlay */
+  .compiling-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(13, 13, 15, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .spinner-loader {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(var(--primary-accent-rgb), 0.15);
+    border-radius: 50%;
+    border-top-color: var(--primary-accent);
+    animation: spin 1s linear infinite;
+  }
+
+  .loader-text-group {
+    text-align: center;
+  }
+
+  .loader-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .loader-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Compiled Result Area */
+  .output-preview-container {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    align-items: center;
+  }
+
+  .output-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+  }
+
+  .dimensions-indicator {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.2rem 0.6rem;
+    border-radius: 99px;
+    font-family: monospace;
+  }
+
+  .output-visualizer {
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    background-size: 16px 16px;
+    background-color: #0c0c0e;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 400px;
+  }
+
+  .output-visualizer img {
+    max-width: 100%;
+    max-height: 350px;
+    object-fit: contain;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+  }
+
+  .output-stats {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .stat-badge {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    padding: 0.4rem 1rem;
+    border-radius: 99px;
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .badge-lbl {
+    color: var(--text-secondary);
+  }
+
+  .badge-val {
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .output-action {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* Configurations right panel */
+  .settings-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .settings-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+  }
+
+  .settings-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .setting-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .setting-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .setting-help {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .setting-divider {
+    height: 1px;
+    background: var(--border-color);
+  }
+
+  .label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .value-display {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--primary-accent);
+    background: rgba(var(--primary-accent-rgb), 0.1);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+  }
+
+  /* Dimension Presets Layout */
+  .dimension-presets {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.4rem;
+  }
+
+  .preset-btn {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.4rem 0.2rem;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    text-align: center;
+    transition: all 0.2s;
+  }
+
+  .preset-btn.active, .preset-btn:hover {
+    border-color: var(--primary-accent);
+    color: var(--text-primary);
+    background: rgba(var(--primary-accent-rgb), 0.05);
+  }
+
+  .dimension-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+  }
+
+  .dimension-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .field-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+  }
+
+  .form-input:focus {
+    border-color: var(--primary-accent);
+    outline: none;
+  }
+
+  /* Color Input override */
+  .color-input {
+    padding: 0.25rem 0.5rem;
+    height: 34px;
+    cursor: pointer;
+  }
+
+  .text-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .text-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  /* Select styling */
+  .select-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  .form-select {
+    width: 100%;
+    padding: 0.6rem 2rem 0.6rem 0.8rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    cursor: pointer;
+    appearance: none;
+    transition: all 0.2s;
+  }
+
+  .form-select:focus {
+    border-color: var(--primary-accent);
+    outline: none;
+  }
+
+  .select-wrapper::after {
+    content: "▼";
+    font-size: 0.6rem;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    pointer-events: none;
+  }
+
+  .checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    user-select: none;
+  }
+
+  .checkbox-label input {
+    accent-color: var(--primary-accent);
+  }
+
+  .form-range {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 99px;
+    outline: none;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .form-range::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--primary-accent);
+    border: 2px solid #fff;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s;
+  }
+
+  .form-range::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+  }
+
+  /* buttons buttons buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+  }
+
+  .btn-lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .btn-block {
+    display: flex;
+    width: 100%;
+  }
+
+  .btn-primary {
+    background: var(--primary-accent);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    opacity: 0.95;
+  }
+
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .btn-success {
+    background: #2ecc71;
+    color: white;
+  }
+
+  .btn-success:hover {
+    background: #27ae60;
+  }
+
+  .generate-action {
+    margin-top: 1.25rem;
+  }
+</style>
+
+<script>
+  // Helper sizes formatter
+  function formatBytes(bytes: number, decimals: number = 2): string {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
+
+  // Load gifshot from CDN dynamically
+  let gifshotPromise: Promise<any> | null = null;
+  function loadGifshot(): Promise<any> {
+    if (gifshotPromise) return gifshotPromise;
+
+    gifshotPromise = new Promise((resolve, reject) => {
+      if ((window as any).gifshot) {
+        resolve((window as any).gifshot);
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gifshot/0.4.5/gifshot.min.js';
+      script.onload = () => {
+        if ((window as any).gifshot) {
+          resolve((window as any).gifshot);
+        } else {
+          reject(new Error('gifshot failed to load'));
+        }
+      };
+      script.onerror = () => reject(new Error('Failed to load gifshot script'));
+      document.head.appendChild(script);
+    });
+
+    return gifshotPromise;
+  }
+
+  class GifGeneratorTool extends HTMLElement {
+    private dropzoneArea!: HTMLDivElement;
+    private workspaceArea!: HTMLDivElement;
+    
+    // File inputs
+    private fileInputEl!: HTMLInputElement;
+    private addInputEl!: HTMLInputElement;
+    private dropzoneEl!: HTMLDivElement;
+    private addFramesBtn!: HTMLButtonElement;
+    private resetBtn!: HTMLButtonElement;
+    
+    // Frame list UI
+    private framesContainer!: HTMLDivElement;
+    private frameCountEl!: HTMLSpanElement;
+
+    // Config inputs
+    private speedInput!: HTMLInputElement;
+    private speedValEl!: HTMLSpanElement;
+    private fpsValEl!: HTMLParagraphElement;
+    private loopCheck!: HTMLInputElement;
+    private presetBtns!: NodeListOf<HTMLButtonElement>;
+    private customDimsEl!: HTMLDivElement;
+    private widthInput!: HTMLInputElement;
+    private heightInput!: HTMLInputElement;
+    private qualityInput!: HTMLInputElement;
+    private qualityValEl!: HTMLSpanElement;
+    private textInput!: HTMLInputElement;
+    private textSizeInput!: HTMLInputElement;
+    private textColorInput!: HTMLInputElement;
+    private textPosSelect!: HTMLSelectElement;
+    
+    // Actions and Output
+    private generateBtn!: HTMLButtonElement;
+    private loadingOverlay!: HTMLDivElement;
+    private outputArea!: HTMLDivElement;
+    private outputImg!: HTMLImageElement;
+    private outputSizeEl!: HTMLSpanElement;
+    private outputFramesCountEl!: HTMLSpanElement;
+    private outputDimensionsEl!: HTMLSpanElement;
+    private downloadBtn!: HTMLAnchorElement;
+
+    // State Variables
+    private frameFiles: File[] = [];
+    private frameUrls: string[] = []; // Cache ObjectURLs to prevent leaks
+    private currentWidth = 480;
+    private currentHeight = 360;
+
+    connectedCallback() {
+      // Find DOM elements
+      this.dropzoneArea = this.querySelector('#dropzone-area') as HTMLDivElement;
+      this.workspaceArea = this.querySelector('#workspace-area') as HTMLDivElement;
+      this.fileInputEl = this.querySelector('#gif-file-input') as HTMLInputElement;
+      this.addInputEl = this.querySelector('#gif-add-input') as HTMLInputElement;
+      this.dropzoneEl = this.querySelector('#gif-dropzone') as HTMLDivElement;
+      this.addFramesBtn = this.querySelector('#btn-add-frames') as HTMLButtonElement;
+      this.resetBtn = this.querySelector('#btn-reset') as HTMLButtonElement;
+      this.framesContainer = this.querySelector('#frames-container') as HTMLDivElement;
+      this.frameCountEl = this.querySelector('#frame-count') as HTMLSpanElement;
+
+      this.speedInput = this.querySelector('#gif-speed') as HTMLInputElement;
+      this.speedValEl = this.querySelector('#speed-val') as HTMLSpanElement;
+      this.fpsValEl = this.querySelector('#fps-val') as HTMLParagraphElement;
+      this.loopCheck = this.querySelector('#gif-loop') as HTMLInputElement;
+      this.presetBtns = this.querySelectorAll('.preset-btn') as NodeListOf<HTMLButtonElement>;
+      this.customDimsEl = this.querySelector('#custom-dims') as HTMLDivElement;
+      this.widthInput = this.querySelector('#gif-width') as HTMLInputElement;
+      this.heightInput = this.querySelector('#gif-height') as HTMLInputElement;
+      this.qualityInput = this.querySelector('#gif-quality') as HTMLInputElement;
+      this.qualityValEl = this.querySelector('#quality-val') as HTMLSpanElement;
+
+      this.textInput = this.querySelector('#gif-text') as HTMLInputElement;
+      this.textSizeInput = this.querySelector('#gif-text-size') as HTMLInputElement;
+      this.textColorInput = this.querySelector('#gif-text-color') as HTMLInputElement;
+      this.textPosSelect = this.querySelector('#gif-text-pos') as HTMLSelectElement;
+
+      this.generateBtn = this.querySelector('#btn-generate-gif') as HTMLButtonElement;
+      this.loadingOverlay = this.querySelector('#loading-overlay') as HTMLDivElement;
+      this.outputArea = this.querySelector('#output-area') as HTMLDivElement;
+      this.outputImg = this.querySelector('#gif-result-img') as HTMLImageElement;
+      this.outputSizeEl = this.querySelector('#output-size') as HTMLSpanElement;
+      this.outputFramesCountEl = this.querySelector('#output-frames-count') as HTMLSpanElement;
+      this.outputDimensionsEl = this.querySelector('#output-dimensions') as HTMLSpanElement;
+      this.downloadBtn = this.querySelector('#btn-download-gif') as HTMLAnchorElement;
+
+      // Dropzone Listeners
+      this.dropzoneEl.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        this.dropzoneEl.classList.add('dragover');
+      });
+
+      this.dropzoneEl.addEventListener('dragleave', () => {
+        this.dropzoneEl.classList.remove('dragover');
+      });
+
+      this.dropzoneEl.addEventListener('drop', (e) => {
+        e.preventDefault();
+        this.dropzoneEl.classList.remove('dragover');
+        if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
+          this.handleFilesUploaded(e.dataTransfer.files);
+        }
+      });
+
+      this.dropzoneEl.addEventListener('click', () => this.fileInputEl.click());
+      this.fileInputEl.addEventListener('change', () => {
+        if (this.fileInputEl.files) this.handleFilesUploaded(this.fileInputEl.files);
+      });
+
+      // Actions buttons listeners
+      this.addFramesBtn.addEventListener('click', () => this.addInputEl.click());
+      this.addInputEl.addEventListener('change', () => {
+        if (this.addInputEl.files) this.handleFilesUploaded(this.addInputEl.files, true);
+      });
+
+      this.resetBtn.addEventListener('click', () => this.resetState());
+      this.generateBtn.addEventListener('click', () => this.generateGif());
+
+      // Speed control listeners
+      this.speedInput.addEventListener('input', () => {
+        const val = parseFloat(this.speedInput.value);
+        this.speedValEl.textContent = `${val.toFixed(2)}s`;
+        const fps = (1 / val).toFixed(1);
+        this.fpsValEl.textContent = `Equivalent to ~${fps} frames per second.`;
+      });
+
+      // Quality control listeners
+      this.qualityInput.addEventListener('input', () => {
+        const q = parseInt(this.qualityInput.value);
+        let lbl = 'Medium';
+        if (q <= 3) lbl = 'Ultra High';
+        else if (q <= 7) lbl = 'High';
+        else if (q <= 12) lbl = 'Medium';
+        else lbl = 'Low';
+        this.qualityValEl.textContent = `${lbl} (${q})`;
+      });
+
+      // Presets listeners
+      this.presetBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.presetBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const w = btn.getAttribute('data-w')!;
+          const h = btn.getAttribute('data-h')!;
+
+          if (w === 'custom') {
+            this.customDimsEl.classList.remove('hidden');
+          } else {
+            this.customDimsEl.classList.add('hidden');
+            this.widthInput.value = w;
+            this.heightInput.value = h;
+            this.currentWidth = parseInt(w);
+            this.currentHeight = parseInt(h);
+          }
+        });
+      });
+
+      this.widthInput.addEventListener('change', () => {
+        this.currentWidth = parseInt(this.widthInput.value) || 480;
+      });
+      
+      this.heightInput.addEventListener('change', () => {
+        this.currentHeight = parseInt(this.heightInput.value) || 360;
+      });
+    }
+
+    private handleFilesUploaded(files: FileList, append = false) {
+      const validFiles: File[] = [];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file.type.startsWith('image/')) {
+          validFiles.push(file);
+        }
+      }
+
+      if (validFiles.length === 0) {
+        alert('Please select valid image frames (PNG, JPEG, WebP).');
+        return;
+      }
+
+      if (!append) {
+        this.clearUrls();
+        this.frameFiles = [];
+        this.frameUrls = [];
+      }
+
+      validFiles.forEach(file => {
+        this.frameFiles.push(file);
+        this.frameUrls.push(URL.createObjectURL(file));
+      });
+
+      // Render workspace
+      this.dropzoneArea.classList.add('hidden');
+      this.workspaceArea.classList.remove('hidden');
+      
+      this.renderFramesList();
+    }
+
+    private clearUrls() {
+      this.frameUrls.forEach(url => URL.revokeObjectURL(url));
+    }
+
+    private renderFramesList() {
+      this.framesContainer.innerHTML = '';
+      this.frameCountEl.textContent = this.frameFiles.length.toString();
+
+      this.frameFiles.forEach((file, index) => {
+        const url = this.frameUrls[index];
+
+        const card = document.createElement('div');
+        card.className = 'frame-card';
+        card.innerHTML = `
+          <button class="btn-remove-frame" title="Remove frame">✕</button>
+          <div class="frame-thumb-container">
+            <img src="${url}" alt="Frame ${index + 1}" />
+          </div>
+          <span class="frame-number">Frame ${index + 1}</span>
+          <div class="frame-controls">
+            <button class="frame-ctrl-btn move-left-btn" ${index === 0 ? 'disabled' : ''} title="Move left">◀</button>
+            <button class="frame-ctrl-btn move-right-btn" ${index === this.frameFiles.length - 1 ? 'disabled' : ''} title="Move right">▶</button>
+          </div>
+        `;
+
+        // Frame actions listeners
+        card.querySelector('.btn-remove-frame')?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.removeFrame(index);
+        });
+
+        card.querySelector('.move-left-btn')?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.shiftFrame(index, -1);
+        });
+
+        card.querySelector('.move-right-btn')?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.shiftFrame(index, 1);
+        });
+
+        this.framesContainer.appendChild(card);
+      });
+    }
+
+    private removeFrame(index: number) {
+      URL.revokeObjectURL(this.frameUrls[index]);
+      this.frameFiles.splice(index, 1);
+      this.frameUrls.splice(index, 1);
+
+      if (this.frameFiles.length === 0) {
+        this.resetState();
+      } else {
+        this.renderFramesList();
+      }
+    }
+
+    private shiftFrame(index: number, direction: number) {
+      const targetIndex = index + direction;
+      if (targetIndex < 0 || targetIndex >= this.frameFiles.length) return;
+
+      // Swap files
+      const tempFile = this.frameFiles[index];
+      this.frameFiles[index] = this.frameFiles[targetIndex];
+      this.frameFiles[targetIndex] = tempFile;
+
+      // Swap object urls
+      const tempUrl = this.frameUrls[index];
+      this.frameUrls[index] = this.frameUrls[targetIndex];
+      this.frameUrls[targetIndex] = tempUrl;
+
+      this.renderFramesList();
+    }
+
+    private resetState() {
+      this.clearUrls();
+      this.frameFiles = [];
+      this.frameUrls = [];
+      this.fileInputEl.value = '';
+      this.addInputEl.value = '';
+      this.framesContainer.innerHTML = '';
+      this.frameCountEl.textContent = '0';
+
+      this.outputArea.classList.add('hidden');
+      this.dropzoneArea.classList.remove('hidden');
+      this.workspaceArea.classList.add('hidden');
+      this.loadingOverlay.classList.add('hidden');
+      this.outputImg.src = '';
+    }
+
+    private async generateGif() {
+      if (this.frameFiles.length === 0) return;
+
+      // Show loader
+      this.loadingOverlay.classList.remove('hidden');
+      this.outputArea.classList.add('hidden');
+      this.generateBtn.disabled = true;
+
+      try {
+        const gifshot = await loadGifshot();
+        
+        // Prepare options
+        const interval = parseFloat(this.speedInput.value);
+        const loop = this.loopCheck.checked;
+        const quality = parseInt(this.qualityInput.value);
+        const text = this.textInput.value.trim();
+        const textSize = parseInt(this.textSizeInput.value) || 30;
+        const textColor = this.textColorInput.value;
+        
+        let textBaseline: 'top' | 'middle' | 'bottom' = 'bottom';
+        if (this.textPosSelect.value === 'top') textBaseline = 'top';
+        else if (this.textPosSelect.value === 'middle') textBaseline = 'middle';
+
+        // Retrieve width/height
+        const activePreset = this.querySelector('.preset-btn.active') as HTMLButtonElement;
+        const type = activePreset.getAttribute('data-w')!;
+        let w = 480;
+        let h = 360;
+        if (type === 'custom') {
+          w = parseInt(this.widthInput.value) || 480;
+          h = parseInt(this.heightInput.value) || 360;
+        } else {
+          w = parseInt(type);
+          h = parseInt(activePreset.getAttribute('data-h')!);
+        }
+
+        // We can pass direct Object URLs of frames to gifshot!
+        const options: any = {
+          images: this.frameUrls,
+          gifWidth: w,
+          gifHeight: h,
+          interval: interval,
+          numFrames: this.frameUrls.length,
+          sampleInterval: quality,
+          numWorkers: 4,
+          loop: loop ? 0 : 1 // gifshot loop: 0 = infinite, 1 = play once
+        };
+
+        if (text) {
+          options.text = text;
+          options.fontSize = `${textSize}px`;
+          options.fontColor = textColor;
+          options.textBaseline = textBaseline;
+          options.fontFamily = 'Inter, Roboto, sans-serif';
+        }
+
+        gifshot.createGIF(options, (obj: any) => {
+          this.loadingOverlay.classList.add('hidden');
+          this.generateBtn.disabled = false;
+
+          if (obj.error) {
+            alert(`GIF generation failed: ${obj.errorMsg}`);
+            return;
+          }
+
+          // Render output
+          const base64Data = obj.image;
+          this.outputImg.src = base64Data;
+          this.outputDimensionsEl.textContent = `${w} × ${h}`;
+          this.outputFramesCountEl.textContent = this.frameFiles.length.toString();
+
+          // Calculate final file size from base64 string
+          const stringLength = base64Data.length - 'data:image/gif;base64,'.length;
+          const sizeInBytes = 4 * Math.ceil(stringLength / 3) * 0.5624896334383812; // approximate padding correction
+          this.outputSizeEl.textContent = formatBytes(sizeInBytes);
+
+          // Configure download action
+          this.downloadBtn.href = base64Data;
+          this.downloadBtn.download = `lowkeydevs-animated-${Date.now()}.gif`;
+
+          // Show output area
+          this.outputArea.classList.remove('hidden');
+          this.outputArea.scrollIntoView({ behavior: 'smooth' });
+        });
+
+      } catch (err: any) {
+        this.loadingOverlay.classList.add('hidden');
+        this.generateBtn.disabled = false;
+        alert(`Error loading encoder: ${err.message}`);
+      }
+    }
+  }
+
+  if (!customElements.get('gif-generator-tool')) {
+    customElements.define('gif-generator-tool', GifGeneratorTool);
+  }
+</script>

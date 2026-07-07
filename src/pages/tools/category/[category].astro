@@ -14,13 +14,15 @@ export async function getStaticPaths() {
   }));
 }
 
-const { category } = Astro.props;
-const tools = getToolsByCategory(category.slug);
+const { category: propsCategory } = Astro.props;
+const { category: paramCategory } = Astro.params;
+const category = propsCategory || categories.find(cat => cat.slug === paramCategory);
+const tools = category ? getToolsByCategory(category.slug) : [];
 ---
 
 <Layout
-  title={`Best ${category.title.toLowerCase()} tools online - Lowkeydevs`}
-  description={category.description}
+  title={`Best ${category ? category.title.toLowerCase() : ''} tools online - Lowkeydevs`}
+  description={category ? category.description : ''}
 >
   <Header />
 
@@ -31,7 +33,7 @@ const tools = getToolsByCategory(category.slug);
       <span class="breadcrumb-sep" aria-hidden="true">
         <Icon name="ChevronRight" size={14} />
       </span>
-      <span class="breadcrumb-current" aria-current="page">{category.title}</span>
+      <span class="breadcrumb-current" aria-current="page">{category?.title}</span>
     </div>
   </nav>
 
@@ -39,16 +41,16 @@ const tools = getToolsByCategory(category.slug);
     <header class="category-header max-w-narrow">
       <div class="category-icon-title">
         <div class="category-icon-wrapper">
-          <Icon name={category.icon} size={24} />
+          <Icon name={category?.icon || 'Info'} size={24} />
         </div>
-        <h1 class="category-title">{category.title}</h1>
+        <h1 class="category-title">{category?.title}</h1>
       </div>
-      <p class="category-description">{category.description}</p>
+      <p class="category-description">{category?.description}</p>
     </header>
 
     <AdPlaceholder format="horizontal" adSlot="category-horizontal" />
 
-    <section class="category-tools" aria-label={`Tools in ${category.title}`}>
+    <section class="category-tools" aria-label={`Tools in ${category?.title || ''}`}>
       {tools.length > 0 ? (
         <div class="tools-grid">
           {tools.map(tool => (
