@@ -24,8 +24,5 @@ pnpm-debug.log*
 .idea/
 
 # wrangler cache
-.wrangler/*
-!.wrangler/deploy/
-.wrangler/deploy/*
-!.wrangler/deploy/config.json
+.wrangler/
 
