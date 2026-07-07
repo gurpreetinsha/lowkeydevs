@@ -1,0 +1,517 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<word-counter-tool class="tool-workspace">
+  <!-- Layout -->
+  <div class="analyzer-layout">
+    <!-- Input & Actions Pane -->
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Input Editor</span>
+        <div class="header-actions">
+          <button data-action="load-sample" class="btn-text">Load Sample</button>
+        </div>
+      </div>
+
+      <!-- Main Input Textarea -->
+      <textarea
+        id="text-input"
+        placeholder="Type or paste your text here to begin analysis..."
+        aria-label="Text to count"
+      ></textarea>
+
+      <!-- Quick Casing & Cleanup Bar -->
+      <div class="control-bar border-top pt-3 mt-1">
+        <span class="bar-label">Convert Case:</span>
+        <div class="btn-group">
+          <button data-convert="upper" class="btn btn-secondary btn-sm">UPPER</button>
+          <button data-convert="lower" class="btn btn-secondary btn-sm">lower</button>
+          <button data-convert="title" class="btn btn-secondary btn-sm">Title</button>
+          <button data-convert="sentence" class="btn btn-secondary btn-sm">Sentence</button>
+          <button data-convert="camel" class="btn btn-secondary btn-sm">camel</button>
+          <button data-convert="snake" class="btn btn-secondary btn-sm">snake</button>
+          <button data-convert="kebab" class="btn btn-secondary btn-sm">kebab</button>
+        </div>
+      </div>
+
+      <div class="control-bar justify-between">
+        <div class="clean-actions">
+          <span class="bar-label">Clean Text:</span>
+          <button data-clean="spaces" class="btn btn-secondary btn-sm" title="Remove excessive spacing">Collapse Spaces</button>
+          <button data-clean="strip-html" class="btn btn-secondary btn-sm" title="Strip HTML tags">Strip HTML</button>
+        </div>
+        
+        <button data-action="clear" class="btn btn-danger btn-sm">
+          <Icon name="Trash2" size={14} />
+          Clear
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats & Analytics Sidebar -->
+    <div class="sidebar-pane">
+      <!-- Counts Pane -->
+      <div class="glass-panel stats-card">
+        <h3 class="pane-title border-bottom pb-2 mb-3">Live Text Metrics</h3>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <span class="stat-number" id="metric-words">0</span>
+            <span class="stat-name">Words</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number" id="metric-chars">0</span>
+            <span class="stat-name">Characters</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number" id="metric-chars-no-spaces">0</span>
+            <span class="stat-name">Chars (no spaces)</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number" id="metric-sentences">0</span>
+            <span class="stat-name">Sentences</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number" id="metric-paragraphs">0</span>
+            <span class="stat-name">Paragraphs</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number" id="metric-lines">0</span>
+            <span class="stat-name">Lines</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estimates Pane -->
+      <div class="glass-panel estimates-card mt-3">
+        <h3 class="pane-title border-bottom pb-2 mb-3">Estimated Times</h3>
+        <div class="estimates-list">
+          <div class="estimate-item">
+            <div class="estimate-label">
+              <Icon name="Clock" size={16} />
+              <span>Reading Time:</span>
+            </div>
+            <strong id="metric-read-time" class="estimate-val">0s</strong>
+          </div>
+          <div class="estimate-item">
+            <div class="estimate-label">
+              <Icon name="Clock" size={16} />
+              <span>Speaking Time:</span>
+            </div>
+            <strong id="metric-speak-time" class="estimate-val">0s</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Keyword Density Pane -->
+      <div class="glass-panel density-card mt-3">
+        <h3 class="pane-title border-bottom pb-2 mb-2">Keyword Density</h3>
+        <p class="section-desc">Identifies top tags and repetitive words (3+ chars).</p>
+        <div class="density-list" id="density-list">
+          <div class="empty-density">Enter text to analyze keywords...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</word-counter-tool>
+
+<style>
+  .tool-workspace {
+    width: 100%;
+  }
+
+  .analyzer-layout {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .analyzer-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .editor-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    min-height: 480px;
+  }
+
+  #text-input {
+    flex: 1;
+    width: 100%;
+    min-height: 320px;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    resize: none;
+    outline: none;
+  }
+
+  .pane-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+  }
+
+  .pane-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 1rem;
+  }
+
+  .btn-text {
+    background: none;
+    border: none;
+    color: var(--primary-accent);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: var(--font-display);
+    font-weight: 500;
+  }
+
+  .btn-text:hover {
+    text-decoration: underline;
+  }
+
+  .control-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .bar-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .clean-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  /* Sidebar styling */
+  .sidebar-pane {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stats-card, .estimates-card, .density-card {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .stat-box {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-accent);
+  }
+
+  .stat-name {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-top: 0.25rem;
+  }
+
+  .estimates-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .estimate-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+  }
+
+  .estimate-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+
+  .estimate-val {
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+  }
+
+  .section-desc {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+  }
+
+  .density-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .empty-density {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 1rem;
+    font-style: italic;
+  }
+
+  .density-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.85rem;
+  }
+
+  .density-word {
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .density-gauge-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: flex-end;
+  }
+
+  .density-count {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    min-width: 45px;
+    text-align: right;
+  }
+
+  .density-bar {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+    width: 60px;
+    overflow: hidden;
+  }
+
+  .density-bar-fill {
+    height: 100%;
+    background: var(--primary-accent);
+    border-radius: 3px;
+  }
+</style>
+
+<script>
+  import {
+    analyzeText,
+    getKeywordDensity,
+    toTitleCase,
+    toSentenceCase,
+    toCamelCase,
+    toPascalCase,
+    toSnakeCase,
+    toKebabCase
+  } from './logic';
+
+  class WordCounterTool extends HTMLElement {
+    private inputEl!: HTMLTextAreaElement;
+    private densityListEl!: HTMLDivElement;
+
+    // Metrics El
+    private wordsEl!: HTMLSpanElement;
+    private charsEl!: HTMLSpanElement;
+    private charsNoSpacesEl!: HTMLSpanElement;
+    private sentencesEl!: HTMLSpanElement;
+    private paragraphsEl!: HTMLSpanElement;
+    private linesEl!: HTMLSpanElement;
+    private readTimeEl!: HTMLStrongElement;
+    private speakTimeEl!: HTMLStrongElement;
+
+    connectedCallback() {
+      this.inputEl = this.querySelector('#text-input') as HTMLTextAreaElement;
+      this.densityListEl = this.querySelector('#density-list') as HTMLDivElement;
+
+      // Stats selectors
+      this.wordsEl = this.querySelector('#metric-words') as HTMLSpanElement;
+      this.charsEl = this.querySelector('#metric-chars') as HTMLSpanElement;
+      this.charsNoSpacesEl = this.querySelector('#metric-chars-no-spaces') as HTMLSpanElement;
+      this.sentencesEl = this.querySelector('#metric-sentences') as HTMLSpanElement;
+      this.paragraphsEl = this.querySelector('#metric-paragraphs') as HTMLSpanElement;
+      this.linesEl = this.querySelector('#metric-lines') as HTMLSpanElement;
+      this.readTimeEl = this.querySelector('#metric-read-time') as HTMLStrongElement;
+      this.speakTimeEl = this.querySelector('#metric-speak-time') as HTMLStrongElement;
+
+      // Listeners
+      this.inputEl.addEventListener('input', () => this.runAnalysis());
+
+      // Click delegations
+      this.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const button = target.closest('button');
+        if (!button) return;
+
+        const action = button.getAttribute('data-action');
+        const convert = button.getAttribute('data-convert');
+        const clean = button.getAttribute('data-clean');
+
+        if (action === 'clear') this.handleClear();
+        if (action === 'load-sample') this.handleLoadSample();
+
+        if (convert) this.handleConvert(convert);
+        if (clean) this.handleClean(clean);
+      });
+
+      // Load sample initial run
+      this.handleLoadSample();
+    }
+
+    private runAnalysis() {
+      const text = this.inputEl.value;
+      const stats = analyzeText(text);
+
+      // Render stats
+      this.wordsEl.textContent = stats.words.toLocaleString();
+      this.charsEl.textContent = stats.characters.toLocaleString();
+      this.charsNoSpacesEl.textContent = stats.charactersNoSpaces.toLocaleString();
+      this.sentencesEl.textContent = stats.sentences.toLocaleString();
+      this.paragraphsEl.textContent = stats.paragraphs.toLocaleString();
+      this.linesEl.textContent = stats.lines.toLocaleString();
+
+      // Set reading/speaking times
+      this.readTimeEl.textContent = this.formatDuration(stats.readingTimeMin);
+      this.speakTimeEl.textContent = this.formatDuration(stats.speakingTimeMin);
+
+      // Density
+      this.renderDensity(text);
+    }
+
+    private formatDuration(min: number): string {
+      const totalSec = Math.round(min * 60);
+      if (totalSec < 60) return `${totalSec}s`;
+      const m = Math.floor(totalSec / 60);
+      const s = totalSec % 60;
+      return s > 0 ? `${m}m ${s}s` : `${m}m`;
+    }
+
+    private renderDensity(text: string) {
+      const density = getKeywordDensity(text, 5);
+
+      if (density.length === 0) {
+        this.densityListEl.innerHTML = '<div class="empty-density">Enter text to analyze keywords...</div>';
+        return;
+      }
+
+      this.densityListEl.innerHTML = '';
+      density.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'density-item';
+        div.innerHTML = `
+          <span class="density-word">${item.word}</span>
+          <div class="density-gauge-wrapper">
+            <div class="density-bar">
+              <div class="density-bar-fill" style="width: ${Math.min(item.percentage * 10, 100)}%"></div>
+            </div>
+            <span class="density-count">${item.count} (${item.percentage.toFixed(1)}%)</span>
+          </div>
+        `;
+        this.densityListEl.appendChild(div);
+      });
+    }
+
+    private handleConvert(type: string) {
+      const val = this.inputEl.value;
+      if (!val) return;
+
+      let result = '';
+      if (type === 'upper') result = val.toUpperCase();
+      else if (type === 'lower') result = val.toLowerCase();
+      else if (type === 'title') result = toTitleCase(val);
+      else if (type === 'sentence') result = toSentenceCase(val);
+      else if (type === 'camel') result = toCamelCase(val);
+      else if (type === 'snake') result = toSnakeCase(val);
+      else if (type === 'kebab') result = toKebabCase(val);
+
+      this.inputEl.value = result;
+      this.runAnalysis();
+    }
+
+    private handleClean(type: string) {
+      const val = this.inputEl.value;
+      if (!val) return;
+
+      let result = '';
+      if (type === 'spaces') {
+        result = val.replace(/\s+/g, ' ').trim();
+      } else if (type === 'strip-html') {
+        result = val.replace(/<\/?[^>]+(>|$)/g, "");
+      }
+
+      this.inputEl.value = result;
+      this.runAnalysis();
+    }
+
+    private handleClear() {
+      this.inputEl.value = '';
+      this.runAnalysis();
+      this.inputEl.focus();
+    }
+
+    private handleLoadSample() {
+      this.inputEl.value = `Writing is an art form, but optimization is a science! Modern SEO copywriting requires clear readability and structured word placement.
+
+When preparing web copy, aim for sentences that are brief and engaging. If a paragraph is too long, readers will check out and skim. Break up your paragraphs every three or four sentences.
+
+By checking word metrics, we ensure compliance with copy guidelines. For example, search engine summaries must stay under 160 characters. YouTube descriptions have a 5000 character limit. Using this analyzer, you can verify density and estimate reading times instantly.`;
+      this.runAnalysis();
+    }
+  }
+
+  if (!customElements.get('word-counter-tool')) {
+    customElements.define('word-counter-tool', WordCounterTool);
+  }
+</script>

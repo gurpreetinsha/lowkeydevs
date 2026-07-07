@@ -81,6 +81,12 @@ import { meta as nanoidGeneratorMeta } from './list/nanoid-generator/meta';
 import { meta as strongPasswordGeneratorMeta } from './list/strong-password-generator/meta';
 import { meta as apaCitationGeneratorMeta } from './list/apa-citation-generator/meta';
 
+import { meta as pxToRemConverterMeta } from './list/px-to-rem-converter/meta';
+import { meta as wordCounterMeta } from './list/word-counter/meta';
+import { meta as imageCompressorResizerMeta } from './list/image-compressor-resizer/meta';
+import { meta as videoToGifConverterMeta } from './list/video-to-gif-converter/meta';
+import { meta as loremIpsumGeneratorMeta } from './list/lorem-ipsum-generator/meta';
+
 // PDF tools imports
 import { meta as mergePdfMeta } from './list/merge-pdf/meta';
 import { meta as splitPdfMeta } from './list/split-pdf/meta';
@@ -193,6 +199,11 @@ export const registry: ToolMeta[] = [
   nanoidGeneratorMeta,
   strongPasswordGeneratorMeta,
   apaCitationGeneratorMeta,
+  pxToRemConverterMeta,
+  wordCounterMeta,
+  imageCompressorResizerMeta,
+  videoToGifConverterMeta,
+  loremIpsumGeneratorMeta,
 
   // PDF tools
   mergePdfMeta,

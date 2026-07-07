@@ -1,0 +1,824 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<image-compressor-tool class="tool-workspace">
+  <div class="workspace-grid">
+    <!-- Left Column: Controls & Setup -->
+    <div class="card-pane glass-panel">
+      <div class="pane-header">
+        <h3 class="pane-title">Upload & Options</h3>
+      </div>
+
+      <!-- Upload Zone -->
+      <div class="dropzone" id="img-dropzone">
+        <input type="file" id="img-file-input" accept="image/png, image/jpeg, image/webp" class="hidden-input" aria-label="Upload image" />
+        
+        <div class="dropzone-content" id="img-idle-state">
+          <Icon name="Image" size={48} />
+          <p class="dropzone-text">Drag & drop your image here or <span>browse</span></p>
+          <p class="dropzone-subtext">Supports PNG, JPG, JPEG, WebP (Max 50MB)</p>
+        </div>
+
+        <div class="preview-state hidden" id="img-preview-state">
+          <div class="preview-image-container">
+            <img id="img-preview-img" src="" alt="Source preview" />
+          </div>
+          <div class="preview-details">
+            <span class="file-name" id="source-name">image.jpg</span>
+            <span class="file-size" id="source-size">0 KB</span>
+            <span class="file-dims" id="source-dims">0 x 0 px</span>
+          </div>
+          <button class="btn-remove-preview" id="btn-remove-img" aria-label="Clear selection">✕</button>
+        </div>
+      </div>
+
+      <!-- Optimization Settings Panel -->
+      <div class="settings-form disabled" id="settings-panel">
+        <!-- Quality Slider -->
+        <div class="setting-group" id="quality-setting-group">
+          <div class="setting-label-row">
+            <label for="compression-quality" class="label">Compression Quality</label>
+            <span class="badge-value" id="quality-val">80%</span>
+          </div>
+          <input type="range" id="compression-quality" min="1" max="100" value="80" class="slider" aria-label="Compression quality" />
+          <p class="setting-hint">Lower quality reduces file size significantly. JPG and WebP only.</p>
+        </div>
+
+        <!-- Resize Dimensions -->
+        <div class="setting-group">
+          <div class="setting-label-row">
+            <label class="label">Resize Dimensions</label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="constrain-ratio" checked />
+              <span>Lock Aspect Ratio</span>
+            </label>
+          </div>
+          <div class="dims-inputs">
+            <div class="dim-field">
+              <input type="number" id="resize-width" placeholder="Width" min="1" class="input" aria-label="Target Width" />
+              <span class="dim-unit">px</span>
+            </div>
+            <span class="dims-x">✕</span>
+            <div class="dim-field">
+              <input type="number" id="resize-height" placeholder="Height" min="1" class="input" aria-label="Target Height" />
+              <span class="dim-unit">px</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Output Format -->
+        <div class="setting-group">
+          <label for="output-format" class="label">Output Format</label>
+          <select id="output-format" class="select" aria-label="Output format">
+            <option value="original">Keep Original Format</option>
+            <option value="image/jpeg">Convert to JPG/JPEG</option>
+            <option value="image/png">Convert to PNG (Lossless)</option>
+            <option value="image/webp">Convert to WebP</option>
+          </select>
+        </div>
+
+        <!-- Convert Button -->
+        <div class="actions-panel">
+          <button id="btn-process" class="btn btn-primary btn-lg w-full justify-center">
+            Compress & Resize
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Results & Optimization Stats -->
+    <div class="card-pane glass-panel">
+      <div class="pane-header">
+        <h3 class="pane-title">Optimized Result</h3>
+      </div>
+
+      <div class="results-placeholder" id="results-idle">
+        <Icon name="Sliders" size={40} />
+        <p>Configure options and click "Compress & Resize" to generate your optimized image.</p>
+      </div>
+
+      <div class="results-content hidden" id="results-active">
+        <div class="success-badge">
+          <span class="badge-icon">✓</span>
+          Optimization Successful!
+        </div>
+
+        <!-- Optimization savings card -->
+        <div class="savings-card">
+          <div class="savings-percent" id="savings-percent">-0%</div>
+          <div class="savings-label">Saved in file size</div>
+        </div>
+
+        <!-- Size comparison layout -->
+        <div class="comparison-grid">
+          <div class="compare-card">
+            <span class="compare-label">Original File</span>
+            <span class="compare-val" id="orig-size-val">0 KB</span>
+            <span class="compare-sub" id="orig-dims-val">0 x 0 px</span>
+          </div>
+          <div class="compare-card highlight">
+            <span class="compare-label">Optimized File</span>
+            <span class="compare-val" id="opt-size-val">0 KB</span>
+            <span class="compare-sub" id="opt-dims-val">0 x 0 px</span>
+          </div>
+        </div>
+
+        <!-- Download Action -->
+        <div class="download-container">
+          <a id="btn-download-image" class="btn btn-success btn-lg w-full justify-center download-link">
+            <Icon name="Download" size={18} />
+            Download Optimized Image
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</image-compressor-tool>
+
+<style>
+  .tool-workspace {
+    width: 100%;
+  }
+
+  .workspace-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .workspace-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .card-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    min-height: 520px;
+  }
+
+  .pane-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+  }
+
+  .pane-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin: 0;
+  }
+
+  /* Dropzone Styling */
+  .dropzone {
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-lg);
+    min-height: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.01);
+    transition: all 0.2s ease;
+  }
+
+  .dropzone:hover, .dropzone.dragover {
+    border-color: var(--primary-accent);
+    background: rgba(var(--primary-accent-rgb), 0.02);
+  }
+
+  .hidden-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    pointer-events: none;
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .dropzone-text {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .dropzone-text span {
+    color: var(--primary-accent);
+    text-decoration: underline;
+  }
+
+  .dropzone-subtext {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  /* Preview State */
+  .preview-state {
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.25rem;
+    z-index: 3;
+    position: relative;
+  }
+
+  .preview-image-container {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+  }
+
+  #img-preview-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .preview-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .file-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .file-size, .file-dims {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  .btn-remove-preview {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    transition: all 0.2s ease;
+  }
+
+  .btn-remove-preview:hover {
+    background: var(--text-danger-bg, rgba(239, 68, 68, 0.1));
+    color: #ef4444;
+    border-color: #ef4444;
+  }
+
+  /* Form Panels */
+  .settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    transition: opacity 0.2s ease;
+  }
+
+  .settings-form.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  .setting-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .setting-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .badge-value {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary-accent);
+  }
+
+  .slider {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    outline: none;
+    -webkit-appearance: none;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--primary-accent);
+    cursor: pointer;
+    transition: transform 0.1s ease;
+  }
+
+  .slider::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+  }
+
+  .setting-hint {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    opacity: 0.7;
+    margin: 0;
+  }
+
+  /* Dimensions inputs */
+  .dims-inputs {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .dim-field {
+    position: relative;
+    flex: 1;
+  }
+
+  .dim-field .input {
+    width: 100%;
+    padding-right: 2.2rem;
+  }
+
+  .dim-unit {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .dims-x {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+
+  .checkbox-label input {
+    cursor: pointer;
+  }
+
+  .actions-panel {
+    margin-top: 0.5rem;
+  }
+
+  .w-full {
+    width: 100%;
+  }
+
+  /* Results styling */
+  .results-placeholder {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 2rem;
+    opacity: 0.6;
+    border: 1px dashed var(--border-color);
+    border-radius: var(--radius-lg);
+  }
+
+  .results-placeholder p {
+    font-size: 0.875rem;
+    max-width: 250px;
+    line-height: 1.5;
+  }
+
+  .results-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .success-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--success-color);
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+
+  .badge-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: rgba(var(--success-color-rgb), 0.15);
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: bold;
+  }
+
+  .savings-card {
+    background: rgba(var(--success-color-rgb), 0.08);
+    border: 1px solid rgba(var(--success-color-rgb), 0.2);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .savings-percent {
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--success-color);
+  }
+
+  .savings-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .compare-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .compare-card.highlight {
+    background: rgba(var(--primary-accent-rgb), 0.02);
+    border-color: var(--primary-accent);
+  }
+
+  .compare-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .compare-val {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .compare-sub {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+  }
+
+  .download-container {
+    margin-top: 0.5rem;
+  }
+
+  .download-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+</style>
+
+<script>
+  class ImageCompressorTool extends HTMLElement {
+    private fileInputEl!: HTMLInputElement;
+    private dropzoneEl!: HTMLDivElement;
+    private idleStateEl!: HTMLDivElement;
+    private previewStateEl!: HTMLDivElement;
+    private previewImgEl!: HTMLImageElement;
+    private sourceNameEl!: HTMLSpanElement;
+    private sourceSizeEl!: HTMLSpanElement;
+    private sourceDimsEl!: HTMLSpanElement;
+    private removeBtn!: HTMLButtonElement;
+    
+    private settingsPanelEl!: HTMLDivElement;
+    private qualitySliderEl!: HTMLInputElement;
+    private qualityValEl!: HTMLSpanElement;
+    private widthInputEl!: HTMLInputElement;
+    private heightInputEl!: HTMLInputElement;
+    private constrainCheckboxEl!: HTMLInputElement;
+    private outputFormatEl!: HTMLSelectElement;
+    private qualityGroupEl!: HTMLDivElement;
+    
+    private processBtn!: HTMLButtonElement;
+    private resultsIdleEl!: HTMLDivElement;
+    private resultsActiveEl!: HTMLDivElement;
+    private savingsPercentEl!: HTMLDivElement;
+    private origSizeValEl!: HTMLSpanElement;
+    private origDimsValEl!: HTMLSpanElement;
+    private optSizeValEl!: HTMLSpanElement;
+    private optDimsValEl!: HTMLSpanElement;
+    private downloadBtn!: HTMLAnchorElement;
+
+    private selectedFile: File | null = null;
+    private sourceImage: HTMLImageElement | null = null;
+    private originalAspectRatio: number = 1;
+    private processingWidth: number = 0;
+    private processingHeight: number = 0;
+
+    connectedCallback() {
+      // Elements selectors
+      this.fileInputEl = this.querySelector('#img-file-input') as HTMLInputElement;
+      this.dropzoneEl = this.querySelector('#img-dropzone') as HTMLDivElement;
+      this.idleStateEl = this.querySelector('#img-idle-state') as HTMLDivElement;
+      this.previewStateEl = this.querySelector('#img-preview-state') as HTMLDivElement;
+      this.previewImgEl = this.querySelector('#img-preview-img') as HTMLImageElement;
+      this.sourceNameEl = this.querySelector('#source-name') as HTMLSpanElement;
+      this.sourceSizeEl = this.querySelector('#source-size') as HTMLSpanElement;
+      this.sourceDimsEl = this.querySelector('#source-dims') as HTMLSpanElement;
+      this.removeBtn = this.querySelector('#btn-remove-img') as HTMLButtonElement;
+
+      this.settingsPanelEl = this.querySelector('#settings-panel') as HTMLDivElement;
+      this.qualitySliderEl = this.querySelector('#compression-quality') as HTMLInputElement;
+      this.qualityValEl = this.querySelector('#quality-val') as HTMLSpanElement;
+      this.widthInputEl = this.querySelector('#resize-width') as HTMLInputElement;
+      this.heightInputEl = this.querySelector('#resize-height') as HTMLInputElement;
+      this.constrainCheckboxEl = this.querySelector('#constrain-ratio') as HTMLInputElement;
+      this.outputFormatEl = this.querySelector('#output-format') as HTMLSelectElement;
+      this.qualityGroupEl = this.querySelector('#quality-setting-group') as HTMLDivElement;
+
+      this.processBtn = this.querySelector('#btn-process') as HTMLButtonElement;
+      this.resultsIdleEl = this.querySelector('#results-idle') as HTMLDivElement;
+      this.resultsActiveEl = this.querySelector('#results-active') as HTMLDivElement;
+      this.savingsPercentEl = this.querySelector('#savings-percent') as HTMLDivElement;
+      this.origSizeValEl = this.querySelector('#orig-size-val') as HTMLSpanElement;
+      this.origDimsValEl = this.querySelector('#orig-dims-val') as HTMLSpanElement;
+      this.optSizeValEl = this.querySelector('#opt-size-val') as HTMLSpanElement;
+      this.optDimsValEl = this.querySelector('#opt-dims-val') as HTMLSpanElement;
+      this.downloadBtn = this.querySelector('#btn-download-image') as HTMLAnchorElement;
+
+      // Event listeners
+      this.dropzoneEl.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        this.dropzoneEl.classList.add('dragover');
+      });
+
+      this.dropzoneEl.addEventListener('dragleave', () => {
+        this.dropzoneEl.classList.remove('dragover');
+      });
+
+      this.dropzoneEl.addEventListener('drop', (e) => {
+        e.preventDefault();
+        this.dropzoneEl.classList.remove('dragover');
+        if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
+          this.handleFileSelect(e.dataTransfer.files[0]);
+        }
+      });
+
+      this.fileInputEl.addEventListener('change', () => {
+        if (this.fileInputEl.files && this.fileInputEl.files.length > 0) {
+          this.handleFileSelect(this.fileInputEl.files[0]);
+        }
+      });
+
+      this.removeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.resetCompressor();
+      });
+
+      this.qualitySliderEl.addEventListener('input', () => {
+        this.qualityValEl.textContent = `${this.qualitySliderEl.value}%`;
+      });
+
+      this.widthInputEl.addEventListener('input', () => this.handleWidthResize());
+      this.heightInputEl.addEventListener('input', () => this.handleHeightResize());
+      
+      this.outputFormatEl.addEventListener('change', () => this.handleFormatChange());
+
+      this.processBtn.addEventListener('click', () => this.compressAndResize());
+    }
+
+    private formatBytes(bytes: number): string {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    private handleFileSelect(file: File) {
+      if (!file.type.startsWith('image/')) {
+        alert('Please drop or select a valid image file (PNG, JPG, WebP).');
+        return;
+      }
+
+      this.selectedFile = file;
+      this.sourceNameEl.textContent = file.name;
+      this.sourceSizeEl.textContent = this.formatBytes(file.size);
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          this.sourceImage = img;
+          this.originalAspectRatio = img.naturalWidth / img.naturalHeight;
+          this.sourceDimsEl.textContent = `${img.naturalWidth} x ${img.naturalHeight} px`;
+          
+          // Autofill dimensions
+          this.widthInputEl.value = img.naturalWidth.toString();
+          this.heightInputEl.value = img.naturalHeight.toString();
+          
+          this.previewImgEl.src = e.target?.result as string;
+          this.idleStateEl.classList.add('hidden');
+          this.previewStateEl.classList.remove('hidden');
+          this.settingsPanelEl.classList.remove('disabled');
+          
+          this.resultsIdleEl.classList.remove('hidden');
+          this.resultsActiveEl.classList.add('hidden');
+
+          // Initialize quality slider availability based on source format
+          this.outputFormatEl.value = 'original';
+          this.handleFormatChange();
+        };
+        img.src = e.target?.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    private handleWidthResize() {
+      if (!this.sourceImage || !this.constrainCheckboxEl.checked) return;
+      const width = parseInt(this.widthInputEl.value);
+      if (isNaN(width) || width <= 0) return;
+      
+      const newHeight = Math.round(width / this.originalAspectRatio);
+      this.heightInputEl.value = newHeight.toString();
+    }
+
+    private handleHeightResize() {
+      if (!this.sourceImage || !this.constrainCheckboxEl.checked) return;
+      const height = parseInt(this.heightInputEl.value);
+      if (isNaN(height) || height <= 0) return;
+      
+      const newWidth = Math.round(height * this.originalAspectRatio);
+      this.widthInputEl.value = newWidth.toString();
+    }
+
+    private handleFormatChange() {
+      if (!this.selectedFile) return;
+      const format = this.outputFormatEl.value;
+      const originalType = this.selectedFile.type;
+      
+      const isLossless = (format === 'image/png') || (format === 'original' && originalType === 'image/png');
+      if (isLossless) {
+        this.qualityGroupEl.classList.add('hidden');
+      } else {
+        this.qualityGroupEl.classList.remove('hidden');
+      }
+    }
+
+    private resetCompressor() {
+      this.selectedFile = null;
+      this.sourceImage = null;
+      this.fileInputEl.value = '';
+      this.previewImgEl.src = '';
+      this.widthInputEl.value = '';
+      this.heightInputEl.value = '';
+      this.idleStateEl.classList.remove('hidden');
+      this.previewStateEl.classList.add('hidden');
+      this.settingsPanelEl.classList.add('disabled');
+      this.resultsIdleEl.classList.remove('hidden');
+      this.resultsActiveEl.classList.add('hidden');
+    }
+
+    private compressAndResize() {
+      if (!this.selectedFile || !this.sourceImage) return;
+
+      const targetWidth = parseInt(this.widthInputEl.value) || this.sourceImage.naturalWidth;
+      const targetHeight = parseInt(this.heightInputEl.value) || this.sourceImage.naturalHeight;
+
+      const formatSelect = this.outputFormatEl.value;
+      const targetType = formatSelect === 'original' ? this.selectedFile.type : formatSelect;
+
+      // Quality setting (0 to 1)
+      const quality = parseFloat(this.qualitySliderEl.value) / 100;
+
+      const canvas = document.createElement('canvas');
+      canvas.width = targetWidth;
+      canvas.height = targetHeight;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      // Draw background if converting to lossy formats which don't support alpha channel perfectly
+      if (targetType === 'image/jpeg') {
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, targetWidth, targetHeight);
+      }
+
+      ctx.drawImage(this.sourceImage, 0, 0, targetWidth, targetHeight);
+
+      canvas.toBlob((blob) => {
+        if (!blob) return;
+
+        // Render optimized details
+        const savedBytes = this.selectedFile!.size - blob.size;
+        const savedPercent = Math.max(0, Math.round((savedBytes / this.selectedFile!.size) * 100));
+
+        this.savingsPercentEl.textContent = `-${savedPercent}%`;
+        this.origSizeValEl.textContent = this.formatBytes(this.selectedFile!.size);
+        this.origDimsValEl.textContent = `${this.sourceImage!.naturalWidth} x ${this.sourceImage!.naturalHeight} px`;
+
+        this.optSizeValEl.textContent = this.formatBytes(blob.size);
+        this.optDimsValEl.textContent = `${targetWidth} x ${targetHeight} px`;
+
+        const url = URL.createObjectURL(blob);
+        this.downloadBtn.href = url;
+
+        // Determine extension
+        let ext = 'jpg';
+        if (targetType === 'image/png') ext = 'png';
+        if (targetType === 'image/webp') ext = 'webp';
+
+        const baseName = this.selectedFile!.name.substring(0, this.selectedFile!.name.lastIndexOf('.'));
+        this.downloadBtn.download = `${baseName}_optimized.${ext}`;
+
+        this.resultsIdleEl.classList.add('hidden');
+        this.resultsActiveEl.classList.remove('hidden');
+
+        // Scroll results into view smoothly
+        this.resultsActiveEl.scrollIntoView({ behavior: 'smooth' });
+      }, targetType, quality);
+    }
+  }
+
+  if (!customElements.get('image-compressor-tool')) {
+    customElements.define('image-compressor-tool', ImageCompressorTool);
+  }
+</script>

@@ -1,0 +1,808 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<script src="https://cdn.jsdelivr.net/npm/gifshot@0.4.5/build/gifshot.min.js" is:inline></script>
+
+<video-to-gif-tool class="tool-workspace">
+  <div class="workspace-grid">
+    <!-- Left Column: Video Setup & Options -->
+    <div class="card-pane glass-panel">
+      <div class="pane-header">
+        <h3 class="pane-title">Video Input & Options</h3>
+      </div>
+
+      <!-- Upload Zone -->
+      <div class="dropzone" id="vid-dropzone">
+        <input type="file" id="vid-file-input" accept="video/mp4, video/webm, video/ogg" class="hidden-input" aria-label="Upload video file" />
+        
+        <div class="dropzone-content" id="vid-idle-state">
+          <Icon name="Video" size={48} />
+          <p class="dropzone-text">Drag & drop your video here or <span>browse</span></p>
+          <p class="dropzone-subtext">Supports MP4, WebM, OGG (Max 100MB)</p>
+        </div>
+
+        <div class="preview-state hidden" id="vid-preview-state">
+          <div class="video-preview-wrapper">
+            <video id="vid-preview-player" controls muted class="video-player"></video>
+          </div>
+          <div class="preview-details">
+            <span class="file-name" id="vid-source-name">clip.mp4</span>
+            <span class="file-size" id="vid-source-size">0 MB</span>
+            <span class="file-dims" id="vid-source-dims">0 x 0 px | 0.0s</span>
+          </div>
+          <button class="btn-remove-preview" id="btn-remove-vid" aria-label="Clear selection">✕</button>
+        </div>
+      </div>
+
+      <!-- Settings Panel -->
+      <div class="settings-form disabled" id="vid-settings-panel">
+        <!-- Capture Start & Duration -->
+        <div class="time-range-group">
+          <div class="setting-group">
+            <label for="vid-start-time" class="label">Start Time (seconds)</label>
+            <input type="number" id="vid-start-time" value="0.0" step="0.1" min="0" class="input" aria-label="Start time in seconds" />
+          </div>
+          <div class="setting-group">
+            <label for="vid-duration" class="label">Duration (seconds)</label>
+            <input type="number" id="vid-duration" value="3.0" step="0.5" min="0.5" max="10" class="input" aria-label="Duration in seconds" />
+            <p class="setting-hint">Max 10s to prevent crash.</p>
+          </div>
+        </div>
+
+        <!-- Resolution Scale & Aspect Lock -->
+        <div class="setting-group">
+          <div class="setting-label-row">
+            <label class="label">GIF Resolution</label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="vid-constrain-ratio" checked />
+              <span>Lock Aspect Ratio</span>
+            </label>
+          </div>
+          <div class="dims-inputs">
+            <div class="dim-field">
+              <input type="number" id="vid-gif-width" value="480" min="50" max="1920" class="input" aria-label="GIF Width" />
+              <span class="dim-unit">px</span>
+            </div>
+            <span class="dims-x">✕</span>
+            <div class="dim-field">
+              <input type="number" id="vid-gif-height" value="270" min="50" max="1080" class="input" aria-label="GIF Height" />
+              <span class="dim-unit">px</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- GIF Settings: FPS & Quality -->
+        <div class="time-range-group">
+          <div class="setting-group">
+            <label for="vid-fps" class="label">Frames Per Second (FPS)</label>
+            <select id="vid-fps" class="select" aria-label="Frames per second">
+              <option value="5">5 FPS (Low Size)</option>
+              <option value="10" selected>10 FPS (Recommended)</option>
+              <option value="15">15 FPS (Smooth)</option>
+              <option value="20">20 FPS (Very Smooth)</option>
+            </select>
+          </div>
+          <div class="setting-group">
+            <label for="vid-quality" class="label">Color Quality</label>
+            <select id="vid-quality" class="select" aria-label="Render Quality">
+              <option value="20">Draft (Fastest)</option>
+              <option value="10" selected>Standard (Balanced)</option>
+              <option value="5">High Quality (Slower)</option>
+              <option value="2">Maximum Quality (Slow)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Action Button -->
+        <div class="actions-panel">
+          <button id="btn-vid-process" class="btn btn-primary btn-lg w-full justify-center">
+            Convert to GIF
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Animated GIF Result -->
+    <div class="card-pane glass-panel">
+      <div class="pane-header">
+        <h3 class="pane-title">Animated GIF Preview</h3>
+      </div>
+
+      <!-- Idle state -->
+      <div class="results-placeholder" id="vid-results-idle">
+        <Icon name="Sliders" size={40} />
+        <p>Set video options and click "Convert to GIF" to generate your custom looping animation.</p>
+      </div>
+
+      <!-- Loading State -->
+      <div class="results-placeholder hidden" id="vid-results-loading">
+        <div class="spinner"></div>
+        <p id="loading-msg">Compiling frames and generating GIF...<br><small>This may take a few seconds.</small></p>
+      </div>
+
+      <!-- Active result state -->
+      <div class="results-content hidden" id="vid-results-active">
+        <div class="success-badge">
+          <span class="badge-icon">✓</span>
+          GIF Created Successfully!
+        </div>
+
+        <!-- Preview Image of the GIF -->
+        <div class="gif-preview-container">
+          <img id="gif-preview-img" src="" alt="Animated GIF result" />
+        </div>
+
+        <!-- Stat box -->
+        <div class="compare-card highlight w-full">
+          <span class="compare-label">Generated GIF Size</span>
+          <span class="compare-val" id="gif-size-val">0 KB</span>
+          <span class="compare-sub" id="gif-dims-val">480 x 270 px</span>
+        </div>
+
+        <!-- Download Action -->
+        <div class="download-container">
+          <a id="btn-download-gif" class="btn btn-success btn-lg w-full justify-center download-link">
+            <Icon name="Download" size={18} />
+            Download Animated GIF
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</video-to-gif-tool>
+
+<style>
+  .tool-workspace {
+    width: 100%;
+  }
+
+  .workspace-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .workspace-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .card-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    min-height: 520px;
+  }
+
+  .pane-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+  }
+
+  .pane-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin: 0;
+  }
+
+  /* Dropzone Styling */
+  .dropzone {
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-lg);
+    min-height: 185px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.01);
+    transition: all 0.2s ease;
+  }
+
+  .dropzone:hover, .dropzone.dragover {
+    border-color: var(--primary-accent);
+    background: rgba(var(--primary-accent-rgb), 0.02);
+  }
+
+  .hidden-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    pointer-events: none;
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .dropzone-text {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .dropzone-text span {
+    color: var(--primary-accent);
+    text-decoration: underline;
+  }
+
+  .dropzone-subtext {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  /* Preview State */
+  .preview-state {
+    width: 100%;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    z-index: 3;
+    position: relative;
+  }
+
+  .video-preview-wrapper {
+    width: 120px;
+    height: 80px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: #000;
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .video-player {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .preview-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .file-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .file-size, .file-dims {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  .btn-remove-preview {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    transition: all 0.2s ease;
+  }
+
+  .btn-remove-preview:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border-color: #ef4444;
+  }
+
+  /* Form Panels */
+  .settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    transition: opacity 0.2s ease;
+  }
+
+  .settings-form.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  .time-range-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .setting-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .setting-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .setting-hint {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    opacity: 0.7;
+    margin: 0;
+  }
+
+  /* Dimensions inputs */
+  .dims-inputs {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .dim-field {
+    position: relative;
+    flex: 1;
+  }
+
+  .dim-field .input {
+    width: 100%;
+    padding-right: 2.2rem;
+  }
+
+  .dim-unit {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .dims-x {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+
+  .checkbox-label input {
+    cursor: pointer;
+  }
+
+  .actions-panel {
+    margin-top: 0.5rem;
+  }
+
+  .w-full {
+    width: 100%;
+  }
+
+  /* Results styling */
+  .results-placeholder {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 2rem;
+    opacity: 0.6;
+    border: 1px dashed var(--border-color);
+    border-radius: var(--radius-lg);
+  }
+
+  .results-placeholder p {
+    font-size: 0.875rem;
+    max-width: 250px;
+    line-height: 1.5;
+  }
+
+  /* Spinner */
+  .spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--primary-accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .results-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    align-items: center;
+  }
+
+  .success-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--success-color);
+    font-weight: 600;
+    font-size: 1.05rem;
+    align-self: flex-start;
+  }
+
+  .badge-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: rgba(var(--success-color-rgb), 0.15);
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: bold;
+  }
+
+  .gif-preview-container {
+    width: 100%;
+    max-height: 280px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: #0d0d0d;
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+  }
+
+  #gif-preview-img {
+    max-width: 100%;
+    max-height: 260px;
+    object-fit: contain;
+  }
+
+  .compare-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .compare-card.highlight {
+    background: rgba(var(--primary-accent-rgb), 0.02);
+    border-color: var(--primary-accent);
+  }
+
+  .compare-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .compare-val {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .compare-sub {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+  }
+
+  .download-container {
+    width: 100%;
+  }
+
+  .download-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+</style>
+
+<script>
+  declare const gifshot: any;
+
+  class VideoToGifTool extends HTMLElement {
+    private fileInputEl!: HTMLInputElement;
+    private dropzoneEl!: HTMLDivElement;
+    private idleStateEl!: HTMLDivElement;
+    private previewStateEl!: HTMLDivElement;
+    private previewPlayerEl!: HTMLVideoElement;
+    private sourceNameEl!: HTMLSpanElement;
+    private sourceSizeEl!: HTMLSpanElement;
+    private sourceDimsEl!: HTMLSpanElement;
+    private removeBtn!: HTMLButtonElement;
+
+    private settingsPanelEl!: HTMLDivElement;
+    private startTimeEl!: HTMLInputElement;
+    private durationEl!: HTMLInputElement;
+    private widthEl!: HTMLInputElement;
+    private heightEl!: HTMLInputElement;
+    private constrainCheckboxEl!: HTMLInputElement;
+    private fpsEl!: HTMLSelectElement;
+    private qualityEl!: HTMLSelectElement;
+
+    private processBtn!: HTMLButtonElement;
+    private resultsIdleEl!: HTMLDivElement;
+    private resultsLoadingEl!: HTMLDivElement;
+    private resultsActiveEl!: HTMLDivElement;
+    private gifPreviewImgEl!: HTMLImageElement;
+    private gifSizeValEl!: HTMLSpanElement;
+    private gifDimsValEl!: HTMLSpanElement;
+    private downloadBtn!: HTMLAnchorElement;
+
+    private selectedFile: File | null = null;
+    private originalWidth: number = 0;
+    private originalHeight: number = 0;
+    private aspectRatio: number = 1.7778;
+
+    connectedCallback() {
+      // Element selections
+      this.fileInputEl = this.querySelector('#vid-file-input') as HTMLInputElement;
+      this.dropzoneEl = this.querySelector('#vid-dropzone') as HTMLDivElement;
+      this.idleStateEl = this.querySelector('#vid-idle-state') as HTMLDivElement;
+      this.previewStateEl = this.querySelector('#vid-preview-state') as HTMLDivElement;
+      this.previewPlayerEl = this.querySelector('#vid-preview-player') as HTMLVideoElement;
+      this.sourceNameEl = this.querySelector('#vid-source-name') as HTMLSpanElement;
+      this.sourceSizeEl = this.querySelector('#vid-source-size') as HTMLSpanElement;
+      this.sourceDimsEl = this.querySelector('#vid-source-dims') as HTMLSpanElement;
+      this.removeBtn = this.querySelector('#btn-remove-vid') as HTMLButtonElement;
+
+      this.settingsPanelEl = this.querySelector('#vid-settings-panel') as HTMLDivElement;
+      this.startTimeEl = this.querySelector('#vid-start-time') as HTMLInputElement;
+      this.durationEl = this.querySelector('#vid-duration') as HTMLInputElement;
+      this.widthEl = this.querySelector('#vid-gif-width') as HTMLInputElement;
+      this.heightEl = this.querySelector('#vid-gif-height') as HTMLInputElement;
+      this.constrainCheckboxEl = this.querySelector('#vid-constrain-ratio') as HTMLInputElement;
+      this.fpsEl = this.querySelector('#vid-fps') as HTMLSelectElement;
+      this.qualityEl = this.querySelector('#vid-quality') as HTMLSelectElement;
+
+      this.processBtn = this.querySelector('#btn-vid-process') as HTMLButtonElement;
+      this.resultsIdleEl = this.querySelector('#vid-results-idle') as HTMLDivElement;
+      this.resultsLoadingEl = this.querySelector('#vid-results-loading') as HTMLDivElement;
+      this.resultsActiveEl = this.querySelector('#vid-results-active') as HTMLDivElement;
+      this.gifPreviewImgEl = this.querySelector('#gif-preview-img') as HTMLImageElement;
+      this.gifSizeValEl = this.querySelector('#gif-size-val') as HTMLSpanElement;
+      this.gifDimsValEl = this.querySelector('#gif-dims-val') as HTMLSpanElement;
+      this.downloadBtn = this.querySelector('#btn-download-gif') as HTMLAnchorElement;
+
+      // Event registrations
+      this.dropzoneEl.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        this.dropzoneEl.classList.add('dragover');
+      });
+
+      this.dropzoneEl.addEventListener('dragleave', () => {
+        this.dropzoneEl.classList.remove('dragover');
+      });
+
+      this.dropzoneEl.addEventListener('drop', (e) => {
+        e.preventDefault();
+        this.dropzoneEl.classList.remove('dragover');
+        if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
+          this.handleFileSelect(e.dataTransfer.files[0]);
+        }
+      });
+
+      this.fileInputEl.addEventListener('change', () => {
+        if (this.fileInputEl.files && this.fileInputEl.files.length > 0) {
+          this.handleFileSelect(this.fileInputEl.files[0]);
+        }
+      });
+
+      this.removeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.resetTool();
+      });
+
+      this.widthEl.addEventListener('input', () => this.handleWidthResize());
+      this.heightEl.addEventListener('input', () => this.handleHeightResize());
+
+      this.processBtn.addEventListener('click', () => this.convertToGif());
+    }
+
+    private formatSize(bytes: number): string {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    private handleFileSelect(file: File) {
+      if (!file.type.startsWith('video/')) {
+        alert('Please select or drop a valid video file (MP4, WebM, OGG).');
+        return;
+      }
+
+      this.selectedFile = file;
+      this.sourceNameEl.textContent = file.name;
+      this.sourceSizeEl.textContent = this.formatSize(file.size);
+
+      const url = URL.createObjectURL(file);
+      this.previewPlayerEl.src = url;
+
+      this.previewPlayerEl.onloadedmetadata = () => {
+        this.originalWidth = this.previewPlayerEl.videoWidth;
+        this.originalHeight = this.previewPlayerEl.videoHeight;
+        this.aspectRatio = this.originalWidth / this.originalHeight;
+
+        const duration = this.previewPlayerEl.duration;
+        this.sourceDimsEl.textContent = `${this.originalWidth} x ${this.originalHeight} px | ${duration.toFixed(1)}s`;
+
+        // Fill target dimensions (cap at max width 640px to prevent memory crashes by default)
+        const defWidth = Math.min(this.originalWidth, 480);
+        const defHeight = Math.round(defWidth / this.aspectRatio);
+        this.widthEl.value = defWidth.toString();
+        this.heightEl.value = defHeight.toString();
+
+        // Limit inputs based on duration
+        this.startTimeEl.max = Math.max(0, duration - 1).toString();
+        this.startTimeEl.value = '0.0';
+        this.durationEl.value = Math.min(3.0, duration).toString();
+
+        this.idleStateEl.classList.add('hidden');
+        this.previewStateEl.classList.remove('hidden');
+        this.settingsPanelEl.classList.remove('disabled');
+
+        this.resultsIdleEl.classList.remove('hidden');
+        this.resultsLoadingEl.classList.add('hidden');
+        this.resultsActiveEl.classList.add('hidden');
+      };
+    }
+
+    private handleWidthResize() {
+      if (!this.selectedFile || !this.constrainCheckboxEl.checked) return;
+      const width = parseInt(this.widthEl.value);
+      if (isNaN(width) || width <= 0) return;
+      
+      const height = Math.round(width / this.aspectRatio);
+      this.heightEl.value = height.toString();
+    }
+
+    private handleHeightResize() {
+      if (!this.selectedFile || !this.constrainCheckboxEl.checked) return;
+      const height = parseInt(this.heightEl.value);
+      if (isNaN(height) || height <= 0) return;
+      
+      const width = Math.round(height * this.aspectRatio);
+      this.widthEl.value = width.toString();
+    }
+
+    private resetTool() {
+      this.selectedFile = null;
+      if (this.previewPlayerEl.src) {
+        URL.revokeObjectURL(this.previewPlayerEl.src);
+      }
+      this.previewPlayerEl.src = '';
+      this.fileInputEl.value = '';
+      this.idleStateEl.classList.remove('hidden');
+      this.previewStateEl.classList.add('hidden');
+      this.settingsPanelEl.classList.add('disabled');
+      this.resultsIdleEl.classList.remove('hidden');
+      this.resultsLoadingEl.classList.add('hidden');
+      this.resultsActiveEl.classList.add('hidden');
+    }
+
+    private convertToGif() {
+      if (!this.selectedFile || !this.previewPlayerEl.src) return;
+
+      if (typeof gifshot === 'undefined') {
+        alert('GIF converter engine not loaded yet. Check internet connection.');
+        return;
+      }
+
+      this.resultsIdleEl.classList.add('hidden');
+      this.resultsActiveEl.classList.add('hidden');
+      this.resultsLoadingEl.classList.remove('hidden');
+
+      const width = parseInt(this.widthEl.value) || 480;
+      const height = parseInt(this.heightEl.value) || 270;
+      const fps = parseInt(this.fpsEl.value) || 10;
+      const quality = parseInt(this.qualityEl.value) || 10; // lower is better quality, standard is 10
+      const startTime = parseFloat(this.startTimeEl.value) || 0.0;
+      const duration = parseFloat(this.durationEl.value) || 3.0;
+
+      const numFrames = Math.round(fps * duration);
+      const interval = 1 / fps;
+
+      gifshot.createGIF({
+        video: [this.previewPlayerEl.src],
+        gifWidth: width,
+        gifHeight: height,
+        numFrames: numFrames,
+        interval: interval,
+        sampleInterval: quality,
+        offset: startTime,
+        numWorkers: 2
+      }, (obj: any) => {
+        if (obj.error) {
+          console.error(obj.errorMsg);
+          alert(`Error during GIF creation: ${obj.errorMsg}`);
+          this.resultsLoadingEl.classList.add('hidden');
+          this.resultsIdleEl.classList.remove('hidden');
+          return;
+        }
+
+        const base64Gif = obj.image;
+        this.gifPreviewImgEl.src = base64Gif;
+        this.gifDimsValEl.textContent = `${width} x ${height} px | ${duration.toFixed(1)}s`;
+
+        // Calculate size from Base64
+        const stringLength = base64Gif.length - 'data:image/gif;base64,'.length;
+        const sizeInBytes = Math.ceil(stringLength * (3 / 4));
+        this.gifSizeValEl.textContent = this.formatSize(sizeInBytes);
+
+        this.downloadBtn.href = base64Gif;
+        
+        // Generate matching download name
+        const origName = this.selectedFile!.name.substring(0, this.selectedFile!.name.lastIndexOf('.'));
+        this.downloadBtn.download = `${origName}_clip.gif`;
+
+        this.resultsLoadingEl.classList.add('hidden');
+        this.resultsActiveEl.classList.remove('hidden');
+
+        // Scroll results into view
+        this.resultsActiveEl.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+  }
+
+  if (!customElements.get('video-to-gif-tool')) {
+    customElements.define('video-to-gif-tool', VideoToGifTool);
+  }
+</script>

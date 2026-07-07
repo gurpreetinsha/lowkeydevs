@@ -1,0 +1,481 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<px-to-rem-tool class="tool-workspace">
+  <div class="converter-layout">
+    <!-- Calculator Panel -->
+    <div class="calculator-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Conversion Calculator</span>
+      </div>
+
+      <!-- Settings Base Size -->
+      <div class="setting-row">
+        <label for="base-size-input" class="label">Base Font Size (Root)</label>
+        <div class="input-with-unit">
+          <input type="number" id="base-size-input" value="16" min="1" max="100" class="input" aria-label="Base Font Size" />
+          <span class="input-unit">px</span>
+        </div>
+      </div>
+
+      <!-- Inputs Grid -->
+      <div class="inputs-grid">
+        <div class="input-group">
+          <label for="px-input" class="label">Pixels (PX)</label>
+          <div class="input-with-unit">
+            <input type="number" id="px-input" placeholder="e.g. 16" step="any" class="input" aria-label="Pixels" />
+            <span class="input-unit">px</span>
+          </div>
+        </div>
+
+        <div class="exchange-divider">
+          <Icon name="RefreshCw" size={20} class="exchange-icon" />
+        </div>
+
+        <div class="input-group">
+          <label for="rem-input" class="label">Relative EM (REM)</label>
+          <div class="input-with-unit">
+            <input type="number" id="rem-input" placeholder="e.g. 1" step="any" class="input" aria-label="REM" />
+            <span class="input-unit">rem</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Shortcuts -->
+      <div class="shortcuts-section">
+        <span class="section-label">Quick Pixels:</span>
+        <div class="shortcuts-list">
+          <button class="btn-shortcut" data-px="8">8px</button>
+          <button class="btn-shortcut" data-px="12">12px</button>
+          <button class="btn-shortcut" data-px="14">14px</button>
+          <button class="btn-shortcut" data-px="16">16px</button>
+          <button class="btn-shortcut" data-px="20">20px</button>
+          <button class="btn-shortcut" data-px="24">24px</button>
+          <button class="btn-shortcut" data-px="32">32px</button>
+          <button class="btn-shortcut" data-px="48">48px</button>
+          <button class="btn-shortcut" data-px="64">64px</button>
+        </div>
+      </div>
+
+      <!-- CSS Code Snippet -->
+      <div class="snippet-section">
+        <span class="section-label">CSS Snippet</span>
+        <div class="snippet-box">
+          <pre id="css-snippet" class="code-pre">font-size: 1rem; /* 16px */</pre>
+          <button id="btn-copy-snippet" class="btn btn-secondary btn-sm" aria-label="Copy CSS Snippet">
+            <Icon name="Clipboard" size={14} class="copy-icon" />
+            <Icon name="Check" size={14} class="check-icon" />
+            <span class="copy-text">Copy</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reference Table Panel -->
+    <div class="table-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Conversion Table (Base <span id="table-base-val">16</span>px)</span>
+      </div>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>PX</th>
+              <th>REM</th>
+              <th>Usage Scenario (Example)</th>
+            </tr>
+          </thead>
+          <tbody id="conversion-table-body">
+            <!-- Populated dynamically via javascript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</px-to-rem-tool>
+
+<style>
+  .tool-workspace {
+    width: 100%;
+  }
+
+  .converter-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .converter-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .calculator-pane, .table-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    min-height: 450px;
+  }
+
+  .pane-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+  }
+
+  .pane-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 1rem;
+  }
+
+  .setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .input-with-unit {
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-width: 160px;
+    width: 100%;
+  }
+
+  .input-with-unit .input {
+    width: 100%;
+    padding-right: 3rem;
+  }
+
+  .input-unit {
+    position: absolute;
+    right: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    pointer-events: none;
+  }
+
+  .inputs-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: flex-end;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .exchange-divider {
+    padding-bottom: 0.75rem;
+    display: flex;
+    justify-content: center;
+    color: var(--text-secondary);
+    opacity: 0.7;
+  }
+
+  .exchange-icon {
+    animation: rotate-static 10s linear infinite;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .input-group .input-with-unit {
+    max-width: 100%;
+  }
+
+  .shortcuts-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .section-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .shortcuts-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .btn-shortcut {
+    background: var(--bg-secondary, rgba(255, 255, 255, 0.05));
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    transition: all 0.2s ease;
+  }
+
+  .btn-shortcut:hover {
+    border-color: var(--primary-accent);
+    color: var(--primary-accent);
+    transform: translateY(-1px);
+  }
+
+  .snippet-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .snippet-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    gap: 1rem;
+  }
+
+  .code-pre {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--primary-accent);
+    overflow-x: auto;
+  }
+
+  .table-container {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 380px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    text-align: left;
+  }
+
+  .data-table th, .data-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .data-table th {
+    background: rgba(0, 0, 0, 0.15);
+    color: var(--text-secondary);
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+  }
+
+  .data-table td {
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+  }
+
+  .data-table td:last-child {
+    font-family: var(--font-sans);
+    color: var(--text-secondary);
+  }
+
+  .data-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  /* Copy status */
+  #btn-copy-snippet .check-icon {
+    display: none;
+  }
+
+  #btn-copy-snippet.copied .copy-icon {
+    display: none;
+  }
+
+  #btn-copy-snippet.copied .check-icon {
+    display: inline-block;
+    color: var(--success-color);
+  }
+
+  #btn-copy-snippet.copied {
+    border-color: var(--success-color);
+  }
+</style>
+
+<script>
+  class PxToRemTool extends HTMLElement {
+    private baseSizeEl!: HTMLInputElement;
+    private pxInputEl!: HTMLInputElement;
+    private remInputEl!: HTMLInputElement;
+    private cssSnippetEl!: HTMLPreElement;
+    private tableBaseValEl!: HTMLSpanElement;
+    private tableBodyEl!: HTMLTableSectionElement;
+
+    connectedCallback() {
+      this.baseSizeEl = this.querySelector('#base-size-input') as HTMLInputElement;
+      this.pxInputEl = this.querySelector('#px-input') as HTMLInputElement;
+      this.remInputEl = this.querySelector('#rem-input') as HTMLInputElement;
+      this.cssSnippetEl = this.querySelector('#css-snippet') as HTMLPreElement;
+      this.tableBaseValEl = this.querySelector('#table-base-val') as HTMLSpanElement;
+      this.tableBodyEl = this.querySelector('#conversion-table-body') as HTMLTableSectionElement;
+
+      // Event listener for inputs
+      this.pxInputEl.addEventListener('input', () => this.handlePxInput());
+      this.remInputEl.addEventListener('input', () => this.handleRemInput());
+      this.baseSizeEl.addEventListener('input', () => {
+        this.updateTable();
+        this.handlePxInput();
+      });
+
+      // Shortcut buttons
+      this.querySelectorAll('.btn-shortcut').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const pxVal = (e.currentTarget as HTMLButtonElement).getAttribute('data-px');
+          if (pxVal) {
+            this.pxInputEl.value = pxVal;
+            this.handlePxInput();
+          }
+        });
+      });
+
+      // Copy Snippet button
+      const copyBtn = this.querySelector('#btn-copy-snippet') as HTMLButtonElement;
+      copyBtn.addEventListener('click', () => this.handleCopySnippet());
+
+      // Set initial values and populate table
+      this.pxInputEl.value = '16';
+      this.handlePxInput();
+      this.updateTable();
+    }
+
+    private getBaseSize(): number {
+      const val = parseFloat(this.baseSizeEl.value);
+      return isNaN(val) || val <= 0 ? 16 : val;
+    }
+
+    private handlePxInput() {
+      const pxVal = parseFloat(this.pxInputEl.value);
+      const base = this.getBaseSize();
+
+      if (isNaN(pxVal)) {
+        this.remInputEl.value = '';
+        this.updateSnippet('', 0);
+        return;
+      }
+
+      const remVal = pxVal / base;
+      // Round to 4 decimal places for neat UI, but keep raw value accessible
+      this.remInputEl.value = parseFloat(remVal.toFixed(4)).toString();
+      this.updateSnippet(this.remInputEl.value, pxVal);
+    }
+
+    private handleRemInput() {
+      const remVal = parseFloat(this.remInputEl.value);
+      const base = this.getBaseSize();
+
+      if (isNaN(remVal)) {
+        this.pxInputEl.value = '';
+        this.updateSnippet(0, '');
+        return;
+      }
+
+      const pxVal = remVal * base;
+      this.pxInputEl.value = parseFloat(pxVal.toFixed(4)).toString();
+      this.updateSnippet(remVal, pxVal);
+    }
+
+    private updateSnippet(remVal: number | string, pxVal: number | string) {
+      if (remVal === '' || pxVal === '') {
+        this.cssSnippetEl.textContent = '/* Enter a value */';
+        return;
+      }
+      this.cssSnippetEl.textContent = `font-size: ${remVal}rem; /* ${pxVal}px */`;
+    }
+
+    private async handleCopySnippet() {
+      const code = this.cssSnippetEl.textContent;
+      if (!code || code.includes('Enter a value')) return;
+
+      try {
+        await navigator.clipboard.writeText(code);
+        const copyBtn = this.querySelector('#btn-copy-snippet') as HTMLButtonElement;
+        const copyText = copyBtn.querySelector('.copy-text') as HTMLSpanElement;
+
+        copyBtn.classList.add('copied');
+        copyText.textContent = 'Copied!';
+
+        setTimeout(() => {
+          copyBtn.classList.remove('copied');
+          copyText.textContent = 'Copy';
+        }, 2000);
+      } catch (err) {
+        console.error('Copy snippet failed', err);
+      }
+    }
+
+    private updateTable() {
+      const base = this.getBaseSize();
+      this.tableBaseValEl.textContent = base.toString();
+
+      // Common reference sizes
+      const standardSizes = [
+        { px: 10, usage: 'Tiny labels, small captions' },
+        { px: 12, usage: 'Subtext, metadata labels' },
+        { px: 14, usage: 'Body copy (secondary, compact)' },
+        { px: 16, usage: 'Default browser font-size, standard body' },
+        { px: 18, usage: 'Subheaders, large body copy' },
+        { px: 20, usage: 'H4/H5 section headers' },
+        { px: 24, usage: 'H3 subsections' },
+        { px: 28, usage: 'H2 titles, standard post titles' },
+        { px: 32, usage: 'H1 display titles' },
+        { px: 36, usage: 'Large banner headings' },
+        { px: 48, usage: 'Hero typography (desktop)' },
+        { px: 64, usage: 'Ultra display/hero typography' }
+      ];
+
+      this.tableBodyEl.innerHTML = '';
+      standardSizes.forEach(item => {
+        const remVal = (item.px / base).toFixed(4);
+        const remDisplay = parseFloat(remVal).toString();
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${item.px}px</td>
+          <td>${remDisplay}rem</td>
+          <td>${item.usage}</td>
+        `;
+        // Make row clickable to load into calculator
+        tr.style.cursor = 'pointer';
+        tr.addEventListener('click', () => {
+          this.pxInputEl.value = item.px.toString();
+          this.handlePxInput();
+        });
+
+        this.tableBodyEl.appendChild(tr);
+      });
+    }
+  }
+
+  if (!customElements.get('px-to-rem-tool')) {
+    customElements.define('px-to-rem-tool', PxToRemTool);
+  }
+</script>

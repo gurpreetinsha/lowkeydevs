@@ -1,0 +1,696 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<lorem-ipsum-tool class="tool-workspace">
+  <div class="workspace-grid">
+    <!-- Left Column: Settings -->
+    <div class="card-pane glass-panel">
+      <!-- Tabs -->
+      <div class="tabs-header">
+        <button class="tab-btn active" data-tab="lorem">Lorem Ipsum</button>
+        <button class="tab-btn" data-tab="dummy">Dummy Data</button>
+      </div>
+
+      <!-- Lorem Ipsum Tab Form -->
+      <div class="tab-content" id="tab-lorem-content">
+        <div class="settings-form">
+          <!-- Quantity Slider -->
+          <div class="setting-group">
+            <div class="setting-label-row">
+              <label for="lorem-qty" class="label">Quantity</label>
+              <span class="badge-value" id="lorem-qty-val">5</span>
+            </div>
+            <input type="range" id="lorem-qty" min="1" max="50" value="5" class="slider" aria-label="Lorem quantity" />
+          </div>
+
+          <!-- Type Selection -->
+          <div class="setting-group">
+            <label for="lorem-type" class="label">Generate Type</label>
+            <select id="lorem-type" class="select" aria-label="Lorem type">
+              <option value="paragraphs" selected>Paragraphs</option>
+              <option value="sentences">Sentences</option>
+              <option value="words">Words</option>
+              <option value="lists">List Items</option>
+            </select>
+          </div>
+
+          <!-- Options -->
+          <div class="setting-group mt-2">
+            <label class="checkbox-label">
+              <input type="checkbox" id="lorem-start" checked />
+              <span>Start with "Lorem ipsum dolor sit..."</span>
+            </label>
+            <label class="checkbox-label mt-2">
+              <input type="checkbox" id="lorem-html" />
+              <span>Wrap with HTML tags (e.g. &lt;p&gt;, &lt;li&gt;)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dummy Data Tab Form -->
+      <div class="tab-content hidden" id="tab-dummy-content">
+        <div class="settings-form">
+          <!-- Rows Selector -->
+          <div class="setting-group">
+            <label for="dummy-qty" class="label">Number of Rows</label>
+            <select id="dummy-qty" class="select" aria-label="Number of rows">
+              <option value="5">5 Rows</option>
+              <option value="10" selected>10 Rows</option>
+              <option value="25">25 Rows</option>
+              <option value="50">50 Rows</option>
+              <option value="100">100 Rows</option>
+            </select>
+          </div>
+
+          <!-- Fields Selection -->
+          <div class="setting-group">
+            <span class="label">Fields to Include</span>
+            <div class="checkbox-grid">
+              <label class="checkbox-label">
+                <input type="checkbox" data-field="id" checked />
+                <span>ID</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" data-field="firstName" checked />
+                <span>First Name</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" data-field="lastName" checked />
+                <span>Last Name</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" data-field="username" checked />
+                <span>Username</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" data-field="email" checked />
+                <span>Email</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" data-field="phone" checked />
+                <span>Phone</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" data-field="address" checked />
+                <span>Address</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" data-field="company" checked />
+                <span>Company</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Format Selection -->
+          <div class="setting-group">
+            <label for="dummy-format" class="label">Output Format</label>
+            <select id="dummy-format" class="select" aria-label="Output format">
+              <option value="json" selected>JSON Array</option>
+              <option value="csv">CSV Sheet</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Outputs -->
+    <div class="card-pane glass-panel">
+      <div class="pane-header flex justify-between items-center">
+        <h3 class="pane-title">Generated Output</h3>
+        <div class="header-actions flex gap-2">
+          <!-- Copy Button -->
+          <button id="btn-copy-output" class="btn btn-secondary btn-sm" aria-label="Copy to Clipboard">
+            <Icon name="Clipboard" size={14} class="copy-icon" />
+            <Icon name="Check" size={14} class="check-icon" />
+            <span class="copy-text">Copy</span>
+          </button>
+          <!-- Download Button -->
+          <button id="btn-download-output" class="btn btn-secondary btn-sm" aria-label="Download File">
+            <Icon name="Download" size={14} />
+            <span>Save</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Text Output Box -->
+      <div class="output-container">
+        <textarea id="generator-output" readonly class="code-textarea" aria-label="Generated dummy data output"></textarea>
+      </div>
+    </div>
+  </div>
+</lorem-ipsum-tool>
+
+<style>
+  .tool-workspace {
+    width: 100%;
+  }
+
+  .workspace-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .workspace-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .card-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    min-height: 520px;
+  }
+
+  .pane-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+  }
+
+  .pane-header.flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .pane-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin: 0;
+  }
+
+  .flex {
+    display: flex;
+  }
+
+  .gap-2 {
+    gap: 0.5rem;
+  }
+
+  /* Tabs */
+  .tabs-header {
+    display: flex;
+    gap: 0.25rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+  }
+
+  .tab-btn {
+    background: transparent;
+    border: none;
+    padding: 0.5rem 1rem;
+    color: var(--text-secondary);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+  }
+
+  .tab-btn:hover {
+    color: var(--text-primary);
+  }
+
+  .tab-btn.active {
+    color: var(--primary-accent);
+    border-bottom-color: var(--primary-accent);
+  }
+
+  .tab-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  /* Settings form */
+  .settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .setting-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .setting-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .badge-value {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary-accent);
+  }
+
+  .slider {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    outline: none;
+    -webkit-appearance: none;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--primary-accent);
+    cursor: pointer;
+    transition: transform 0.1s ease;
+  }
+
+  .slider::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+
+  .checkbox-label input {
+    cursor: pointer;
+  }
+
+  .checkbox-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.75rem;
+  }
+
+  .mt-2 {
+    margin-top: 0.5rem;
+  }
+
+  /* Output */
+  .output-container {
+    flex: 1;
+    display: flex;
+    min-height: 380px;
+  }
+
+  .code-textarea {
+    width: 100%;
+    height: 100%;
+    min-height: 380px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    resize: none;
+    outline: none;
+  }
+
+  /* Copy status */
+  #btn-copy-output .check-icon {
+    display: none;
+  }
+
+  #btn-copy-output.copied .copy-icon {
+    display: none;
+  }
+
+  #btn-copy-output.copied .check-icon {
+    display: inline-block;
+    color: var(--success-color);
+  }
+
+  #btn-copy-output.copied {
+    border-color: var(--success-color);
+  }
+
+  .hidden {
+    display: none !important;
+  }
+</style>
+
+<script>
+  // Dictionaries for Lorem Ipsum & Mock Data
+  const LATIN_WORDS = [
+    "lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit", "sed", "do",
+    "eiusmod", "tempor", "incididunt", "ut", "labore", "et", "dolore", "magna", "aliqua", "ut",
+    "enim", "ad", "minim", "veniam", "quis", "nostrud", "exercitation", "ullamco", "laboris",
+    "nisi", "ut", "aliquip", "ex", "ea", "commodo", "consequat", "duis", "aute", "irure",
+    "dolor", "in", "reprehenderit", "in", "voluptate", "velit", "esse", "cillum", "dolore",
+    "eu", "fugiat", "nulla", "pariatur", "excepteur", "sint", "occaecat", "cupidatat", "non",
+    "proident", "sunt", "in", "culpa", "qui", "officia", "deserunt", "mollit", "anim", "id",
+    "est", "laborum", "at", "vero", "eos", "accusamus", "iusto", "odio", "dignissimos",
+    "ducimus", "blanditiis", "praesentium", "voluptatum", "deleniti", "atque", "corrupti",
+    "quos", "dolores", "quas", "molestias", "excepturi", "sint", "obcaecati", "cupiditate"
+  ];
+
+  const FIRST_NAMES = ["John", "Jane", "Alice", "Bob", "Charlie", "David", "Emma", "Fiona", "George", "Hannah", "James", "Katy", "Leo", "Maya", "Nathan", "Olivia", "Peter", "Rachel", "Sam", "Zoe", "Alexander", "Sophia", "Daniel", "Chloe", "Matthew", "Mia", "Andrew", "Lily", "Ethan", "Emily"];
+  const LAST_NAMES = ["Smith", "Doe", "Johnson", "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor", "Anderson", "Thomas", "Jackson", "White", "Harris", "Martin", "Thompson", "Garcia", "Martinez", "Robinson", "Clark", "Rodriguez", "Lewis", "Lee", "Walker", "Hall", "Allen", "Young", "Hernandez", "King", "Wright"];
+  const COMPANIES = ["Acme Corp", "TechNova Systems", "Globex Corporation", "Initech", "Soylent Green", "Hooli", "Vehement Capital", "Wayne Enterprises", "Stark Industries", "Tyrell Nexus", "Umbrella Corp", "Cyberdyne Systems", "Virtucon Industries", "Oscorp Technologies", "Dunder Mifflin", "Massive Dynamic", "Aperture Science"];
+  const CITIES = ["New York", "London", "Tokyo", "Paris", "Berlin", "San Francisco", "Sydney", "Toronto", "Mumbai", "Singapore", "Los Angeles", "Chicago", "Boston", "Austin", "Seattle", "Amsterdam", "Dublin"];
+  const COUNTRIES = ["United States", "United Kingdom", "Japan", "France", "Germany", "Canada", "Australia", "India", "Singapore", "Netherlands", "Ireland"];
+  const DOMAINS = ["example.com", "mockmail.org", "test.net", "techfirm.co", "webmail.io", "cloudscale.dev"];
+
+  class LoremIpsumTool extends HTMLElement {
+    private currentTab: 'lorem' | 'dummy' = 'lorem';
+
+    private tabButtons!: HTMLButtonElement[];
+    private tabLoremContent!: HTMLDivElement;
+    private tabDummyContent!: HTMLDivElement;
+
+    // Lorem elements
+    private loremQtySlider!: HTMLInputElement;
+    private loremQtyVal!: HTMLSpanElement;
+    private loremTypeSelect!: HTMLSelectElement;
+    private loremStartCheckbox!: HTMLInputElement;
+    private loremHtmlCheckbox!: HTMLInputElement;
+
+    // Dummy elements
+    private dummyQtySelect!: HTMLSelectElement;
+    private dummyFormatSelect!: HTMLSelectElement;
+
+    // Output elements
+    private outputTextarea!: HTMLTextAreaElement;
+    private copyBtn!: HTMLButtonElement;
+    private downloadBtn!: HTMLButtonElement;
+
+    connectedCallback() {
+      // selectors
+      this.tabButtons = Array.from(this.querySelectorAll('.tab-btn')) as HTMLButtonElement[];
+      this.tabLoremContent = this.querySelector('#tab-lorem-content') as HTMLDivElement;
+      this.tabDummyContent = this.querySelector('#tab-dummy-content') as HTMLDivElement;
+
+      this.loremQtySlider = this.querySelector('#lorem-qty') as HTMLInputElement;
+      this.loremQtyVal = this.querySelector('#lorem-qty-val') as HTMLSpanElement;
+      this.loremTypeSelect = this.querySelector('#lorem-type') as HTMLSelectElement;
+      this.loremStartCheckbox = this.querySelector('#lorem-start') as HTMLInputElement;
+      this.loremHtmlCheckbox = this.querySelector('#lorem-html') as HTMLInputElement;
+
+      this.dummyQtySelect = this.querySelector('#dummy-qty') as HTMLSelectElement;
+      this.dummyFormatSelect = this.querySelector('#dummy-format') as HTMLSelectElement;
+
+      this.outputTextarea = this.querySelector('#generator-output') as HTMLTextAreaElement;
+      this.copyBtn = this.querySelector('#btn-copy-output') as HTMLButtonElement;
+      this.downloadBtn = this.querySelector('#btn-download-output') as HTMLButtonElement;
+
+      // Tab switcher
+      this.tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const tab = btn.getAttribute('data-tab') as 'lorem' | 'dummy';
+          this.switchTab(tab);
+        });
+      });
+
+      // Lorem listeners
+      this.loremQtySlider.addEventListener('input', () => {
+        this.loremQtyVal.textContent = this.loremQtySlider.value;
+        this.generate();
+      });
+      this.loremTypeSelect.addEventListener('change', () => this.generate());
+      this.loremStartCheckbox.addEventListener('change', () => this.generate());
+      this.loremHtmlCheckbox.addEventListener('change', () => this.generate());
+
+      // Dummy listeners
+      this.dummyQtySelect.addEventListener('change', () => this.generate());
+      this.dummyFormatSelect.addEventListener('change', () => this.generate());
+      this.querySelectorAll('[data-field]').forEach(cb => {
+        cb.addEventListener('change', () => this.generate());
+      });
+
+      // Actions
+      this.copyBtn.addEventListener('click', () => this.handleCopy());
+      this.downloadBtn.addEventListener('click', () => this.handleDownload());
+
+      // Initial run
+      this.generate();
+    }
+
+    private switchTab(tab: 'lorem' | 'dummy') {
+      this.currentTab = tab;
+      this.tabButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-tab') === tab);
+      });
+
+      this.tabLoremContent.classList.toggle('hidden', tab !== 'lorem');
+      this.tabDummyContent.classList.toggle('hidden', tab !== 'dummy');
+
+      this.generate();
+    }
+
+    private generate() {
+      if (this.currentTab === 'lorem') {
+        this.generateLorem();
+      } else {
+        this.generateDummy();
+      }
+    }
+
+    // Helper random choice
+    private getRandomItem<T>(arr: T[]): T {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    // Generate custom word sequences
+    private generateSentence(wordCount: number, startWithLorem: boolean = false): string {
+      const sentenceWords: string[] = [];
+      
+      if (startWithLorem) {
+        sentenceWords.push("Lorem", "ipsum", "dolor", "sit", "amet");
+      }
+
+      const limit = startWithLorem ? Math.max(1, wordCount - 5) : wordCount;
+
+      for (let i = 0; i < limit; i++) {
+        sentenceWords.push(this.getRandomItem(LATIN_WORDS));
+      }
+
+      let sentence = sentenceWords.join(" ");
+      // Capitalize first letter and end with a period
+      sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1) + ".";
+      return sentence;
+    }
+
+    private generateParagraph(sentenceCount: number, startWithLorem: boolean = false): string {
+      const sentences: string[] = [];
+      for (let i = 0; i < sentenceCount; i++) {
+        // Sentences usually have 8 to 16 words
+        const len = Math.floor(Math.random() * 9) + 8;
+        sentences.push(this.generateSentence(len, i === 0 && startWithLorem));
+      }
+      return sentences.join(" ");
+    }
+
+    private generateLorem() {
+      const qty = parseInt(this.loremQtySlider.value);
+      const type = this.loremTypeSelect.value;
+      const startWithLorem = this.loremStartCheckbox.checked;
+      const wrapHtml = this.loremHtmlCheckbox.checked;
+
+      let result = '';
+
+      if (type === 'paragraphs') {
+        const paragraphs: string[] = [];
+        for (let i = 0; i < qty; i++) {
+          // Paragraphs have 4 to 8 sentences
+          const len = Math.floor(Math.random() * 5) + 4;
+          let pText = this.generateParagraph(len, i === 0 && startWithLorem);
+          if (wrapHtml) pText = `<p>${pText}</p>`;
+          paragraphs.push(pText);
+        }
+        result = paragraphs.join(wrapHtml ? '\n\n' : '\n\n');
+      } 
+      else if (type === 'sentences') {
+        const sentences: string[] = [];
+        for (let i = 0; i < qty; i++) {
+          const len = Math.floor(Math.random() * 9) + 8;
+          let sText = this.generateSentence(len, i === 0 && startWithLorem);
+          if (wrapHtml) sText = `<span>${sText}</span>`;
+          sentences.push(sText);
+        }
+        result = sentences.join('\n');
+      } 
+      else if (type === 'words') {
+        let words: string[] = [];
+        if (startWithLorem) {
+          words = ["Lorem", "ipsum", "dolor", "sit", "amet"];
+        }
+        const limit = startWithLorem ? Math.max(1, qty - 5) : qty;
+        for (let i = 0; i < limit; i++) {
+          words.push(this.getRandomItem(LATIN_WORDS));
+        }
+        let wText = words.slice(0, qty).join(" ");
+        if (wrapHtml) wText = `<span>${wText}</span>`;
+        result = wText;
+      } 
+      else if (type === 'lists') {
+        const listItems: string[] = [];
+        for (let i = 0; i < qty; i++) {
+          const len = Math.floor(Math.random() * 8) + 6;
+          let itemText = this.generateSentence(len, i === 0 && startWithLorem);
+          if (wrapHtml) {
+            itemText = `  <li>${itemText}</li>`;
+          } else {
+            itemText = `- ${itemText}`;
+          }
+          listItems.push(itemText);
+        }
+        if (wrapHtml) {
+          result = `<ul>\n${listItems.join('\n')}\n</ul>`;
+        } else {
+          result = listItems.join('\n');
+        }
+      }
+
+      this.outputTextarea.value = result;
+    }
+
+    private generateDummy() {
+      const count = parseInt(this.dummyQtySelect.value);
+      const format = this.dummyFormatSelect.value;
+
+      // Find checked fields
+      const fields: string[] = [];
+      this.querySelectorAll('[data-field]').forEach(cb => {
+        if ((cb as HTMLInputElement).checked) {
+          const fieldName = cb.getAttribute('data-field');
+          if (fieldName) fields.push(fieldName);
+        }
+      });
+
+      const records: Record<string, any>[] = [];
+
+      for (let i = 1; i <= count; i++) {
+        const row: Record<string, any> = {};
+        const fName = this.getRandomItem(FIRST_NAMES);
+        const lName = this.getRandomItem(LAST_NAMES);
+
+        fields.forEach(field => {
+          if (field === 'id') row.id = i;
+          else if (field === 'firstName') row.firstName = fName;
+          else if (field === 'lastName') row.lastName = lName;
+          else if (field === 'username') row.username = `${fName.toLowerCase()}${Math.floor(Math.random() * 89) + 10}`;
+          else if (field === 'email') row.email = `${fName.toLowerCase()}.${lName.toLowerCase()}@${this.getRandomItem(DOMAINS)}`;
+          else if (field === 'phone') row.phone = `+1 (555) ${Math.floor(Math.random() * 899) + 100}-${Math.floor(Math.random() * 8999) + 1000}`;
+          else if (field === 'address') row.address = `${Math.floor(Math.random() * 899) + 100} Main St, ${this.getRandomItem(CITIES)}, ${this.getRandomItem(COUNTRIES)}`;
+          else if (field === 'company') row.company = this.getRandomItem(COMPANIES);
+        });
+
+        records.push(row);
+      }
+
+      if (format === 'json') {
+        this.outputTextarea.value = JSON.stringify(records, null, 2);
+      } else {
+        // Generate CSV
+        if (fields.length === 0) {
+          this.outputTextarea.value = '';
+          return;
+        }
+        const headers = fields.join(',');
+        const rows = records.map(rec => {
+          return fields.map(field => {
+            const val = rec[field] ?? '';
+            // Quote string containing comma
+            const strVal = String(val);
+            if (strVal.includes(',') || strVal.includes('"') || strVal.includes('\n')) {
+              return `"${strVal.replace(/"/g, '""')}"`;
+            }
+            return strVal;
+          }).join(',');
+        });
+
+        this.outputTextarea.value = `${headers}\n${rows.join('\n')}`;
+      }
+    }
+
+    private async handleCopy() {
+      const code = this.outputTextarea.value;
+      if (!code) return;
+
+      try {
+        await navigator.clipboard.writeText(code);
+        const copyText = this.copyBtn.querySelector('.copy-text') as HTMLSpanElement;
+
+        this.copyBtn.classList.add('copied');
+        copyText.textContent = 'Copied!';
+
+        setTimeout(() => {
+          this.copyBtn.classList.remove('copied');
+          copyText.textContent = 'Copy';
+        }, 2000);
+      } catch (err) {
+        console.error('Copy dummy text failed', err);
+      }
+    }
+
+    private handleDownload() {
+      const content = this.outputTextarea.value;
+      if (!content) return;
+
+      let filename = 'lorem_ipsum.txt';
+      let mimeType = 'text/plain';
+
+      if (this.currentTab === 'dummy') {
+        const format = this.dummyFormatSelect.value;
+        if (format === 'json') {
+          filename = 'dummy_users.json';
+          mimeType = 'application/json';
+        } else {
+          filename = 'dummy_users.csv';
+          mimeType = 'text/csv';
+        }
+      } else {
+        const isHtml = this.loremHtmlCheckbox.checked;
+        if (isHtml) {
+          filename = 'lorem_ipsum.html';
+          mimeType = 'text/html';
+        }
+      }
+
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  }
+
+  if (!customElements.get('lorem-ipsum-tool')) {
+    customElements.define('lorem-ipsum-tool', LoremIpsumTool);
+  }
+</script>
