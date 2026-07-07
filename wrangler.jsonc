@@ -6,6 +6,9 @@
   "compatibility_flags": [
     "nodejs_compat"
   ],
+  "vars": {
+    "SUPABASE_URL": "https://mrnmqqjhvodbcksbvyzx.supabase.co"
+  },
   "assets": {
     "binding": "ASSETS",
     "directory": "./dist"
