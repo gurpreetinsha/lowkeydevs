@@ -14,12 +14,21 @@ export default defineConfig({
       hooks: {
         'astro:build:start': () => {
           try {
-            const dirs = [
-              path.join(process.cwd(), '.wrangler'),
+            // Clean local .wrangler except deploy/ config
+            const localWrangler = path.join(process.cwd(), '.wrangler');
+            if (fs.existsSync(localWrangler)) {
+              for (const file of fs.readdirSync(localWrangler)) {
+                if (file !== 'deploy') {
+                  fs.rmSync(path.join(localWrangler, file), { recursive: true, force: true });
+                }
+              }
+            }
+            // Clean global wrangler dirs entirely
+            const otherDirs = [
               path.join(os.homedir(), '.wrangler'),
               path.join(os.homedir(), '.config', '.wrangler')
             ];
-            for (const d of dirs) {
+            for (const d of otherDirs) {
               if (fs.existsSync(d)) {
                 fs.rmSync(d, { recursive: true, force: true });
               }

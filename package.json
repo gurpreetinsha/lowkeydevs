@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "node -e \"const fs = require('fs'), path = require('path'), os = require('os'); [path.join(process.cwd(), '.wrangler'), path.join(os.homedir(), '.wrangler'), path.join(os.homedir(), '.config', '.wrangler')].forEach(d => { try { fs.rmSync(d, { recursive: true, force: true }) } catch(e){} })\" && astro build",
+    "build": "node -e \"const fs = require('fs'), path = require('path'), os = require('os'); const lw = path.join(process.cwd(), '.wrangler'); if (fs.existsSync(lw)) { fs.readdirSync(lw).forEach(f => { if (f !== 'deploy') fs.rmSync(path.join(lw, f), { recursive: true, force: true }) }) }; [path.join(os.homedir(), '.wrangler'), path.join(os.homedir(), '.config', '.wrangler')].forEach(d => { try { fs.rmSync(d, { recursive: true, force: true }) } catch(e){} })\" && astro build",
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest run"
