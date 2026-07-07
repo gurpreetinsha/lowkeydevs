@@ -62,7 +62,6 @@ import PngToWebpUI from '../../tools/list/png-to-webp/ui.astro';
 import WebpToPngUI from '../../tools/list/webp-to-png/ui.astro';
 import SvgToPngUI from '../../tools/list/svg-to-png/ui.astro';
 import ImageToAsciiUI from '../../tools/list/image-to-ascii/ui.astro';
-import OnlineVideoConverterUI from '../../tools/list/online-video-converter/ui.astro';
 
 // New utilities imports
 import CamelCaseConverterUI from '../../tools/list/camelcase-converter/ui.astro';
@@ -90,7 +89,6 @@ import ApaCitationGeneratorUI from '../../tools/list/apa-citation-generator/ui.a
 import MergePdfUI from '../../tools/list/merge-pdf/ui.astro';
 import SplitPdfUI from '../../tools/list/split-pdf/ui.astro';
 import CompressPdfUI from '../../tools/list/compress-pdf/ui.astro';
-import PdfToWordUI from '../../tools/list/pdf-to-word/ui.astro';
 import WordToPdfUI from '../../tools/list/word-to-pdf/ui.astro';
 import JpgToPdfUI from '../../tools/list/jpg-to-pdf/ui.astro';
 import PdfToJpgUI from '../../tools/list/pdf-to-jpg/ui.astro';
@@ -100,26 +98,20 @@ import UnlockPdfUI from '../../tools/list/unlock-pdf/ui.astro';
 
 // PDF tools Set 2 UI imports
 import ProtectPdfUI from '../../tools/list/protect-pdf/ui.astro';
-import PdfToExcelUI from '../../tools/list/pdf-to-excel/ui.astro';
 import ExcelToPdfUI from '../../tools/list/excel-to-pdf/ui.astro';
-import PdfToPowerpointUI from '../../tools/list/pdf-to-powerpoint/ui.astro';
 import PowerpointToPdfUI from '../../tools/list/powerpoint-to-pdf/ui.astro';
 import OrganizePdfUI from '../../tools/list/organize-pdf/ui.astro';
 import AddPageNumbersUI from '../../tools/list/add-page-numbers/ui.astro';
 import AddWatermarkUI from '../../tools/list/add-watermark/ui.astro';
 import RotatePdfUI from '../../tools/list/rotate-pdf/ui.astro';
-import ScanToPdfUI from '../../tools/list/scan-to-pdf/ui.astro';
 
 // PDF tools Set 3 UI imports
-import OcrPdfUI from '../../tools/list/ocr-pdf/ui.astro';
-import RepairPdfUI from '../../tools/list/repair-pdf/ui.astro';
 import PdfToPdfaUI from '../../tools/list/pdf-to-pdfa/ui.astro';
 import HtmlToPdfUI from '../../tools/list/html-to-pdf/ui.astro';
 import RemovePdfPagesUI from '../../tools/list/remove-pdf-pages/ui.astro';
 import ExtractPdfPagesUI from '../../tools/list/extract-pdf-pages/ui.astro';
 import PdfFormsUI from '../../tools/list/pdf-forms/ui.astro';
 import RedactPdfUI from '../../tools/list/redact-pdf/ui.astro';
-import ComparePdfUI from '../../tools/list/compare-pdf/ui.astro';
 
 
 // Map slugs to UI components
@@ -183,7 +175,6 @@ const uiComponents: Record<string, any> = {
   'webp-to-png': WebpToPngUI,
   'svg-to-png': SvgToPngUI,
   'image-to-ascii': ImageToAsciiUI,
-  'online-video-converter': OnlineVideoConverterUI,
 
   // New utilities mappings
   'camelcase-converter': CamelCaseConverterUI,
@@ -209,7 +200,6 @@ const uiComponents: Record<string, any> = {
   'merge-pdf': MergePdfUI,
   'split-pdf': SplitPdfUI,
   'compress-pdf': CompressPdfUI,
-  'pdf-to-word': PdfToWordUI,
   'word-to-pdf': WordToPdfUI,
   'jpg-to-pdf': JpgToPdfUI,
   'pdf-to-jpg': PdfToJpgUI,
@@ -217,24 +207,18 @@ const uiComponents: Record<string, any> = {
   'sign-pdf': SignPdfUI,
   'unlock-pdf': UnlockPdfUI,
   'protect-pdf': ProtectPdfUI,
-  'pdf-to-excel': PdfToExcelUI,
   'excel-to-pdf': ExcelToPdfUI,
-  'pdf-to-powerpoint': PdfToPowerpointUI,
   'powerpoint-to-pdf': PowerpointToPdfUI,
   'organize-pdf': OrganizePdfUI,
   'add-page-numbers': AddPageNumbersUI,
   'add-watermark': AddWatermarkUI,
   'rotate-pdf': RotatePdfUI,
-  'scan-to-pdf': ScanToPdfUI,
-  'ocr-pdf': OcrPdfUI,
-  'repair-pdf': RepairPdfUI,
   'pdf-to-pdfa': PdfToPdfaUI,
   'html-to-pdf': HtmlToPdfUI,
   'remove-pdf-pages': RemovePdfPagesUI,
   'extract-pdf-pages': ExtractPdfPagesUI,
   'pdf-forms': PdfFormsUI,
-  'redact-pdf': RedactPdfUI,
-  'compare-pdf': ComparePdfUI
+  'redact-pdf': RedactPdfUI
 };
 
 export async function getStaticPaths() {

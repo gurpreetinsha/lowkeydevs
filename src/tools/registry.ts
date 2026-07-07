@@ -58,7 +58,6 @@ import { meta as pngToWebpMeta } from './list/png-to-webp/meta';
 import { meta as webpToPngMeta } from './list/webp-to-png/meta';
 import { meta as svgToPngMeta } from './list/svg-to-png/meta';
 import { meta as imageToAsciiMeta } from './list/image-to-ascii/meta';
-import { meta as onlineVideoConverterMeta } from './list/online-video-converter/meta';
 
 // New utilities imports
 import { meta as camelCaseConverterMeta } from './list/camelcase-converter/meta';
@@ -86,7 +85,6 @@ import { meta as apaCitationGeneratorMeta } from './list/apa-citation-generator/
 import { meta as mergePdfMeta } from './list/merge-pdf/meta';
 import { meta as splitPdfMeta } from './list/split-pdf/meta';
 import { meta as compressPdfMeta } from './list/compress-pdf/meta';
-import { meta as pdfToWordMeta } from './list/pdf-to-word/meta';
 import { meta as wordToPdfMeta } from './list/word-to-pdf/meta';
 import { meta as jpgToPdfMeta } from './list/jpg-to-pdf/meta';
 import { meta as pdfToJpgMeta } from './list/pdf-to-jpg/meta';
@@ -96,26 +94,20 @@ import { meta as unlockPdfMeta } from './list/unlock-pdf/meta';
 
 // PDF tools Set 2 imports
 import { meta as protectPdfMeta } from './list/protect-pdf/meta';
-import { meta as pdfToExcelMeta } from './list/pdf-to-excel/meta';
 import { meta as excelToPdfMeta } from './list/excel-to-pdf/meta';
-import { meta as pdfToPowerpointMeta } from './list/pdf-to-powerpoint/meta';
 import { meta as powerpointToPdfMeta } from './list/powerpoint-to-pdf/meta';
 import { meta as organizePdfMeta } from './list/organize-pdf/meta';
 import { meta as addPageNumbersMeta } from './list/add-page-numbers/meta';
 import { meta as addWatermarkMeta } from './list/add-watermark/meta';
 import { meta as rotatePdfMeta } from './list/rotate-pdf/meta';
-import { meta as scanToPdfMeta } from './list/scan-to-pdf/meta';
 
 // PDF tools Set 3 imports
-import { meta as ocrPdfMeta } from './list/ocr-pdf/meta';
-import { meta as repairPdfMeta } from './list/repair-pdf/meta';
 import { meta as pdfToPdfaMeta } from './list/pdf-to-pdfa/meta';
 import { meta as htmlToPdfMeta } from './list/html-to-pdf/meta';
 import { meta as removePdfPagesMeta } from './list/remove-pdf-pages/meta';
 import { meta as extractPdfPagesMeta } from './list/extract-pdf-pages/meta';
 import { meta as pdfFormsMeta } from './list/pdf-forms/meta';
 import { meta as redactPdfMeta } from './list/redact-pdf/meta';
-import { meta as comparePdfMeta } from './list/compare-pdf/meta';
 
 
 // Central Registry of all tools
@@ -179,7 +171,6 @@ export const registry: ToolMeta[] = [
   webpToPngMeta,
   svgToPngMeta,
   imageToAsciiMeta,
-  onlineVideoConverterMeta,
 
   // New utilities entries
   camelCaseConverterMeta,
@@ -207,7 +198,6 @@ export const registry: ToolMeta[] = [
   mergePdfMeta,
   splitPdfMeta,
   compressPdfMeta,
-  pdfToWordMeta,
   wordToPdfMeta,
   jpgToPdfMeta,
   pdfToJpgMeta,
@@ -217,26 +207,20 @@ export const registry: ToolMeta[] = [
 
   // PDF tools Set 2
   protectPdfMeta,
-  pdfToExcelMeta,
   excelToPdfMeta,
-  pdfToPowerpointMeta,
   powerpointToPdfMeta,
   organizePdfMeta,
   addPageNumbersMeta,
   addWatermarkMeta,
   rotatePdfMeta,
-  scanToPdfMeta,
 
   // PDF tools Set 3
-  ocrPdfMeta,
-  repairPdfMeta,
   pdfToPdfaMeta,
   htmlToPdfMeta,
   removePdfPagesMeta,
   extractPdfPagesMeta,
   pdfFormsMeta,
-  redactPdfMeta,
-  comparePdfMeta
+  redactPdfMeta
 ];
 
 // Helper to find a tool by its slug
