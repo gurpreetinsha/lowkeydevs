@@ -58,6 +58,8 @@ import { meta as pngToWebpMeta } from './list/png-to-webp/meta';
 import { meta as webpToPngMeta } from './list/webp-to-png/meta';
 import { meta as svgToPngMeta } from './list/svg-to-png/meta';
 import { meta as imageToAsciiMeta } from './list/image-to-ascii/meta';
+import { meta as imageCompressorMeta } from './list/image-compressor/meta';
+import { meta as gifGeneratorMeta } from './list/gif-generator/meta';
 
 // New utilities imports
 import { meta as camelCaseConverterMeta } from './list/camelcase-converter/meta';
@@ -177,6 +179,8 @@ export const registry: ToolMeta[] = [
   webpToPngMeta,
   svgToPngMeta,
   imageToAsciiMeta,
+  imageCompressorMeta,
+  gifGeneratorMeta,
 
   // New utilities entries
   camelCaseConverterMeta,
