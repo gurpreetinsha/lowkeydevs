@@ -9,5 +9,10 @@
   "assets": {
     "binding": "ASSETS",
     "directory": "./dist"
-  }
+  },
+  "kv_namespaces": [
+    {
+      "binding": "SESSION"
+    }
+  ]
 }
