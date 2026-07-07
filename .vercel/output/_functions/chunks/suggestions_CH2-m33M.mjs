@@ -2132,41 +2132,6 @@ var registry = [
 		}
 	},
 	{
-		slug: "online-video-converter",
-		title: "Online Video Converter",
-		description: "Convert video formats, extract audio tracks, adjust frame rates, and export videos client-side without any server uploads.",
-		category: "video",
-		keywords: [
-			"online video converter",
-			"video to mp3",
-			"video to mp4",
-			"mp4 to webm",
-			"video to gif converter",
-			"extract audio from video",
-			"client side video converter"
-		],
-		icon: "video",
-		faqs: [
-			{
-				question: "Is my video file secure?",
-				answer: "Yes! The entire transcoding, formatting, and audio extraction is performed directly in your web browser. Your video files are never uploaded to any remote server."
-			},
-			{
-				question: "What video files can I upload?",
-				answer: "You can upload any video format that your browser natively supports, including MP4, WebM, OGG, and MOV files."
-			},
-			{
-				question: "How does the video-to-audio extraction work?",
-				answer: "The converter extracts the audio track using the browser's built-in Web Audio API, decoding the audio buffer and formatting it as a download-ready WAV or MP3 stream."
-			}
-		],
-		educationalContent: {
-			whatIsIt: "Online Video Converter leverages modern web interfaces, canvas stream capture, and the Web Audio API to manipulate and transcode video and audio formats locally.",
-			howToUse: "1. Select a video file from your device.\n2. Choose your target output format: Video (MP4/WebM), Audio (MP3/WAV), or Animation (GIF).\n3. Click \"Convert Video\" and watch the local processing progress.\n4. Click \"Download Converted File\" to save the result.",
-			proTips: ["Extracting audio from long lectures is a great way to save space and listen on the go.", "Convert short video segments to GIF animations for easy sharing on social platforms."]
-		}
-	},
-	{
 		slug: "camelcase-converter",
 		title: "camelCase Converter",
 		description: "Convert any text, phrase, or lists of variable names to camelCase format online instantly. Ideal for developers and programmers.",
@@ -2769,40 +2734,6 @@ var registry = [
 		}
 	},
 	{
-		slug: "pdf-to-word",
-		title: "PDF to Word Converter",
-		description: "Convert PDF files to editable Microsoft Word documents (.doc) locally in your browser. Extracts text while preserving formatting.",
-		category: "pdf",
-		keywords: [
-			"pdf to word",
-			"convert pdf to word",
-			"pdf to doc",
-			"pdf to docx",
-			"convert pdf to word online",
-			"client side pdf to word"
-		],
-		icon: "FileText",
-		faqs: [
-			{
-				question: "How is the formatting preserved in the converted Word document?",
-				answer: "The converter extracts text runs along with their fonts, weights, and sizes. It reconstructs paragraphs, headings, and page boundaries, packaging them into a Microsoft Word compatible format that retains readability and clean layouts."
-			},
-			{
-				question: "Can scanned PDFs be converted into Word documents?",
-				answer: "This tool extracts text characters embedded in the PDF document. If the PDF is scanned (images only), it will not contain embedded text characters. For scanned PDFs, first use an OCR tool to convert the pages to text."
-			},
-			{
-				question: "Is my document uploaded to a server?",
-				answer: "No. The conversion processes locally on your system using your browser's execution engine. Your files never leave your device."
-			}
-		],
-		educationalContent: {
-			whatIsIt: "PDF to Word is an offline client-side utility that converts PDF page contents into editable Microsoft Word (.doc) formats. It parses text lines using PDF.js and structures them in HTML formats, which word processors import natively.",
-			howToUse: "1. Drag and drop a PDF document into the upload area.\n2. Choose layout settings (e.g. page breaks, headings detection).\n3. Click \"Convert to Word\".\n4. Download the editable Word (.doc) document to your system.",
-			proTips: ["For complex multi-column layouts, the converter processes paragraphs from left to right, top to bottom. It works best on standard reports, articles, and documentation.", "Saving as a Word document lets you easily correct spellings, change fonts, and adjust paragraph spacings."]
-		}
-	},
-	{
 		slug: "word-to-pdf",
 		title: "Word to PDF Converter",
 		description: "Convert Microsoft Word (.docx) documents to PDF format instantly. High quality offline conversion running entirely in your browser.",
@@ -3041,40 +2972,6 @@ var registry = [
 		}
 	},
 	{
-		slug: "pdf-to-excel",
-		title: "PDF to Excel Converter",
-		description: "Extract tabular data from PDF files and convert them into Microsoft Excel (.xlsx) spreadsheets locally. 100% private.",
-		category: "pdf",
-		keywords: [
-			"pdf to excel",
-			"convert pdf to excel",
-			"extract tables from pdf",
-			"pdf to xlsx",
-			"convert pdf to spreadsheet",
-			"offline pdf to excel"
-		],
-		icon: "FileText",
-		faqs: [
-			{
-				question: "How does the table extraction work?",
-				answer: "The converter parses the coordinate positions of text elements within each PDF page. It groups elements aligning on the same horizontal rows and splits them into Excel columns based on spacing gaps, recreating the table structure."
-			},
-			{
-				question: "Will my formatting and formulas be kept?",
-				answer: "Since PDFs are static documents, they do not contain calculations or formulas. The converter extracts numerical and textual data as values. Basic tabular structure (rows and columns) is preserved, but formulas must be added in Excel."
-			},
-			{
-				question: "Is my data secure?",
-				answer: "Yes, completely. The extraction and spreadsheet assembly happen locally in your browser. No files are uploaded to any external server."
-			}
-		],
-		educationalContent: {
-			whatIsIt: "PDF to Excel parses PDF text structures, groups elements aligning vertically and horizontally to isolate table blocks, and writes them into standard OpenXML Excel spreadsheet (.xlsx) sheets using SheetJS.",
-			howToUse: "1. Select and upload your PDF file.\n2. Choose layout settings (e.g. column spacing sensitivity).\n3. Click \"Convert to Excel\".\n4. Download the generated spreadsheet (.xlsx) directly to your device.",
-			proTips: ["This tool works best on PDFs that contain digital tables. Scanned PDFs containing flat tables should be processed with OCR first.", "Adjust the column separation sensitivity if table cells are merging incorrectly."]
-		}
-	},
-	{
 		slug: "excel-to-pdf",
 		title: "Excel to PDF Converter",
 		description: "Convert Excel spreadsheets (.xlsx, .xls, .csv) into PDF format locally. High quality offline conversion running entirely in your browser.",
@@ -3106,40 +3003,6 @@ var registry = [
 			whatIsIt: "Excel to PDF is an offline conversion tool that parses Excel tabular grid cells (via mammoth/SheetJS), structures them in styled responsive HTML table blocks, and writes them into A4 documents using html2canvas & jsPDF.",
 			howToUse: "1. Select and upload your Excel (.xlsx, .xls, or .csv) file.\n2. Preview the worksheets in the browser frame.\n3. Click \"Convert to PDF\".\n4. Download the print-ready PDF file instantly.",
 			proTips: ["For wide sheets containing dozens of columns, the table preview fits columns to the page width. Set printing orientations to landscape to avoid columns being squished.", "Check all sheet tabs in the preview block before saving the PDF."]
-		}
-	},
-	{
-		slug: "pdf-to-powerpoint",
-		title: "PDF to PowerPoint Converter",
-		description: "Convert PDF files into Microsoft PowerPoint (.pptx) presentation slides locally in your browser. 100% private.",
-		category: "pdf",
-		keywords: [
-			"pdf to powerpoint",
-			"convert pdf to pptx",
-			"pdf to ppt",
-			"convert pdf to slides",
-			"online pdf to pptx",
-			"client side pdf to powerpoint"
-		],
-		icon: "FileText",
-		faqs: [
-			{
-				question: "Will the slides retain the exact layout of the PDF?",
-				answer: "Yes! By choosing the standard conversion mode, each PDF page is rendered as a high-resolution slide background, ensuring that all fonts, drawings, charts, and image layouts are 100% preserved."
-			},
-			{
-				question: "Can I edit the text on the slides after conversion?",
-				answer: "By default, rendering pages as slide backgrounds creates static image slides. If you need editable text boxes, select the \"Extract text to textboxes\" option, though layout matching might vary based on spacing."
-			},
-			{
-				question: "Is my presentation private?",
-				answer: "Yes. The parsing, slide creation, and PPTX compilation run entirely inside your browser using JavaScript. No documents are uploaded to any server."
-			}
-		],
-		educationalContent: {
-			whatIsIt: "PDF to PowerPoint converts document structures into editable or background-mapped slides using PDF.js and PptxGenJS entirely within your local browser context.",
-			howToUse: "1. Select and upload your PDF file.\n2. Choose layout settings (Slide background image vs. text-box isolation).\n3. Click \"Convert to PowerPoint\".\n4. Save your presentation (.pptx) file directly.",
-			proTips: ["For presenting report sheets, the background image layout preserves charts and tables perfectly.", "Slide aspect ratios are set to widescreen 16:9 by default, matching standard modern presentation setups."]
 		}
 	},
 	{
@@ -3309,109 +3172,6 @@ var registry = [
 			whatIsIt: "Rotate PDF parses document structures, calculates current page angle metrics, applies target rotation degrees, and re-saves the updated PDF using pdf-lib.",
 			howToUse: "1. Select and upload your PDF file.\n2. Choose rotation angle (90° CW, 90° CCW, 180°).\n3. Choose page selection (All, Odd, Even, Custom Range).\n4. Click \"Rotate & Save PDF\" to download the updated document.",
 			proTips: ["PDF coordinates and content are automatically re-aligned to the new orientation. Text remains copyable and selectable.", "If you have scanned landscape documents showing up vertically, rotate them 90° CW or CCW to make them readable."]
-		}
-	},
-	{
-		slug: "scan-to-pdf",
-		title: "Scan to PDF",
-		description: "Use your webcam or device camera to scan paper documents and compile them into a clean PDF document locally in your browser.",
-		category: "pdf",
-		keywords: [
-			"scan to pdf",
-			"camera scanner to pdf",
-			"webcam pdf scanner",
-			"convert camera to pdf",
-			"online document scanner",
-			"local camera scanner"
-		],
-		icon: "FileText",
-		faqs: [
-			{
-				question: "How do I use my device camera as a scanner?",
-				answer: "This tool requests browser permissions to access your webcam or integrated device camera. Simply align your paper document inside the camera frame and click \"Capture Page\"."
-			},
-			{
-				question: "Which visual filters are supported?",
-				answer: "You can choose between \"Normal (Color)\" mode, \"Grayscale\" mode (which removes color layers), and \"High Contrast (Document Scan)\" mode, which formats page text like physical scanner outputs."
-			},
-			{
-				question: "Is my camera feed private?",
-				answer: "Yes, 100%. The camera capture, image processing, and PDF assembly are executed entirely client-side. No media data or camera feeds are ever sent over the network."
-			}
-		],
-		educationalContent: {
-			whatIsIt: "Scan to PDF accesses local media streams (via navigator.mediaDevices API), captures frame snapshots on a Canvas, applies pixel filters (grayscale/high-contrast), and merges pages into a PDF using pdf-lib.",
-			howToUse: "1. Click \"Start Camera\" and allow browser webcam permissions.\n2. Align your document in the video frame, select a filter (Color, Grayscale, Document Scan), and click \"Capture Page\".\n3. Repeat to capture all pages.\n4. Reorder or delete captured frames if needed.\n5. Click \"Compile Scan to PDF\" to save.",
-			proTips: ["For best results, align your page flat on a table in a well-lit room to capture sharp text.", "The \"Document Scan\" filter is excellent for black-and-white printouts to make texts stand out."]
-		}
-	},
-	{
-		slug: "ocr-pdf",
-		title: "OCR PDF",
-		description: "Convert scanned PDF documents into searchable PDFs or extract their text directly in your browser. Fast, free, and completely private.",
-		category: "pdf",
-		keywords: [
-			"ocr pdf",
-			"extract text from pdf",
-			"scanned pdf to text",
-			"searchable pdf converter",
-			"online ocr",
-			"browser ocr",
-			"tesseract pdf ocr"
-		],
-		icon: "FileText",
-		faqs: [
-			{
-				question: "How does client-side PDF OCR work?",
-				answer: "This tool renders each page of your PDF into an image inside your browser, then uses Tesseract.js (an OCR engine running via WebAssembly) to detect and extract characters. All processing is local, and no files are sent to any server."
-			},
-			{
-				question: "What is a searchable PDF?",
-				answer: "A searchable PDF contains an invisible layer of digital text placed exactly over the scanned images. This allows you to select, highlight, and search (using Ctrl+F) text within the scanned document while keeping its original visual design."
-			},
-			{
-				question: "Is my data secure?",
-				answer: "Yes. Because all operations are executed in your browser locally, your documents never leave your computer. It is 100% private and secure."
-			}
-		],
-		educationalContent: {
-			whatIsIt: "OCR (Optical Character Recognition) PDF is a utility that analyzes scanned or image-based PDF documents and identifies text content. It allows you to download the extracted text as a plain text file or re-compile the document as a searchable PDF with invisible text overlays.",
-			howToUse: "1. Select and upload your scanned PDF file.\n2. Click \"Perform OCR\" to begin the extraction process.\n3. Monitor the progress page-by-page.\n4. Copy the extracted text, download the text (.txt), or save the document as a Searchable PDF.",
-			proTips: ["For best results, ensure the scanned document has high contrast and is right-side up.", "Larger files with many pages may take a few minutes to process as OCR is a CPU-intensive operation."]
-		}
-	},
-	{
-		slug: "repair-pdf",
-		title: "Repair PDF",
-		description: "Fix and repair damaged, corrupted, or unreadable PDF files. Recover content and rebuild the PDF structure locally in your browser.",
-		category: "pdf",
-		keywords: [
-			"repair pdf",
-			"fix corrupted pdf",
-			"recover pdf file",
-			"damaged pdf recovery",
-			"client side pdf repair",
-			"unreadable pdf fixer"
-		],
-		icon: "FileText",
-		faqs: [
-			{
-				question: "How does client-side PDF repair work?",
-				answer: "This tool has two repair modes: Standard and Deep. Standard Repair processes the PDF stream using pdf-lib to re-serialize the structure, fixing broken indexing tables (XREFs) and headers. Deep Repair uses PDF.js to extract page-by-page visual data and reconstructs a brand-new PDF document from scratch."
-			},
-			{
-				question: "Can this tool repair password-protected PDFs?",
-				answer: "Password-protected PDFs must be unlocked first before they can be repaired. You can use our Unlock PDF tool to remove the password if you know it, and then run the repair process."
-			},
-			{
-				question: "Is it safe to repair confidential PDFs here?",
-				answer: "Absolutely. The repair process is executed entirely on your device using JavaScript. Your files are never uploaded to any remote server, maintaining maximum privacy."
-			}
-		],
-		educationalContent: {
-			whatIsIt: "Repair PDF is a client-side recovery utility designed to solve common issues with corrupted PDFs (e.g. files that won't open, show blank pages, or have header errors). It attempts to rebuild structural components, correcting encoding offsets and cross-reference records.",
-			howToUse: "1. Upload the corrupted PDF file.\n2. Select your recovery mode: Standard Repair (recommended for minor metadata/xref corruptions) or Deep Repair (recommended for files that fail to load entirely).\n3. Click \"Start Repair\" and wait for the recovery logic to complete.\n4. Download the repaired PDF file and verify its contents.",
-			proTips: ["If Standard Repair doesn't make the pages readable, try Deep Repair which visually reconstructs each page.", "Deep Repair will flatten the PDF into high-quality images, meaning selectable text will be rasterized. Use OCR PDF on the repaired file afterwards to make the text selectable again!"]
 		}
 	},
 	{
@@ -3614,40 +3374,6 @@ var registry = [
 			howToUse: "1. Select and upload the PDF file you wish to sanitize.\n2. Navigate through the document pages using the navigation bar.\n3. Click and drag on the page canvas to draw redaction rectangles.\n4. Select your preferred blackout color.\n5. Click \"Apply & Download Redacted PDF\".",
 			proTips: ["Draw boxes slightly larger than the text you want to hide to make sure no letters or word edges peek out.", "Unlike simple PDF annotation editors, this tool embeds the redaction rectangles as solid vector objects in the page streams, preventing readers from \"moving\" the box to see what is underneath."]
 		}
-	},
-	{
-		slug: "compare-pdf",
-		title: "Compare PDF",
-		description: "Compare two PDF documents side-by-side. View visual rendering differences and run character-by-character text diff analysis locally in your browser.",
-		category: "pdf",
-		keywords: [
-			"compare pdf",
-			"compare pdf files side by side",
-			"pdf diff online",
-			"visual pdf comparison",
-			"textual pdf diff",
-			"client side pdf diff"
-		],
-		icon: "FileText",
-		faqs: [
-			{
-				question: "How do I compare two PDF files?",
-				answer: "Upload PDF Document A and PDF Document B. The tool will render both documents side-by-side. You can choose \"Visual Mode\" to inspect rendering pages side-by-side, or \"Text Diff Mode\" to view a highlighted character-by-character difference report between their text contents."
-			},
-			{
-				question: "How is the text diff calculated?",
-				answer: "The tool extracts text from both PDFs using PDF.js text layer capabilities and calculates standard line and character diffs using the jsdiff library. Added text is highlighted in green, and removed text is highlighted in red."
-			},
-			{
-				question: "Is my data secure?",
-				answer: "Yes. Both files are loaded, parsed, rendered, and compared 100% locally in your browser. No document content is ever sent to a server."
-			}
-		],
-		educationalContent: {
-			whatIsIt: "Compare PDF is a document comparison utility. It provides a dual-pane renderer for comparing layout changes and a differential engine that parses text structures to find literal differences in copy.",
-			howToUse: "1. Select and upload PDF A (original) and PDF B (revised).\n2. Toggle between \"Visual side-by-side\" and \"Text Diff\" views.\n3. Navigate page-by-page to inspect visual deviations.\n4. Scroll through the color-coded text diff pane to see added and removed words.",
-			proTips: ["Text comparison is ideal for contracts, agreements, or drafts to make sure no sneaky clauses were added.", "Visual mode works great for verifying design alignment, fonts, and grid spacing modifications."]
-		}
 	}
 ];
 var categories = [
@@ -3680,12 +3406,6 @@ var categories = [
 		title: "Image Tools",
 		description: "Perform local OCR conversions, image format translations, and render ASCII art.",
 		icon: "Image"
-	},
-	{
-		slug: "video",
-		title: "Video & Audio Tools",
-		description: "Convert video structures and extract audio tracks completely locally.",
-		icon: "Video"
 	},
 	{
 		slug: "dev-utils",
