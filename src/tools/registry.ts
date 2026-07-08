@@ -88,6 +88,7 @@ import { meta as wordCounterMeta } from './list/word-counter/meta';
 import { meta as imageCompressorResizerMeta } from './list/image-compressor-resizer/meta';
 import { meta as videoToGifConverterMeta } from './list/video-to-gif-converter/meta';
 import { meta as loremIpsumGeneratorMeta } from './list/lorem-ipsum-generator/meta';
+import { meta as bmiCalculatorMeta } from './list/bmi-calculator/meta';
 
 // PDF tools imports
 import { meta as mergePdfMeta } from './list/merge-pdf/meta';
@@ -208,6 +209,7 @@ export const registry: ToolMeta[] = [
   imageCompressorResizerMeta,
   videoToGifConverterMeta,
   loremIpsumGeneratorMeta,
+  bmiCalculatorMeta,
 
   // PDF tools
   mergePdfMeta,
