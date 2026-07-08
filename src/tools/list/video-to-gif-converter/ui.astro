@@ -2,8 +2,6 @@
 import Icon from '../../../components/base/Icon.astro';
 ---
 
-<script src="https://cdn.jsdelivr.net/npm/gifshot@0.4.5/build/gifshot.min.js" is:inline></script>
-
 <video-to-gif-tool class="tool-workspace">
   <div class="workspace-grid">
     <!-- Left Column: Video Setup & Options -->
@@ -554,7 +552,7 @@ import Icon from '../../../components/base/Icon.astro';
 </style>
 
 <script>
-  declare const gifshot: any;
+  import gifshot from 'gifshot';
 
   class VideoToGifTool extends HTMLElement {
     private fileInputEl!: HTMLInputElement;
