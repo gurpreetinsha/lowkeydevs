@@ -27,3 +27,6 @@ pnpm-debug.log*
 # wrangler cache
 .wrangler/
 
+# vercel
+.vercel/
+
