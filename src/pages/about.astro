@@ -44,6 +44,45 @@ import Footer from '../components/Footer.astro';
         </article>
       </div>
 
+      <div class="about-team max-w-narrow mx-auto w-full">
+        <h2>Meet the team</h2>
+        <p class="team-subtitle">The developers behind Lowkeydevs.</p>
+        
+        <div class="team-grid">
+          <div class="team-member-card">
+            <div class="member-avatar">GI</div>
+            <div class="member-info">
+              <h3>Gurpreet Insha</h3>
+              <span class="member-role">Developer</span>
+              <p class="member-education">Shri Ram Group of Colleges, Muzaffarnagar</p>
+              <p class="member-location">Lives in Khatauli, Uttar Pradesh</p>
+            </div>
+          </div>
+          <div class="team-member-card">
+            <div class="member-avatar">PT</div>
+            <div class="member-info">
+              <h3>Priyank Tyagi</h3>
+              <span class="member-role">Developer</span>
+              <p class="member-education">Shri Ram Group of Colleges, Muzaffarnagar</p>
+              <p class="member-location">Lives in Muzaffarnagar, Uttar Pradesh</p>
+            </div>
+          </div>
+          <div class="team-member-card">
+            <div class="member-avatar">AG</div>
+            <div class="member-info">
+              <h3>Abhi Garg</h3>
+              <span class="member-role">Developer</span>
+              <p class="member-education">Shri Ram Group of Colleges, Muzaffarnagar</p>
+              <p class="member-location">Lives in Muzaffarnagar, Uttar Pradesh</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="team-contact">
+          <p>To contact us, email at <a href="mailto:info@lowkeydevs.com" class="contact-link">info@lowkeydevs.com</a></p>
+        </div>
+      </div>
+
       <div class="about-cta max-w-narrow mx-auto w-full">
         <h2>Open source & community driven</h2>
         <p>
@@ -203,6 +242,138 @@ import Footer from '../components/Footer.astro';
     .about-cta {
       padding: var(--space-8) var(--space-4);
     }
+  }
+
+  /* Team Section Styles */
+  .about-team {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    margin-top: clamp(24px, 6vw, 48px);
+    margin-bottom: clamp(24px, 6vw, 48px);
+    border-top: 1px solid var(--border);
+    padding-top: clamp(32px, 8vw, 64px);
+  }
+
+  .about-team h2 {
+    font-family: var(--font-heading);
+    font-size: var(--fs-h2);
+    font-weight: 500;
+    line-height: var(--lh-h2);
+    letter-spacing: var(--ls-h2);
+    color: var(--text-primary);
+    text-align: center;
+  }
+
+  .team-subtitle {
+    color: var(--text-secondary);
+    font-size: var(--fs-body);
+    text-align: center;
+    margin-top: calc(-1 * var(--space-4));
+    margin-bottom: var(--space-2);
+  }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(16px, 3vw, 24px);
+    margin-top: var(--space-4);
+  }
+
+  @media (max-width: 768px) {
+    .team-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .team-member-card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(20px, 4vw, 32px) clamp(16px, 3vw, 24px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-4);
+    transition: transform var(--duration-normal) var(--ease-out),
+                border-color var(--duration-normal) var(--ease-out),
+                box-shadow var(--duration-normal) var(--ease-out);
+  }
+
+  .team-member-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    box-shadow: var(--shadow-md);
+  }
+
+  .member-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-full);
+    background: var(--accent-subtle);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: var(--fs-h4);
+    border: 2px solid var(--border);
+  }
+
+  .member-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    align-items: center;
+  }
+
+  .member-info h3 {
+    font-family: var(--font-heading);
+    font-size: var(--fs-h4);
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .member-role {
+    color: var(--accent);
+    font-size: var(--fs-caption);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .member-education {
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    line-height: var(--lh-sm);
+    margin: var(--space-1) 0 0 0;
+  }
+
+  .member-location {
+    font-size: var(--fs-caption);
+    color: var(--text-tertiary);
+    margin: 0;
+  }
+
+  .team-contact {
+    margin-top: var(--space-4);
+    font-size: var(--fs-body);
+    color: var(--text-secondary);
+    text-align: center;
+  }
+
+  .contact-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .contact-link:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
   }
 </style>
 
