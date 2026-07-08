@@ -1070,6 +1070,9 @@ input::placeholder, textarea::placeholder {
 }
 
 @media (max-width: 768px) {
+  .nav-container {
+    grid-template-columns: 1fr auto;
+  }
   .nav-links {
     display: none;
   }
