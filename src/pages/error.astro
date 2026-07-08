@@ -1,0 +1,97 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ErrorDisplay from '../components/ErrorDisplay.astro';
+
+// SSR Page to handle dynamic error status codes
+const codeParam = Astro.url.searchParams.get('code') || '500';
+const cleanCode = codeParam.trim().substring(0, 3); // Extract first 3 chars to prevent long input injection
+
+interface ErrorDefinition {
+  title: string;
+  description: string;
+}
+
+const errorMap: Record<string, ErrorDefinition> = {
+  '400': {
+    title: 'Bad Request',
+    description: 'The server could not understand the request due to invalid syntax or parameters.'
+  },
+  '401': {
+    title: 'Unauthorized',
+    description: 'You are not authorized to view this page. Please authenticate and try again.'
+  },
+  '403': {
+    title: 'Forbidden',
+    description: 'Access to this resource is forbidden. You do not have the required permissions.'
+  },
+  '404': {
+    title: 'Page Not Found',
+    description: 'Oops! The page you are looking for does not exist, has been moved, or is under construction.'
+  },
+  '405': {
+    title: 'Method Not Allowed',
+    description: 'The request method is not supported for this resource.'
+  },
+  '408': {
+    title: 'Request Timeout',
+    description: 'The server timed out waiting for the request. Please reload and try again.'
+  },
+  '429': {
+    title: 'Too Many Requests',
+    description: 'Rate limit exceeded. You are making too many requests. Please cool down and try again later.'
+  },
+  '500': {
+    title: 'Internal Server Error',
+    description: 'Something went wrong on our end. We are investigating the issue and will resolve it shortly.'
+  },
+  '502': {
+    title: 'Bad Gateway',
+    description: 'The server received an invalid response from an upstream server. Please try again later.'
+  },
+  '503': {
+    title: 'Service Unavailable',
+    description: 'The server is temporarily overloaded or down for maintenance. Please check back soon.'
+  },
+  '504': {
+    title: 'Gateway Timeout',
+    description: 'The gateway server timed out waiting for a response from the upstream server.'
+  },
+  '505': {
+    title: 'HTTP Version Not Supported',
+    description: 'The HTTP protocol version used in the request is not supported by this server.'
+  }
+};
+
+const errorDetails = errorMap[cleanCode] || {
+  title: 'An Error Occurred',
+  description: 'An unexpected error was encountered while processing your request.'
+};
+
+// Set response status code dynamically if possible
+if (Astro.response) {
+  const numericCode = parseInt(cleanCode, 10);
+  if (!isNaN(numericCode) && numericCode >= 400 && numericCode <= 599) {
+    Astro.response.status = numericCode;
+    Astro.response.statusText = errorDetails.title;
+  }
+}
+---
+
+<Layout
+  title={`${cleanCode} ${errorDetails.title} - Lowkeydevs`}
+  description={errorDetails.description}
+>
+  <Header />
+
+  <main id="main-content">
+    <ErrorDisplay
+      statusCode={cleanCode}
+      title={errorDetails.title}
+      description={errorDetails.description}
+    />
+  </main>
+
+  <Footer />
+</Layout>

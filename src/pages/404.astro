@@ -1,0 +1,23 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ErrorDisplay from '../components/ErrorDisplay.astro';
+---
+
+<Layout
+  title="404 Page Not Found - Lowkeydevs"
+  description="The page you are looking for does not exist on Lowkeydevs."
+>
+  <Header />
+
+  <main id="main-content">
+    <ErrorDisplay
+      statusCode="404"
+      title="Page Not Found"
+      description="Oops! We couldn't find the page you were looking for. The link might be broken, or the page may have been moved."
+    />
+  </main>
+
+  <Footer />
+</Layout>

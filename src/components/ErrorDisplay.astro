@@ -1,0 +1,459 @@
+---
+import Icon from './base/Icon.astro';
+
+interface Props {
+  statusCode: string | number;
+  title: string;
+  description: string;
+  errorStack?: any;
+}
+
+const { statusCode, title, description, errorStack } = Astro.props;
+
+// Convert errorStack to string safely
+let stackString = '';
+if (errorStack) {
+  if (errorStack instanceof Error) {
+    stackString = `${errorStack.name}: ${errorStack.message}\n${errorStack.stack || ''}`;
+  } else if (typeof errorStack === 'object') {
+    try {
+      stackString = JSON.stringify(errorStack, null, 2);
+    } catch {
+      stackString = String(errorStack);
+    }
+  } else {
+    stackString = String(errorStack);
+  }
+}
+---
+
+<div class="error-container">
+  <div class="error-card">
+    <div class="error-visual">
+      <!-- Glowing Retro Terminal Animation -->
+      <div class="terminal-mockup">
+        <div class="terminal-header">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+          <span class="terminal-title">system_error.log</span>
+        </div>
+        <div class="terminal-body">
+          <div class="code-line prompt">
+            <span class="prompt-sym">$</span> cat error_status
+          </div>
+          <div class="code-line error-output glow-text">
+            STATUS_{statusCode}
+          </div>
+          <div class="code-line prompt">
+            <span class="prompt-sym">$</span> diagnose --code={statusCode}
+          </div>
+          <div class="code-line warning-output">
+            > [WARN] {title}
+          </div>
+          <div class="code-line cursor-line">
+            <span class="prompt-sym">$</span><span class="blinking-cursor">_</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="error-content">
+      <h1 class="error-code-badge">{statusCode}</h1>
+      <h2 class="error-title">{title}</h2>
+      <p class="error-description">{description}</p>
+    </div>
+
+    <div class="error-actions">
+      <a href="/" class="btn btn-primary">
+        <Icon name="Logo" size={16} />
+        <span>Go to Homepage</span>
+      </a>
+      <button class="btn btn-secondary" onclick="window.location.reload()">
+        <Icon name="RefreshCw" size={16} />
+        <span>Reload Page</span>
+      </button>
+    </div>
+
+    {stackString && (
+      <div class="tech-details-container">
+        <details class="tech-details">
+          <summary class="tech-details-summary">
+            <span>Show Technical Details</span>
+            <Icon name="ChevronDown" size={14} class="chevron" />
+          </summary>
+          <div class="tech-details-content">
+            <div class="tech-details-header">
+              <span class="tech-title">Stack Trace / Details</span>
+              <button class="btn-copy-error" data-clipboard-text={stackString} aria-label="Copy error details">
+                <span class="copy-icon">
+                  <Icon name="Copy" size={14} />
+                </span>
+                <span class="check-icon" hidden>
+                  <Icon name="Check" size={14} />
+                </span>
+                <span>Copy Details</span>
+              </button>
+            </div>
+            <pre class="tech-pre"><code>{stackString}</code></pre>
+          </div>
+        </details>
+      </div>
+    )}
+  </div>
+</div>
+
+<script>
+  // Clipboard copying logic for error details
+  const copyButtons = document.querySelectorAll('.btn-copy-error');
+  copyButtons.forEach(button => {
+    button.addEventListener('click', async () => {
+      const textToCopy = button.getAttribute('data-clipboard-text') || '';
+      if (!textToCopy) return;
+
+      try {
+        await navigator.clipboard.writeText(textToCopy);
+        const copyIcon = button.querySelector('.copy-icon');
+        const checkIcon = button.querySelector('.check-icon');
+        const label = button.querySelector('span');
+
+        if (copyIcon && checkIcon && label) {
+          copyIcon.setAttribute('hidden', 'true');
+          checkIcon.removeAttribute('hidden');
+          const originalText = label.textContent;
+          label.textContent = 'Copied!';
+
+          setTimeout(() => {
+            copyIcon.removeAttribute('hidden');
+            checkIcon.setAttribute('hidden', 'true');
+            label.textContent = originalText;
+          }, 2000);
+        }
+      } catch (err) {
+        console.error('Failed to copy error text: ', err);
+      }
+    });
+  });
+</script>
+
+<style>
+  .error-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 250px);
+    padding: var(--space-12) var(--space-4);
+    box-sizing: border-box;
+  }
+
+  .error-card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    width: 100%;
+    max-width: 600px;
+    padding: clamp(24px, 6vw, 48px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-8);
+    box-shadow: var(--shadow-lg);
+    transition: transform var(--duration-normal) var(--ease-out);
+  }
+
+  .error-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-hover);
+  }
+
+  /* === Terminal Visual Animation === */
+  .error-visual {
+    width: 100%;
+    max-width: 440px;
+  }
+
+  .terminal-mockup {
+    background: #0d0d11;
+    border: 1px solid #1e1e24;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    text-align: left;
+    box-shadow: var(--shadow-md), 0 0 20px rgba(140, 82, 255, 0.05);
+  }
+
+  .terminal-header {
+    background: #14141a;
+    padding: var(--space-2) var(--space-4);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid #1e1e24;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .dot.red { background-color: #ff5f56; }
+  .dot.yellow { background-color: #ffbd2e; }
+  .dot.green { background-color: #27c93f; }
+
+  .terminal-title {
+    color: var(--text-tertiary);
+    font-size: 11px;
+    font-family: var(--font-mono);
+    margin-left: 8px;
+    user-select: none;
+  }
+
+  .terminal-body {
+    padding: var(--space-4);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.6;
+    color: #c9c3e6;
+  }
+
+  .code-line {
+    margin-bottom: var(--space-1);
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  .prompt-sym {
+    color: var(--accent);
+    margin-right: var(--space-2);
+    font-weight: 500;
+  }
+
+  .error-output {
+    color: var(--error);
+    font-weight: bold;
+    padding-left: var(--space-4);
+  }
+
+  .glow-text {
+    text-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+    animation: errorPulse 2s infinite ease-in-out;
+  }
+
+  @keyframes errorPulse {
+    0%, 100% {
+      opacity: 1;
+      text-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+    }
+    50% {
+      opacity: 0.8;
+      text-shadow: 0 0 4px rgba(239, 68, 68, 0.1);
+    }
+  }
+
+  .warning-output {
+    color: var(--text-secondary);
+    padding-left: var(--space-4);
+  }
+
+  .blinking-cursor {
+    font-weight: bold;
+    color: var(--text-primary);
+    animation: cursorBlink 1s infinite step-end;
+  }
+
+  @keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  /* === Typography === */
+  .error-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    width: 100%;
+  }
+
+  .error-code-badge {
+    font-family: var(--font-heading);
+    font-size: clamp(48px, 10vw, 72px);
+    font-weight: 700;
+    line-height: 1;
+    margin: 0;
+    background: linear-gradient(135deg, var(--accent), #ff77ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 4px 12px rgba(140, 82, 255, 0.15));
+    letter-spacing: var(--ls-h1);
+  }
+
+  .error-title {
+    font-family: var(--font-heading);
+    font-size: var(--fs-h3);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: var(--ls-h3);
+  }
+
+  .error-description {
+    font-family: var(--font-sans);
+    font-size: var(--fs-body);
+    color: var(--text-secondary);
+    max-width: 440px;
+    margin: 0 auto;
+    line-height: var(--lh-body);
+  }
+
+  /* === Buttons === */
+  .error-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    justify-content: center;
+    width: 100%;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-md);
+    font-family: var(--font-sans);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+    text-decoration: none;
+    box-sizing: border-box;
+  }
+
+  .btn-primary {
+    background-color: var(--accent);
+    color: var(--accent-on);
+    border: 1px solid var(--accent);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
+    box-shadow: 0 0 16px var(--accent-subtle);
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--surface-hover);
+    border-color: var(--border-hover);
+  }
+
+  /* === Tech Details Collapsible === */
+  .tech-details-container {
+    width: 100%;
+    text-align: left;
+    margin-top: var(--space-2);
+  }
+
+  .tech-details {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .tech-details-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3) var(--space-4);
+    background-color: var(--surface-elevated);
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    color: var(--text-secondary);
+    user-select: none;
+    list-style: none; /* Hide default summary marker */
+  }
+
+  .tech-details-summary::-webkit-details-marker {
+    display: none; /* Hide Safari default summary marker */
+  }
+
+  .tech-details-summary:hover {
+    color: var(--text-primary);
+    background-color: var(--surface-hover);
+  }
+
+  .tech-details-summary .chevron {
+    transition: transform var(--duration-normal) var(--ease-out);
+  }
+
+  .tech-details[open] .tech-details-summary .chevron {
+    transform: rotate(180deg);
+  }
+
+  .tech-details-content {
+    background-color: #0c0c0e;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tech-details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-2) var(--space-4);
+    background-color: #111114;
+    border-bottom: 1px solid #1e1e24;
+  }
+
+  .tech-title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+
+  .btn-copy-error {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-sans);
+    font-size: 11px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1-5);
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .btn-copy-error:hover {
+    color: var(--text-primary);
+    background-color: var(--surface-hover);
+    border-color: var(--border-hover);
+  }
+
+  .tech-pre {
+    margin: 0;
+    padding: var(--space-4);
+    overflow-x: auto;
+    max-height: 250px;
+  }
+
+  .tech-pre code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.5;
+    color: #e4e3ea;
+  }
+</style>

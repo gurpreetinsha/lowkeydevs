@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ErrorDisplay from '../components/ErrorDisplay.astro';
+
+interface Props {
+  error: unknown;
+}
+
+const { error } = Astro.props;
+---
+
+<Layout
+  title="500 Internal Server Error - Lowkeydevs"
+  description="Something went wrong on our server. We are working to resolve the issue."
+>
+  <Header />
+
+  <main id="main-content">
+    <ErrorDisplay
+      statusCode="500"
+      title="Internal Server Error"
+      description="An unexpected error occurred on our server. Don't worry, it's not you, it's us. We are investigating the issue."
+      errorStack={error}
+    />
+  </main>
+
+  <Footer />
+</Layout>
