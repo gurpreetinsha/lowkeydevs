@@ -19,6 +19,8 @@ const {
   toolSlug,
   toolCategory
 } = Astro.props;
+
+const isPagesDev = Astro.url.hostname.endsWith('.pages.dev');
 ---
 
 <!doctype html>
@@ -44,6 +46,7 @@ const {
     <link rel="manifest" href="/site.webmanifest" />
 
     <!-- SEO Tags -->
+    {isPagesDev && <meta name="robots" content="noindex, nofollow" />}
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
