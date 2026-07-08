@@ -10,7 +10,8 @@
     "build": "node -e \"const fs = require('fs'), path = require('path'), os = require('os'); [path.join(process.cwd(), '.wrangler'), path.join(os.homedir(), '.wrangler'), path.join(os.homedir(), '.config', '.wrangler')].forEach(d => { try { fs.rmSync(d, { recursive: true, force: true }) } catch(e){} })\" && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "test": "vitest run"
+    "test": "vitest run",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.13",
