@@ -1,13 +1,16 @@
 import { defineConfig } from 'astro/config';
 import cloudflare from '@astrojs/cloudflare';
+import node from '@astrojs/node';
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 
+const isDev = process.env.NODE_ENV === 'development' || process.argv.includes('dev') || process.argv.includes('start');
+
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
-  adapter: cloudflare(),
+  adapter: isDev ? node({ mode: 'standalone' }) : cloudflare(),
   integrations: [
     {
       name: 'clean-wrangler-cache',
