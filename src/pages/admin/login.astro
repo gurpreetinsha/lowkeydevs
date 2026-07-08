@@ -1,0 +1,254 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Icon from '../../components/base/Icon.astro';
+import { getSupabaseClient } from '../../lib/supabase';
+import { verifyAdmin } from '../../lib/auth';
+
+export const prerender = false;
+
+let errorMessage = '';
+const { isAuthenticated, isAdmin } = await verifyAdmin(Astro.cookies, Astro.locals);
+
+// If already logged in as admin, redirect to dashboard
+if (isAuthenticated && isAdmin) {
+  return Astro.redirect('/admin/suggestions');
+}
+
+if (Astro.request.method === 'POST') {
+  try {
+    const formData = await Astro.request.formData();
+    const email = formData.get('email')?.toString().trim();
+    const password = formData.get('password')?.toString();
+
+    if (!email || !password) {
+      errorMessage = 'Please enter both email and password.';
+    } else {
+      const supabase = getSupabaseClient(Astro.locals);
+      if (!supabase) {
+        errorMessage = 'Database client configuration is missing.';
+      } else {
+        // Attempt login via Supabase Auth
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (error) {
+          errorMessage = error.message;
+        } else if (data.user && data.session) {
+          // Check if user is admin
+          const { data: roleData, error: roleError } = await supabase
+            .from('user_roles')
+            .select('role')
+            .eq('user_id', data.user.id)
+            .single();
+
+          if (roleError || !roleData || roleData.role !== 'admin') {
+            // Sign out user immediately if they are not an admin to clear their session
+            await supabase.auth.signOut();
+            errorMessage = 'Access denied. You do not have administrator privileges.';
+          } else {
+            // Valid admin session, set cookies
+            const session = data.session;
+            Astro.cookies.set('sb-access-token', session.access_token, {
+              path: '/',
+              secure: true,
+              httpOnly: true,
+              sameSite: 'strict',
+              maxAge: session.expires_in,
+            });
+            Astro.cookies.set('sb-refresh-token', session.refresh_token, {
+              path: '/',
+              secure: true,
+              httpOnly: true,
+              sameSite: 'strict',
+              maxAge: session.expires_in,
+            });
+
+            return Astro.redirect('/admin/suggestions');
+          }
+        }
+      }
+    }
+  } catch (err: any) {
+    errorMessage = err.message || 'An unexpected error occurred.';
+  }
+}
+---
+
+<Layout title="Admin Login - Lowkeydevs">
+  <Header />
+
+  <main id="main-content" class="container login-container">
+    <div class="login-card-wrapper">
+      <div class="login-card">
+        <div class="login-card-header">
+          <div class="lock-icon-wrapper">
+            <Icon name="Logo" size={32} class="logo-icon" />
+          </div>
+          <h1 class="login-title">Admin Console</h1>
+          <p class="login-subtitle">Sign in to access the suggestions dashboard</p>
+        </div>
+
+        {errorMessage && (
+          <div class="error-banner">
+            <Icon name="AlertCircle" size={16} />
+            <span>{errorMessage}</span>
+          </div>
+        )}
+
+        <form method="POST" class="login-form">
+          <div class="form-group">
+            <label for="email" class="label">Email Address</label>
+            <div class="input-wrapper">
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                autocomplete="email"
+                placeholder="admin@lowkeydevs.com"
+                class="login-input"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="label">Password</label>
+            <div class="input-wrapper">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                required
+                autocomplete="current-password"
+                placeholder="••••••••"
+                class="login-input"
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block submit-btn">
+            Sign In
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 200px);
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-12);
+  }
+
+  .login-card-wrapper {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .login-card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    box-shadow: var(--shadow-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .login-card-header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .lock-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background-color: var(--accent-subtle);
+    color: var(--accent);
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-2);
+  }
+
+  .logo-icon {
+    color: var(--accent);
+  }
+
+  .login-title {
+    font-family: var(--font-heading);
+    font-size: var(--fs-h4);
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .login-subtitle {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .error-banner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    background-color: var(--error-subtle);
+    border: 1px solid var(--error-border);
+    color: var(--error);
+    font-size: 13px;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+  }
+
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .input-wrapper {
+    position: relative;
+  }
+
+  .login-input {
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    background-color: var(--surface-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    transition: border-color var(--duration-fast), box-shadow var(--duration-fast);
+  }
+
+  .login-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-subtle);
+  }
+
+  .submit-btn {
+    margin-top: var(--space-2);
+    justify-content: center;
+    height: 44px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+</style>

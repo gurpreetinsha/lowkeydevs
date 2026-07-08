@@ -4,259 +4,403 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import Icon from '../../components/base/Icon.astro';
 import { getSupabaseClient } from '../../lib/supabase';
+import { verifyAdmin } from '../../lib/auth';
 
 export const prerender = false;
 
-const supabase = getSupabaseClient(Astro.locals);
+// 1. Verify admin authentication server-side
+const { isAuthenticated, isAdmin, user } = await verifyAdmin(Astro.cookies, Astro.locals);
 
-// Fetch suggestions from Supabase
-let suggestions = [];
-let fetchError = null;
+let suggestions: any[] = [];
+let fetchError: string | null = null;
+let uniqueTools: string[] = [];
+let uniqueBrowsers: string[] = [];
+let uniqueOS: string[] = [];
+let uniqueDevices: string[] = [];
+let totalCount = 0;
+let emailCount = 0;
+let emailRate = 0;
+let avgScroll = 0;
+let avgTime = 0;
 
-try {
-  if (!supabase) {
-    fetchError = 'Supabase environment variables (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY) are missing or not loaded. Please configure them in your .env file and restart your dev server.';
-  } else {
-    const { data, error } = await supabase
-      .from('suggestions')
-      .select('*')
-      .order('created_at', { ascending: false });
+if (!isAuthenticated || !isAdmin) {
+  Astro.response.status = 403;
+} else {
+  // 2. Fetch suggestions from Supabase only if authenticated & admin
+  const supabase = getSupabaseClient(Astro.locals);
 
-    if (error) {
-      fetchError = error.message;
+  try {
+    if (!supabase) {
+      fetchError = 'Supabase environment variables (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY) are missing or not loaded. Please configure them in your .env file and restart your dev server.';
     } else {
-      suggestions = data || [];
+      const { data, error } = await supabase
+        .from('suggestions')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        fetchError = error.message;
+      } else {
+        suggestions = data || [];
+      }
     }
+  } catch (err: any) {
+    fetchError = err.message || 'Unknown error occurred.';
   }
-} catch (err: any) {
-  fetchError = err.message || 'Unknown error occurred.';
+
+  // Generate dynamic filter lists from actual data to populate dropdowns
+  uniqueTools = Array.from(new Set(suggestions.map(s => s.tool_slug).filter(Boolean))).sort() as string[];
+  uniqueBrowsers = Array.from(new Set(suggestions.map(s => s.browser).filter(Boolean))).sort() as string[];
+  uniqueOS = Array.from(new Set(suggestions.map(s => s.os).filter(Boolean))).sort() as string[];
+  uniqueDevices = Array.from(new Set(suggestions.map(s => s.device_type).filter(Boolean))).sort() as string[];
+
+  // Calculate simple overview stats
+  totalCount = suggestions.length;
+  emailCount = suggestions.filter(s => s.email).length;
+  emailRate = totalCount ? Math.round((emailCount / totalCount) * 100) : 0;
+  avgScroll = totalCount ? Math.round(suggestions.reduce((acc, s) => acc + (s.scroll_percent || 0), 0) / totalCount) : 0;
+  avgTime = totalCount ? Math.round(suggestions.reduce((acc, s) => acc + (s.time_on_page || 0), 0) / totalCount) : 0;
 }
-
-// Generate dynamic filter lists from actual data to populate dropdowns
-const uniqueTools = Array.from(new Set(suggestions.map(s => s.tool_slug).filter(Boolean))).sort();
-const uniqueBrowsers = Array.from(new Set(suggestions.map(s => s.browser).filter(Boolean))).sort();
-const uniqueOS = Array.from(new Set(suggestions.map(s => s.os).filter(Boolean))).sort();
-const uniqueDevices = Array.from(new Set(suggestions.map(s => s.device_type).filter(Boolean))).sort();
-
-// Calculate simple overview stats
-const totalCount = suggestions.length;
-const emailCount = suggestions.filter(s => s.email).length;
-const emailRate = totalCount ? Math.round((emailCount / totalCount) * 100) : 0;
-const avgScroll = totalCount ? Math.round(suggestions.reduce((acc, s) => acc + (s.scroll_percent || 0), 0) / totalCount) : 0;
-const avgTime = totalCount ? Math.round(suggestions.reduce((acc, s) => acc + (s.time_on_page || 0), 0) / totalCount) : 0;
 ---
 
-<Layout title="Suggestions Admin Dashboard - Lowkeydevs">
+<Layout title={(!isAuthenticated || !isAdmin) ? "403 Forbidden - Lowkeydevs" : "Suggestions Admin Dashboard - Lowkeydevs"}>
   <Header />
 
-  <main id="main-content" class="container admin-container">
-    <div class="admin-header">
-      <div>
-        <h1 class="admin-title">Suggestions Dashboard</h1>
-        <p class="admin-subtitle">Monitor and analyze feature suggestions and user feedback.</p>
+  {(!isAuthenticated || !isAdmin) ? (
+    <main id="main-content" class="container forbidden-container">
+      <div class="forbidden-card">
+        <div class="forbidden-icon-wrapper">
+          <Icon name="AlertCircle" size={48} />
+        </div>
+        <h1 class="forbidden-title">403 Forbidden</h1>
+        <p class="forbidden-subtitle">You must be signed in as an administrator to access the dashboard.</p>
+        <div class="forbidden-actions">
+          <a href="/admin/login" class="btn btn-primary">Sign In as Admin</a>
+          <a href="/" class="btn btn-secondary">Back to Home</a>
+        </div>
       </div>
-      <button id="export-csv-btn" class="btn btn-primary" title="Export current filtered data to CSV">
-        <Icon name="Download" size={16} />
-        Export to CSV
-      </button>
-    </div>
-
-    {fetchError ? (
-      <div class="error-banner">
-        <Icon name="AlertCircle" size={20} />
+    </main>
+  ) : (
+    <main id="main-content" class="container admin-container">
+      <div class="admin-header">
         <div>
-          <strong>Failed to load suggestions:</strong> {fetchError}
-          <p style="margin-top: 4px; font-size: 13px;">Please make sure your Supabase environment variables are set and the suggestions table exists.</p>
+          <h1 class="admin-title">Suggestions Dashboard</h1>
+          <p class="admin-subtitle">Monitor and analyze feature suggestions and user feedback.</p>
         </div>
-      </div>
-    ) : (
-      <>
-      {/* Overview Cards */}
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon-wrapper purple">
-            <Icon name="MessageSquare" size={20} />
-          </div>
-          <div>
-            <div class="stat-label">Total Suggestions</div>
-            <div class="stat-value" id="stat-total">{totalCount}</div>
-          </div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-icon-wrapper green">
-            <Icon name="Mail" size={20} />
-          </div>
-          <div>
-            <div class="stat-label">Contact Rate</div>
-            <div class="stat-value" id="stat-email-rate">{emailRate}%</div>
-            <div class="stat-desc">{emailCount} suggestions with email</div>
-          </div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-icon-wrapper orange">
-            <Icon name="TrendingUp" size={20} />
-          </div>
-          <div>
-            <div class="stat-label">Avg. Scroll Depth</div>
-            <div class="stat-value" id="stat-scroll">{avgScroll}%</div>
-          </div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-icon-wrapper blue">
-            <Icon name="Clock" size={20} />
-          </div>
-          <div>
-            <div class="stat-label">Avg. Time on Page</div>
-            <div class="stat-value" id="stat-time">{avgTime}s</div>
-          </div>
+        <div class="admin-header-actions">
+          <span class="admin-user-info" title={user?.email}>
+            <Icon name="User" size={14} />
+            <span class="admin-user-email">{user?.email}</span>
+          </span>
+          <button id="export-csv-btn" class="btn btn-primary" title="Export current filtered data to CSV">
+            <Icon name="Download" size={16} />
+            Export to CSV
+          </button>
+          <a href="/api/admin/logout" class="btn btn-secondary logout-btn" title="Sign out of admin console">
+            <Icon name="LogOut" size={16} />
+            Sign Out
+          </a>
         </div>
       </div>
 
-      {/* Filters Panel */}
-      <div class="filters-card">
-        <div class="filters-header">
-          <h2 class="filters-title">
-            <Icon name="Filter" size={16} />
-            Filters & Search
-          </h2>
-          <button id="clear-filters-btn" class="btn-text">Clear Filters</button>
+      {fetchError ? (
+        <div class="error-banner">
+          <Icon name="AlertCircle" size={20} />
+          <div>
+            <strong>Failed to load suggestions:</strong> {fetchError}
+            <p style="margin-top: 4px; font-size: 13px;">Please make sure your Supabase environment variables are set and the suggestions table exists.</p>
+          </div>
         </div>
-
-        <div class="filters-grid">
-          {/* Search input */}
-          <div class="form-group search-group">
-            <label for="search-input" class="label">Search</label>
-            <div class="search-input-wrapper">
-              <Icon name="Search" class="search-icon" size={16} />
-              <input type="text" id="search-input" placeholder="Search suggestion, email, page, tool..." autocomplete="off" />
+      ) : (
+        <>
+        {/* Overview Cards */}
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon-wrapper purple">
+              <Icon name="MessageSquare" size={20} />
+            </div>
+            <div>
+              <div class="stat-label">Total Suggestions</div>
+              <div class="stat-value" id="stat-total">{totalCount}</div>
             </div>
           </div>
 
-          {/* Date Filter */}
-          <div class="form-group">
-            <label for="filter-date" class="label">Date Range</label>
-            <select id="filter-date">
-              <option value="all">All Time</option>
-              <option value="today">Today</option>
-              <option value="week">Last 7 Days</option>
-              <option value="month">Last 30 Days</option>
-            </select>
+          <div class="stat-card">
+            <div class="stat-icon-wrapper green">
+              <Icon name="Mail" size={20} />
+            </div>
+            <div>
+              <div class="stat-label">Contact Rate</div>
+              <div class="stat-value" id="stat-email-rate">{emailRate}%</div>
+              <div class="stat-desc">{emailCount} suggestions with email</div>
+            </div>
           </div>
 
-          {/* Tool Filter */}
-          <div class="form-group">
-            <label for="filter-tool" class="label">Tool</label>
-            <select id="filter-tool">
-              <option value="all">All Tools</option>
-              <option value="none">No Tool (Generic)</option>
-              {uniqueTools.map(tool => (
-                <option value={tool}>{tool}</option>
-              ))}
-            </select>
+          <div class="stat-card">
+            <div class="stat-icon-wrapper orange">
+              <Icon name="TrendingUp" size={20} />
+            </div>
+            <div>
+              <div class="stat-label">Avg. Scroll Depth</div>
+              <div class="stat-value" id="stat-scroll">{avgScroll}%</div>
+            </div>
           </div>
 
-          {/* Browser Filter */}
-          <div class="form-group">
-            <label for="filter-browser" class="label">Browser</label>
-            <select id="filter-browser">
-              <option value="all">All Browsers</option>
-              {uniqueBrowsers.map(b => (
-                <option value={b}>{b}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* OS Filter */}
-          <div class="form-group">
-            <label for="filter-os" class="label">Operating System</label>
-            <select id="filter-os">
-              <option value="all">All OS</option>
-              {uniqueOS.map(os => (
-                <option value={os}>{os}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Device Filter */}
-          <div class="form-group">
-            <label for="filter-device" class="label">Device Type</label>
-            <select id="filter-device">
-              <option value="all">All Devices</option>
-              {uniqueDevices.map(d => (
-                <option value={d}>{d}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Theme Filter */}
-          <div class="form-group">
-            <label for="filter-theme" class="label">Theme</label>
-            <select id="filter-theme">
-              <option value="all">All Themes</option>
-              <option value="light">Light</option>
-              <option value="dark">Dark</option>
-            </select>
-          </div>
-
-          {/* Has Email Filter */}
-          <div class="form-group">
-            <label for="filter-email" class="label">Email Contact</label>
-            <select id="filter-email">
-              <option value="all">All Suggestions</option>
-              <option value="has_email">Has Email</option>
-              <option value="no_email">No Email</option>
-            </select>
-          </div>
-
-          {/* Sorting Filter */}
-          <div class="form-group">
-            <label for="sort-by" class="label">Sort By</label>
-            <select id="sort-by">
-              <option value="newest">Newest First</option>
-              <option value="oldest">Oldest First</option>
-              <option value="time">Time on Page</option>
-              <option value="scroll">Scroll Depth</option>
-            </select>
+          <div class="stat-card">
+            <div class="stat-icon-wrapper blue">
+              <Icon name="Clock" size={20} />
+            </div>
+            <div>
+              <div class="stat-label">Avg. Time on Page</div>
+              <div class="stat-value" id="stat-time">{avgTime}s</div>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Suggestions Table */}
-      <div class="table-container">
-        <table id="suggestions-table">
-          <thead>
-            <tr>
-              <th>Suggestion</th>
-              <th>Details</th>
-              <th>Context</th>
-              <th>Platform</th>
-              <th>Metrics</th>
-              <th>Timestamp / ID</th>
-            </tr>
-          </thead>
-          <tbody id="table-body">
-            {/* Rendered dynamically by script below */}
-          </tbody>
-        </table>
+        {/* Filters Panel */}
+        <div class="filters-card">
+          <div class="filters-header">
+            <h2 class="filters-title">
+              <Icon name="Filter" size={16} />
+              Filters & Search
+            </h2>
+            <button id="clear-filters-btn" class="btn-text">Clear Filters</button>
+          </div>
 
-        {/* Empty State */}
-        <div id="empty-state" class="empty-state" style="display: none;">
-          <span class="empty-icon">💡</span>
-          <h3>No suggestions match the filters</h3>
-          <p>Try clearing your search query or choosing different filters.</p>
+          <div class="filters-grid">
+            {/* Search input */}
+            <div class="form-group search-group">
+              <label for="search-input" class="label">Search</label>
+              <div class="search-input-wrapper">
+                <Icon name="Search" class="search-icon" size={16} />
+                <input type="text" id="search-input" placeholder="Search suggestion, email, page, tool..." autocomplete="off" />
+              </div>
+            </div>
+
+            {/* Date Filter */}
+            <div class="form-group">
+              <label for="filter-date" class="label">Date Range</label>
+              <select id="filter-date">
+                <option value="all">All Time</option>
+                <option value="today">Today</option>
+                <option value="week">Last 7 Days</option>
+                <option value="month">Last 30 Days</option>
+              </select>
+            </div>
+
+            {/* Tool Filter */}
+            <div class="form-group">
+              <label for="filter-tool" class="label">Tool</label>
+              <select id="filter-tool">
+                <option value="all">All Tools</option>
+                <option value="none">No Tool (Generic)</option>
+                {uniqueTools.map(tool => (
+                  <option value={tool}>{tool}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Browser Filter */}
+            <div class="form-group">
+              <label for="filter-browser" class="label">Browser</label>
+              <select id="filter-browser">
+                <option value="all">All Browsers</option>
+                {uniqueBrowsers.map(b => (
+                  <option value={b}>{b}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* OS Filter */}
+            <div class="form-group">
+              <label for="filter-os" class="label">Operating System</label>
+              <select id="filter-os">
+                <option value="all">All OS</option>
+                {uniqueOS.map(os => (
+                  <option value={os}>{os}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Device Filter */}
+            <div class="form-group">
+              <label for="filter-device" class="label">Device Type</label>
+              <select id="filter-device">
+                <option value="all">All Devices</option>
+                {uniqueDevices.map(d => (
+                  <option value={d}>{d}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Theme Filter */}
+            <div class="form-group">
+              <label for="filter-theme" class="label">Theme</label>
+              <select id="filter-theme">
+                <option value="all">All Themes</option>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+              </select>
+            </div>
+
+            {/* Has Email Filter */}
+            <div class="form-group">
+              <label for="filter-email" class="label">Email Contact</label>
+              <select id="filter-email">
+                <option value="all">All Suggestions</option>
+                <option value="has_email">Has Email</option>
+                <option value="no_email">No Email</option>
+              </select>
+            </div>
+
+            {/* Sorting Filter */}
+            <div class="form-group">
+              <label for="sort-by" class="label">Sort By</label>
+              <select id="sort-by">
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="time">Time on Page</option>
+                <option value="scroll">Scroll Depth</option>
+              </select>
+            </div>
+          </div>
         </div>
-      </div>
-      </>
-    )}
-  </main>
+
+        {/* Suggestions Table */}
+        <div class="table-container">
+          <table id="suggestions-table">
+            <thead>
+              <tr>
+                <th>Suggestion</th>
+                <th>Details</th>
+                <th>Context</th>
+                <th>Platform</th>
+                <th>Metrics</th>
+                <th>Timestamp / ID</th>
+              </tr>
+            </thead>
+            <tbody id="table-body">
+              {/* Rendered dynamically by script below */}
+            </tbody>
+          </table>
+
+          {/* Empty State */}
+          <div id="empty-state" class="empty-state" style="display: none;">
+            <span class="empty-icon">💡</span>
+            <h3>No suggestions match the filters</h3>
+            <p>Try clearing your search query or choosing different filters.</p>
+          </div>
+        </div>
+        </>
+      )}
+    </main>
+  )}
 
   <Footer />
 </Layout>
 
 <style>
+  /* 403 Forbidden Screen styles */
+  .forbidden-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 200px);
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-12);
+  }
+
+  .forbidden-card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    box-shadow: var(--shadow-xl);
+    text-align: center;
+    max-width: 440px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .forbidden-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    background-color: var(--error-subtle);
+    color: var(--error);
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-2);
+  }
+
+  .forbidden-title {
+    font-family: var(--font-heading);
+    font-size: var(--fs-h3);
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .forbidden-subtitle {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .forbidden-actions {
+    display: flex;
+    gap: var(--space-3);
+    width: 100%;
+    margin-top: var(--space-2);
+  }
+
+  .forbidden-actions a {
+    flex: 1;
+    justify-content: center;
+  }
+
+  /* Admin Header Actions & User Info */
+  .admin-header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .admin-user-info {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1-5);
+    padding: var(--space-2) var(--space-3);
+    background-color: var(--surface-hover);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    max-width: 220px;
+  }
+
+  .admin-user-email {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .logout-btn {
+    border-color: var(--border);
+  }
+
+  .logout-btn:hover {
+    background-color: var(--error-subtle);
+    border-color: var(--error-border);
+    color: var(--error);
+  }
+
   .admin-container {
     padding-top: var(--space-8);
     padding-bottom: var(--space-16);
