@@ -9,6 +9,7 @@ interface Props {
   ogImage?: string;
   toolSlug?: string;
   toolCategory?: string;
+  keywords?: string;
 }
 
 const {
@@ -17,7 +18,8 @@ const {
   canonicalUrl = Astro.url.href,
   ogImage = '/og-default.png',
   toolSlug,
-  toolCategory
+  toolCategory,
+  keywords
 } = Astro.props;
 
 const isPagesDev = Astro.url.hostname.endsWith('.pages.dev');
@@ -49,6 +51,10 @@ const isPagesDev = Astro.url.hostname.endsWith('.pages.dev');
     {isPagesDev && <meta name="robots" content="noindex, nofollow" />}
     <title>{title}</title>
     <meta name="description" content={description} />
+    {keywords && <meta name="keywords" content={keywords} />}
+    <meta name="generator" content={Astro.generator} />
+    <meta name="author" content="Lowkeydevs" />
+    <meta name="theme-color" content="#121212" />
     <link rel="canonical" href={canonicalUrl} />
     <link rel="sitemap" href="/sitemap.xml" />
 
@@ -58,6 +64,8 @@ const isPagesDev = Astro.url.hostname.endsWith('.pages.dev');
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL(ogImage, Astro.url).href} />
+    <meta property="og:site_name" content="Lowkeydevs" />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
