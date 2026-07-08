@@ -1,0 +1,692 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<unit-converter-tool class="tool-workspace">
+  <!-- Category Selector Segment Control -->
+  <div class="category-tabs glass-panel" role="tablist" aria-label="Measurement Categories">
+    <button class="tab-btn active" data-category="length" role="tab" aria-selected="true" id="tab-length">Length</button>
+    <button class="tab-btn" data-category="weight" role="tab" aria-selected="false" id="tab-weight">Weight & Mass</button>
+    <button class="tab-btn" data-category="temperature" role="tab" aria-selected="false" id="tab-temperature">Temperature</button>
+    <button class="tab-btn" data-category="area" role="tab" aria-selected="false" id="tab-area">Area</button>
+    <button class="tab-btn" data-category="volume" role="tab" aria-selected="false" id="tab-volume">Volume</button>
+    <button class="tab-btn" data-category="speed" role="tab" aria-selected="false" id="tab-speed">Speed</button>
+    <button class="tab-btn" data-category="time" role="tab" aria-selected="false" id="tab-time">Time</button>
+    <button class="tab-btn" data-category="storage" role="tab" aria-selected="false" id="tab-storage">Digital Storage</button>
+  </div>
+
+  <div class="converter-layout">
+    <!-- Calculator Panel -->
+    <div class="calculator-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Conversion Calculator</span>
+      </div>
+
+      <!-- Inputs Grid -->
+      <div class="inputs-grid">
+        <div class="input-group">
+          <label for="from-value-input" class="label">From</label>
+          <div class="input-with-select">
+            <input type="number" id="from-value-input" placeholder="0" step="any" class="input" aria-label="From Value" />
+            <select id="from-unit-select" class="select-unit" aria-label="From Unit">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+        </div>
+
+        <button id="btn-swap-units" class="btn-swap" aria-label="Swap units" title="Swap units">
+          <Icon name="RefreshCw" size={20} class="swap-icon" />
+        </button>
+
+        <div class="input-group">
+          <label for="to-value-input" class="label">To</label>
+          <div class="input-with-select">
+            <input type="number" id="to-value-input" placeholder="0" step="any" class="input" readonly aria-label="To Value" />
+            <select id="to-unit-select" class="select-unit" aria-label="To Unit">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formula Section -->
+      <div class="formula-section">
+        <span class="section-label">Formula & Explanation</span>
+        <div class="formula-box">
+          <span id="formula-text" class="formula-text">Select units to see conversion formula</span>
+          <button id="btn-copy-result" class="btn btn-secondary btn-sm" aria-label="Copy conversion result">
+            <Icon name="Clipboard" size={14} class="copy-icon" />
+            <Icon name="Check" size={14} class="check-icon" />
+            <span class="copy-text">Copy Result</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reference Table Panel -->
+    <div class="table-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">All Conversions for <span id="ref-unit-label">...</span></span>
+      </div>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Value</th>
+              <th>Symbol</th>
+            </tr>
+          </thead>
+          <tbody id="reference-table-body">
+            <!-- Populated dynamically via javascript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</unit-converter-tool>
+
+<style>
+  .tool-workspace {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .category-tabs {
+    display: flex;
+    overflow-x: auto;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    border-radius: var(--radius-md);
+  }
+
+  .category-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab-btn {
+    flex: 1;
+    min-width: 120px;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s var(--ease-out);
+  }
+
+  .tab-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .tab-btn.active {
+    color: var(--primary-accent);
+    background: var(--accent-subtle);
+    font-weight: 600;
+  }
+
+  .converter-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .converter-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .calculator-pane, .table-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    min-height: 380px;
+  }
+
+  .pane-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+  }
+
+  .pane-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 1rem;
+  }
+
+  .inputs-grid {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  @media (max-width: 600px) {
+    .inputs-grid {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  .input-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .input-with-select {
+    display: flex;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+  }
+
+  .input-with-select:focus-within {
+    border-color: var(--primary-accent);
+    box-shadow: var(--focus-ring);
+  }
+
+  .input-with-select .input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 0.75rem 1rem;
+    font-size: 1.1rem;
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+    width: 60%;
+  }
+
+  .input-with-select .input:focus {
+    outline: none;
+  }
+
+  .select-unit {
+    border: none;
+    border-left: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    outline: none;
+    max-width: 140px;
+  }
+
+  .select-unit option {
+    background: var(--surface-color);
+    color: var(--text-primary);
+  }
+
+  .btn-swap {
+    background: var(--bg-secondary, rgba(255, 255, 255, 0.05));
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s var(--ease-out);
+    margin-top: 1.5rem;
+  }
+
+  @media (max-width: 600px) {
+    .btn-swap {
+      margin-top: 0;
+      align-self: center;
+      transform: rotate(90deg);
+    }
+  }
+
+  .btn-swap:hover {
+    border-color: var(--primary-accent);
+    color: var(--primary-accent);
+    transform: scale(1.05);
+  }
+
+  .btn-swap:active {
+    transform: scale(0.95);
+  }
+
+  .swap-icon {
+    transition: transform 0.3s ease;
+  }
+
+  .btn-swap:hover .swap-icon {
+    transform: rotate(180deg);
+  }
+
+  .formula-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .formula-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    gap: 1rem;
+  }
+
+  .formula-text {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--primary-accent);
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .table-container {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 280px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    text-align: left;
+  }
+
+  .data-table th, .data-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .data-table th {
+    background: rgba(0, 0, 0, 0.15);
+    color: var(--text-secondary);
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+  }
+
+  .data-table td {
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+  }
+
+  .data-table td:last-child {
+    color: var(--text-secondary);
+  }
+
+  .data-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  /* Copy status */
+  #btn-copy-result .check-icon {
+    display: none;
+  }
+
+  #btn-copy-result.copied .copy-icon {
+    display: none;
+  }
+
+  #btn-copy-result.copied .check-icon {
+    display: inline-block;
+    color: var(--success-color);
+  }
+
+  #btn-copy-result.copied {
+    border-color: var(--success-color);
+  }
+</style>
+
+<script>
+  interface UnitInfo {
+    name: string;
+    symbol: string;
+    factor?: number;
+    toBase?: (val: number) => number;
+    fromBase?: (val: number) => number;
+  }
+
+  const CATEGORIES: Record<string, Record<string, UnitInfo>> = {
+    length: {
+      mm: { name: 'Millimeters', symbol: 'mm', factor: 0.001 },
+      cm: { name: 'Centimeters', symbol: 'cm', factor: 0.01 },
+      m: { name: 'Meters', symbol: 'm', factor: 1 },
+      km: { name: 'Kilometers', symbol: 'km', factor: 1000 },
+      in: { name: 'Inches', symbol: 'in', factor: 0.0254 },
+      ft: { name: 'Feet', symbol: 'ft', factor: 0.3048 },
+      yd: { name: 'Yards', symbol: 'yd', factor: 0.9144 },
+      mi: { name: 'Miles', symbol: 'mi', factor: 1609.344 }
+    },
+    weight: {
+      mg: { name: 'Milligrams', symbol: 'mg', factor: 0.000001 },
+      g: { name: 'Grams', symbol: 'g', factor: 0.001 },
+      kg: { name: 'Kilograms', symbol: 'kg', factor: 1 },
+      oz: { name: 'Ounces', symbol: 'oz', factor: 0.028349523125 },
+      lb: { name: 'Pounds', symbol: 'lb', factor: 0.45359237 },
+      st: { name: 'Stones', symbol: 'st', factor: 6.35029318 }
+    },
+    temperature: {
+      C: { name: 'Celsius', symbol: '°C', toBase: v => v, fromBase: v => v },
+      F: { name: 'Fahrenheit', symbol: '°F', toBase: v => (v - 32) * 5/9, fromBase: v => v * 9/5 + 32 },
+      K: { name: 'Kelvin', symbol: 'K', toBase: v => v - 273.15, fromBase: v => v + 273.15 }
+    },
+    area: {
+      sq_mm: { name: 'Square Millimeters', symbol: 'mm²', factor: 0.000001 },
+      sq_cm: { name: 'Square Centimeters', symbol: 'cm²', factor: 0.0001 },
+      sq_m: { name: 'Square Meters', symbol: 'm²', factor: 1 },
+      sq_km: { name: 'Square Kilometers', symbol: 'km²', factor: 1000000 },
+      sq_in: { name: 'Square Inches', symbol: 'in²', factor: 0.00064516 },
+      sq_ft: { name: 'Square Feet', symbol: 'ft²', factor: 0.09290304 },
+      sq_yd: { name: 'Square Yards', symbol: 'yd²', factor: 0.83612736 },
+      sq_mi: { name: 'Square Miles', symbol: 'mi²', factor: 2589988.110336 },
+      ac: { name: 'Acres', symbol: 'ac', factor: 4046.8564224 },
+      ha: { name: 'Hectares', symbol: 'ha', factor: 10000 }
+    },
+    volume: {
+      ml: { name: 'Milliliters', symbol: 'mL', factor: 0.001 },
+      l: { name: 'Liters', symbol: 'L', factor: 1 },
+      m3: { name: 'Cubic Meters', symbol: 'm³', factor: 1000 },
+      tsp: { name: 'US Teaspoons', symbol: 'tsp', factor: 0.00492892159375 },
+      tbsp: { name: 'US Tablespoons', symbol: 'tbsp', factor: 0.01478676478125 },
+      floz: { name: 'US Fluid Ounces', symbol: 'fl oz', factor: 0.0295735295625 },
+      cup: { name: 'US Cups', symbol: 'cup', factor: 0.2365882365 },
+      pt: { name: 'US Pints', symbol: 'pt', factor: 0.473176473 },
+      qt: { name: 'US Quarts', symbol: 'qt', factor: 0.946352946 },
+      gal: { name: 'US Gallons', symbol: 'gal', factor: 3.785411784 }
+    },
+    speed: {
+      ms: { name: 'Meters / Second', symbol: 'm/s', factor: 1 },
+      kmh: { name: 'Kilometers / Hour', symbol: 'km/h', factor: 1 / 3.6 },
+      mph: { name: 'Miles / Hour', symbol: 'mph', factor: 0.44704 },
+      kn: { name: 'Knots', symbol: 'kn', factor: 0.514444 }
+    },
+    time: {
+      ms: { name: 'Milliseconds', symbol: 'ms', factor: 0.001 },
+      s: { name: 'Seconds', symbol: 's', factor: 1 },
+      min: { name: 'Minutes', symbol: 'min', factor: 60 },
+      h: { name: 'Hours', symbol: 'h', factor: 3600 },
+      d: { name: 'Days', symbol: 'd', factor: 86400 },
+      wk: { name: 'Weeks', symbol: 'wk', factor: 604800 },
+      mo: { name: 'Months (Avg)', symbol: 'mo', factor: 2629746 },
+      yr: { name: 'Years (Avg)', symbol: 'yr', factor: 31556952 }
+    },
+    storage: {
+      b: { name: 'Bytes', symbol: 'B', factor: 1 },
+      kb: { name: 'Kilobytes', symbol: 'KB', factor: 1024 },
+      mb: { name: 'Megabytes', symbol: 'MB', factor: 1024 * 1024 },
+      gb: { name: 'Gigabytes', symbol: 'GB', factor: 1024 * 1024 * 1024 },
+      tb: { name: 'Terabytes', symbol: 'TB', factor: 1024 * 1024 * 1024 * 1024 },
+      pb: { name: 'Petabytes', symbol: 'PB', factor: 1024 * 1024 * 1024 * 1024 * 1024 }
+    }
+  };
+
+  class UnitConverterTool extends HTMLElement {
+    private currentCategory = 'length';
+    private tabButtons!: NodeListOf<HTMLButtonElement>;
+    private fromValInput!: HTMLInputElement;
+    private toValInput!: HTMLInputElement;
+    private fromUnitSelect!: HTMLSelectElement;
+    private toUnitSelect!: HTMLSelectElement;
+    private btnSwap!: HTMLButtonElement;
+    private formulaText!: HTMLSpanElement;
+    private btnCopyResult!: HTMLButtonElement;
+    private refUnitLabel!: HTMLSpanElement;
+    private referenceTableBody!: HTMLTableSectionElement;
+
+    connectedCallback() {
+      this.tabButtons = this.querySelectorAll('.tab-btn');
+      this.fromValInput = this.querySelector('#from-value-input') as HTMLInputElement;
+      this.toValInput = this.querySelector('#to-value-input') as HTMLInputElement;
+      this.fromUnitSelect = this.querySelector('#from-unit-select') as HTMLSelectElement;
+      this.toUnitSelect = this.querySelector('#to-unit-select') as HTMLSelectElement;
+      this.btnSwap = this.querySelector('#btn-swap-units') as HTMLButtonElement;
+      this.formulaText = this.querySelector('#formula-text') as HTMLSpanElement;
+      this.btnCopyResult = this.querySelector('#btn-copy-result') as HTMLButtonElement;
+      this.refUnitLabel = this.querySelector('#ref-unit-label') as HTMLSpanElement;
+      this.referenceTableBody = this.querySelector('#reference-table-body') as HTMLTableSectionElement;
+
+      // Add event listeners
+      this.tabButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => this.handleCategoryChange(e));
+      });
+
+      this.fromValInput.addEventListener('input', () => this.performConversion());
+      this.fromUnitSelect.addEventListener('change', () => {
+        this.performConversion();
+        this.updateReferenceTable();
+      });
+      this.toUnitSelect.addEventListener('change', () => this.performConversion());
+      this.btnSwap.addEventListener('click', () => this.swapUnits());
+      this.btnCopyResult.addEventListener('click', () => this.copyResult());
+
+      // Set initial values
+      this.fromValInput.value = '1';
+      this.initializeCategory('length');
+    }
+
+    private handleCategoryChange(e: Event) {
+      const target = e.currentTarget as HTMLButtonElement;
+      const category = target.getAttribute('data-category');
+      if (!category || category === this.currentCategory) return;
+
+      this.tabButtons.forEach(btn => {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-selected', 'false');
+      });
+      target.classList.add('active');
+      target.setAttribute('aria-selected', 'true');
+
+      this.currentCategory = category;
+      this.initializeCategory(category);
+    }
+
+    private initializeCategory(category: string) {
+      const units = CATEGORIES[category];
+      const keys = Object.keys(units);
+
+      // Clear existing selects
+      this.fromUnitSelect.innerHTML = '';
+      this.toUnitSelect.innerHTML = '';
+
+      // Populate selects
+      keys.forEach(key => {
+        const unit = units[key];
+        
+        const optFrom = document.createElement('option');
+        optFrom.value = key;
+        optFrom.textContent = `${unit.name} (${unit.symbol})`;
+        this.fromUnitSelect.appendChild(optFrom);
+
+        const optTo = document.createElement('option');
+        optTo.value = key;
+        optTo.textContent = `${unit.name} (${unit.symbol})`;
+        this.toUnitSelect.appendChild(optTo);
+      });
+
+      // Set default selected units
+      if (keys.length >= 2) {
+        this.fromUnitSelect.value = keys[1]; // e.g. cm
+        this.toUnitSelect.value = keys[5] || keys[1];  // e.g. ft (or same)
+      }
+
+      this.performConversion();
+      this.updateReferenceTable();
+    }
+
+    private performConversion() {
+      const fromVal = parseFloat(this.fromValInput.value);
+      const fromKey = this.fromUnitSelect.value;
+      const toKey = this.toUnitSelect.value;
+
+      if (isNaN(fromVal)) {
+        this.toValInput.value = '';
+        this.formulaText.textContent = 'Enter a valid number';
+        return;
+      }
+
+      const result = this.convertValue(fromVal, fromKey, toKey, this.currentCategory);
+      // Format output nicely: round up to 6 decimal places but remove trailing zeros
+      this.toValInput.value = parseFloat(result.toFixed(6)).toString();
+
+      this.updateFormulaText(fromKey, toKey);
+    }
+
+    private convertValue(val: number, fromKey: string, toKey: string, category: string): number {
+      const cat = CATEGORIES[category];
+      const fromUnit = cat[fromKey];
+      const toUnit = cat[toKey];
+
+      if (!fromUnit || !toUnit) return val;
+
+      if (category === 'temperature') {
+        const base = fromUnit.toBase!(val);
+        return toUnit.fromBase!(base);
+      }
+
+      const base = val * fromUnit.factor!;
+      return base / toUnit.factor!;
+    }
+
+    private updateFormulaText(fromKey: string, toKey: string) {
+      const cat = CATEGORIES[this.currentCategory];
+      const fromUnit = cat[fromKey];
+      const toUnit = cat[toKey];
+
+      if (!fromUnit || !toUnit) return;
+
+      let formula = '';
+      if (this.currentCategory === 'temperature') {
+        if (fromKey === 'C' && toKey === 'F') {
+          formula = '°F = (°C × 9/5) + 32';
+        } else if (fromKey === 'F' && toKey === 'C') {
+          formula = '°C = (°F - 32) × 5/9';
+        } else if (fromKey === 'C' && toKey === 'K') {
+          formula = 'K = °C + 273.15';
+        } else if (fromKey === 'K' && toKey === 'C') {
+          formula = '°C = K - 273.15';
+        } else if (fromKey === 'F' && toKey === 'K') {
+          formula = 'K = (°F - 32) × 5/9 + 273.15';
+        } else if (fromKey === 'K' && toKey === 'F') {
+          formula = '°F = (K - 273.15) × 9/5 + 32';
+        } else {
+          formula = 'Value is identical';
+        }
+      } else {
+        const ratio = fromUnit.factor! / toUnit.factor!;
+        const ratioFormatted = parseFloat(ratio.toFixed(8)).toString();
+        formula = `1 ${fromUnit.symbol} = ${ratioFormatted} ${toUnit.symbol}`;
+      }
+
+      this.formulaText.textContent = formula;
+    }
+
+    private swapUnits() {
+      const fromKey = this.fromUnitSelect.value;
+      const toKey = this.toUnitSelect.value;
+      const fromVal = this.fromValInput.value;
+      const toVal = this.toValInput.value;
+
+      this.fromUnitSelect.value = toKey;
+      this.toUnitSelect.value = fromKey;
+
+      if (toVal !== '') {
+        this.fromValInput.value = toVal;
+      }
+
+      this.performConversion();
+      this.updateReferenceTable();
+    }
+
+    private async copyResult() {
+      const fromVal = this.fromValInput.value;
+      const toVal = this.toValInput.value;
+      const fromUnit = CATEGORIES[this.currentCategory][this.fromUnitSelect.value]?.symbol || '';
+      const toUnit = CATEGORIES[this.currentCategory][this.toUnitSelect.value]?.symbol || '';
+
+      if (fromVal === '' || toVal === '') return;
+
+      const text = `${fromVal} ${fromUnit} = ${toVal} ${toUnit}`;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        
+        this.btnCopyResult.classList.add('copied');
+        const copyText = this.btnCopyResult.querySelector('.copy-text') as HTMLSpanElement;
+        copyText.textContent = 'Copied!';
+
+        setTimeout(() => {
+          this.btnCopyResult.classList.remove('copied');
+          copyText.textContent = 'Copy Result';
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy', err);
+      }
+    }
+
+    private updateReferenceTable() {
+      const fromKey = this.fromUnitSelect.value;
+      const fromUnit = CATEGORIES[this.currentCategory][fromKey];
+      const fromVal = parseFloat(this.fromValInput.value);
+
+      if (!fromUnit) return;
+
+      this.refUnitLabel.textContent = `${fromVal || 0} ${fromUnit.symbol}`;
+      this.referenceTableBody.innerHTML = '';
+
+      const val = isNaN(fromVal) ? 0 : fromVal;
+      const units = CATEGORIES[this.currentCategory];
+
+      Object.keys(units).forEach(key => {
+        const unit = units[key];
+        const converted = this.convertValue(val, fromKey, key, this.currentCategory);
+        const formattedVal = parseFloat(converted.toFixed(6)).toString();
+
+        const tr = document.createElement('tr');
+        tr.style.cursor = 'pointer';
+        tr.innerHTML = `
+          <td>${unit.name}</td>
+          <td>${formattedVal}</td>
+          <td>${unit.symbol}</td>
+        `;
+
+        tr.addEventListener('click', () => {
+          this.toUnitSelect.value = key;
+          this.performConversion();
+        });
+
+        this.referenceTableBody.appendChild(tr);
+      });
+    }
+  }
+
+  if (!customElements.get('unit-converter-tool')) {
+    customElements.define('unit-converter-tool', UnitConverterTool);
+  }
+</script>
