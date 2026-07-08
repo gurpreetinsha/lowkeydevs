@@ -739,7 +739,10 @@ import Icon from '../../../components/base/Icon.astro';
     private convertToGif() {
       if (!this.selectedFile || !this.previewPlayerEl.src) return;
 
-      if (typeof gifshot === 'undefined') {
+      // Fallback to window.gifshot if the default import is an empty object or undefined
+      const gifshotEngine = (gifshot && (gifshot as any).createGIF) ? gifshot : (window as any).gifshot;
+
+      if (!gifshotEngine) {
         alert('GIF converter engine not loaded yet. Check internet connection.');
         return;
       }
@@ -758,7 +761,7 @@ import Icon from '../../../components/base/Icon.astro';
       const numFrames = Math.round(fps * duration);
       const interval = 1 / fps;
 
-      gifshot.createGIF({
+      gifshotEngine.createGIF({
         video: [this.previewPlayerEl.src],
         gifWidth: width,
         gifHeight: height,
