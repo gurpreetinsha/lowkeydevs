@@ -123,6 +123,11 @@ import ExtractPdfPagesUI from '../../tools/list/extract-pdf-pages/ui.astro';
 import PdfFormsUI from '../../tools/list/pdf-forms/ui.astro';
 import RedactPdfUI from '../../tools/list/redact-pdf/ui.astro';
 
+// New tool UI imports
+import JWTDebuggerUI from '../../tools/list/jwt-debugger/ui.astro';
+import SQLFormatterUI from '../../tools/list/sql-formatter/ui.astro';
+import CronExpressionDescriptorUI from '../../tools/list/cron-expression-descriptor/ui.astro';
+
 
 // Map slugs to UI components
 const uiComponents: Record<string, any> = {
@@ -237,7 +242,10 @@ const uiComponents: Record<string, any> = {
   'remove-pdf-pages': RemovePdfPagesUI,
   'extract-pdf-pages': ExtractPdfPagesUI,
   'pdf-forms': PdfFormsUI,
-  'redact-pdf': RedactPdfUI
+  'redact-pdf': RedactPdfUI,
+  'jwt-debugger': JWTDebuggerUI,
+  'sql-formatter': SQLFormatterUI,
+  'cron-expression-descriptor': CronExpressionDescriptorUI
 };
 
 export async function getStaticPaths() {

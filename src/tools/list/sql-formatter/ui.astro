@@ -1,0 +1,375 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<sql-formatter-tool class="tool-workspace">
+  <div class="tool-controls glass-panel">
+    <div class="control-group">
+      <label for="sql-indent-select" class="label">Indentation</label>
+      <select id="sql-indent-select" class="select select-compact">
+        <option value="2">2 Spaces</option>
+        <option value="4">4 Spaces</option>
+        <option value="tab">Tab</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label for="sql-case-select" class="label">Keyword Case</label>
+      <select id="sql-case-select" class="select select-compact">
+        <option value="upper">UPPERCASE</option>
+        <option value="lower">lowercase</option>
+        <option value="preserve">Preserve Case</option>
+      </select>
+    </div>
+    
+    <div class="control-actions">
+      <button data-action="format" class="btn btn-primary btn-sm">
+        <Icon name="Braces" size={14} />
+        Beautify
+      </button>
+      <button data-action="minify" class="btn btn-secondary btn-sm">
+        Minify
+      </button>
+      <button data-action="clear" class="btn btn-danger btn-sm">
+        <Icon name="Trash2" size={14} />
+        Clear
+      </button>
+    </div>
+  </div>
+
+  <div class="editor-grid">
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Input SQL Query</span>
+        <button data-action="load-sample" class="btn-text">Load Sample</button>
+      </div>
+      <textarea 
+        id="sql-input" 
+        placeholder="Paste your raw, minified SQL query here..." 
+        aria-label="Raw SQL Input"
+      ></textarea>
+    </div>
+
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Formatted SQL</span>
+        <button data-action="copy" class="btn btn-secondary btn-sm" id="btn-copy">
+          <Icon name="Clipboard" size={14} class="copy-icon" />
+          <Icon name="Check" size={14} class="check-icon" />
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      
+      <div class="output-container">
+        <div id="sql-error-banner" class="error-banner" hidden>
+          <Icon name="Info" size={16} />
+          <span id="error-message"></span>
+        </div>
+        <pre id="sql-output" class="output-pre" tabindex="0" aria-label="Formatted SQL Output"></pre>
+      </div>
+    </div>
+  </div>
+</sql-formatter-tool>
+
+<style>
+  .tool-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .tool-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+  }
+
+  @media (max-width: 640px) {
+    .tool-controls {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  .control-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .select-compact {
+    padding: 0.5rem 2rem 0.5rem 1rem;
+    font-size: 0.9rem;
+    width: auto;
+    cursor: pointer;
+  }
+
+  .control-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .editor-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .editor-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .editor-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 480px;
+    padding: 1.25rem;
+  }
+
+  .pane-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.75rem;
+  }
+
+  .pane-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .btn-text {
+    background: none;
+    border: none;
+    color: var(--accent);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn-text:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
+
+  #sql-input {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    min-height: 380px;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    resize: none;
+    outline: none;
+  }
+
+  .output-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    min-height: 380px;
+    overflow: hidden;
+  }
+
+  .output-pre {
+    flex: 1;
+    overflow: auto;
+    padding: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+    word-break: break-all;
+    outline: none;
+  }
+
+  .error-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background-color: var(--error-subtle);
+    border: 1px solid var(--error);
+    color: var(--error);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+
+  /* Copy Button states */
+  #btn-copy .check-icon {
+    display: none;
+  }
+
+  #btn-copy.copied .copy-icon {
+    display: none;
+  }
+
+  #btn-copy.copied .check-icon {
+    display: inline-block;
+    color: var(--success);
+  }
+
+  #btn-copy.copied {
+    border-color: var(--success);
+  }
+
+  .btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.85rem;
+    border-radius: var(--radius-sm);
+  }
+</style>
+
+<script>
+  import { formatSql, minifySql } from './logic';
+
+  class SqlFormatterTool extends HTMLElement {
+    private inputEl!: HTMLTextAreaElement;
+    private outputEl!: HTMLPreElement;
+    private indentSelectEl!: HTMLSelectElement;
+    private caseSelectEl!: HTMLSelectElement;
+    private errorBannerEl!: HTMLDivElement;
+    private errorMessageEl!: HTMLSpanElement;
+
+    connectedCallback() {
+      this.inputEl = this.querySelector('#sql-input') as HTMLTextAreaElement;
+      this.outputEl = this.querySelector('#sql-output') as HTMLPreElement;
+      this.indentSelectEl = this.querySelector('#sql-indent-select') as HTMLSelectElement;
+      this.caseSelectEl = this.querySelector('#sql-case-select') as HTMLSelectElement;
+      this.errorBannerEl = this.querySelector('#sql-error-banner') as HTMLDivElement;
+      this.errorMessageEl = this.querySelector('#error-message') as HTMLSpanElement;
+
+      // Event delegation for actions
+      this.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const button = target.closest('button');
+        if (!button) return;
+
+        const action = button.getAttribute('data-action');
+        if (action === 'format') this.handleFormat();
+        if (action === 'minify') this.handleMinify();
+        if (action === 'clear') this.handleClear();
+        if (action === 'copy') this.handleCopy();
+        if (action === 'load-sample') this.handleLoadSample();
+      });
+
+      // Auto format silently on input
+      this.inputEl.addEventListener('input', () => this.handleFormat(true));
+
+      // Re-format when controls change
+      this.indentSelectEl.addEventListener('change', () => this.handleFormat());
+      this.caseSelectEl.addEventListener('change', () => this.handleFormat());
+
+      // Initial formatting if loaded
+      this.handleFormat();
+    }
+
+    private handleFormat(silent = false) {
+      const val = this.inputEl.value.trim();
+      if (!val) {
+        this.clearOutput();
+        return;
+      }
+
+      try {
+        const options = {
+          indentation: this.indentSelectEl.value,
+          keywordCase: this.caseSelectEl.value as any
+        };
+        const result = formatSql(val, options);
+        this.outputEl.textContent = result;
+        this.hideError();
+      } catch (err: any) {
+        if (!silent) {
+          this.showError(`Error formatting SQL: ${err.message}`);
+        }
+      }
+    }
+
+    private handleMinify() {
+      const val = this.inputEl.value.trim();
+      if (!val) return;
+
+      try {
+        const result = minifySql(val);
+        this.outputEl.textContent = result;
+        this.hideError();
+      } catch (err: any) {
+        this.showError(`Error minifying SQL: ${err.message}`);
+      }
+    }
+
+    private handleClear() {
+      this.inputEl.value = '';
+      this.clearOutput();
+      this.inputEl.focus();
+    }
+
+    private handleLoadSample() {
+      const sample = `select u.id, u.name, o.order_date, sum(oi.price * oi.quantity) as total_spent from users u left join orders o on u.id = o.user_id inner join order_items oi on o.id = oi.order_id where u.active = 1 and o.status = 'completed' group by u.id, o.order_date having total_spent > 100 order by total_spent desc limit 10;`;
+      this.inputEl.value = sample;
+      this.handleFormat();
+    }
+
+    private async handleCopy() {
+      const text = this.outputEl.textContent;
+      if (!text) return;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        const copyBtn = this.querySelector('#btn-copy') as HTMLButtonElement;
+        const copyText = copyBtn.querySelector('.copy-text') as HTMLSpanElement;
+
+        copyBtn.classList.add('copied');
+        copyText.textContent = 'Copied!';
+
+        setTimeout(() => {
+          copyBtn.classList.remove('copied');
+          copyText.textContent = 'Copy';
+        }, 2000);
+      } catch (e) {
+        console.error('Failed to copy text', e);
+      }
+    }
+
+    private clearOutput() {
+      this.outputEl.textContent = '';
+      this.hideError();
+    }
+
+    private showError(msg: string) {
+      this.errorMessageEl.textContent = msg;
+      this.errorBannerEl.removeAttribute('hidden');
+      this.outputEl.textContent = '';
+    }
+
+    private hideError() {
+      this.errorBannerEl.setAttribute('hidden', 'true');
+      this.errorMessageEl.textContent = '';
+    }
+  }
+
+  if (!customElements.get('sql-formatter-tool')) {
+    customElements.define('sql-formatter-tool', SqlFormatterTool);
+  }
+</script>

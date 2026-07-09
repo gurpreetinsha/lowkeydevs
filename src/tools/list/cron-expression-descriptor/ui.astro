@@ -1,0 +1,655 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<cron-descriptor-tool class="tool-workspace">
+  <div class="tool-controls glass-panel">
+    <div class="control-group">
+      <label for="cron-preset-select" class="label">Presets</label>
+      <select id="cron-preset-select" class="select select-compact">
+        <option value="* * * * *">Every minute (* * * * *)</option>
+        <option value="0 * * * *">Every hour (0 * * * *)</option>
+        <option value="0 0 * * *">Daily at midnight (0 0 * * *)</option>
+        <option value="0 0 * * 0">Weekly on Sunday (0 0 * * 0)</option>
+        <option value="0 0 1 * *">Monthly on the 1st (0 0 1 * *)</option>
+        <option value="0 9 * * 1-5" selected>Weekdays at 9:00 AM (0 9 * * 1-5)</option>
+        <option value="*/15 9-17 * * 1-5">Every 15 mins during business hours (*/15 9-17 * * 1-5)</option>
+      </select>
+    </div>
+    
+    <div class="control-actions">
+      <button data-action="clear" class="btn btn-danger btn-sm">
+        <Icon name="Trash2" size={14} />
+        Clear
+      </button>
+    </div>
+  </div>
+
+  <div class="editor-grid">
+    <!-- Left Pane: Input, Generator, and Details -->
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Cron Expression</span>
+      </div>
+      <div class="cron-input-wrapper">
+        <input 
+          type="text" 
+          id="cron-input" 
+          value="0 9 * * 1-5"
+          placeholder="e.g. * * * * *" 
+          class="cron-text-input"
+          aria-label="Cron Expression Input"
+        />
+      </div>
+
+      <!-- Human Readable Output -->
+      <div class="sentence-box">
+        <div class="sentence-label">Human Description</div>
+        <div id="cron-description" class="sentence-text">
+          At 9:00 AM, Monday through Friday.
+        </div>
+      </div>
+
+      <!-- Interactive Generator Cards -->
+      <div class="generator-section mt-4">
+        <div class="pane-header-sub">
+          <span class="pane-title-sub">Interactive Builder</span>
+        </div>
+
+        <div class="builder-grid">
+          <div class="builder-field">
+            <label for="builder-minute" class="label-sm">Minutes</label>
+            <select id="builder-minute" class="select select-compact w-100">
+              <option value="*">Every minute</option>
+              <option value="*/5">Every 5 minutes</option>
+              <option value="*/15">Every 15 minutes</option>
+              <option value="0" selected>At minute 0</option>
+            </select>
+          </div>
+
+          <div class="builder-field">
+            <label for="builder-hour" class="label-sm">Hours</label>
+            <select id="builder-hour" class="select select-compact w-100">
+              <option value="*">Every hour</option>
+              <option value="*/2">Every 2 hours</option>
+              <option value="9" selected>At 9:00 AM</option>
+              <option value="12">At 12:00 PM (noon)</option>
+              <option value="0">At 12:00 AM (midnight)</option>
+            </select>
+          </div>
+
+          <div class="builder-field">
+            <label for="builder-dom" class="label-sm">Day of Month</label>
+            <select id="builder-dom" class="select select-compact w-100">
+              <option value="*" selected>Every day</option>
+              <option value="1">1st of month</option>
+              <option value="15">15th of month</option>
+            </select>
+          </div>
+
+          <div class="builder-field">
+            <label for="builder-month" class="label-sm">Month</label>
+            <select id="builder-month" class="select select-compact w-100">
+              <option value="*" selected>Every month</option>
+              <option value="1">January</option>
+              <option value="6">June</option>
+              <option value="12">December</option>
+            </select>
+          </div>
+
+          <div class="builder-field">
+            <label for="builder-dow" class="label-sm">Day of Week</label>
+            <select id="builder-dow" class="select select-compact w-100">
+              <option value="*">Every day</option>
+              <option value="1-5" selected>Weekdays (Mon-Fri)</option>
+              <option value="0,6">Weekends (Sat-Sun)</option>
+              <option value="0">Sunday</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Pane: Breakdown and Upcoming Run Schedule -->
+    <div class="editor-pane glass-panel">
+      <!-- Field Breakdown -->
+      <div class="section-container">
+        <div class="pane-header">
+          <span class="pane-title">Field Breakdown</span>
+        </div>
+        <table class="breakdown-table">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Value</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody id="breakdown-body">
+            <tr>
+              <td><strong>Minute</strong></td>
+              <td class="code-val" id="val-minute">0</td>
+              <td id="desc-minute">At minute 0</td>
+            </tr>
+            <tr>
+              <td><strong>Hour</strong></td>
+              <td class="code-val" id="val-hour">9</td>
+              <td id="desc-hour">At 9:00 AM</td>
+            </tr>
+            <tr>
+              <td><strong>Day of Month</strong></td>
+              <td class="code-val" id="val-dom">*</td>
+              <td id="desc-dom">Every day</td>
+            </tr>
+            <tr>
+              <td><strong>Month</strong></td>
+              <td class="code-val" id="val-month">*</td>
+              <td id="desc-month">Every month</td>
+            </tr>
+            <tr>
+              <td><strong>Day of Week</strong></td>
+              <td class="code-val" id="val-dow">1-5</td>
+              <td id="desc-dow">Monday through Friday</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Upcoming Schedule -->
+      <div class="section-container mt-4">
+        <div class="pane-header">
+          <span class="pane-title">Upcoming Schedule (Next 5 runs)</span>
+        </div>
+        <div id="schedule-error-banner" class="error-banner" hidden>
+          <Icon name="Info" size={16} />
+          <span id="error-message"></span>
+        </div>
+        <ul class="schedule-list" id="schedule-list">
+          <!-- Next runs list loaded here -->
+        </ul>
+      </div>
+    </div>
+  </div>
+</cron-descriptor-tool>
+
+<style>
+  .tool-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .tool-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+  }
+
+  .control-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .select-compact {
+    padding: 0.5rem 2rem 0.5rem 1rem;
+    font-size: 0.9rem;
+    width: auto;
+    cursor: pointer;
+  }
+
+  .control-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .editor-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 1024px) {
+    .editor-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .editor-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    min-height: 520px;
+  }
+
+  .pane-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .pane-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .cron-input-wrapper {
+    width: 100%;
+  }
+
+  .cron-text-input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 600;
+    padding: 0.75rem 1.25rem;
+    text-align: center;
+    outline: none;
+    letter-spacing: 0.1em;
+  }
+
+  .cron-text-input:focus {
+    border-color: var(--accent);
+  }
+
+  .sentence-box {
+    background: var(--accent-subtle);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .sentence-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent-hover);
+    font-weight: 600;
+  }
+
+  .sentence-text {
+    font-size: 1.15rem;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--text-primary);
+  }
+
+  .generator-section {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+  }
+
+  .pane-header-sub {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .pane-title-sub {
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .builder-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .builder-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .w-100 {
+    width: 100% !important;
+  }
+
+  .label-sm {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .section-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .breakdown-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .breakdown-table th, .breakdown-table td {
+    padding: 0.65rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .breakdown-table th {
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+
+  .breakdown-table td {
+    color: var(--text-primary);
+  }
+
+  .code-val {
+    font-family: var(--font-mono);
+    color: var(--accent-hover);
+    font-weight: 600;
+  }
+
+  .schedule-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .schedule-list li {
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.875rem;
+  }
+
+  .run-time {
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+  }
+
+  .run-relative {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+  }
+
+  .error-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background-color: var(--error-subtle);
+    border: 1px solid var(--error);
+    color: var(--error);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+
+  .mt-4 { margin-top: 1rem; }
+</style>
+
+<script>
+  import { describeCron, getNextExecutionTimes } from './logic';
+
+  class CronDescriptorTool extends HTMLElement {
+    private cronInput!: HTMLInputElement;
+    private presetSelect!: HTMLSelectElement;
+    private cronDescEl!: HTMLDivElement;
+    private scheduleListEl!: HTMLUListElement;
+    private errorBannerEl!: HTMLDivElement;
+    private errorMessageEl!: HTMLSpanElement;
+
+    // Table elements
+    private valMinEl!: HTMLTableCellElement;
+    private descMinEl!: HTMLTableCellElement;
+    private valHourEl!: HTMLTableCellElement;
+    private descHourEl!: HTMLTableCellElement;
+    private valDomEl!: HTMLTableCellElement;
+    private descDomEl!: HTMLTableCellElement;
+    private valMonthEl!: HTMLTableCellElement;
+    private descMonthEl!: HTMLTableCellElement;
+    private valDowEl!: HTMLTableCellElement;
+    private descDowEl!: HTMLTableCellElement;
+
+    // Builder elements
+    private bMin!: HTMLSelectElement;
+    private bHour!: HTMLSelectElement;
+    private bDom!: HTMLSelectElement;
+    private bMonth!: HTMLSelectElement;
+    private bDow!: HTMLSelectElement;
+
+    private isUpdating = false;
+
+    connectedCallback() {
+      this.cronInput = this.querySelector('#cron-input') as HTMLInputElement;
+      this.presetSelect = this.querySelector('#cron-preset-select') as HTMLSelectElement;
+      this.cronDescEl = this.querySelector('#cron-description') as HTMLDivElement;
+      this.scheduleListEl = this.querySelector('#schedule-list') as HTMLUListElement;
+      this.errorBannerEl = this.querySelector('#schedule-error-banner') as HTMLDivElement;
+      this.errorMessageEl = this.querySelector('#error-message') as HTMLSpanElement;
+
+      // Table breakdown values
+      this.valMinEl = this.querySelector('#val-minute') as HTMLTableCellElement;
+      this.descMinEl = this.querySelector('#desc-minute') as HTMLTableCellElement;
+      this.valHourEl = this.querySelector('#val-hour') as HTMLTableCellElement;
+      this.descHourEl = this.querySelector('#desc-hour') as HTMLTableCellElement;
+      this.valDomEl = this.querySelector('#val-dom') as HTMLTableCellElement;
+      this.descDomEl = this.querySelector('#desc-dom') as HTMLTableCellElement;
+      this.valMonthEl = this.querySelector('#val-month') as HTMLTableCellElement;
+      this.descMonthEl = this.querySelector('#desc-month') as HTMLTableCellElement;
+      this.valDowEl = this.querySelector('#val-dow') as HTMLTableCellElement;
+      this.descDowEl = this.querySelector('#desc-dow') as HTMLTableCellElement;
+
+      // Builder dropdowns
+      this.bMin = this.querySelector('#builder-minute') as HTMLSelectElement;
+      this.bHour = this.querySelector('#builder-hour') as HTMLSelectElement;
+      this.bDom = this.querySelector('#builder-dom') as HTMLSelectElement;
+      this.bMonth = this.querySelector('#builder-month') as HTMLSelectElement;
+      this.bDow = this.querySelector('#builder-dow') as HTMLSelectElement;
+
+      // Register change events
+      this.cronInput.addEventListener('input', () => this.handleTextChange());
+      this.presetSelect.addEventListener('change', () => this.handlePresetChange());
+
+      // Builder changes
+      const builderDropdowns = [this.bMin, this.bHour, this.bDom, this.bMonth, this.bDow];
+      builderDropdowns.forEach(dropdown => {
+        dropdown.addEventListener('change', () => this.handleBuilderChange());
+      });
+
+      this.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const button = target.closest('button');
+        if (!button) return;
+
+        const action = button.getAttribute('data-action');
+        if (action === 'clear') this.handleClear();
+      });
+
+      // Update initial values
+      this.updateDescriptor();
+    }
+
+    private handlePresetChange() {
+      if (this.isUpdating) return;
+      this.cronInput.value = this.presetSelect.value;
+      this.updateDescriptor();
+    }
+
+    private handleTextChange() {
+      if (this.isUpdating) return;
+      this.updateDescriptor();
+    }
+
+    private handleBuilderChange() {
+      if (this.isUpdating) return;
+      
+      const newExpression = `${this.bMin.value} ${this.bHour.value} ${this.bDom.value} ${this.bMonth.value} ${this.bDow.value}`;
+      this.cronInput.value = newExpression;
+      this.updateDescriptor();
+    }
+
+    private handleClear() {
+      this.cronInput.value = '';
+      this.cronDescEl.textContent = '';
+      this.scheduleListEl.innerHTML = '';
+      this.hideError();
+      this.cronInput.focus();
+    }
+
+    private updateDescriptor() {
+      const val = this.cronInput.value.trim();
+      if (!val) {
+        this.cronDescEl.textContent = 'Please enter a cron expression.';
+        this.scheduleListEl.innerHTML = '';
+        this.hideError();
+        return;
+      }
+
+      this.isUpdating = true;
+      try {
+        // Compute Description & Table Breakdown
+        const result = describeCron(val);
+        this.cronDescEl.textContent = result.description;
+
+        const parts = val.split(/\s+/);
+        this.valMinEl.textContent = parts[0];
+        this.descMinEl.textContent = result.parts.minute;
+        this.valHourEl.textContent = parts[1];
+        this.descHourEl.textContent = result.parts.hour;
+        this.valDomEl.textContent = parts[2];
+        this.descDomEl.textContent = result.parts.dom;
+        this.valMonthEl.textContent = parts[3];
+        this.descMonthEl.textContent = result.parts.month;
+        this.valDowEl.textContent = parts[4];
+        this.descDowEl.textContent = result.parts.dow;
+
+        // Sync Builder Dropdowns if values match preset options
+        this.syncDropdown(this.bMin, parts[0]);
+        this.syncDropdown(this.bHour, parts[1]);
+        this.syncDropdown(this.bDom, parts[2]);
+        this.syncDropdown(this.bMonth, parts[3]);
+        this.syncDropdown(this.bDow, parts[4]);
+
+        this.hideError();
+
+        // Calculate upcoming fire times
+        this.calculateUpcoming(val);
+      } catch (err: any) {
+        this.cronDescEl.textContent = 'Invalid Cron Expression';
+        this.showError(`Parsing Error: ${err.message}`);
+        this.scheduleListEl.innerHTML = '';
+      } finally {
+        this.isUpdating = false;
+      }
+    }
+
+    private syncDropdown(el: HTMLSelectElement, val: string) {
+      const options = Array.from(el.options).map(o => o.value);
+      if (options.includes(val)) {
+        el.value = val;
+      } else {
+        // If not matching, add dynamic "custom" option or just leave as is
+        let customOpt = el.querySelector('option[data-custom="true"]') as HTMLOptionElement;
+        if (!customOpt) {
+          customOpt = document.createElement('option');
+          customOpt.setAttribute('data-custom', 'true');
+          el.appendChild(customOpt);
+        }
+        customOpt.value = val;
+        customOpt.textContent = `Custom (${val})`;
+        el.value = val;
+      }
+    }
+
+    private calculateUpcoming(cronExpression: string) {
+      try {
+        const nextRuns = getNextExecutionTimes(cronExpression, 5);
+        this.scheduleListEl.innerHTML = '';
+
+        if (nextRuns.length === 0) {
+          const li = document.createElement('li');
+          li.textContent = 'No matching future schedules found within 5 years.';
+          this.scheduleListEl.appendChild(li);
+          return;
+        }
+
+        const now = new Date();
+        nextRuns.forEach(runDate => {
+          const li = document.createElement('li');
+          
+          // Formatted time
+          const timeStr = runDate.toLocaleString(undefined, {
+            weekday: 'short',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+          });
+
+          // Relative time calculation
+          const diffMs = runDate.getTime() - now.getTime();
+          const diffMins = Math.floor(diffMs / 60000);
+          const diffHours = Math.floor(diffMins / 60);
+          const diffDays = Math.floor(diffHours / 24);
+
+          let relativeStr = '';
+          if (diffMins < 60) {
+            relativeStr = `in ${diffMins} min${diffMins > 1 ? 's' : ''}`;
+          } else if (diffHours < 24) {
+            relativeStr = `in ${diffHours} hour${diffHours > 1 ? 's' : ''}`;
+          } else {
+            relativeStr = `in ${diffDays} day${diffDays > 1 ? 's' : ''}`;
+          }
+
+          li.innerHTML = `
+            <span class="run-time">${timeStr}</span>
+            <span class="run-relative">${relativeStr}</span>
+          `;
+          this.scheduleListEl.appendChild(li);
+        });
+      } catch (err: any) {
+        this.showError(`Scheduling Error: ${err.message}`);
+      }
+    }
+
+    private showError(msg: string) {
+      this.errorMessageEl.textContent = msg;
+      this.errorBannerEl.removeAttribute('hidden');
+    }
+
+    private hideError() {
+      this.errorBannerEl.setAttribute('hidden', 'true');
+      this.errorMessageEl.textContent = '';
+    }
+  }
+
+  if (!customElements.get('cron-descriptor-tool')) {
+    customElements.define('cron-descriptor-tool', CronDescriptorTool);
+  }
+</script>
