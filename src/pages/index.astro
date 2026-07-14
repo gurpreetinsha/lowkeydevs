@@ -175,6 +175,19 @@ const homeKeywords = "Lowkeydevs, lowkeydevs, lowkey devs, lowkeydevs.com, lowke
       </div>
     </section>
 
+    <!-- Request Tool Section -->
+    <section class="request-section" aria-labelledby="request-title">
+      <div class="container">
+        <div class="request-cta max-w-narrow mx-auto w-full">
+          <h2 id="request-title" class="request-heading">Can't find the tool you're looking for?</h2>
+          <p class="request-description">
+            Describe the tool you need and we'll build it for you. Once it's ready and approved, it'll become part of LowKeyDevs.
+          </p>
+          <a href="/request-tool" class="btn btn-primary">Request a Tool</a>
+        </div>
+      </div>
+    </section>
+
     <!-- SEO Content Section -->
     <section class="seo-content-section" aria-labelledby="seo-heading">
       <div class="container container-narrow seo-container-inner">
@@ -628,6 +641,48 @@ const homeKeywords = "Lowkeydevs, lowkeydevs, lowkey devs, lowkeydevs.com, lowke
   @media (max-width: 480px) {
     .hero-search-trigger {
       max-width: 100%;
+    }
+  }
+
+  /* === Request Tool Section === */
+  .request-section {
+    padding: var(--space-16) 0 var(--space-20) 0;
+    border-top: 1px solid var(--border);
+    background-color: var(--bg);
+  }
+
+  .request-cta {
+    padding: clamp(24px, 6vw, 40px) clamp(16px, 5vw, 32px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-5);
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .request-cta h2 {
+    font-family: var(--font-heading);
+    font-size: var(--fs-h2);
+    font-weight: 500;
+    line-height: var(--lh-h2);
+    letter-spacing: var(--ls-h2);
+    color: var(--text-primary);
+  }
+
+  .request-cta p {
+    color: var(--text-secondary);
+    font-size: var(--fs-body);
+    max-width: 480px;
+    line-height: var(--lh-body);
+    letter-spacing: var(--ls-body);
+  }
+
+  @media (max-width: 480px) {
+    .request-cta {
+      padding: var(--space-8) var(--space-4);
     }
   }
 

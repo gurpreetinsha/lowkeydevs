@@ -1,0 +1,456 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Icon from '../components/base/Icon.astro';
+---
+
+<Layout
+  title="Request a Custom Tool - Lowkeydevs"
+  description="Describe the tool you need and we'll build it for you. Once it's ready and approved, it'll become part of Lowkeydevs."
+>
+  <Header />
+
+  <main id="main-content" class="request-main container container-narrow">
+    <div class="request-container">
+      
+      <!-- Form State -->
+      <div id="request-form-container" class="request-card">
+        <header class="request-page-header">
+          <h1 class="request-page-title">Request a <span class="accent-text">Custom Tool</span></h1>
+          <p class="request-page-subtitle">
+            Can't find the tool you're looking for? Describe what you need, and we'll build it for you.
+          </p>
+        </header>
+
+        <form id="request-tool-form" class="request-form" novalidate>
+          <!-- Anti-Spam Honeypot Field -->
+          <div style="display: none;" aria-hidden="true">
+            <input type="text" id="request-honeypot" name="website_url" tabIndex="-1" autocomplete="off" />
+          </div>
+
+          <div class="form-group">
+            <label for="real-name" class="label">Real Name <span class="required-indicator">*</span></label>
+            <input 
+              type="text" 
+              id="real-name" 
+              name="realName" 
+              required 
+              placeholder="e.g. Naman Kumar" 
+              autocomplete="name" 
+            />
+            <span class="error-msg" id="name-error" aria-live="polite"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="tool-idea" class="label">Tool Idea <span class="required-indicator">*</span></label>
+            <textarea 
+              id="tool-idea" 
+              name="toolIdea" 
+              required 
+              minlength="30" 
+              maxlength="1000" 
+              placeholder="Please describe in detail: What should the tool do? What are the inputs, outputs, and expected behavior? Are there any special requirements or edge cases?"
+            ></textarea>
+            <div class="counter-container">
+              <span class="error-msg" id="idea-error" aria-live="polite"></span>
+              <span class="char-counter" id="char-counter" aria-live="polite">0 / 1000</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="keywords" class="label">Supporting Keywords <span class="optional-label">(optional)</span></label>
+            <input 
+              type="text" 
+              id="keywords" 
+              name="keywords" 
+              placeholder="e.g. finance, sip, calculator, interest" 
+            />
+            <span class="help-text">Add search tags or categories to help us classify your tool.</span>
+          </div>
+
+          <div class="form-actions">
+            <a href="/" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary" id="submit-btn" disabled>
+              Submit Request
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Success State (Hidden by default) -->
+      <div id="request-success-container" class="request-card success-card" style="display: none;">
+        <div class="success-icon-wrapper">
+          <Icon name="Check" size={32} />
+        </div>
+        <h2 class="success-title">Request Received</h2>
+        <p class="success-message">
+          Your request has been received. We'll review your idea, build the tool, and once it's approved, it'll become available on Lowkeydevs.
+        </p>
+        <div class="success-actions">
+          <a href="/" class="btn btn-primary">Return to Homepage</a>
+          <button type="button" class="btn btn-secondary" id="request-another-btn">
+            Request Another Tool
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .request-main {
+    padding-top: clamp(32px, 8vw, 64px);
+    padding-bottom: clamp(40px, 10vw, 80px);
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .request-container {
+    width: 100%;
+    max-width: 580px;
+    margin: 0 auto;
+  }
+
+  .request-card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(24px, 5vw, 40px);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    transition: transform var(--duration-normal) var(--ease-out),
+                opacity var(--duration-normal) var(--ease-out);
+  }
+
+  .request-page-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--space-4);
+  }
+
+  .request-page-title {
+    font-family: var(--font-heading);
+    font-size: var(--fs-h2);
+    font-weight: 500;
+    line-height: var(--lh-h2);
+    letter-spacing: var(--ls-h2);
+  }
+
+  .request-page-subtitle {
+    color: var(--text-secondary);
+    font-size: 15px;
+    line-height: var(--lh-body);
+  }
+
+  .request-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .required-indicator {
+    color: var(--error);
+    margin-left: 2px;
+  }
+
+  .optional-label {
+    color: var(--text-tertiary);
+    font-size: 12px;
+    font-weight: normal;
+  }
+
+  .help-text {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  .counter-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-2);
+    margin-top: 2px;
+  }
+
+  .char-counter {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    font-family: var(--font-mono);
+    white-space: nowrap;
+  }
+
+  .error-msg {
+    font-size: 12px;
+    color: var(--error);
+    line-height: 1.3;
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+  }
+
+  /* Success Card Styling */
+  .success-card {
+    align-items: center;
+    text-align: center;
+    animation: fadeIn var(--duration-normal) var(--ease-out);
+  }
+
+  .success-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    color: var(--success);
+    background-color: var(--success-subtle);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-2);
+  }
+
+  .success-title {
+    font-family: var(--font-heading);
+    font-size: var(--fs-h3);
+    color: var(--text-primary);
+  }
+
+  .success-message {
+    color: var(--text-secondary);
+    font-size: 15px;
+    line-height: var(--lh-body);
+    max-width: 440px;
+  }
+
+  .success-actions {
+    display: flex;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+    justify-content: center;
+    width: 100%;
+  }
+
+  .submit-spinner {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .submit-spinner::before {
+    content: "";
+    width: 14px;
+    height: 14px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.75s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .request-card {
+      padding: var(--space-6);
+    }
+    .form-actions, .success-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+    .form-actions button, .form-actions a,
+    .success-actions button, .success-actions a {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  import { SuggestionTracker } from '../hooks/useSuggestionTracking';
+
+  if (typeof window !== 'undefined') {
+    const tracker = new SuggestionTracker();
+    tracker.start();
+
+    const form = document.getElementById('request-tool-form') as HTMLFormElement;
+    const nameInput = document.getElementById('real-name') as HTMLInputElement;
+    const ideaInput = document.getElementById('tool-idea') as HTMLTextAreaElement;
+    const keywordsInput = document.getElementById('keywords') as HTMLInputElement;
+    const honeypot = document.getElementById('request-honeypot') as HTMLInputElement;
+
+    const nameError = document.getElementById('name-error') as HTMLElement;
+    const ideaError = document.getElementById('idea-error') as HTMLElement;
+    const charCounter = document.getElementById('char-counter') as HTMLElement;
+    const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+
+    const formContainer = document.getElementById('request-form-container') as HTMLElement;
+    const successContainer = document.getElementById('request-success-container') as HTMLElement;
+    const requestAnotherBtn = document.getElementById('request-another-btn') as HTMLButtonElement;
+
+    function validateForm(): boolean {
+      const nameVal = nameInput.value.trim();
+      const ideaVal = ideaInput.value.trim();
+
+      let isNameValid = false;
+      let isIdeaValid = false;
+
+      // Update char counter
+      charCounter.textContent = `${ideaInput.value.length} / 1000`;
+
+      // Validate name
+      if (nameInput.value.length > 0 && nameVal.length === 0) {
+        nameError.textContent = 'Please enter a valid name.';
+      } else {
+        nameError.textContent = '';
+        if (nameVal.length > 0) {
+          isNameValid = true;
+        }
+      }
+
+      // Validate idea
+      if (ideaInput.value.length === 0) {
+        ideaError.textContent = '';
+        charCounter.style.color = 'var(--text-tertiary)';
+      } else if (ideaInput.value.length < 30) {
+        ideaError.textContent = 'Please describe your idea in more detail (min 30 characters).';
+        charCounter.style.color = 'var(--error)';
+      } else if (ideaInput.value.length > 1000) {
+        ideaError.textContent = 'Description cannot exceed 1000 characters.';
+        charCounter.style.color = 'var(--error)';
+      } else {
+        ideaError.textContent = '';
+        charCounter.style.color = 'var(--text-tertiary)';
+        isIdeaValid = true;
+      }
+
+      const isValid = isNameValid && isIdeaValid;
+      submitBtn.disabled = !isValid;
+      return isValid;
+    }
+
+    // Input listeners
+    nameInput.addEventListener('input', validateForm);
+    ideaInput.addEventListener('input', validateForm);
+
+    // Form Submit Event
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (!validateForm()) return;
+
+      // Check Honeypot
+      if (honeypot.value) {
+        // Quietly fail for bots by showing success
+        formContainer.style.display = 'none';
+        successContainer.style.display = 'flex';
+        return;
+      }
+
+      // Set Loading State
+      submitBtn.innerHTML = '<span class="submit-spinner">Submitting...</span>';
+      submitBtn.disabled = true;
+      nameInput.disabled = true;
+      ideaInput.disabled = true;
+      keywordsInput.disabled = true;
+
+      try {
+        const metadata = tracker.collectMetadata();
+        
+        // Format suggestion: Real Name + Tool Idea + Supporting Keywords
+        const nameVal = nameInput.value.trim();
+        const ideaVal = ideaInput.value.trim();
+        const keywordsVal = keywordsInput.value.trim();
+
+        const parts = [nameVal, ideaVal];
+        if (keywordsVal) {
+          parts.push(keywordsVal);
+        }
+        const suggestionText = parts.join(' + ');
+
+        const payload = {
+          suggestion: suggestionText,
+          email: 'n/a',
+          ...metadata,
+        };
+
+        const response = await fetch('/api/suggestions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          throw new Error(errData.message || `Server error: ${response.status}`);
+        }
+
+        // Show Success state
+        formContainer.style.display = 'none';
+        successContainer.style.display = 'flex';
+        successContainer.scrollIntoView({ behavior: 'smooth' });
+
+      } catch (err: any) {
+        console.error('Failed to submit request:', err);
+        ideaError.textContent = err.message || 'Submission failed. Please check your connection and try again.';
+        
+        // Reset button loading state
+        submitBtn.innerHTML = 'Submit Request';
+        submitBtn.disabled = false;
+        nameInput.disabled = false;
+        ideaInput.disabled = false;
+        keywordsInput.disabled = false;
+      }
+    });
+
+    // Request Another button handler
+    requestAnotherBtn.addEventListener('click', () => {
+      form.reset();
+      
+      // Reset disabled states
+      nameInput.disabled = false;
+      ideaInput.disabled = false;
+      keywordsInput.disabled = false;
+      submitBtn.innerHTML = 'Submit Request';
+      submitBtn.disabled = true;
+      
+      // Update validation states & UI
+      validateForm();
+
+      // Switch containers
+      successContainer.style.display = 'none';
+      formContainer.style.display = 'flex';
+    });
+
+    // Cleanup tracker on page unload
+    window.addEventListener('beforeunload', () => {
+      tracker.destroy();
+    });
+  }
+</script>
