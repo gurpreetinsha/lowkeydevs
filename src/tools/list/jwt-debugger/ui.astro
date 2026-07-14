@@ -1,0 +1,645 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<jwt-debugger-tool class="tool-workspace">
+  <div class="tool-controls glass-panel">
+    <div class="control-actions">
+      <button data-action="load-sample" class="btn btn-secondary btn-sm">
+        <Icon name="Sliders" size={14} />
+        Load Sample Token
+      </button>
+      <button data-action="clear" class="btn btn-danger btn-sm">
+        <Icon name="Trash2" size={14} />
+        Clear
+      </button>
+    </div>
+  </div>
+
+  <div class="editor-grid">
+    <!-- Left Pane: Encoded Token & Signature Input -->
+    <div class="editor-pane glass-panel">
+      <div class="pane-header">
+        <span class="pane-title">Encoded Token (Paste here)</span>
+      </div>
+      <textarea 
+        id="jwt-input" 
+        placeholder="Paste your encoded JWT here..." 
+        aria-label="Encoded JWT Input"
+        class="jwt-textarea-encoded"
+      ></textarea>
+
+      <div class="signature-verification-card">
+        <div class="pane-header">
+          <span class="pane-title">Verify Signature (HS256)</span>
+        </div>
+        <div class="secret-input-group">
+          <label for="jwt-secret" class="label-sm">Secret Key</label>
+          <div class="password-wrapper">
+            <input 
+              type="password" 
+              id="jwt-secret" 
+              placeholder="Enter HS256 secret key..." 
+              value="your-256-bit-secret"
+              class="input input-compact"
+            />
+            <button id="toggle-secret-visibility" class="btn-icon-toggle" aria-label="Toggle secret visibility">
+              👁️
+            </button>
+          </div>
+          <div class="checkbox-group mt-2">
+            <input type="checkbox" id="secret-base64" />
+            <label for="secret-base64" class="label-sm label-checkbox">Secret is Base64 encoded</label>
+          </div>
+        </div>
+
+        <div id="signature-status" class="signature-status-banner warning">
+          <Icon name="Info" size={16} />
+          <span id="signature-status-text">Signature validation pending</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Pane: Decoded Token (Header, Payload) -->
+    <div class="editor-pane glass-panel">
+      <!-- Decoded Header -->
+      <div class="decoded-section">
+        <div class="pane-header">
+          <span class="pane-title text-header-jwt">HEADER: <span class="subtitle-jwt">Algorithm & Token Type</span></span>
+        </div>
+        <textarea 
+          id="jwt-header-input" 
+          placeholder="Header JSON" 
+          aria-label="Decoded Header JSON"
+          class="jwt-textarea-json json-header-color"
+        ></textarea>
+        <span id="header-json-error" class="json-error-label" hidden>Invalid JSON</span>
+      </div>
+
+      <!-- Decoded Payload -->
+      <div class="decoded-section mt-4">
+        <div class="pane-header">
+          <span class="pane-title text-payload-jwt">PAYLOAD: <span class="subtitle-jwt">Data / Claims</span></span>
+        </div>
+        <textarea 
+          id="jwt-payload-input" 
+          placeholder="Payload JSON" 
+          aria-label="Decoded Payload JSON"
+          class="jwt-textarea-json json-payload-color"
+        ></textarea>
+        <span id="payload-json-error" class="json-error-label" hidden>Invalid JSON</span>
+      </div>
+
+      <!-- Claims Explanation -->
+      <div class="claims-explanation-card mt-4" id="claims-card" hidden>
+        <div class="pane-header-sub">
+          <span class="pane-title-sub">Decoded Claims Guide</span>
+        </div>
+        <ul class="claims-list" id="claims-list">
+          <!-- Claims dynamically loaded here -->
+        </ul>
+      </div>
+    </div>
+  </div>
+</jwt-debugger-tool>
+
+<style>
+  .tool-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .tool-controls {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+  }
+
+  .control-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .editor-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 1024px) {
+    .editor-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .editor-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    min-height: 520px;
+  }
+
+  .pane-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+  }
+
+  .pane-title {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .text-header-jwt {
+    color: #FBBF24; /* Yellowish header */
+  }
+
+  .text-payload-jwt {
+    color: #3B82F6; /* Bluish payload */
+  }
+
+  .subtitle-jwt {
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
+    font-weight: 400;
+  }
+
+  .jwt-textarea-encoded {
+    flex: 1;
+    width: 100%;
+    min-height: 180px;
+    background: rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    padding: 0.75rem;
+    resize: vertical;
+    outline: none;
+  }
+
+  .jwt-textarea-json {
+    width: 100%;
+    min-height: 160px;
+    background: rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    padding: 0.75rem;
+    resize: vertical;
+    outline: none;
+  }
+
+  .json-header-color {
+    color: #FBBF24;
+    border-color: rgba(251, 191, 36, 0.3);
+  }
+
+  .json-payload-color {
+    color: #60A5FA;
+    border-color: rgba(96, 165, 250, 0.3);
+  }
+
+  .json-header-color:focus {
+    border-color: #FBBF24;
+  }
+
+  .json-payload-color:focus {
+    border-color: #60A5FA;
+  }
+
+  .decoded-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .signature-verification-card {
+    border-top: 1px solid var(--border);
+    padding-top: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .secret-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .password-wrapper input {
+    width: 100%;
+    padding-right: 2.5rem;
+  }
+
+  .btn-icon-toggle {
+    position: absolute;
+    right: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.25rem;
+  }
+
+  .checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .label-checkbox {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .label-sm {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .input-compact {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    border-radius: var(--radius-sm);
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    width: 100%;
+    outline: none;
+  }
+
+  .input-compact:focus {
+    border-color: var(--accent);
+  }
+
+  .signature-status-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .signature-status-banner.success {
+    background-color: rgba(34, 197, 94, 0.15);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    color: #4ADE80;
+  }
+
+  .signature-status-banner.error {
+    background-color: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #F87171;
+  }
+
+  .signature-status-banner.warning {
+    background-color: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: #FBBF24;
+  }
+
+  .json-error-label {
+    font-size: 0.8rem;
+    color: var(--error);
+    margin-top: 0.25rem;
+  }
+
+  .claims-explanation-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+  }
+
+  .pane-header-sub {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .pane-title-sub {
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .claims-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .claims-list li {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: var(--text-secondary);
+  }
+
+  .claim-name {
+    font-family: var(--font-mono);
+    color: var(--accent-hover);
+    font-weight: 600;
+  }
+
+  .claim-value {
+    color: var(--text-primary);
+  }
+
+  .claim-description {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    margin-left: 0.5rem;
+  }
+
+  .mt-2 { margin-top: 0.5rem; }
+  .mt-4 { margin-top: 1rem; }
+</style>
+
+<script>
+  import { decodeJWT, signHS256, verifyHS256 } from './logic';
+
+  class JwtDebuggerTool extends HTMLElement {
+    private jwtInput!: HTMLTextAreaElement;
+    private headerInput!: HTMLTextAreaElement;
+    private payloadInput!: HTMLTextAreaElement;
+    private secretInput!: HTMLInputElement;
+    private secretBase64Checkbox!: HTMLInputElement;
+    private toggleSecretBtn!: HTMLButtonElement;
+    private sigStatusBanner!: HTMLDivElement;
+    private sigStatusText!: HTMLSpanElement;
+    private headerError!: HTMLSpanElement;
+    private payloadError!: HTMLSpanElement;
+    private claimsCard!: HTMLDivElement;
+    private claimsList!: HTMLUListElement;
+
+    private isUpdatingSelf = false;
+
+    connectedCallback() {
+      this.jwtInput = this.querySelector('#jwt-input') as HTMLTextAreaElement;
+      this.headerInput = this.querySelector('#jwt-header-input') as HTMLTextAreaElement;
+      this.payloadInput = this.querySelector('#jwt-payload-input') as HTMLTextAreaElement;
+      this.secretInput = this.querySelector('#jwt-secret') as HTMLInputElement;
+      this.secretBase64Checkbox = this.querySelector('#secret-base64') as HTMLInputElement;
+      this.toggleSecretBtn = this.querySelector('#toggle-secret-visibility') as HTMLButtonElement;
+      this.sigStatusBanner = this.querySelector('#signature-status') as HTMLDivElement;
+      this.sigStatusText = this.querySelector('#signature-status-text') as HTMLSpanElement;
+      this.headerError = this.querySelector('#header-json-error') as HTMLSpanElement;
+      this.payloadError = this.querySelector('#payload-json-error') as HTMLSpanElement;
+      this.claimsCard = this.querySelector('#claims-card') as HTMLDivElement;
+      this.claimsList = this.querySelector('#claims-list') as HTMLUListElement;
+
+      // Listen for events
+      this.jwtInput.addEventListener('input', () => this.handleEncodedChange());
+      this.headerInput.addEventListener('input', () => this.handleDecodedChange());
+      this.payloadInput.addEventListener('input', () => this.handleDecodedChange());
+      this.secretInput.addEventListener('input', () => this.validateSignature());
+      this.secretBase64Checkbox.addEventListener('change', () => this.validateSignature());
+
+      // Toggle Secret Key Visibility
+      this.toggleSecretBtn.addEventListener('click', () => {
+        if (this.secretInput.type === 'password') {
+          this.secretInput.type = 'text';
+          this.toggleSecretBtn.textContent = '🙈';
+        } else {
+          this.secretInput.type = 'password';
+          this.toggleSecretBtn.textContent = '👁️';
+        }
+      });
+
+      this.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const button = target.closest('button');
+        if (!button) return;
+
+        const action = button.getAttribute('data-action');
+        if (action === 'load-sample') this.loadSample();
+        if (action === 'clear') this.clearAll();
+      });
+
+      // Load initial sample
+      this.loadSample();
+    }
+
+    private loadSample() {
+      // Valid HS256 Token signed with "your-256-bit-secret"
+      const sampleToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjI1MjQ2MDgwMDAsImFkbWluIjp0cnVlfQ.34l7uJ28wGZ0SND0e012F2sWn5X4p8Qv20V_p0tFq7Y';
+      this.jwtInput.value = sampleToken;
+      this.secretInput.value = 'your-256-bit-secret';
+      this.secretBase64Checkbox.checked = false;
+      this.handleEncodedChange();
+    }
+
+    private clearAll() {
+      this.jwtInput.value = '';
+      this.headerInput.value = '';
+      this.payloadInput.value = '';
+      this.secretInput.value = '';
+      this.secretBase64Checkbox.checked = false;
+      this.headerError.hidden = true;
+      this.payloadError.hidden = true;
+      this.claimsCard.hidden = true;
+      this.setSignatureStatus('warning', 'Signature validation pending (empty token)');
+    }
+
+    private handleEncodedChange() {
+      if (this.isUpdatingSelf) return;
+
+      const token = this.jwtInput.value.trim();
+      if (!token) {
+        this.clearAll();
+        return;
+      }
+
+      try {
+        const decoded = decodeJWT(token);
+
+        this.isUpdatingSelf = true;
+        this.headerInput.value = JSON.stringify(decoded.header, null, 2);
+        this.payloadInput.value = JSON.stringify(decoded.payload, null, 2);
+        this.headerError.hidden = true;
+        this.payloadError.hidden = true;
+        this.isUpdatingSelf = false;
+
+        this.validateSignature();
+        this.updateClaimsGuide(decoded.payload);
+      } catch (err: any) {
+        this.headerInput.value = '';
+        this.payloadInput.value = '';
+        this.claimsCard.hidden = true;
+        this.setSignatureStatus('error', `Invalid Token Structure: ${err.message}`);
+      }
+    }
+
+    private async handleDecodedChange() {
+      if (this.isUpdatingSelf) return;
+
+      const headerVal = this.headerInput.value.trim();
+      const payloadVal = this.payloadInput.value.trim();
+
+      let headerObj = null;
+      let payloadObj = null;
+
+      try {
+        headerObj = JSON.parse(headerVal);
+        this.headerError.hidden = true;
+      } catch (err) {
+        this.headerError.hidden = false;
+      }
+
+      try {
+        payloadObj = JSON.parse(payloadVal);
+        this.payloadError.hidden = true;
+      } catch (err) {
+        this.payloadError.hidden = false;
+      }
+
+      if (headerObj === null || payloadObj === null) return;
+
+      try {
+        this.isUpdatingSelf = true;
+        const secret = this.secretInput.value;
+        const isBase64 = this.secretBase64Checkbox.checked;
+
+        // Re-generate token on the fly
+        const newToken = await signHS256(
+          JSON.stringify(headerObj),
+          JSON.stringify(payloadObj),
+          secret,
+          isBase64
+        );
+        
+        this.jwtInput.value = newToken;
+        this.isUpdatingSelf = false;
+
+        this.validateSignature();
+        this.updateClaimsGuide(payloadObj);
+      } catch (err) {
+        this.isUpdatingSelf = false;
+      }
+    }
+
+    private async validateSignature() {
+      const token = this.jwtInput.value.trim();
+      if (!token) return;
+
+      try {
+        const decoded = decodeJWT(token);
+        const secret = this.secretInput.value;
+        
+        if (!secret) {
+          this.setSignatureStatus('warning', 'Signature validation pending (no secret provided)');
+          return;
+        }
+
+        const alg = decoded.header.alg;
+        if (alg !== 'HS256') {
+          this.setSignatureStatus('warning', `Signature verification only supported for HS256. Found algorithm: ${alg}`);
+          return;
+        }
+
+        const isBase64 = this.secretBase64Checkbox.checked;
+        const isValid = await verifyHS256(
+          decoded.headerBase64,
+          decoded.payloadBase64,
+          decoded.signature,
+          secret,
+          isBase64
+        );
+
+        if (isValid) {
+          this.setSignatureStatus('success', 'Signature Verified successfully!');
+        } else {
+          this.setSignatureStatus('error', 'Invalid Signature. The key did not match the token.');
+        }
+      } catch (err) {
+        // Handled in handleEncodedChange
+      }
+    }
+
+    private setSignatureStatus(type: 'success' | 'error' | 'warning', text: string) {
+      this.sigStatusBanner.className = `signature-status-banner ${type}`;
+      this.sigStatusText.textContent = text;
+      
+      const icon = this.sigStatusBanner.querySelector('svg');
+      if (icon) {
+        if (type === 'success') {
+          icon.style.color = '#4ADE80';
+        } else if (type === 'error') {
+          icon.style.color = '#F87171';
+        } else {
+          icon.style.color = '#FBBF24';
+        }
+      }
+    }
+
+    private updateClaimsGuide(payload: any) {
+      this.claimsList.innerHTML = '';
+      let hasClaims = false;
+
+      const claimDescriptions: Record<string, string> = {
+        iss: 'Issuer: Identifies the principal that issued the JWT.',
+        sub: 'Subject: Identifies the principal that is the subject of the JWT (e.g. user ID).',
+        aud: 'Audience: Identifies the recipients that the JWT is intended for.',
+        exp: 'Expiration Time: The time after which the token is invalid.',
+        nbf: 'Not Before: The time before which the token must not be accepted.',
+        iat: 'Issued At: The time at which the JWT was issued.',
+        jti: 'JWT ID: Unique identifier for the token (can prevent replay attacks).',
+      };
+
+      for (const [key, val] of Object.entries(payload)) {
+        if (claimDescriptions[key]) {
+          hasClaims = true;
+          const li = document.createElement('li');
+
+          let friendlyVal = String(val);
+          if ((key === 'exp' || key === 'iat' || key === 'nbf') && typeof val === 'number') {
+            const date = new Date(val * 1000);
+            friendlyVal = `${val} (${date.toLocaleString()})`;
+          }
+
+          li.innerHTML = `
+            <span class="claim-name">${key}</span>: 
+            <span class="claim-value">${friendlyVal}</span>
+            <span class="claim-description">${claimDescriptions[key]}</span>
+          `;
+          this.claimsList.appendChild(li);
+        }
+      }
+
+      this.claimsCard.hidden = !hasClaims;
+    }
+  }
+
+  if (!customElements.get('jwt-debugger-tool')) {
+    customElements.define('jwt-debugger-tool', JwtDebuggerTool);
+  }
+</script>

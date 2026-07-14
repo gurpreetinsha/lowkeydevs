@@ -2,7 +2,7 @@
 import Icon from '../../../components/base/Icon.astro';
 ---
 
-<image-compressor-tool class="tool-workspace">
+<image-compressor-resizer-tool class="tool-workspace">
   <div class="workspace-grid">
     <!-- Left Column: Controls & Setup -->
     <div class="card-pane glass-panel">
@@ -99,16 +99,19 @@ import Icon from '../../../components/base/Icon.astro';
       </div>
 
       <div class="results-content hidden" id="results-active">
-        <div class="success-badge">
-          <span class="badge-icon">✓</span>
-          Optimization Successful!
+        <div class="success-badge" id="results-badge">
+          <span class="badge-icon" id="results-badge-icon">✓</span>
+          <span id="results-badge-text">Optimization Successful!</span>
         </div>
 
         <!-- Optimization savings card -->
-        <div class="savings-card">
+        <div class="savings-card" id="results-savings-card">
           <div class="savings-percent" id="savings-percent">-0%</div>
-          <div class="savings-label">Saved in file size</div>
+          <div class="savings-label" id="savings-label">Saved in file size</div>
         </div>
+
+        <!-- Info notice for edge cases -->
+        <div class="savings-notice hidden" id="savings-notice"></div>
 
         <!-- Size comparison layout -->
         <div class="comparison-grid">
@@ -117,8 +120,8 @@ import Icon from '../../../components/base/Icon.astro';
             <span class="compare-val" id="orig-size-val">0 KB</span>
             <span class="compare-sub" id="orig-dims-val">0 x 0 px</span>
           </div>
-          <div class="compare-card highlight">
-            <span class="compare-label">Optimized File</span>
+          <div class="compare-card highlight" id="opt-compare-card">
+            <span class="compare-label" id="opt-compare-label">Optimized File</span>
             <span class="compare-val" id="opt-size-val">0 KB</span>
             <span class="compare-sub" id="opt-dims-val">0 x 0 px</span>
           </div>
@@ -134,7 +137,7 @@ import Icon from '../../../components/base/Icon.astro';
       </div>
     </div>
   </div>
-</image-compressor-tool>
+</image-compressor-resizer-tool>
 
 <style>
   .tool-workspace {
@@ -554,10 +557,63 @@ import Icon from '../../../components/base/Icon.astro';
   .hidden {
     display: none !important;
   }
+
+  /* Savings Card Variations */
+  .savings-card.is-warning {
+    background: rgba(239, 68, 68, 0.08) !important;
+    border-color: rgba(239, 68, 68, 0.3) !important;
+  }
+  .savings-card.is-warning .savings-percent {
+    color: #ef4444 !important;
+  }
+  
+  .savings-card.is-info {
+    background: rgba(140, 82, 255, 0.08) !important;
+    border-color: rgba(140, 82, 255, 0.3) !important;
+  }
+  .savings-card.is-info .savings-percent {
+    color: var(--primary-accent) !important;
+  }
+
+  .success-badge.is-warning {
+    color: #ef4444 !important;
+  }
+  .success-badge.is-warning .badge-icon {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #ef4444 !important;
+  }
+  
+  .success-badge.is-info {
+    color: var(--primary-accent) !important;
+  }
+  .success-badge.is-info .badge-icon {
+    background: rgba(140, 82, 255, 0.15) !important;
+    color: var(--primary-accent) !important;
+  }
+
+  .compare-card.highlight.is-warning {
+    border-color: #ef4444 !important;
+    background: rgba(239, 68, 68, 0.02) !important;
+  }
+
+  .compare-card.highlight.is-info {
+    border-color: var(--primary-accent) !important;
+    background: rgba(140, 82, 255, 0.02) !important;
+  }
+
+  .savings-notice {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    line-height: 1.4;
+  }
 </style>
 
 <script>
-  class ImageCompressorTool extends HTMLElement {
+  class ImageCompressorResizerTool extends HTMLElement {
     private fileInputEl!: HTMLInputElement;
     private dropzoneEl!: HTMLDivElement;
     private idleStateEl!: HTMLDivElement;
@@ -586,6 +642,15 @@ import Icon from '../../../components/base/Icon.astro';
     private optSizeValEl!: HTMLSpanElement;
     private optDimsValEl!: HTMLSpanElement;
     private downloadBtn!: HTMLAnchorElement;
+
+    private resultsBadgeEl!: HTMLDivElement;
+    private resultsBadgeIconEl!: HTMLSpanElement;
+    private resultsBadgeTextEl!: HTMLSpanElement;
+    private resultsSavingsCardEl!: HTMLDivElement;
+    private savingsLabelEl!: HTMLDivElement;
+    private savingsNoticeEl!: HTMLDivElement;
+    private optCompareCardEl!: HTMLDivElement;
+    private optCompareLabelEl!: HTMLSpanElement;
 
     private selectedFile: File | null = null;
     private sourceImage: HTMLImageElement | null = null;
@@ -623,6 +688,15 @@ import Icon from '../../../components/base/Icon.astro';
       this.optSizeValEl = this.querySelector('#opt-size-val') as HTMLSpanElement;
       this.optDimsValEl = this.querySelector('#opt-dims-val') as HTMLSpanElement;
       this.downloadBtn = this.querySelector('#btn-download-image') as HTMLAnchorElement;
+
+      this.resultsBadgeEl = this.querySelector('#results-badge') as HTMLDivElement;
+      this.resultsBadgeIconEl = this.querySelector('#results-badge-icon') as HTMLSpanElement;
+      this.resultsBadgeTextEl = this.querySelector('#results-badge-text') as HTMLSpanElement;
+      this.resultsSavingsCardEl = this.querySelector('#results-savings-card') as HTMLDivElement;
+      this.savingsLabelEl = this.querySelector('#savings-label') as HTMLDivElement;
+      this.savingsNoticeEl = this.querySelector('#savings-notice') as HTMLDivElement;
+      this.optCompareCardEl = this.querySelector('#opt-compare-card') as HTMLDivElement;
+      this.optCompareLabelEl = this.querySelector('#opt-compare-label') as HTMLSpanElement;
 
       // Event listeners
       this.dropzoneEl.addEventListener('dragover', (e) => {
@@ -787,18 +861,99 @@ import Icon from '../../../components/base/Icon.astro';
       canvas.toBlob((blob) => {
         if (!blob) return;
 
-        // Render optimized details
-        const savedBytes = this.selectedFile!.size - blob.size;
-        const savedPercent = Math.max(0, Math.round((savedBytes / this.selectedFile!.size) * 100));
+        const originalSize = this.selectedFile!.size;
+        const originalType = this.selectedFile!.type;
 
-        this.savingsPercentEl.textContent = `-${savedPercent}%`;
-        this.origSizeValEl.textContent = this.formatBytes(this.selectedFile!.size);
+        const hasResized = targetWidth !== this.sourceImage!.naturalWidth || targetHeight !== this.sourceImage!.naturalHeight;
+        const hasFormatChanged = targetType !== originalType;
+
+        let finalBlob = blob;
+        let isAlreadyOptimized = false;
+        let isLargerOutput = false;
+
+        if (blob.size >= originalSize) {
+          if (!hasResized && !hasFormatChanged) {
+            // Compressed file size is larger or equal, but format & size didn't change: fall back to original
+            finalBlob = this.selectedFile!;
+            isAlreadyOptimized = true;
+          } else {
+            // Resized or converted format, but size ended up larger: we must use the generated blob
+            isLargerOutput = true;
+          }
+        }
+
+        // Calculate size difference
+        const sizeDiff = originalSize - finalBlob.size;
+        
+        // Reset classes
+        this.resultsBadgeEl.classList.remove('is-warning', 'is-info');
+        this.resultsSavingsCardEl.classList.remove('is-warning', 'is-info');
+        this.optCompareCardEl.classList.remove('is-warning', 'is-info');
+        this.savingsNoticeEl.classList.add('hidden');
+        this.savingsNoticeEl.textContent = '';
+
+        if (isAlreadyOptimized || finalBlob.size === originalSize) {
+          // Case 1: Fallback to original since compression offered no size improvement, or identical size
+          this.resultsBadgeIconEl.textContent = '✓';
+          this.resultsBadgeTextEl.textContent = 'Already Optimized';
+          this.resultsBadgeEl.classList.add('is-info');
+          
+          this.resultsSavingsCardEl.classList.add('is-info');
+          this.savingsPercentEl.textContent = '0%';
+          this.savingsLabelEl.textContent = 'File is already fully optimized';
+          
+          this.optCompareLabelEl.textContent = 'Output (Original kept)';
+          this.optCompareCardEl.classList.add('is-info');
+          
+          this.savingsNoticeEl.classList.remove('hidden');
+          this.savingsNoticeEl.textContent = 'The compressed version was larger than or equal to the original image. We have kept your original file to maintain the smallest size and highest quality.';
+        } else if (isLargerOutput || finalBlob.size > originalSize) {
+          // Case 2: Size is larger, but they resized or changed format, so we can't fall back to original
+          const increasePercent = Math.round(((finalBlob.size - originalSize) / originalSize) * 100);
+          
+          this.resultsBadgeIconEl.textContent = '⚠';
+          this.resultsBadgeTextEl.textContent = 'Processing Completed';
+          this.resultsBadgeEl.classList.add('is-warning');
+          
+          this.resultsSavingsCardEl.classList.add('is-warning');
+          this.savingsPercentEl.textContent = `+${increasePercent}%`;
+          this.savingsLabelEl.textContent = 'Increase in file size';
+          
+          this.optCompareLabelEl.textContent = 'Optimized File';
+          this.optCompareCardEl.classList.add('is-warning');
+          
+          this.savingsNoticeEl.classList.remove('hidden');
+          
+          let noticeText = 'Note: The processed image has a larger file size than the original. ';
+          if (hasResized && (targetWidth > this.sourceImage!.naturalWidth || targetHeight > this.sourceImage!.naturalHeight)) {
+            noticeText += 'This is because you upscaled the dimensions of the image.';
+          } else if (hasFormatChanged) {
+            noticeText += 'This is common when converting to an uncompressed or less efficient format (e.g., JPEG to PNG).';
+          } else {
+            noticeText += 'This can occur when re-encoding already highly-compressed source images.';
+          }
+          this.savingsNoticeEl.textContent = noticeText;
+        } else {
+          // Case 3: Optimization was successful (savings > 0)
+          const savedPercent = Math.round((sizeDiff / originalSize) * 100);
+          
+          this.resultsBadgeIconEl.textContent = '✓';
+          this.resultsBadgeTextEl.textContent = 'Optimization Successful!';
+          
+          this.savingsPercentEl.textContent = savedPercent > 0 ? `-${savedPercent}%` : '< 1%';
+          this.savingsLabelEl.textContent = 'Saved in file size';
+          
+          this.optCompareLabelEl.textContent = 'Optimized File';
+        }
+
+        // Render sizes and dimensions
+        this.origSizeValEl.textContent = this.formatBytes(originalSize);
         this.origDimsValEl.textContent = `${this.sourceImage!.naturalWidth} x ${this.sourceImage!.naturalHeight} px`;
 
-        this.optSizeValEl.textContent = this.formatBytes(blob.size);
+        this.optSizeValEl.textContent = this.formatBytes(finalBlob.size);
         this.optDimsValEl.textContent = `${targetWidth} x ${targetHeight} px`;
 
-        const url = URL.createObjectURL(blob);
+        const url = URL.createObjectURL(finalBlob);
         this.downloadBtn.href = url;
 
         // Determine extension
@@ -807,7 +962,14 @@ import Icon from '../../../components/base/Icon.astro';
         if (targetType === 'image/webp') ext = 'webp';
 
         const baseName = this.selectedFile!.name.substring(0, this.selectedFile!.name.lastIndexOf('.'));
-        this.downloadBtn.download = `${baseName}_optimized.${ext}`;
+        
+        if (isAlreadyOptimized) {
+          // Keep original extension if using fallback original file
+          const origExt = this.selectedFile!.name.substring(this.selectedFile!.name.lastIndexOf('.') + 1);
+          this.downloadBtn.download = `${baseName}_optimized.${origExt}`;
+        } else {
+          this.downloadBtn.download = `${baseName}_optimized.${ext}`;
+        }
 
         this.resultsIdleEl.classList.add('hidden');
         this.resultsActiveEl.classList.remove('hidden');
@@ -818,7 +980,7 @@ import Icon from '../../../components/base/Icon.astro';
     }
   }
 
-  if (!customElements.get('image-compressor-tool')) {
-    customElements.define('image-compressor-tool', ImageCompressorTool);
+  if (!customElements.get('image-compressor-resizer-tool')) {
+    customElements.define('image-compressor-resizer-tool', ImageCompressorResizerTool);
   }
 </script>

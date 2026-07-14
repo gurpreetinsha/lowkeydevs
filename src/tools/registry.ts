@@ -119,6 +119,10 @@ import { meta as extractPdfPagesMeta } from './list/extract-pdf-pages/meta';
 import { meta as pdfFormsMeta } from './list/pdf-forms/meta';
 import { meta as redactPdfMeta } from './list/redact-pdf/meta';
 
+// New tool imports
+import { meta as jwtDebuggerMeta } from './list/jwt-debugger/meta';
+import { meta as sqlFormatterMeta } from './list/sql-formatter/meta';
+import { meta as cronExpressionDescriptorMeta } from './list/cron-expression-descriptor/meta';
 
 // Central Registry of all tools
 export const registry: ToolMeta[] = [
@@ -228,7 +232,42 @@ export const registry: ToolMeta[] = [
   apaCitationGeneratorMeta,
   bigTextGeneratorMeta,
   cuteFontMeta,
-  pxToRemConverterMeta
+  pxToRemConverterMeta,
+  wordCounterMeta,
+  imageCompressorResizerMeta,
+  videoToGifConverterMeta,
+  loremIpsumGeneratorMeta,
+
+  // PDF tools
+  mergePdfMeta,
+  splitPdfMeta,
+  compressPdfMeta,
+  wordToPdfMeta,
+  jpgToPdfMeta,
+  pdfToJpgMeta,
+  editPdfMeta,
+  signPdfMeta,
+  unlockPdfMeta,
+
+  // PDF tools Set 2
+  protectPdfMeta,
+  excelToPdfMeta,
+  powerpointToPdfMeta,
+  organizePdfMeta,
+  addPageNumbersMeta,
+  addWatermarkMeta,
+  rotatePdfMeta,
+
+  // PDF tools Set 3
+  pdfToPdfaMeta,
+  htmlToPdfMeta,
+  removePdfPagesMeta,
+  extractPdfPagesMeta,
+  pdfFormsMeta,
+  redactPdfMeta,
+  jwtDebuggerMeta,
+  sqlFormatterMeta,
+  cronExpressionDescriptorMeta
 ];
 
 // Helper to find a tool by its slug
