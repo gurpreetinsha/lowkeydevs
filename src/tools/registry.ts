@@ -123,6 +123,7 @@ import { meta as redactPdfMeta } from './list/redact-pdf/meta';
 import { meta as jwtDebuggerMeta } from './list/jwt-debugger/meta';
 import { meta as sqlFormatterMeta } from './list/sql-formatter/meta';
 import { meta as cronExpressionDescriptorMeta } from './list/cron-expression-descriptor/meta';
+import { meta as usernameAvailabilityCheckerMeta } from './list/username-availability-checker/meta';
 
 // Central Registry of all tools
 export const registry: ToolMeta[] = [
@@ -267,7 +268,8 @@ export const registry: ToolMeta[] = [
   redactPdfMeta,
   jwtDebuggerMeta,
   sqlFormatterMeta,
-  cronExpressionDescriptorMeta
+  cronExpressionDescriptorMeta,
+  usernameAvailabilityCheckerMeta
 ];
 
 // Helper to find a tool by its slug

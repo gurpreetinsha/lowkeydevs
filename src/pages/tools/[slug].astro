@@ -127,6 +127,7 @@ import RedactPdfUI from '../../tools/list/redact-pdf/ui.astro';
 import JWTDebuggerUI from '../../tools/list/jwt-debugger/ui.astro';
 import SQLFormatterUI from '../../tools/list/sql-formatter/ui.astro';
 import CronExpressionDescriptorUI from '../../tools/list/cron-expression-descriptor/ui.astro';
+import UsernameAvailabilityCheckerUI from '../../tools/list/username-availability-checker/ui.astro';
 
 
 // Map slugs to UI components
@@ -245,7 +246,8 @@ const uiComponents: Record<string, any> = {
   'redact-pdf': RedactPdfUI,
   'jwt-debugger': JWTDebuggerUI,
   'sql-formatter': SQLFormatterUI,
-  'cron-expression-descriptor': CronExpressionDescriptorUI
+  'cron-expression-descriptor': CronExpressionDescriptorUI,
+  'username-availability-checker': UsernameAvailabilityCheckerUI
 };
 
 export async function getStaticPaths() {

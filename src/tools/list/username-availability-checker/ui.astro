@@ -1,0 +1,1229 @@
+---
+import Icon from '../../../components/base/Icon.astro';
+---
+
+<username-checker-tool class="tool-workspace">
+  <!-- Search & Input Card -->
+  <div class="checker-card glass-panel">
+    <div class="search-section">
+      <div class="input-wrapper">
+        <Icon name="Search" class="search-input-icon" size={20} />
+        <input 
+          type="text" 
+          id="username-input" 
+          placeholder="Enter a username..." 
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="none"
+          spellcheck="false"
+          aria-label="Username to check"
+        />
+        <button id="btn-clear" class="btn-clear-input" aria-label="Clear input" style="display: none;">
+          ✕
+        </button>
+      </div>
+      <button id="btn-check" class="btn btn-primary btn-check">
+        <Icon name="RefreshCw" size={18} class="btn-spinner" />
+        <span>Check Availability</span>
+      </button>
+    </div>
+
+    <!-- Example Usernames -->
+    <div class="examples-row">
+      <span class="example-label">Try:</span>
+      <button class="example-pill" data-username="john">john</button>
+      <button class="example-pill" data-username="alex">alex</button>
+      <button class="example-pill" data-username="guri">guri</button>
+      <button class="example-pill" data-username="devcoder">devcoder</button>
+    </div>
+  </div>
+
+  <!-- Scan Status & Controls Panel (Shown only when scanning or scanned) -->
+  <div id="status-panel" class="status-panel glass-panel" style="display: none;">
+    <div class="status-header">
+      <div class="progress-info">
+        <span class="status-text" id="status-text">Ready to scan</span>
+        <span class="scan-time" id="scan-time"></span>
+      </div>
+      <div class="utility-actions">
+        <button id="btn-copy-username" class="btn btn-secondary btn-sm" title="Copy Username">
+          <Icon name="Clipboard" size={14} class="copy-icon" />
+          <Icon name="Check" size={14} class="check-icon" style="display: none; color: var(--success);" />
+          <span>Copy Username</span>
+        </button>
+        <button id="btn-share" class="btn btn-secondary btn-sm" title="Share Results">
+          <Icon name="ExternalLink" size={14} class="share-icon" />
+          <Icon name="Check" size={14} class="share-check-icon" style="display: none; color: var(--success);" />
+          <span>Share</span>
+        </button>
+        <button id="btn-download" class="btn btn-secondary btn-sm" title="Download JSON">
+          <Icon name="Download" size={14} />
+          <span>JSON</span>
+        </button>
+        <button id="btn-favorite" class="btn btn-secondary btn-sm" title="Add to Favorites">
+          <Icon name="Star" size={14} class="fav-star-icon" />
+          <span>Favorite</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar-container">
+      <div id="progress-bar" class="progress-bar"></div>
+    </div>
+
+    <!-- Counters -->
+    <div class="counters-grid">
+      <div class="counter-card available">
+        <span class="counter-badge">✅</span>
+        <div class="counter-info">
+          <span class="counter-count" id="count-available">0</span>
+          <span class="counter-label">Available</span>
+        </div>
+      </div>
+      <div class="counter-card taken">
+        <span class="counter-badge">❌</span>
+        <div class="counter-info">
+          <span class="counter-count" id="count-taken">0</span>
+          <span class="counter-label">Taken</span>
+        </div>
+      </div>
+      <div class="counter-card unknown">
+        <span class="counter-badge">⚠️</span>
+        <div class="counter-info">
+          <span class="counter-count" id="count-unknown">0</span>
+          <span class="counter-label">Unknown</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Filters -->
+    <div class="filters-row">
+      <span class="filter-label">Filter:</span>
+      <button class="filter-pill active" data-filter="all">All Platforms</button>
+      <button class="filter-pill" data-filter="social">Social</button>
+      <button class="filter-pill" data-filter="developer">Developer</button>
+      <button class="filter-pill" data-filter="gaming">Gaming</button>
+      <button class="filter-pill" data-filter="streaming">Streaming</button>
+      <button class="filter-pill" data-filter="community">Community</button>
+      <button class="filter-pill" data-filter="design">Design</button>
+      <button class="filter-pill" data-filter="business">Business</button>
+      <button class="filter-pill" data-filter="domain">Domains</button>
+    </div>
+  </div>
+
+  <!-- Results Grid -->
+  <div id="results-grid" class="results-grid" style="display: none;">
+    <!-- Cards will be populated dynamically -->
+  </div>
+
+  <!-- History & Favorites Section -->
+  <div class="history-favorites-section">
+    <!-- Favorites -->
+    <div id="favorites-box" class="favorites-box glass-panel" style="display: none;">
+      <h3 class="panel-subtitle">
+        <Icon name="Star" size={16} style="color: var(--accent);" />
+        Favorite Usernames
+      </h3>
+      <div id="favorites-list" class="pill-list">
+        <!-- populated dynamically -->
+      </div>
+    </div>
+
+    <!-- Recently Checked -->
+    <div id="history-box" class="history-box glass-panel" style="display: none;">
+      <h3 class="panel-subtitle">
+        <Icon name="Terminal" size={16} />
+        Recently Checked
+      </h3>
+      <div id="history-list" class="pill-list">
+        <!-- populated dynamically -->
+      </div>
+    </div>
+  </div>
+</username-checker-tool>
+
+<style>
+  .tool-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .glass-panel {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    transition: all var(--duration-normal) var(--ease-out);
+  }
+
+  .glass-panel:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Search Panel */
+  .search-section {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0 1rem;
+    transition: border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .input-wrapper:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-subtle);
+  }
+
+  .search-input-icon {
+    color: var(--text-secondary);
+    margin-right: 0.75rem;
+  }
+
+  #username-input {
+    flex: 1;
+    height: 48px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+  }
+
+  .btn-clear-input {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.25rem;
+  }
+
+  .btn-clear-input:hover {
+    color: var(--text-primary);
+  }
+
+  .btn-check {
+    height: 50px;
+    padding: 0 1.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .btn-spinner {
+    display: none;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Examples Row */
+  .examples-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .example-label {
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+  }
+
+  .example-pill {
+    background-color: var(--surface-hover);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-size: var(--fs-sm);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .example-pill:hover {
+    background-color: var(--accent-subtle);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Status Panel */
+  .status-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .progress-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .status-text {
+    font-size: var(--fs-body-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .scan-time {
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+  }
+
+  .utility-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  /* Progress Bar */
+  .progress-bar-container {
+    height: 6px;
+    background-color: var(--border);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .progress-bar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+    border-radius: var(--radius-full);
+    transition: width 0.2s ease;
+  }
+
+  /* Counters */
+  .counters-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .counter-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+  }
+
+  .counter-badge {
+    font-size: 1.25rem;
+  }
+
+  .counter-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .counter-count {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .counter-label {
+    font-size: var(--fs-caption);
+    color: var(--text-secondary);
+  }
+
+  /* Category Filters */
+  .filters-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+
+  .filter-label {
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    margin-right: 0.5rem;
+  }
+
+  .filter-pill {
+    background-color: var(--surface-hover);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-full);
+    font-size: var(--fs-sm);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .filter-pill:hover, .filter-pill.active {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-on);
+  }
+
+  /* Results Grid */
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    width: 100%;
+  }
+
+  /* Platform Card */
+  .platform-card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: all var(--duration-normal) var(--ease-out);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .platform-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .platform-identity {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .platform-logo-container {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--surface-hover);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    color: var(--text-primary);
+    font-weight: bold;
+    font-size: 0.9rem;
+  }
+
+  .platform-logo-svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+  }
+
+  .platform-name {
+    font-weight: 600;
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
+  }
+
+  /* Status Badge */
+  .status-badge {
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--radius-full);
+    font-size: var(--fs-caption);
+    font-weight: 600;
+  }
+
+  .status-badge.available {
+    background-color: var(--success-subtle);
+    color: var(--success);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+  }
+
+  .status-badge.taken {
+    background-color: var(--error-subtle);
+    color: var(--error);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+  }
+
+  .status-badge.unknown {
+    background-color: rgba(234, 179, 8, 0.15);
+    color: #EAB308;
+    border: 1px solid rgba(234, 179, 8, 0.2);
+  }
+
+  .status-badge.scanning {
+    background-color: var(--surface-hover);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+  }
+
+  .profile-link-container {
+    margin-top: auto;
+    width: 100%;
+  }
+
+  .btn-profile {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: var(--fs-caption);
+    font-weight: 500;
+    background-color: var(--surface-hover);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .btn-profile:hover {
+    background-color: var(--border);
+    border-color: var(--border-hover);
+  }
+
+  /* Skeletons */
+  .skeleton-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--surface-hover);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skeleton-text {
+    width: 80px;
+    height: 14px;
+    background: var(--surface-hover);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skeleton-badge {
+    width: 70px;
+    height: 20px;
+    background: var(--surface-hover);
+    border-radius: var(--radius-full);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skeleton-logo::after, .skeleton-text::after, .skeleton-badge::after {
+    content: "";
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  /* History & Favorites */
+  .history-favorites-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .favorites-box, .history-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .panel-subtitle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .pill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .history-pill {
+    background-color: var(--surface-hover);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: var(--fs-sm);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .history-pill:hover {
+    border-color: var(--accent);
+    background-color: var(--accent-subtle);
+  }
+
+  .btn-remove-pill {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    cursor: pointer;
+    padding: 2px;
+  }
+
+  .btn-remove-pill:hover {
+    color: var(--error);
+  }
+
+  /* Mobile Tweaks */
+  @media (max-width: 768px) {
+    .search-section {
+      flex-direction: column;
+    }
+    .btn-check {
+      width: 100%;
+      justify-content: center;
+    }
+    .counters-grid {
+      grid-template-columns: 1fr;
+    }
+    .history-favorites-section {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  import { platforms } from './platforms';
+
+  // SVG Paths for top brand logos
+  const BRAND_LOGOS: Record<string, string> = {
+    instagram: '<path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>',
+    twitter: '<path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>',
+    facebook: '<path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>',
+    threads: '<path d="M12.03 0c-6.52 0-11.8 5.28-11.8 11.8 0 6.52 5.28 11.8 11.8 11.8 6.52 0 11.8-5.28 11.8-11.8 0-6.52-5.28-11.8-11.8-11.8zm3.89 15.69c-.44.59-1.07.99-1.89 1.2-1.03.26-2.17.06-3.03-.55-.8-.57-1.28-1.5-1.28-2.52s.48-1.95 1.28-2.52c.86-.61 2-.81 3.03-.55.82.21 1.45.61 1.89 1.2.46.62.69 1.41.69 2.37 0 .96-.23 1.75-.69 2.37zm1.18-5.18c0-.62-.12-1.14-.36-1.57-.45-.79-1.25-1.28-2.18-1.4-1.34-.18-2.76.08-3.79.77-.92.62-1.46 1.63-1.46 2.72s.54 2.1 1.46 2.72c1.03.69 2.45.95 3.79.77.93-.12 1.73-.61 2.18-1.4.24-.43.36-.95.36-1.57V10.51z"/>',
+    tiktok: '<path d="M12.525.02c1.31-.03 2.61-.01 3.91-.02.08 1.53.63 3.05 1.62 4.2 1.21 1.28 2.87 2.07 4.63 2.23v3.85c-1.52-.08-3.01-.59-4.28-1.43-.29-.2-.56-.41-.8-.65-.05 3.12.01 6.25-.04 9.37-.09 2.21-.92 4.38-2.48 5.96-1.83 1.93-4.57 2.92-7.23 2.6-3.13-.26-6.04-2.5-6.93-5.55-1.02-3.23-.05-7.06 2.49-9.15 1.81-1.57 4.29-2.22 6.66-1.74v3.9c-1.55-.42-3.32-.01-4.49 1.09-1.21 1.07-1.72 2.89-1.21 4.45.46 1.5 1.92 2.64 3.51 2.64 1.89.04 3.54-1.37 3.78-3.25.13-2.31.04-4.63.07-6.95V.02z"/>',
+    youtube: '<path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.518 3.545 12 3.545 12 3.545s-7.518 0-9.388.507a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11C4.482 20.455 12 20.455 12 20.455s7.518 0 9.388-.507a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>',
+    pinterest: '<path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.947-.199-2.403.041-3.439.219-.937 1.406-5.965 1.406-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.621 0 11.988-5.367 11.988-11.987C24.017 5.367 18.638 0 12.017 0z"/>',
+    reddit: '<path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-.533 1.025c.19.638.16 1.342-.093 2.016a5.05 5.05 0 0 1-.72 1.328c-.02.029-.01.077.018.093c.31.2.664.303 1.03.303a1.75 1.75 0 0 0 1.75-1.75c0-.62-.323-1.16-.807-1.47a1.745 1.745 0 0 0 .152-.72c0-.965-.785-1.75-1.75-1.75-.486 0-.928.2-1.248.522a6.388 6.388 0 0 0-3.085-.884l.643-2.02 1.8.384c.03.493.44.887.94.887a1 1 0 1 0-1-1c0-.03.01-.06.01-.09l-2.02-.43c-.15-.03-.31.06-.36.21l-.73 2.29a6.43 6.43 0 0 0-3.11.89c-.31-.32-.75-.52-1.23-.52-.965 0-1.75.785-1.75 1.75 0 .25.05.49.15.71a1.734 1.734 0 0 0-.8 1.48c0 .965.785 1.75 1.75 1.75.36 0 .71-.11 1.02-.3a.07.07 0 0 1 .09-.01c1.55 1.02 3.65 1.66 5.92 1.66 2.27 0 4.37-.64 5.92-1.66a.07.07 0 0 1 .09.01c.31.19.66.3 1.02.3.965 0 1.75-.785 1.75-1.75 0-.58-.29-1.1-.73-1.42zM8.56 10.45a1 1 0 1 1 2 0 1 1 0 0 1-2 0zm6.88 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0zm-5.74 3.73c.96 0 1.74-.78 1.74-1.74a.25.25 0 0 0-.5 0 1.24 1.24 0 0 1-2.48 0 .25.25 0 0 0-.5 0c0 .96.78 1.74 1.74 1.74z"/>',
+    github: '<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>',
+    gitlab: '<path d="M23.955 13.587l-1.342-4.135-2.664-8.189c-.135-.417-.724-.417-.86 0L16.425 9.452H7.575L4.911 1.263c-.135-.417-.724-.417-.86 0L1.387 9.452.045 13.587c-.161.497.017 1.037.444 1.348l11.511 8.368 11.511-8.368c.427-.311.605-.851.444-1.348z"/>',
+    discord: '<path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.873-.894.077.077 0 0 1-.008-.128c.126-.093.252-.19.372-.287a.075.075 0 0 1 .077-.011c3.92 1.793 8.18 1.793 12.061 0a.073.073 0 0 1 .078.009c.12.099.246.195.373.289a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.156-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.156 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.156-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.156 2.418z"/>',
+    telegram: '<path d="M11.944 0C5.344 0 0 5.344 0 12c0 6.656 5.344 12 11.944 12 6.656 0 12-5.344 12-12 0-6.656-5.344-12-12-12zM18.08 8.048l-2.024 9.536c-.152.68-.56.84-.112.448l-3.08-2.272-1.488 1.44c-.168.168-.304.304-.624.304l.224-3.16 5.76-5.2c.248-.224-.056-.344-.384-.128L9.248 13.08l-3.08-.96c-.672-.208-.688-.672.144-.992l12.032-4.64c.56-.208 1.048.136.736 1.56z"/>',
+    spotify: '<path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.49 17.31c-.22.36-.68.48-1.04.26-2.85-1.74-6.43-2.13-10.66-1.17-.41.09-.82-.16-.91-.57-.09-.41.16-.82.57-.91 4.63-1.06 8.59-.62 11.78 1.33.36.22.48.69.26 1.06zm1.46-3.26c-.28.45-.87.6-1.32.32-3.26-2-8.23-2.58-12.08-1.41-.5.15-1.03-.13-1.18-.63-.15-.5.13-1.03.63-1.18 4.4-1.34 9.87-.69 13.6 1.6.45.28.6.87.32 1.32zm.12-3.39C15.19 8.23 8.78 8.02 5.07 9.14c-.57.17-1.17-.15-1.34-.72-.17-.57.15-1.17.72-1.34 4.26-1.29 11.34-1.05 15.82 1.61.51.3.68.96.38 1.47-.3.51-.96.68-1.47.38z"/>',
+    twitch: '<path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/>',
+    steam: '<path d="M12 0C5.373 0 0 5.373 0 12c0 5.078 3.16 9.416 7.618 11.16l1.246-3.427c-.244-.199-.444-.452-.581-.74l-2.905-1.2c-.792-.328-1.282-1.096-1.282-1.956 0-1.17 1.03-2.118 2.3-2.118a2.38 2.38 0 0 1 1.706.745l2.859 1.185c.614-.265 1.3-.332 1.953-.162l3.411-5.111c.005-.045.008-.09.008-.137 0-1.89-1.536-3.423-3.43-3.423a3.426 3.426 0 0 0-3.43 3.423c0 .047.003.092.008.137l-5.109 3.411c.17.653.103 1.339-.162 1.953l1.185 2.859a2.38 2.38 0 0 1 .745 1.706c0 1.27-.948 2.3-2.118 2.3-.86 0-1.628-.49-1.956-1.282l-1.2-2.905c-.288-.137-.541-.337-.74-.581L.84 8.764C2.584 4.306 6.922 1.146 12 1.146c6.627 0 12 5.373 12 12s-5.373 12-12 12z"/>',
+    linkedin: '<path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>',
+    medium: '<path d="M13.54 12a6.8 6.8 0 0 1-6.77 6.82A6.8 6.8 0 0 1 0 12a6.8 6.8 0 0 1 6.77-6.82A6.8 6.8 0 0 1 13.54 12zm7.42 0c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42zM24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>',
+    patreon: '<path d="M0 .48v23.04h4.22V.48H0zm15.385 0c-4.764 0-8.623 3.86-8.623 8.623 0 4.764 3.86 8.623 8.623 8.623 4.764 0 8.622-3.86 8.622-8.623 0-4.764-3.858-8.623-8.622-8.623z"/>',
+    figma: '<path d="M12 0C8.688 0 6 2.688 6 6v3c0 3.312 2.688 6 6 6h3c3.312 0 6-2.688 6-6V6c0-3.312-2.688-6-6-6h-3zm0 18c-3.312 0-6-2.688-6-6v-3h3c3.312 0 6 2.688 6 6v3c0 3.312-2.688 6-6 6z"/>',
+    slack: '<path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523 2.528 2.528 0 0 1-2.522-2.523 2.528 2.528 0 0 1 2.522-2.52h2.52v2.52zm1.261 0a2.528 2.528 0 0 1 2.52-2.52h5.043a2.528 2.528 0 0 1 2.522 2.52v5.042a2.528 2.528 0 0 1-2.522 2.52H8.823a2.528 2.528 0 0 1-2.52-2.52v-5.042zM8.823 5.043a2.528 2.528 0 0 1 2.52-2.52 2.528 2.528 0 0 1 2.522 2.52v2.52h-2.522a2.528 2.528 0 0 1-2.52-2.52zm0 1.261a2.528 2.528 0 0 1 2.52 2.52v5.043a2.528 2.528 0 0 1-2.52 2.522H3.78a2.528 2.528 0 0 1-2.52-2.522V8.824a2.528 2.528 0 0 1 2.52-2.52h5.043zm10.135 3.78a2.528 2.528 0 0 1 2.52-2.52 2.528 2.528 0 0 1 2.522 2.52 2.528 2.528 0 0 1-2.522 2.52h-2.52v-2.52zm-1.262 0a2.528 2.528 0 0 1-2.52 2.52h-5.043a2.528 2.528 0 0 1-2.522-2.52V3.78a2.528 2.528 0 0 1 2.522-2.52h5.043a2.528 2.528 0 0 1 2.52 2.52v5.043zm-3.78 10.135a2.528 2.528 0 0 1-2.52 2.52 2.528 2.528 0 0 1-2.522-2.52v-2.52h2.522a2.528 2.528 0 0 1 2.52 2.52zm0-1.262a2.528 2.528 0 0 1-2.52-2.52v-5.043a2.528 2.528 0 0 1 2.52-2.522h5.043a2.528 2.528 0 0 1 2.52 2.522v5.043a2.528 2.528 0 0 1-2.52 2.52h-5.043z"/>',
+    codepen: '<path d="M24 8.242c0-.063-.008-.124-.025-.184-.009-.033-.024-.065-.037-.097-.018-.041-.035-.084-.059-.122l-.011-.017-5.539-3.702a.75.75 0 0 0-.832 0L12.01 7.828 6.51 4.12a.75.75 0 0 0-.832 0L.139 7.822l-.011.017a.75.75 0 0 0-.059.122c-.013.032-.028.064-.037.097A.74.74 0 0 0 0 8.242v7.517c0 .063.008.124.025.184.009.033.024.065.037.097.018.041.035.084.059.122l.011.017 5.539 3.702a.75.75 0 0 0 .832 0l5.487-3.706 5.487 3.706a.75.75 0 0 0 .832 0l5.539-3.702.011-.017c.024-.038.041-.081.059-.122.013-.032.028-.064.037-.097.017-.06.025-.121.025-.184V8.242zm-1.5 5.922-3.955-2.646 3.955-2.646v5.292zM12 16.035l-3.327-2.223L12 11.59l3.327 2.222L12 16.035zM7.5 13.916 3.545 11.27l3.955-2.646v5.292zM12 7.965l3.327 2.223L12 12.41 8.673 10.188 12 7.965zM17.472 5.53 21 7.889l-3.528 2.36V5.53zm-10.944 0V10.25l-3.528-2.36 3.528-2.36zm1.758 12.94 3.714-2.507V20.21l-3.714-1.74zm7.974 0-3.714 1.74V15.963l3.714 2.507z"/>',
+    dribbble: '<path d="M12 24C5.385 24 0 18.615 0 12S5.385 0 12 0s12 5.385 12 12-5.385 12-12 12zm10.12-10.37c-.311-.115-2.822-.988-5.717-.457 1.205 3.323 1.688 6.079 1.776 6.643 2.457-1.42 4.103-3.84 3.941-6.186zm-5.703 7.422c-.104-.633-.629-3.486-1.921-6.852-5.184 1.55-7.079 4.673-7.229 4.935 1.706 1.488 3.931 2.385 6.368 2.385 1.026 0 2.012-.16 2.782-.468zM6.162 18.066c.196-.289 2.548-3.662 7.471-5.111.085-.027.168-.052.253-.078a31.336 31.336 0 0 0-2.483-5.2c-5.267 1.482-7.518 4.793-7.575 4.881.93 2.35 2.87 4.133 2.334 5.508zm.29-9.596c.071-.096 3.125-4.148 7.974-2.316-.761 1.79-1.637 4.132-2.319 6.222-4.167 1.258-5.372 4.095-5.655 4.786-.889-1.954-1.282-4.148.00-8.692zm9.646-3.816c-.053-.008-.106-.018-.16-.026-3.32-.472-5.83 2.404-6.046 2.666a33.326 33.326 0 0 1 2.274 4.848c2.617-.798 5.231-.383 5.485-.34-.51-2.935-1.503-5.46-1.553-7.148zm6.059 4.41c-.288-.041-3.238-.387-6.216.711.042.1.082.203.123.307.72 1.798 1.486 4.341 1.791 6.305 3.326-.74 5.289.479 5.377.536.212-1.97-.042-3.905-1.075-7.859z"/>',
+    behance: '<path d="M22 7h-7v1.25h7V7zm-9.3 5.3c1 0 1.8-.7 1.8-1.8 0-1-.7-1.7-1.8-1.7H8.5v3.5h4.2zm.4 4.4c1.1 0 2-.8 2-2 0-1.1-.9-1.9-2-1.9H8.5v5.9h4.6zm-4.6-9.7H13c2.4 0 4.1 1.4 4.1 3.5 0 1.4-.8 2.6-2.1 3.1 1.6.5 2.6 1.8 2.6 3.6 0 2.5-2 4.2-4.7 4.2H8.5V7zm13.1 7.2c-2.4 0-4.1 1.4-4.1 3.9 0 2.3 1.7 3.8 4.1 3.8 1.8 0 3-.9 3.5-2.2h-1.6c-.3.6-.9 1-1.9 1-1.3 0-2.1-.8-2.2-2.1h5.8c.1-.3.1-.7.1-1 .2-2.3-1.4-3.4-3.7-3.4zm-2.2 2.6c.1-1 .9-1.5 2.1-1.5s1.9.6 2 1.5h-4.1z"/>',
+  };
+
+  class UsernameCheckerTool extends HTMLElement {
+    private inputEl!: HTMLInputElement;
+    private btnCheckEl!: HTMLButtonElement;
+    private btnClearEl!: HTMLButtonElement;
+    private statusPanelEl!: HTMLDivElement;
+    private statusTextEl!: HTMLSpanElement;
+    private scanTimeEl!: HTMLSpanElement;
+    private progressBarEl!: HTMLDivElement;
+    
+    private countAvailableEl!: HTMLSpanElement;
+    private countTakenEl!: HTMLSpanElement;
+    private countUnknownEl!: HTMLSpanElement;
+    
+    private resultsGridEl!: HTMLDivElement;
+    private favoritesBoxEl!: HTMLDivElement;
+    private favoritesListEl!: HTMLDivElement;
+    private historyBoxEl!: HTMLDivElement;
+    private historyListEl!: HTMLDivElement;
+
+    // Actions
+    private btnCopyUsernameEl!: HTMLButtonElement;
+    private btnShareEl!: HTMLButtonElement;
+    private btnDownloadEl!: HTMLButtonElement;
+    private btnFavoriteEl!: HTMLButtonElement;
+
+    // State
+    private isScanning = false;
+    private results: Array<{ platformId: string; platformName: string; category: string; status: string; profileUrl: string }> = [];
+    private favorites: string[] = [];
+    private history: string[] = [];
+    private searchCache: Record<string, typeof this.results> = {};
+
+    connectedCallback() {
+      // Elements lookup
+      this.inputEl = this.querySelector('#username-input') as HTMLInputElement;
+      this.btnCheckEl = this.querySelector('#btn-check') as HTMLButtonElement;
+      this.btnClearEl = this.querySelector('#btn-clear') as HTMLButtonElement;
+      this.statusPanelEl = this.querySelector('#status-panel') as HTMLDivElement;
+      this.statusTextEl = this.querySelector('#status-text') as HTMLSpanElement;
+      this.scanTimeEl = this.querySelector('#scan-time') as HTMLSpanElement;
+      this.progressBarEl = this.querySelector('#progress-bar') as HTMLDivElement;
+      
+      this.countAvailableEl = this.querySelector('#count-available') as HTMLSpanElement;
+      this.countTakenEl = this.querySelector('#count-taken') as HTMLSpanElement;
+      this.countUnknownEl = this.querySelector('#count-unknown') as HTMLSpanElement;
+      
+      this.resultsGridEl = this.querySelector('#results-grid') as HTMLDivElement;
+      this.favoritesBoxEl = this.querySelector('#favorites-box') as HTMLDivElement;
+      this.favoritesListEl = this.querySelector('#favorites-list') as HTMLDivElement;
+      this.historyBoxEl = this.querySelector('#history-box') as HTMLDivElement;
+      this.historyListEl = this.querySelector('#history-list') as HTMLDivElement;
+
+      this.btnCopyUsernameEl = this.querySelector('#btn-copy-username') as HTMLButtonElement;
+      this.btnShareEl = this.querySelector('#btn-share') as HTMLButtonElement;
+      this.btnDownloadEl = this.querySelector('#btn-download') as HTMLButtonElement;
+      this.btnFavoriteEl = this.querySelector('#btn-favorite') as HTMLButtonElement;
+
+      // Load Favorites & History from LocalStorage
+      this.loadStorage();
+
+      // Setup Listeners
+      this.btnCheckEl.addEventListener('click', () => this.startSearch());
+      this.inputEl.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') this.startSearch();
+      });
+      this.inputEl.addEventListener('input', () => this.handleInputUpdate());
+      this.btnClearEl.addEventListener('click', () => {
+        this.inputEl.value = '';
+        this.handleInputUpdate();
+        this.inputEl.focus();
+      });
+
+      // Example Pills Click
+      this.querySelectorAll('.example-pill').forEach(pill => {
+        pill.addEventListener('click', (e) => {
+          const username = (e.currentTarget as HTMLButtonElement).getAttribute('data-username') || '';
+          this.inputEl.value = username;
+          this.handleInputUpdate();
+          this.startSearch();
+        });
+      });
+
+      // Filters Click
+      this.querySelectorAll('.filter-pill').forEach(pill => {
+        pill.addEventListener('click', (e) => {
+          const btn = e.currentTarget as HTMLButtonElement;
+          this.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+          btn.classList.add('active');
+          this.applyFilter(btn.getAttribute('data-filter') || 'all');
+        });
+      });
+
+      // Actions Click
+      this.btnCopyUsernameEl.addEventListener('click', () => this.copyUsername());
+      this.btnShareEl.addEventListener('click', () => this.shareResults());
+      this.btnDownloadEl.addEventListener('click', () => this.downloadJson());
+      this.btnFavoriteEl.addEventListener('click', () => this.toggleFavorite());
+
+      // Auto-search if query parameter exists
+      const params = new URLSearchParams(window.location.search);
+      const queryUsername = params.get('q');
+      if (queryUsername) {
+        this.inputEl.value = queryUsername;
+        this.handleInputUpdate();
+        this.startSearch();
+      }
+    }
+
+    private loadStorage() {
+      try {
+        this.favorites = JSON.parse(localStorage.getItem('username_checker_favorites') || '[]');
+        this.history = JSON.parse(localStorage.getItem('username_checker_history') || '[]');
+        this.renderPills();
+      } catch (err) {
+        console.error('Failed to load storage', err);
+      }
+    }
+
+    private saveStorage() {
+      try {
+        localStorage.setItem('username_checker_favorites', JSON.stringify(this.favorites));
+        localStorage.setItem('username_checker_history', JSON.stringify(this.history));
+      } catch (err) {
+        console.error('Failed to save storage', err);
+      }
+    }
+
+    private handleInputUpdate() {
+      const val = this.inputEl.value.trim();
+      this.btnClearEl.style.display = val.length > 0 ? 'block' : 'none';
+    }
+
+    private renderPills() {
+      // Render Favorites
+      if (this.favorites.length > 0) {
+        this.favoritesBoxEl.style.display = 'block';
+        this.favoritesListEl.innerHTML = '';
+        this.favorites.forEach(fav => {
+          const pill = document.createElement('button');
+          pill.className = 'history-pill';
+          pill.innerHTML = `⭐ <span>${fav}</span>`;
+          pill.addEventListener('click', () => {
+            this.inputEl.value = fav;
+            this.handleInputUpdate();
+            this.startSearch();
+          });
+          this.favoritesListEl.appendChild(pill);
+        });
+      } else {
+        this.favoritesBoxEl.style.display = 'none';
+      }
+
+      // Render History
+      if (this.history.length > 0) {
+        this.historyBoxEl.style.display = 'block';
+        this.historyListEl.innerHTML = '';
+        this.history.forEach(hist => {
+          const container = document.createElement('div');
+          container.className = 'history-pill';
+          
+          const textSpan = document.createElement('span');
+          textSpan.textContent = hist;
+          textSpan.addEventListener('click', () => {
+            this.inputEl.value = hist;
+            this.handleInputUpdate();
+            this.startSearch();
+          });
+
+          const removeBtn = document.createElement('button');
+          removeBtn.className = 'btn-remove-pill';
+          removeBtn.innerHTML = '✕';
+          removeBtn.setAttribute('aria-label', `Remove ${hist} from history`);
+          removeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.history = this.history.filter(h => h !== hist);
+            this.saveStorage();
+            this.renderPills();
+          });
+
+          container.appendChild(textSpan);
+          container.appendChild(removeBtn);
+          this.historyListEl.appendChild(container);
+        });
+      } else {
+        this.historyBoxEl.style.display = 'none';
+      }
+    }
+
+    private async startSearch() {
+      const username = this.inputEl.value.trim().toLowerCase();
+      if (!username || this.isScanning) return;
+
+      // Basic regex validation check
+      if (username.length < 1 || username.length > 50 || /[^a-zA-Z0-9_\-\.]/.test(username)) {
+        alert('Please enter a valid username (only letters, numbers, underscores, hyphens, and dots allowed).');
+        return;
+      }
+
+      this.isScanning = true;
+      this.btnCheckEl.disabled = true;
+      this.btnCheckEl.querySelector('.btn-spinner')!.style.display = 'inline-block';
+      this.results = [];
+
+      // Update URL query parameter
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.set('q', username);
+      window.history.replaceState({}, '', newUrl.toString());
+
+      // Update document title for SEO
+      document.title = `Check Username Availability - ${username}`;
+
+      // Reset counters & panel
+      this.statusPanelEl.style.display = 'block';
+      this.resultsGridEl.style.display = 'grid';
+      this.statusTextEl.textContent = `Scanning "${username}"...`;
+      this.scanTimeEl.textContent = '';
+      this.progressBarEl.style.width = '0%';
+      this.updateCounters(0, 0, 0);
+
+      // Add to history
+      this.history = [username, ...this.history.filter(h => h !== username)].slice(0, 10);
+      this.saveStorage();
+      this.renderPills();
+
+      // Check Favorite status
+      this.updateFavoriteButtonState(username);
+
+      // Check Cache
+      if (this.searchCache[username]) {
+        // Instant simulated check from cache
+        this.results = this.searchCache[username];
+        this.renderAllCards(this.results);
+        this.isScanning = false;
+        this.btnCheckEl.disabled = false;
+        this.btnCheckEl.querySelector('.btn-spinner')!.style.display = 'none';
+        this.statusTextEl.textContent = `Scan completed for "${username}" (cached)`;
+        this.progressBarEl.style.width = '100%';
+        const available = this.results.filter(r => r.status === 'Available').length;
+        const taken = this.results.filter(r => r.status === 'Taken').length;
+        const unknown = this.results.filter(r => r.status === 'Unknown').length;
+        this.updateCounters(available, taken, unknown);
+        this.applyFilter(this.querySelector('.filter-pill.active')?.getAttribute('data-filter') || 'all');
+        return;
+      }
+
+      // Initial loading state skeletons
+      this.renderSkeletons();
+
+      const startTime = performance.now();
+      const concurrencyLimit = 10;
+      let completedCount = 0;
+      const totalPlatforms = platforms.length;
+
+      let availableCount = 0;
+      let takenCount = 0;
+      let unknownCount = 0;
+
+      // Concurrency Pool
+      const pool = [...platforms];
+      const workers = Array(concurrencyLimit).fill(null).map(async () => {
+        while (pool.length > 0) {
+          const platform = pool.shift();
+          if (!platform) break;
+
+          try {
+            const response = await fetch(`/api/check-username?username=${encodeURIComponent(username)}&platform=${platform.id}`);
+            const data = await response.json();
+            
+            const result = {
+              platformId: platform.id,
+              platformName: platform.name,
+              category: platform.category,
+              status: data.status,
+              profileUrl: data.profileUrl
+            };
+
+            this.results.push(result);
+
+            // Update stats
+            if (result.status === 'Available') availableCount++;
+            else if (result.status === 'Taken') takenCount++;
+            else unknownCount++;
+
+            this.updateCardState(result);
+          } catch (err) {
+            const errorResult = {
+              platformId: platform.id,
+              platformName: platform.name,
+              category: platform.category,
+              status: 'Unknown',
+              profileUrl: platform.url.replace('{username}', encodeURIComponent(username))
+            };
+            this.results.push(errorResult);
+            unknownCount++;
+            this.updateCardState(errorResult);
+          } finally {
+            completedCount++;
+            const pct = Math.round((completedCount / totalPlatforms) * 100);
+            this.progressBarEl.style.width = `${pct}%`;
+            this.statusTextEl.textContent = `Scanning "${username}" (${pct}%)...`;
+            this.updateCounters(availableCount, takenCount, unknownCount);
+          }
+        }
+      });
+
+      await Promise.all(workers);
+
+      const endTime = performance.now();
+      const durationSeconds = ((endTime - startTime) / 1000).toFixed(2);
+
+      this.isScanning = false;
+      this.btnCheckEl.disabled = false;
+      this.btnCheckEl.querySelector('.btn-spinner')!.style.display = 'none';
+      this.statusTextEl.textContent = `Scan completed for "${username}"`;
+      this.scanTimeEl.textContent = `Scan completed in ${durationSeconds}s`;
+
+      // Cache Results
+      this.searchCache[username] = [...this.results];
+
+      // Sort and re-render final list
+      this.sortResults();
+      this.applyFilter(this.querySelector('.filter-pill.active')?.getAttribute('data-filter') || 'all');
+    }
+
+    private updateCounters(available: number, taken: number, unknown: number) {
+      this.countAvailableEl.textContent = String(available);
+      this.countTakenEl.textContent = String(taken);
+      this.countUnknownEl.textContent = String(unknown);
+    }
+
+    private renderSkeletons() {
+      this.resultsGridEl.innerHTML = '';
+      platforms.forEach(platform => {
+        const card = document.createElement('div');
+        card.className = `platform-card skeleton-card`;
+        card.setAttribute('data-id', platform.id);
+        card.setAttribute('data-category', platform.category);
+        
+        card.innerHTML = `
+          <div class="card-top">
+            <div class="platform-identity">
+              <div class="skeleton-logo"></div>
+              <div class="skeleton-text"></div>
+            </div>
+            <div class="skeleton-badge"></div>
+          </div>
+        `;
+        this.resultsGridEl.appendChild(card);
+      });
+    }
+
+    private getPlatformLogoSvg(id: string): string {
+      const path = BRAND_LOGOS[id];
+      if (path) {
+        return `<svg class="platform-logo-svg" viewBox="0 0 24 24">${path}</svg>`;
+      }
+      // Return letter avatar
+      const platform = platforms.find(p => p.id === id);
+      const letter = platform ? platform.name.charAt(0) : '?';
+      return `<span class="platform-logo-letter">${letter}</span>`;
+    }
+
+    private updateCardState(result: typeof this.results[0]) {
+      const card = this.resultsGridEl.querySelector(`[data-id="${result.platformId}"]`) as HTMLDivElement;
+      if (!card) return;
+
+      const badgeClass = result.status.toLowerCase();
+      const badgeIcon = result.status === 'Available' ? '✅' : result.status === 'Taken' ? '❌' : '⚠️';
+      const logoMarkup = this.getPlatformLogoSvg(result.platformId);
+
+      card.className = `platform-card ${badgeClass}-card`;
+      card.innerHTML = `
+        <div class="card-top">
+          <div class="platform-identity">
+            <div class="platform-logo-container">
+              ${logoMarkup}
+            </div>
+            <span class="platform-name">${result.platformName}</span>
+          </div>
+          <span class="status-badge ${badgeClass}">${badgeIcon} ${result.status}</span>
+        </div>
+        <div class="profile-link-container">
+          <a href="${result.profileUrl}" target="_blank" rel="noopener noreferrer" class="btn-profile">
+            <span>${result.status === 'Taken' ? 'Open Profile' : 'Visit Site'}</span>
+            <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+          </a>
+        </div>
+      `;
+    }
+
+    private renderAllCards(resultsList: typeof this.results) {
+      this.resultsGridEl.innerHTML = '';
+      resultsList.forEach(result => {
+        const card = document.createElement('div');
+        card.className = `platform-card ${result.status.toLowerCase()}-card`;
+        card.setAttribute('data-id', result.platformId);
+        card.setAttribute('data-category', result.category);
+        
+        const badgeClass = result.status.toLowerCase();
+        const badgeIcon = result.status === 'Available' ? '✅' : result.status === 'Taken' ? '❌' : '⚠️';
+        const logoMarkup = this.getPlatformLogoSvg(result.platformId);
+
+        card.innerHTML = `
+          <div class="card-top">
+            <div class="platform-identity">
+              <div class="platform-logo-container">
+                ${logoMarkup}
+              </div>
+              <span class="platform-name">${result.platformName}</span>
+            </div>
+            <span class="status-badge ${badgeClass}">${badgeIcon} ${result.status}</span>
+          </div>
+          <div class="profile-link-container">
+            <a href="${result.profileUrl}" target="_blank" rel="noopener noreferrer" class="btn-profile">
+              <span>${result.status === 'Taken' ? 'Open Profile' : 'Visit Site'}</span>
+              <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+            </a>
+          </div>
+        `;
+        this.resultsGridEl.appendChild(card);
+      });
+    }
+
+    private sortResults() {
+      // Sort: Available first, Taken second, Unknown last
+      this.results.sort((a, b) => {
+        const statusWeight: Record<string, number> = {
+          'Available': 1,
+          'Taken': 2,
+          'Unknown': 3
+        };
+        const wA = statusWeight[a.status] || 3;
+        const wB = statusWeight[b.status] || 3;
+        return wA - wB;
+      });
+
+      this.renderAllCards(this.results);
+    }
+
+    private applyFilter(category: string) {
+      const cards = this.resultsGridEl.querySelectorAll('.platform-card');
+      cards.forEach(card => {
+        const htmlCard = card as HTMLDivElement;
+        const cardCat = htmlCard.getAttribute('data-category');
+        if (category === 'all' || cardCat === category) {
+          htmlCard.style.display = 'flex';
+        } else {
+          htmlCard.style.display = 'none';
+        }
+      });
+    }
+
+    // Actions implementation
+    private copyUsername() {
+      const username = this.inputEl.value.trim();
+      if (!username) return;
+
+      navigator.clipboard.writeText(username).then(() => {
+        const span = this.btnCopyUsernameEl.querySelector('span') as HTMLSpanElement;
+        const copyIcon = this.btnCopyUsernameEl.querySelector('.copy-icon') as HTMLElement;
+        const checkIcon = this.btnCopyUsernameEl.querySelector('.check-icon') as HTMLElement;
+
+        span.textContent = 'Copied!';
+        copyIcon.style.display = 'none';
+        checkIcon.style.display = 'inline-block';
+
+        setTimeout(() => {
+          span.textContent = 'Copy Username';
+          copyIcon.style.display = 'inline-block';
+          checkIcon.style.display = 'none';
+        }, 2000);
+      });
+    }
+
+    private shareResults() {
+      const username = this.inputEl.value.trim();
+      if (!username) return;
+
+      const shareUrl = `${window.location.origin}${window.location.pathname}?q=${encodeURIComponent(username)}`;
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        const span = this.btnShareEl.querySelector('span') as HTMLSpanElement;
+        const shareIcon = this.btnShareEl.querySelector('.share-icon') as HTMLElement;
+        const checkIcon = this.btnShareEl.querySelector('.share-check-icon') as HTMLElement;
+
+        span.textContent = 'Link Copied!';
+        shareIcon.style.display = 'none';
+        checkIcon.style.display = 'inline-block';
+
+        setTimeout(() => {
+          span.textContent = 'Share';
+          shareIcon.style.display = 'inline-block';
+          checkIcon.style.display = 'none';
+        }, 2000);
+      });
+    }
+
+    private downloadJson() {
+      const username = this.inputEl.value.trim();
+      if (!username || this.results.length === 0) return;
+
+      const report = {
+        username,
+        scannedAt: new Date().toISOString(),
+        totalChecked: this.results.length,
+        summary: {
+          available: this.results.filter(r => r.status === 'Available').length,
+          taken: this.results.filter(r => r.status === 'Taken').length,
+          unknown: this.results.filter(r => r.status === 'Unknown').length
+        },
+        results: this.results
+      };
+
+      const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `username-report-${username}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    private updateFavoriteButtonState(username: string) {
+      const isFav = this.favorites.includes(username);
+      const span = this.btnFavoriteEl.querySelector('span') as HTMLSpanElement;
+      
+      if (isFav) {
+        span.textContent = 'Favorited ⭐';
+        this.btnFavoriteEl.classList.add('btn-primary');
+        this.btnFavoriteEl.classList.remove('btn-secondary');
+      } else {
+        span.textContent = 'Favorite';
+        this.btnFavoriteEl.classList.add('btn-secondary');
+        this.btnFavoriteEl.classList.remove('btn-primary');
+      }
+    }
+
+    private toggleFavorite() {
+      const username = this.inputEl.value.trim().toLowerCase();
+      if (!username) return;
+
+      const index = this.favorites.indexOf(username);
+      if (index === -1) {
+        this.favorites.push(username);
+      } else {
+        this.favorites.splice(index, 1);
+      }
+
+      this.saveStorage();
+      this.renderPills();
+      this.updateFavoriteButtonState(username);
+    }
+  }
+
+  if (!customElements.get('username-checker-tool')) {
+    customElements.define('username-checker-tool', UsernameCheckerTool);
+  }
+</script>
